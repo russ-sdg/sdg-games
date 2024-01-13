@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Illuminate Scorepad</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="../js/R2illuminate.js"></script>
+  <!-- <script src="js/R1illuminate.js"></script> -->
+  <script src="../js/grace.js"></script>
+  <script src="../js/mercy.js"></script>
+  <!-- Favicon-->
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <link rel="stylesheet" href="../css/Illuminate.css">
+  <script>
+    numplayers = sessionStorage.getItem("numplayers");
+    player1name = sessionStorage.getItem("player1name");
+    player2name = sessionStorage.getItem("player2name");
+    player3name = sessionStorage.getItem("player3name");
+    player4name = sessionStorage.getItem("player4name");
+    game = sessionStorage.getItem("game");
+    hands = sessionStorage.getItem("hands");
+    graceWinningScore = sessionStorage.getItem("graceWinningScore");
+    mercyEndingScore = sessionStorage.getItem("mercyEndingScore");
+
+    leader = "leader";
+    winner = "winner";
+    player1score = 0;
+    player2score = 0;
+    player3score = 0;
+    player4score = 0;
+    highestscore = 0;
+    player1bid = 0;
+    player2bid = 0;
+    player3bid = 0;
+    player4bid = 0;
+    player1won = 0;
+    player2won = 0;
+    player3won = 0;
+    player4won = 0;
+    endingscore = 0;
+    round = 1;
+    newrow = "";
+    newrowbid = "";
+    newrowwon = "";
+    newrowscore = "";
+
+    $( document ).ready(function() {
+        $("#selectedGame").hide();
+        $("#playingToLine").hide();
+        $("#gameover").hide();
+        $("#grace-game-options").hide();
+        $("#mercy-game-options").hide();
+        $("#R1-scoring").hide();
+        $("#grace-scoring").hide();
+        $("#mercy-scoring").hide();
+        $("#R1-namesDone").hide();
+        $("#grace-namesDone").hide();
+        $("#mercy-namesDone").hide();
+        $("#player1name").hide();
+        $("#player2name").hide();
+        $("#player3name").hide();
+        $("#player4name").hide();
+        $("#playernames").hide();
+        if(numplayers < 1) $(".namesDone").prop("disabled",true);
+        $("#scorepad").hide();
+
+        // restore player information
+        $("input[name='numplayer'][value=" + numplayers + "]").attr('checked', 'checked');
+        $("#player1name").val(player1name);
+        $("#player2name").val(player2name);
+        $("#player3name").val(player3name);
+        $("#player4name").val(player4name);
+        if(numplayers == 2) {
+            $("#playernames").show();
+            $("#player1name").show();
+            $("#player3name").show();
+            $("#player2name").hide();
+            $("#player4name").hide();
+        }
+        if(numplayers == 3) {
+            $("#playernames").show();
+            $("#player1name").show();
+            $("#player2name").show();
+            $("#player4name").show();
+            $("#player3name").hide();
+        }
+        if(numplayers == 4) {
+            $("#playernames").show();
+            $("#player1name").show();
+            $("#player2name").show();
+            $("#player3name").show();
+            $("#player4name").show();
+        }
+
+        /* reset game information */
+        switch(game) {
+            case "grace":
+                $("#game").val("grace");
+                if(graceWinningScore) {
+                    $("#playingTo").text(Number(graceWinningScore)/Number(numplayers));
+                }
+                break;
+            case "mercy":
+                $("#game").val("mercy");
+                if(mercyEndingScore) {
+                    $("#playingTo").text(Number(mercyEndingScore)/Number(numplayers));
+                }
+                break;
+            default:
+                $("#game").val("illuminateR2");
+        }
+
+        if(hands) {
+            $("#R2-hands").val(hands);
+        }
+
+        if(graceWinningScore) {
+            $("#grace-winning-score").val(graceWinningScore);
+        }
+
+        if(mercyEndingScore) {
+            $("#mercy-ending-score").val(mercyEndingScore);
+        }
+
+        $( document ).tooltip();
+
+        $("#game").change(function() {
+            switch($("#game").val()) {
+                case "grace":
+                    $("#R1-scoring").hide();
+                    $("#R2-scoring").hide();
+                    $("#grace-scoring").show();
+                    $("#mercy-scoring").hide();
+
+                    $("#R1-game-options").hide();
+                    $("#R2-game-options").hide();
+                    $("#grace-game-options").show();
+                    $("#mercy-game-options").hide();
+
+                    $("#R1-namesDone").hide();
+                    $("#R2-namesDone").hide();
+                    $("#grace-namesDone").show();
+                    $("#mercy-namesDone").hide();
+
+                    break;
+
+                case "mercy":
+                    $("#R1-scoring").hide();
+                    $("#R2-scoring").hide();
+                    $("#grace-scoring").hide();
+                    $("#mercy-scoring").show();
+
+                    $("#R1-game-options").hide();
+                    $("#R2-game-options").hide();
+                    $("#grace-game-options").hide();
+                    $("#mercy-game-options").show();
+
+                    $("#R1-namesDone").hide();
+                    $("#R2-namesDone").hide();
+                    $("#grace-namesDone").hide();
+                    $("#mercy-namesDone").show();
+
+                    break;
+
+                default:
+                    $("#R1-scoring").hide();
+                    $("#R2-scoring").show();
+                    $("#grace-scoring").hide();
+                    $("#mercy-scoring").hide();
+
+                    $("#R1-game-options").hide();
+                    $("#R2-game-options").show();
+                    $("#grace-game-options").hide();
+                    $("#mercy-game-options").hide();
+
+                    $("#R1-namesDone").hide();
+                    $("#R2-namesDone").show();
+                    $("#grace-namesDone").hide();
+                    $("#mercy-namesDone").hide();
+            }
+        })
+
+        $("input[name='numplayer']").change(function() {
+            numplayers = this.value;
+            $("#playernames").show();
+            $("#player1name").show();
+
+            switch(this.value) {
+                case "2":
+                    $("#player3name").show();
+                    $("#player2name").hide();
+                    $("#player4name").hide();
+                    break;
+                case "3":
+                    $("#player2name").show();
+                    $("#player4name").show();
+                    $("#player3name").hide();
+                    break;
+                default:
+                $("#player2name").show();
+                $("#player3name").show();
+                $("#player4name").show();
+            }
+        });
+
+        $(".namesDone").click(function() {
+            player1name = $("#player1name").val();
+            player2name = $("#player2name").val();
+            player3name = $("#player3name").val();
+            player4name = $("#player4name").val();
+            game = $("#game").val();
+            if(game == "grace") {
+                endingscore = Number($("#grace-winning-score").val())/Number(numplayers);
+                $("#playingTo").text(endingscore);
+            }
+            if(game == "mercy") {
+                endingscore = Number($("#mercy-ending-score").val())/Number(numplayers);
+                $("#playingTo").text(endingscore);
+            }
+
+            sessionStorage.setItem("numplayers", numplayers);
+            sessionStorage.setItem("player1name", player1name);
+            sessionStorage.setItem("player2name", player2name);
+            sessionStorage.setItem("player3name", player3name);
+            sessionStorage.setItem("player4name", player4name);
+            sessionStorage.setItem("game", game);
+            sessionStorage.setItem("hands",$("#R2-hands").val());
+            sessionStorage.setItem("graceWinningScore",$("#grace-winning-score").val());
+            sessionStorage.setItem("mercyEndingScore",$("#mercy-ending-score").val());
+
+
+            $("#names").hide(1000);
+            $("#scorepad").show(1000);
+        });
+        $("#R1-namesDone").click(function() {r1NamesDone();});
+        $("#R2-namesDone").click(function() {r2NamesDone();});
+        $("#grace-namesDone").click(function() {graceNamesDone();});
+        $("#mercy-namesDone").click(function() {mercyNamesDone();});
+
+        $("#openNames").click(function() {
+          $("#names").show(1000);
+          $("#scorepad").hide(1000);
+        });
+
+
+        $("#player1name").on('input',function() {
+          if(namescomplete()) $(".namesDone").prop("disabled",false);
+          else $(".namesDone").prop("disabled,true");
+        });
+        $("#player2name").on('input',function() {
+          if(namescomplete()) $(".namesDone").prop("disabled",false);
+          else $(".namesDone").prop("disabled",true);
+        });
+        $("#player3name").on('input',function() {
+          if(namescomplete()) $(".namesDone").prop("disabled",false);
+          else $(".namesDone").prop("disabled",true);
+        });
+        $("#player4name").on('input',function() {
+          if(namescomplete()) $(".namesDone").prop("disabled",false);
+          else $(".namesDone").prop("disabled",true);
+        });
+
+        $(".replay").click(function() {
+            location.reload();
+        });
+
+
+        // reset the game board
+        $("#game").trigger("change");
+
+    });
+
+    function namescomplete()  {
+      numplayers = $("input[name='numplayer']:checked").val();
+
+      if(numplayers == 2) {
+        if((!$("#player1name").val()) ) {
+          return false;
+        }
+        if((!$("#player3name").val()) ) {
+          return false;
+        }
+      }
+       if(numplayers == 3) {
+        if((!$("#player1name").val()) ) {
+          return false;
+        }
+        if((!$("#player2name").val()) ) {
+          return false
+        }
+        if((!$("#player4name").val())) {
+          return false;
+        }
+      }
+       if(numplayers == 4) {
+        if((!$("#player1name").val()) ) {
+          return false;
+        }
+        if((!$("#player2name").val())) {
+          return false;
+        }
+        if((!$("#player3name").val())) {
+          return false;
+        }
+        if((!$("#player4name").val())) {
+          return false;
+        }
+      }
+     return true;
+    }
+
+  </script>
+</head>
+<body>
+    <a href="index.html" target="_blank"><img src="../assets/illuminate.png" /></a>
+<h1>Scorepad</h1>
+<div id="select-game">
+    <fieldset>
+        <legend>Select Game</legend>
+        <select id='game' size=1>
+            <!-- <option value='illuminateR1'>Illuminate (r1)</option> -->
+            <option value='illuminateR2'>Illuminate</option>
+            <option value='grace'>Grace</option>
+            <option value='mercy'>Mercy</option>
+        </select>
+        <div id="R2-game-options" size=1>
+            Hands: <select id='R2-hands'>
+                <option value=6>6</option>
+                <option value=12 selected=true>12</option>
+                <option value=23>23</option>
+            </select>
+        </div>
+        <div id="grace-game-options" size=1>
+            Winning Score: <select id='grace-winning-score'>
+                <option value=900>900/(# of players)</option>
+                <option value=1800 selected=true>1800/(# of players)</option>
+            </select>
+        </div>
+        <div id="mercy-game-options" size=1>
+            Game Ending Score: <select id='mercy-ending-score'>
+                <option value=300>300/(# of players)</option>
+                <option value=600 selected=true>600/(# of players)</option>
+            </select>
+        </div>
+    </fieldset>
+</div>
+<h2 id="selectedGame">Game Name</h1>
+<p id="playingToLine"><strong>Playing to <span id="playingTo">300</span></strong></p>
+<div id="names">
+  <fieldset>
+    <legend>How many players?</legend>
+    <label for="2-player">2</label>
+    <input type="radio" name="numplayer" id="2-player" value="2" />
+    <label for="3-player">3</label>
+    <input type="radio" name="numplayer" id="3-player" value="3" />
+    <label for="4-player">4</label>
+    <input type="radio" name="numplayer" id="4-player" value="4" />
+  </fieldset>
+  <fieldset id="playernames">
+    <legend>What are the players' names?</legend>
+    <input type=text size=20 name="player1name" id="player1name" placeholder="First Dealer's Name" /><br />
+    <input type=text size=20 name="player2name" id="player2name" placeholder="Left of Dealer" /><br />
+    <input type=text size=20 name="player3name" id="player3name" placeholder="Across from Dealer" /><br />
+    <input type=text size=20 name="player4name" id="player4name" placeholder="Right of Dealer" /><br />
+  </fieldset>
+  <br />
+  <!-- <button class="namesDone" id="R1-namesDone">Let's Play Illuminate!</button> -->
+  <button class="namesDone" id="R2-namesDone">Let's Play Illuminate!</button>
+  <button class="namesDone" id="grace-namesDone">Let's Play Grace!</button>
+  <button class="namesDone" id="mercy-namesDone">Let's Play Mercy!</button>
+</div>
+<div id="scorepad">
+    <div id="gameover">
+          <h2>Game Over!<br /><span id="winner">winner</span></span></h2>
+          <button class="replay">Play Again?</button>
+    </div>
+    <div id="R2scorepad">
+      <p id="R2roundline">You are playing hand <b><span id="R2handnum">1</span></b> of <span id="numhands">12</span>.</p>
+      <p id="R2dealerline"><span id="R2dealer">Dealer</span> deals <span id="R2cards">1 card</span>.</p>
+      <div id="R2scoringinputs">
+        <table class="score-table">
+          <tr id="R2playertr">
+            <th class='th-right'>Players:</th>
+            <td><span id="R2col1name" class="col1">Dealer</span></td>
+            <td><span id="R2col2name" class="col2">Left</span></td>
+            <td><span id="R2col3name" class="col3">Across</span></td>
+            <td><span id="R2col4name" class="col4">Right</span></td>
+            <td><span id="R2totalname" class="totalcol">Total</span></td>
+          </tr>
+          <tr id="R2scoretr">
+            <th class='th-right'>Score:</th>
+            <td><span id="R2col1score" class="col1">0</span></td>
+            <td><span id="R2col2score" class="col2">0</span></td>
+            <td><span  id="R2col3score" class="col3">0</span></td>
+            <td><span id="R2col4score" class="col4">0</span></td>
+            <td></td>
+          </tr>
+          <tr id="R2bidtr">
+            <th class='th-right'>Bid:</th>
+            <td><select size=1  id="R2col1bid" class="col1 R2bidrow">
+                <option value="0">0</option>
+            </select></td>
+            <td><select size=1  id="R2col2bid" class="col2 R2bidrow">
+                <option value="0">0</option>
+            </select></td>
+            <td><select size=1  id="R2col3bid" class="col3 R2bidrow">
+                <option value="0">0</option>
+            </select></td>
+            <td><select size=1  id="R2col4bid" class="col4 R2bidrow">
+                <option value="0">0</option>
+            </select></td>
+            <td><span id="R2totalbid" class="totalcol R2bidrow">0</span></td>
+          </tr>
+          <tr id="R2wontr">
+            <th class='th-right'>Tricks Won:</th>
+            <td><select size=1  id="R2col1won" class="col1 R2wonrow">
+                <option value="0">0</option>
+            </select></td>
+            <td><select size=1  id="R2col2won" class="col2 R2wonrow">
+                <option value="0">0</option>
+            </select></td>
+            <td><select size=1  id="R2col3won" class="col3 R2wonrow">
+                <option value="0">0</option>
+            </select></td>
+            <td><select size=1  id="R2col4won" class="col4 R2wonrow">
+                <option value="0">0</option>
+            </select></td>
+            <td><span id="R2totalwon" class="totalcol R2wonrow">0</span></td>
+          </tr>
+          <tr id="R2buttontr"><td></td><td colspan=4><button id="R2score">Score</button></td></tr>
+        </table>
+      </div>
+      <table id="R2handbyhand" class="score-table">
+          <tbody>
+
+          </tbody>
+      </table>
+    </div>
+    <div id="gracescorepad">
+      <p id="gracedealerline"><span id="gracedealer">Dealer</span> deals.</p>
+      <div id="gracescoringinputs">
+        <table class="score-table">
+          <tr id="graceplayertr">
+            <th class='th-right'>Players:</th>
+            <td><span id="gracecol1name" class="col1">Dealer</span></td>
+            <td><span id="gracecol2name" class="col2">Left</span></td>
+            <td><span id="gracecol3name" class="col3">Across</span></td>
+            <td><span id="gracecol4name" class="col4">Right</span></td>
+            <td><span id="gracetotalname" class="totalcol">Total</span></td>
+          </tr>
+          <tr id="gracescoretr">
+            <th class='th-right'>Score:</th>
+            <td><span id="gracecol1score" class="col1">0</span></td>
+            <td><span id="gracecol2score" class="col2">0</span></td>
+            <td><span id="gracecol3score" class="col3">0</span></td>
+            <td><span id="gracecol4score" class="col4">0</span></td>
+            <td></td>
+          </tr>
+          <tr id="gracebidtr">
+            <th class='th-right'>Bid:</th>
+            <td><select size=1  id="gracecol1bid" class="col1 gracebidrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1  id="gracecol2bid" class="col2 gracebidrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1  id="gracecol3bid" class="col3 gracebidrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1  id="gracecol4bid" class="col4 gracebidrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><span id="gracetotalbid" class="totalcol gracebidrow">0</span></td>
+          </tr>
+          <tr id="gracewontr">
+            <th class='th-right'>Tricks Won:</th>
+            <td><select size=1  id="gracecol1won" class="col1 gracewonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1 id="gracecol2won" class="col2 gracewonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1  id="gracecol3won" class="col3 gracewonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1  id="gracecol4won" class="col4 gracewonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><span id="gracetotalwon" class="totalcol gracewonrow">0</span></td>
+          </tr>
+          <tr id="gracebuttontr"><td></td><td colspan=4><button id="gracescore">Score</button></td></tr>
+        </table>
+      </div>
+      <table id="gracehandbyhand" class="score-table">
+          <tbody>
+
+          </tbody>
+      </table>
+    </div>
+    <div id="mercyscorepad">
+      <p id="mercydealerline"><span id="mercydealer">Dealer</span> deals.</p>
+      <div id="mercyscoringinputs">
+        <table class="score-table">
+          <tr id="mercyplayertr">
+            <th class='th-right'>Players:</th>
+            <td><span id="mercycol1name" class="col1">Dealer</span></td>
+            <td><span id="mercycol2name" class="col2">Left</span></td>
+            <td><span id="mercycol3name" class="col3">Across</span></td>
+            <td><span id="mercycol4name" class="col4">Right</span></td>
+            <td><span id="mercytotalname" class="totalcol">Total</span></td>
+          </tr>
+          <tr id="mercyscoretr">
+            <th class='th-right'>Score:</th>
+            <td><span id="mercycol1score" class="col1">0</span></td>
+            <td><span id="mercycol2score" class="col2">0</span></td>
+            <td><span id="mercycol3score" class="col3">0</span></td>
+            <td><span id="mercycol4score" class="col4">0</span></td>
+            <td></td>
+          </tr>
+          <tr id="mercygracewontr">
+            <th class='th-right'>Grace Cards Won:</th>
+            <td><select size=1  id="mercygracecol1won" class="col1 mercygracewonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1 id="mercygracecol2won" class="col2 mercygracewonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1  id="mercygracecol3won" class="col3 mercygracewonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1  id="mercygracecol4won" class="col4 mercygracewonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><span id="mercygracetotalwon" class="totalcol mercygracewonrow">0</span></td>
+          </tr>
+          <tr id="mercyspecialwontr">
+            <th class='th-right'>Special Cards Won:</th>
+            <td><select size=1  id="mercyspecialcol1won" class="col1 mercyspecialwonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1 id="mercyspecialcol2won" class="col2 mercyspecialwonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1  id="mercyspecialcol3won" class="col3 mercyspecialwonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><select size=1  id="mercyspecialcol4won" class="col4 mercyspecialwonrow">
+                <option value="1">1</option>
+            </select></td>
+            <td><span id="mercyspecialtotalwon" class="totalcol mercyspecialwonrow">0</span></td>
+          </tr>
+          <tr id="mercybuttontr"><td></td><td colspan=4><button id="mercyscore">Score</button></td></tr>
+        </table>
+      </div>
+      <table id="mercyhandbyhand" class="score-table">
+          <tbody>
+
+          </tbody>
+      </table>
+    </div>
+</div>
+<!-- <div id='R1-scoring'>
+    <fieldset>
+        <legend>Scoring Rules</legend>
+        <p>N = Number of cards dealt<br />B = Number of tricks bid<br />W = Number of tricks actually won</p>
+        <table class="scoring-table">
+            <tr>
+                <th class="scoring-table th-center">B = # of Tricks Expected</th>
+                <th class="scoring-table th-center">W = # of Tricks Actually Won</th>
+                <th class="scoring-table th-center"># of Points Added to Score</th>
+            </tr>
+            <tr>
+                <td rowspan=2 class="scoring-table td-center">B = 0</td>
+                <td class="scoring-table td-center">W = 0</td>
+                <td class="scoring-table td-center">N</td>
+            </tr>
+            <tr>
+                <td class="scoring-table td-center">W Not 0</td>
+                <td class="scoring-table td-center">- N</td>
+            </tr>
+            <tr>
+                <td rowspan=2 class="scoring-table td-center">0 < B < N</td>
+                <td class="scoring-table td-center">W = B</td>
+                <td class="scoring-table td-center">B</td>
+            </tr>
+            <tr>
+                <td class="scoring-table td-center">W Not B</td>
+                <td class="scoring-table td-center">0</td>
+            </tr>
+            <tr>
+                <td rowspan=2 class="scoring-table td-center">B = N</td>
+                <td class="scoring-table td-center">W = B = N</td>
+                <td class="scoring-table td-center">2xN</td>
+            </tr>
+            <tr>
+                <td class="scoring-table td-center">W Not N</td>
+                <td class="scoring-table td-center">0</td>
+            </tr>
+        </table>
+    </fieldset>
+</div> -->
+<div id='R2-scoring'>
+    <fieldset>
+        <legend>Basic Rules of Illuminate</legend>
+        <ul>
+            <li>The object of the game is to be the player with the most points after the specified number of hands have been played.</li>
+            <li>Each player chooses one of the Role Cards at the beginning of the game.</li>
+            <li>One card is dealt to each player for the first hand. The number of cards dealt increases by one in each subsequent hand so that, in the twelfth (and final) hand, twelve cards are dealt to each player.</li>
+            <li>After cards are dealt and before they are played, players, starting with the player to the dealer's left, bid how many tricks they expect to win.</li>
+            <li>The hands with 6 or 12 cards have special bidding and scoring rules. In those hands, players can only bid "all" (meaning they hope to win all the tricks) or "nothing" (meaning they hope not to win any tricks).</li>
+            <li>The player to the left of the dealer leads first.</li>
+            <li>Players must follow suit with the led card if possible.</li>
+            <li>Highest card in the led suit wins the trick unless someone plays a Grace Card (with a symbol matching their Role Card) or a Special Card (one with a star).</li>
+            <li>If a Special Card is played, follow the instructions on the card.</li>
+            <li>If one or more Grace Cards are played, the highest Grace Card played wins the trick (unless a Special Card says otherwise).</li>
+            <li>The player that wins a trick, leads the next trick.</li>
+            <li>Scoring is determined at the end of each hand (see below).</li>
+           <li>The winner is the player with the most points after the final hand is played and scored.</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>Scoring Rules</legend>
+        <p>Scoring is different in the hands where either 6 or 12 cards are dealt.</p>
+        <p>N = Number of cards dealt<br />B = Number of tricks bid<br />W = Number of tricks actually won</p>
+        <p><strong>In hands with either 6 or 12 cards</strong></p>
+        <table class="scoring-table">
+            <tr>
+                <th class="scoring-table th-center">B = # of Tricks Expected</th>
+                <th class="scoring-table th-center">W = # of Tricks Actually Won</th>
+                <th class="scoring-table th-center"># of Points Added to Score</th>
+            </tr>
+            <tr>
+                <td class="scoring-table td-center">B = 0 (nothing)</td>
+                <td class="scoring-table td-center">W</td>
+                <td class="scoring-table td-center">2xN - 2xW</td>
+            </tr>
+            <tr>
+                <td rowspan=2 class="scoring-table td-center">B = N (all)</td>
+                <td class="scoring-table td-center">N</td>
+                <td class="scoring-table td-center">This player: 2xN, All other players: 0</td>
+            </tr>
+            <tr>
+                <td class="scoring-table td-center">Not N</td>
+                <td class="scoring-table td-center">0</td>
+            </tr>
+        </table>
+        <p><strong>In all other hands</strong></p>
+        <table class="scoring-table">
+            <tr>
+                <th class="scoring-table th-center">B = # of Tricks Expected</th>
+                <th class="scoring-table th-center">W = # of Tricks Actually Won</th>
+                <th class="scoring-table th-center"># of Points Added to Score</th>
+            </tr>
+            <tr>
+                <td rowspan=2 class="scoring-table td-center">B</td>
+                <td class="scoring-table td-center">B</td>
+                <td class="scoring-table td-center">B + 2</td>
+            </tr>
+            <tr>
+                <td class="scoring-table td-center">Not B</td>
+                <td class="scoring-table td-center">0</td>
+            </tr>
+        </table>
+    </fieldset>
+</div>
+<div id='grace-scoring'>
+    <fieldset>
+        <legend>Basic Rules of Grace</legend>
+        <ul>
+            <li>Players agree on how many points it takes to win. Typically this is 225 (a short game) to 450 (a long game) for a 4 person game.</li>
+            <li>The object of the game is to be the player with the most points when any player gets to the winning score.</li>
+            <li>Each player chooses one of the Role Cards at the beginning of the game.</li>
+            <li>All cards are dealt each hand.</li>
+            <li>After cards are dealt and before they are played, players, starting with the player to the dealer's left, bid how many tricks they expect to win. The minimum bid is 1.</li>
+            <li>The player to the left of the dealer leads first.</li>
+            <li>Players must follow suit with the led card if possible.</li>
+            <li>Highest card in the led suit wins unless someone plays a Grace Card (with a symbol matching their Role Card).</li>
+            <li>If at least one Grace Card is played, the highest Grace Card played wins the hand.</li>
+            <li><strong>For this game, disregard the instructions on the Special Cards.</strong></li>
+            <li>The player that wins a trick, leads the next trick.</li>
+            <li>Scoring is determined at the end of the hand.</li>
+            <ul>
+                <li>If a player wins fewer tricks than they bid, they get zero points.</li>
+                <li>If the player wins at least as many tricks as they bid, they get 10x their bid.</li>
+                <li>If they win more tricks than they bid, they also get 1 point for each trick they won over what they bid.</li>
+            </ul>
+            <li>The player to the left of that hand's dealer deals the next hand.</li>
+            <li>The winner is the player with the most points when the first player gets to the winning number of points.</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>Scoring Rules</legend>
+        <p>B = Number of tricks bid<br />W = Number of tricks actually won</p>
+        <table class="scoring-table">
+            <tr>
+                <th class="scoring-table th-center">W < B</th>
+                <td class="scoring-table td-center">Add 0</td>
+            </tr>
+            <tr>
+                <th class="scoring-table th-center">W = B</th>
+                <td class="scoring-table td-center">Add Bx10</td>
+            </tr>
+            <tr>
+                <th class="scoring-table th-center">W > B</th>
+                <td class="scoring-table td-center">Add Bx10 + (W-B)</td>
+            </tr>
+        </table>
+    </fieldset>
+</div>
+<div id='mercy-scoring'>
+    <fieldset>
+        <legend>Basic Rules of Mercy</legend>
+        <ul>
+            <li>Players agree on the number of points that marks the end of the game. Typically this is 75 (a short game) to 150 (a longer game) for a 4 person game.</li>
+            <li>The object of the game is to be the player with the fewest points when any player gets to the game ending score.</li>
+            <li>Each player chooses one of the Role Cards at the beginning of the game.</li>
+            <li>All cards are dealt each hand.</li>
+            <li>Players must follow suit with the led card if possible.</li>
+            <li>The player to the left of the dealer leads first.</li>
+            <li>Highest card in the led suit wins unless someone plays a Grace Card (with a symbol matching their Role Card).</li>
+            <li>If at least one Grace Card is played, the highest Grace Card played wins the hand.</li>
+            <li><strong>For this game, disregard the instructions on the Special Cards.</strong></li>
+            <li>The player that wins a trick, leads the next trick.</li>
+            <li>Scoring is determined at the end of each hand.</li>
+            <ul>
+                <li>Players get one point for each of their “Grace” cards they won (whether they played it or someone else played it).</li>
+                <li>Players get 7 points for each Special card (those with a star) that they won.</li>
+            </ul>
+            <li>The player to the left of that hand's dealer deals the next hand.</li>
+            <li>The winner is the player with the fewest points when the first player reaches the losing number of points.</li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>Scoring Rules</legend>
+        <p>Scoring is determined at the end of each hand.</p>
+        <ul>
+            <li>Players get one point for each of their “Grace” cards they won (whether they played it or someone else played it).</li>
+            <li>Players get 7 points for each Special card (those with a star) that they won.</li>
+        </ul>
+    </fieldset>
+</div>
+
+</body>
+</html>

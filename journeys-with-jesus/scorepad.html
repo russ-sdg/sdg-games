@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Journeys with Jesus Scorepad</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <!-- Favicon-->
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <link href="../css/styles.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script>
+  $( document ).ready(function() {
+
+    score = 0;
+
+      $("#36cards").focus();
+
+    $(".cards").on("change",function() {
+        score = $( "#36cards" ).val()*36+$( "#25cards" ).val()*25+$( "#16cards" ).val()*16+$( "#9cards" ).val()*9+$( "#4cards" ).val()*4+$( "#tokens" ).val()*5;
+        $("#score").text(score);
+
+    });
+
+  });
+
+  </script>
+  <style>
+  tr {padding-bottom: 5px;}
+  th {text-align: right;}
+  td {text-align: center;}
+  img{
+      max-width: 100%;
+      display: block;
+  }
+  body {
+      background-color: #FDEEB9;
+      max-width: 400px;
+  }
+  input[type='number']{ width: 30px;}
+  h1 {margin-top: 0;}
+  table {border: 0;}
+  </style>
+</head>
+<body>
+    <a href="https://sdggames.fun/journeys-with-jesus/index.html" target="_blank"><img  class="img-responsive img-fluid" src="../assets/Small JwJ Logo Line.png" /></a>
+<h1>Scorepad</h1>
+<div id="scorepad">
+  <div id="scoringinputs">
+      <p>Select how many of each type of card you have:</p>
+    <table>
+        <tr id="36row">
+            <th>36 Point Cards:</th>
+            <td>
+                <select id="36cards" class="cards">
+                    <option value=0 selected=true>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="25row">
+            <th>25 Point Cards:</th>
+            <td>
+                <select id="25cards" class="cards">
+                    <option value=0 selected=true>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="16row">
+            <th>16 Point Cards:</th>
+            <td>
+                <select id="16cards" class="cards">
+                    <option value=0 selected=true>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="9row">
+            <th>9 Point Cards:</th>
+            <td>
+                <select id="9cards" class="cards">
+                    <option value=0 selected=true>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="4row">
+            <th>4 Point Cards:</th>
+            <td>
+                <select id="4cards" class="cards">
+                    <option value=0 selected=true>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                </select>
+            </td>
+        </tr>
+        <tr id="tokenrow">
+            <th>Scripture Memory Tokens:</th>
+            <td>
+                <select id="tokens" class="cards">
+                    <option value=0 selected=true>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
+                    <option value=8>8</option>
+                    <option value=9>9</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>Score:</th>
+            <td><span id="score">0</span></td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

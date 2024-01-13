@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Roman Catacombs Scorepad</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="../js/Twister.js"></script>
+  <script src="../js/Catacombs.js"></script>
+  <link rel="stylesheet" type="text/css" href="../css/Catacombs.css">
+
+  <script>
+  $( document ).ready(function() {
+
+    initializeRC();
+
+  });
+  </script>
+
+</head>
+<body>
+    <a href="https://sdggames.fun/roman-catacombs/" target="_blank"><img src="../assets/Catacombs.png" height="75px" style="display: inline-block; vertical-align: middle;" /></a>
+   <span style="display: inline-block; vertical-align: middle;">
+       <button id='scorepadbutton' style='background-color: #F3681D;'>Scorepad</button>
+       <button id='booksbutton' style='background-color: #2000FF;'>Books</button>
+       <button id='rulesbutton' style='background-color: #238000;'>Rules</button>
+        <button id='playbutton' style='background-color: #F40105;'>Play</button>
+    </span>
+<div id="scorepad">
+  <div id="scoringinputs">
+    <table  style='color: white; font-family: Garamond, serif;'>
+        <tbody id="PentatuchBlock" style='background-color: #F40105;'>
+        <tr id="PentatuchHeader">
+            <th colspan="2">Pentatuch</th>
+            <td class="CategoryScore" id="PentatuchScore"><strong>9</strong>/6</td>
+        </tr>
+        <tr id="Pentatuch">
+            <td id=PentatuchA>
+                <select id="Pentatuch1" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=1>Genesis</option>
+                    <option value=2>Exodus</option>
+                    <option value=3>Leviticus</option>
+                </select>
+            </td>
+            <td id=PentatuchB>
+                <select id="Pentatuch2" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=2>Exodus</option>
+                    <option value=3>Leviticus</option>
+                    <option value=4>Numbers</option>
+                </select>
+            </td>
+            <td id=PentatuchC>
+                <select id="Pentatuch3" class="cards"0>
+                    <option value=0>(empty)</option>
+                    <option value=3>Leviticus</option>
+                    <option value=4>Numbers</option>
+                    <option value=5>Deuteronomy</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+        <tbody id="HistoricalBlock" style='background-color: #F3681D;'>
+        <tr id="HistoricalHeader">
+            <th colspan="2">Historical Books</th>
+            <td class="CategoryScore" id="HistoricalScore"><strong>7</strong>/5</td>
+        </tr>
+        <tr id="Historical">
+            <td id=HistoricalA>
+                <select id="Historical1" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=6>Joshua</option>
+                    <option value=7>Judges</option>
+                    <option value=8>Ruth</option>
+                    <option value=9>1 Samuel</option>
+                    <option value=10>2 Samuel</option>
+                    <option value=11>1 Kings</option>
+                    <option value=12>2 Kings</option>
+                    <option value=13>1 Chronicles</option>
+                    <option value=14>2 Chronicles</option>
+                    <option value=15>Ezra</option>
+                </select>
+            </td>
+            <td id=HistoricalB>
+                <select id="Historical2" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=7>Judges</option>
+                    <option value=8>Ruth</option>
+                    <option value=9>1 Samuel</option>
+                    <option value=10>2 Samuel</option>
+                    <option value=11>1 Kings</option>
+                    <option value=12>2 Kings</option>
+                    <option value=13>1 Chronicles</option>
+                    <option value=14>2 Chronicles</option>
+                    <option value=15>Ezra</option>
+                    <option value=16>Nehemiah</option>
+                </select>
+            </td>
+            <td id=HistoricalC>
+                <select id="Historical3" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=8>Ruth</option>
+                    <option value=9>1 Samuel</option>
+                    <option value=10>2 Samuel</option>
+                    <option value=11>1 Kings</option>
+                    <option value=12>2 Kings</option>
+                    <option value=13>1 Chronicles</option>
+                    <option value=14>2 Chronicles</option>
+                    <option value=15>Ezra</option>
+                    <option value=16>Nehemiah</option>
+                    <option value=17>Esther</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+        <tbody id="WisdomBlock" style='background-color: #C9401D;'>
+        <tr id="WisdomHeader">
+            <th colspan="2">Wisdom Books</th>
+            <td class="CategoryScore" id="WisdomScore"><strong>10</strong>/7</td>
+        </tr>
+        <tr id="Wisdom">
+            <td id=WisdomA>
+                <select id="Wisdom1" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=18>Job</option>
+                    <option value=19>Psalms</option>
+                    <option value=20>Proverbs</option>
+                </select>
+            </td>
+            <td id=WisdomB>
+                <select id="Wisdom2" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=19>Psalms</option>
+                    <option value=20>Proverbs</option>
+                    <option value=21>Ecclesiastes</option>
+                </select>
+            </td>
+            <td id=WisdomC>
+                <select id="Wisdom3" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=20>Proverbs</option>
+                    <option value=21>Ecclesiastes</option>
+                    <option value=22>Song of Solomon</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+        <tbody id="ProphetsBlock" style='background-color: #238000;'>
+        <tr id="ProphetsHeader">
+            <th colspan="2">Prophets</th>
+            <td class="CategoryScore" id="ProphetsScore"><strong>6</strong>/4</td>
+        </tr>
+        <tr id="Prophets">
+            <td id=ProphetsA>
+                <select id="Prophets1" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=23>Isaiah</option>
+                    <option value=24>Jeremiah</option>
+                    <option value=25>Lamentations</option>
+                    <option value=26>Ezekiel</option>
+                    <option value=27>Daniel</option>
+                    <option value=28>Hosea</option>
+                    <option value=29>Joel</option>
+                    <option value=30>Amos</option>
+                    <option value=31>Obadiah</option>
+                    <option value=32>Jonah</option>
+                    <option value=33>Micah</option>
+                    <option value=34>Nahum</option>
+                    <option value=35>Habakkuk</option>
+                    <option value=36>Zephaniah</option>
+                    <option value=37>Haggai</option>
+                </select>
+            </td>
+            <td id=ProphetsB>
+                <select id="Prophets2" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=24>Jeremiah</option>
+                    <option value=25>Lamentations</option>
+                    <option value=26>Ezekiel</option>
+                    <option value=27>Daniel</option>
+                    <option value=28>Hosea</option>
+                    <option value=29>Joel</option>
+                    <option value=30>Amos</option>
+                    <option value=31>Obadiah</option>
+                    <option value=32>Jonah</option>
+                    <option value=33>Micah</option>
+                    <option value=34>Nahum</option>
+                    <option value=35>Habakkuk</option>
+                    <option value=36>Zephaniah</option>
+                    <option value=37>Haggai</option>
+                    <option value=38>Zechariah</option>
+                </select>
+            </td>
+            <td id=ProphetsC>
+                <select id="Prophets3" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=25>Lamentations</option>
+                    <option value=26>Ezekiel</option>
+                    <option value=27>Daniel</option>
+                    <option value=28>Hosea</option>
+                    <option value=29>Joel</option>
+                    <option value=30>Amos</option>
+                    <option value=31>Obadiah</option>
+                    <option value=32>Jonah</option>
+                    <option value=33>Micah</option>
+                    <option value=34>Nahum</option>
+                    <option value=35>Habakkuk</option>
+                    <option value=36>Zephaniah</option>
+                    <option value=37>Haggai</option>
+                    <option value=38>Zechariah</option>
+                    <option value=39>Malachi</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+        <tbody id="GospelBlock" style='background-color: #2000FF;'>
+        <tr id="GospelHeader">
+            <th colspan="2">Gospels & Acts</th>
+            <td class="CategoryScore" id="GospelScore"><strong>9</strong>/6</td>
+        </tr>
+        <tr id="Gospel">
+            <td id=GospelA>
+                <select id="Gospel1" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=40>Matthew</option>
+                    <option value=41>Mark</option>
+                    <option value=42>Luke</option>
+                </select>
+            </td>
+            <td id=GospelB>
+                <select id="Gospel2" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=41>Mark</option>
+                    <option value=42>Luke</option>
+                    <option value=43>John</option>
+                </select>
+            </td>
+            <td id=GospelC>
+                <select id="Gospel3" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=42>Luke</option>
+                    <option value=43>John</option>
+                    <option value=44>Acts</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+        <tbody id="PaulBlock" style='background-color: #4B0082;'>
+        <tr id="PaulHeader">
+            <th colspan="2">Paul's Epistles</th>
+            <td class="CategoryScore" id="PaulScore"><strong>7</strong>/5</td>
+        </tr>
+        <tr id="Paul">
+            <td id=PaulA>
+                <select id="Paul1" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=45>Romans</option>
+                    <option value=46>1 Corinthians</option>
+                    <option value=47>2 Corinthians</option>
+                    <option value=48>Galatians</option>
+                    <option value=49>Ephesians</option>
+                    <option value=50>Philippians</option>
+                    <option value=51>Colossians</option>
+                    <option value=52>1 Thessalonians</option>
+                    <option value=53>2 Thessalonians</option>
+                    <option value=54>1 Timothy</option>
+                    <option value=55>2 Timothy</option>
+                </select>
+            </td>
+            <td id=PaulB>
+                <select id="Paul2" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=46>1 Corinthians</option>
+                    <option value=47>2 Corinthians</option>
+                    <option value=48>Galatians</option>
+                    <option value=49>Ephesians</option>
+                    <option value=50>Philippians</option>
+                    <option value=51>Colossians</option>
+                    <option value=52>1 Thessalonians</option>
+                    <option value=53>2 Thessalonians</option>
+                    <option value=54>1 Timothy</option>
+                    <option value=55>2 Timothy</option>
+                    <option value=56>Titus</option>
+                </select>
+            </td>
+            <td id=PaulC>
+                <select id="Paul3" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=47>2 Corinthians</option>
+                    <option value=48>Galatians</option>
+                    <option value=49>Ephesians</option>
+                    <option value=50>Philippians</option>
+                    <option value=51>Colossians</option>
+                    <option value=52>1 Thessalonians</option>
+                    <option value=53>2 Thessalonians</option>
+                    <option value=54>1 Timothy</option>
+                    <option value=55>2 Timothy</option>
+                    <option value=56>Titus</option>
+                    <option value=57>Philemon</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+        <tbody id="GeneralBlock" style='background-color: #9D39F5;'>
+        <tr id="GeneralHeader">
+            <th colspan="2">General Epistles</th>
+            <td class="CategoryScore" id="GeneralScore"><strong>8</strong>/5</td>
+        </tr>
+        <tr id="General">
+            <td id=GeneralA>
+                <select id="General1" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=58>Hebrews</option>
+                    <option value=59>James</option>
+                    <option value=60>1 Peter</option>
+                    <option value=61>2 Peter</option>
+                    <option value=62>1 John</option>
+                    <option value=63>2 John</option>
+                    <option value=64>3 John</option>
+                </select>
+            </td>
+            <td id=GeneralB>
+                <select id="General2" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=59>James</option>
+                    <option value=60>1 Peter</option>
+                    <option value=61>2 Peter</option>
+                    <option value=62>1 John</option>
+                    <option value=63>2 John</option>
+                    <option value=64>3 John</option>
+                    <option value=65>Jude</option>
+                </select>
+            </td>
+            <td id=GeneralC>
+                <select id="General3" class="cards">
+                    <option value=0>(empty)</option>
+                    <option value=60>1 Peter</option>
+                    <option value=61>2 Peter</option>
+                    <option value=62>1 John</option>
+                    <option value=63>2 John</option>
+                    <option value=64>3 John</option>
+                    <option value=65>Jude</option>
+                    <option value=66>Revelation</option>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+        <tbody style='background-color: white; color: black;'>
+        <tr>
+            <th>Current Score:</th>
+            <td><span id="score"> -21</span></td>
+        </tr>
+        </tbody>
+    </table>
+    <button id=restart style="background-color: black;">Clear and Restart</button>
+    <input type=hidden id="ScorePentatuch" value=0>
+    <input type=hidden id="ScoreHistorical" value=0>
+    <input type=hidden id="ScoreWisdom" value=0>
+    <input type=hidden id="ScoreProphets" value=0>
+    <input type=hidden id="ScoreGospel" value=0>
+    <input type=hidden id="ScorePaul" value=0>
+    <input type=hidden id="ScoreGeneral" value=0>
+  </div>
+  <div id="dialog">Are you the first to complete this category?</div>
+  <div id="claimeddialog">Has another player completed this category?</div>
+</div>
+<div id='rules' style='display: none;'>
+    <p>Roman Catacombs is a flip-and-write game. All the players are using the same cards each turn.</p>
+
+    <p>At the beginning of the game, the deck is shuffled and divided into 3 piles, each containing approximately 30 cards. The piles are placed face down where all players can see them.</p>
+
+    <p>Each turn the top card from each pile is revealed by flipping it face up onto a discard pile next to the face down pile. Each player decides which of the three revealed books they are going to add to their library (if any). They place the name of that book in one of the book slots for the category that book is a part of. Each turn each player can only add one book (at most) to their library.</p>
+
+    <p>It is important to carefully select which slot to place the book into because books cannot be moved to another slot, and the canon order of the books must be maintained. </p>
+
+    <p>For example, if during the first turn a player  decides to add the book of Luke to their library,  the middle book slot in the “Gospels and Acts” category would be a good place to place “Luke”. Later in the game the player can add either the Matthew book or the Mark book by placing it in the book slot to the left of Luke and he can add either the John book or Acts book by placing it in the book slot to the right of Luke.</p>
+
+    <p>Sometimes, especially late in the game, a player will not have a usable slot for any of the three revealed cards during a turn. In that turn the player passes without writing down any books.</p>
+
+    <p>When a player fills all three book slots in a category, they announce that they have done so and they read the verse on the card for the book that completed the category. If they are the first player to complete that category, they receive the higher of the two scores for that category. If they are the second or later, they receive the lower of the two scores. If two players both complete the same category on the same turn, if no one had previously completed that category they both receive the higher score.</p>
+
+    <p>When a player announces they have completed a category, the other players can select the small 'x' in the top right corner of that category to indicate that only the lower score is now available.</p>
+
+    <p>If all the cards in a pile are revealed before the game ends then those cards are shuffled, placed back face down and the game continues using the card on the top of the pile.</p>
+
+    <p>The game ends when a player successfully fills in all 21 book slots on their scorecard.</p>
+
+    <h3>Solo Mode</h3>
+
+    <p>A single player can play the game in solo mode. In solo mode, all the rules are the same except that the game ends after 21 rounds. Any slots left unfilled at the end of 21 rounds count against the player. As the first (and only) player to complete any category, the player receives the higher score for any category completed.</p>
+
+      <h3>Scoring</h3>
+
+      <p>Scoring is calculated by adding up the points earned by completing categories and then subtracting one point for each book slot you haven't filled.</p>
+</div>
+<div id="booklist" style='display: none;'>
+    <table style='color: white; font-family: Garamond, serif;'>
+        <tbody class="BookTbody" style='background-color: #F40105'>
+        <tr>
+            <th class="BookHead" id="PentatuchHead">Pentatuch (9/6)</th>
+        </tr>
+        <tr>
+            <td>
+                <ul id="PentatuchList">
+                    <li id="Li01"><select class="BookSelect" id="Book01">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                        </select> Genesis (2)</li>
+                     <li id="Li02"><select class="BookSelect" id="Book02">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                        </select> Exodus (3)</li>
+                     <li id="Li03"><select class="BookSelect" id="Book03">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Leviticus (3)</li>
+                     <li id="Li04"><select class="BookSelect" id="Book04">
+                            <option value=0 selected> </option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Numbers (2)</li>
+                     <li id="Li05"><select class="BookSelect" id="Book05">
+                            <option value=0 selected> </option>
+                            <option value=3>3</option>
+                        </select> Deuteronomy (2)</li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+        <tbody class="BookTbody"  style='background-color: #F3681D;'>
+        <tr>
+            <th class="BookHead" id="HistoricalHead">Historical Books (7/5)</th>
+        </tr>
+        <tr>
+            <td>
+                <ul id="HistoricalList">
+                    <li id="Li06"><select class="BookSelect" id="Book06">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                        </select> Joshua (1)</li>
+                     <li id="Li07"><select class="BookSelect" id="Book07">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                        </select> Judges (1)</li>
+                     <li id="Li08"><select class="BookSelect" id="Book08">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Ruth (1)</li>
+                     <li id="Li09"><select class="BookSelect" id="Book09">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 1 Samuel (1)</li>
+                     <li id="Li10"><select class="BookSelect" id="Book10">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 2 Samuel (1)</li>
+                     <li id="Li11"><select class="BookSelect" id="Book11">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 1 Kings (1)</li>
+                     <li id="Li12"><select class="BookSelect" id="Book12">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 2 Kings (1)</li>
+                     <li id="Li13"><select class="BookSelect" id="Book13">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 1 Chronicles (1)</li>
+                     <li id="Li14"><select class="BookSelect" id="Book14">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 2 Chronicles (1)</li>
+                     <li id="Li15"><select class="BookSelect" id="Book15">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Ezra (1)</li>
+                     <li id="Li16"><select class="BookSelect" id="Book16">
+                            <option value=0 selected> </option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Nehemiah (1)</li>
+                     <li id="Li17"><select class="BookSelect" id="Book17">
+                            <option value=0 selected> </option>
+                            <option value=3>3</option>
+                        </select> Esther (1)</li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+        <tbody class="BookTbody"  style='background-color: #C9401D;'>
+        <tr>
+            <th class="BookHead" id="WisdomHead">Wisdom Books (10/7)</th>
+        </tr>
+        <tr>
+            <td>
+                <ul id="WisdomList">
+                     <li id="Li18"><select class="BookSelect" id="Book18">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                        </select> Job (2)</li>
+                     <li id="Li19"><select class="BookSelect" id="Book19">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                        </select> Psalms (4)</li>
+                     <li id="Li20"><select class="BookSelect" id="Book20">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Proverbs (3)</li>
+                     <li id="Li21"><select class="BookSelect" id="Book21">
+                            <option value=0 selected> </option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Ecclesiastes (2)</li>
+                     <li id="Li22"><select class="BookSelect" id="Book22">
+                            <option value=0 selected> </option>
+                            <option value=3>3</option>
+                        </select> Song of Solomon (1)</li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+        <tbody class="BookTbody"  style='background-color: #238000;'>
+        <tr>
+            <th class="BookHead" id="ProphetsHead">Prophets (6/4)</th>
+        </tr>
+        <tr>
+            <td>
+                <ul id="ProphetsList">
+                     <li id="Li23"><select class="BookSelect" id="Book23">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                        </select> Isaiah (1)</li>
+                     <li id="Li24"><select class="BookSelect" id="Book24">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                        </select> Jeremiah (1)</li>
+                     <li id="Li25"><select class="BookSelect" id="Book25">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Lamentations (1)</li>
+                     <li id="Li26"><select class="BookSelect" id="Book26">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Ezekiel (1)</li>
+                     <li id="Li27"><select class="BookSelect" id="Book27">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Daniel (1)</li>
+                     <li id="Li28"><select class="BookSelect" id="Book28">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Hosea (1)</li>
+                     <li id="Li29"><select class="BookSelect" id="Book29">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Joel (1)</li>
+                     <li id="Li30"><select class="BookSelect" id="Book30">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Amos (1)</li>
+                     <li id="Li31"><select class="BookSelect" id="Book31">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Obadiah (1)</li>
+                     <li id="Li32"><select class="BookSelect" id="Book32">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Jonah (1)</li>
+                     <li id="Li33"><select class="BookSelect" id="Book33">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Micah (1)</li>
+                     <li id="Li34"><select class="BookSelect" id="Book34">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Nahum (1)</li>
+                     <li id="Li35"><select class="BookSelect" id="Book35">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Habakkuk (1)</li>
+                     <li id="Li36"><select class="BookSelect" id="Book36">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Zephaniah (1)</li>
+                     <li id="Li37"><select class="BookSelect" id="Book37">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Haggai (1)</li>
+                     <li id="Li38"><select class="BookSelect" id="Book38">
+                            <option value=0 selected> </option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Zechariah (1)</li>
+                     <li id="Li39"><select class="BookSelect" id="Book39">
+                            <option value=0 selected> </option>
+                            <option value=3>3</option>
+                        </select> Malachi (1)</li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+        <tbody class="BookTbody"  style='background-color: #2000FF;'>
+        <tr>
+            <th class="BookHead" id="GospelHead">Gospels & Acts (9/6)</th>
+        </tr>
+        <tr>
+            <td>
+                <ul id="GospelList">
+                     <li id="Li40"><select class="BookSelect" id="Book40">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                        </select> Matthew (2)</li>
+                     <li id="Li41"><select class="BookSelect" id="Book41">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                        </select> Mark (3)</li>
+                     <li id="Li42"><select class="BookSelect" id="Book42">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Luke (3)</li>
+                     <li id="Li43"><select class="BookSelect" id="Book43">
+                            <option value=0 selected> </option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> John (3)</li>
+                     <li id="Li44"><select class="BookSelect" id="Book44">
+                            <option value=0 selected> </option>
+                            <option value=3>3</option>
+                        </select> Acts (1)</li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+        <tbody class="BookTbody"  style='background-color: #4B0082;'>
+        <tr>
+            <th class="BookHead" id="PaulHead">Paul's Epistles (7/5)</th>
+        </tr>
+        <tr>
+            <td>
+                <ul id="PaulList">
+                     <li id="Li45"><select class="BookSelect" id="Book45">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                        </select> Romans (1)</li>
+                     <li id="Li46"><select class="BookSelect" id="Book46">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                        </select> 1 Corinthians (1)</li>
+                     <li id="Li47"><select class="BookSelect" id="Book47">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 2 Corinthians (1)</li>
+                     <li id="Li48"><select class="BookSelect" id="Book48">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Galatians (1)</li>
+                     <li id="Li49"><select class="BookSelect" id="Book49">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Ephesians (1)</li>
+                     <li id="Li50"><select class="BookSelect" id="Book50">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Philippians (1)</li>
+                     <li id="Li51"><select class="BookSelect" id="Book51">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Colossians (1)</li>
+                     <li id="Li52"><select class="BookSelect" id="Book52">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 1 Thessalonians (1)</li>
+                     <li id="Li53"><select class="BookSelect" id="Book53">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 2 Thessalonians (1)</li>
+                     <li id="Li54"><select class="BookSelect" id="Book54">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 1 Timothy (1)</li>
+                     <li id="Li55"><select class="BookSelect" id="Book55">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 2 Timothy (1)</li>
+                     <li id="Li56"><select class="BookSelect" id="Book56">
+                            <option value=0 selected> </option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Titus (1)</li>
+                     <li id="Li57"><select class="BookSelect" id="Book57">
+                            <option value=0 selected> </option>
+                            <option value=3>3</option>
+                        </select>Philemon (1)</li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+        <tbody class="BookTbody"  style='background-color: #9D39F5;'>
+        <tr>
+            <th class="BookHead" id="GeneralHead">General Epistles (8/5)</th>
+        </tr>
+        <tr>
+            <td>
+                <ul id="GeneralList">
+                     <li id="Li58"><select class="BookSelect" id="Book58">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                        </select> Hebrews (1)</li>
+                     <li id="Li59"><select class="BookSelect" id="Book59">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                        </select> James (2)</li>
+                     <li id="Li60"><select class="BookSelect" id="Book60">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 1 Peter (2)</li>
+                     <li id="Li61"><select class="BookSelect" id="Book61">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 2 Peter (1)</li>
+                     <li id="Li62"><select class="BookSelect" id="Book62">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 1 John (2)</li>
+                     <li id="Li63"><select class="BookSelect" id="Book63">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 2 John (1)</li>
+                     <li id="Li64"><select class="BookSelect" id="Book64">
+                            <option value=0 selected> </option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> 3 John (1)</li>
+                     <li id="Li65"><select class="BookSelect" id="Book65">
+                            <option value=0 selected> </option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                        </select> Jude (1)</li>
+                     <li id="Li66"><select class="BookSelect" id="Book66">
+                            <option value=0 selected> </option>
+                            <option value=3>3</option>
+                        </select> Revelation (1)</li>
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+        <tr><td>Numbers in parentheses after each book indicate the number of cards in the game for that book of the Bible.</td></tr>
+    </table>
+</div>
+<div id="playdiv" style='display: none;'>
+    <table id="playtable">
+        <tbody id="playtbody" style="width: 100%; max-width: 400px;">
+        <tr class="playrow" style="width: 100%; max-width: 400px; display: block;">
+            <td colspan="2" style="width: 100%;" id="playinstructions"></td>
+        </tr>
+        <tr class="playrow" style="width: 100%; max-width: 400px; display: block;">
+            <td class="cardback" id="cardback1" style="width: 50%"><img id="back1" src="../assets/Backv2sm.png"></td>
+            <td class="cardface" id="cardface1" style="width: 50%"></td>
+        </tr>
+        <tr class="playrow" style="width: 100%; max-width: 400px; display: block;">
+            <td class="cardback" id="cardback2" style="width: 50%"></td>
+            <td class="cardface" id="cardface2" style="width: 50%"></td>
+        </tr>
+        <tr class="playrow" style="width: 100%; max-width: 400px; display: block;">
+            <td class="cardback" id="cardback3" style="width: 50%"></td>
+            <td class="cardface" id="cardface3" style="width: 50%"></td>
+        </tr>
+        <tr class="playrow" style="width: 100%; max-width: 400px; display: block;">
+            <td colspan=2 style="text-align: center"><button id="shuffle" style="background-color: black;">Shuffle and Start New Game</button></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

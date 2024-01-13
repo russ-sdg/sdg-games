@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Roman Catacombs - A Flip and Write Game</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+    </head>
+    <body class="sb-nav-fixed">
+        <!-- Responsive navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div class="container px-5">
+              <a class="navbar-brand" href="../index.html">SDG Games</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                      <li class="nav-item"><a class="nav-link" href="../about.html">About</a></li>
+                      <li class="nav-item"><a class="nav-link" href="../games.html">Games</a></li>
+                      <li class="nav-item"><a class="nav-link" href="https://sdggames.fun/posts">News</a></li>
+                  </ul>
+              </div>
+          </div>
+        </nav>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <img class="img-responsive img-fluid" style="padding: 10px;" src="../assets/RomanCatacombsTitle.png" alt="Roman Catacombs">
+                        <div class="row">
+                          <div class="col ml-auto">
+                              <div class="card bg-primary text-white mb-4">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                  <a class="text-white stretched-link text-decoration-none" href="#description">Game Description</a>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="col ml-auto">
+                              <div class="card bg-primary text-white mb-4">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                  <a class="text-white stretched-link text-decoration-none" href="#deck">Deck Description</a>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="col ml-auto">
+                              <div class="card bg-primary text-white mb-4">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                  <a class="text-white stretched-link text-decoration-none" href="#play">How to Play</a>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="col ml-auto">
+                              <div class="card bg-primary text-white mb-4">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                  <a class="text-white stretched-link text-decoration-none" href="#buy">How to Buy</a>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="col ml-auto">
+                              <div class="card bg-primary text-white mb-4">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                  <a class="text-white stretched-link text-decoration-none" href="scorepad.html">Scorepad</a>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                        <a id="description"></a>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <strong>Game Description</strong>
+                            </div>
+                            <div class="card-body">
+                              <p><em>Roman Catacombs</em> is a flip-and-write game with a Biblical theme.</p>
+
+                              <p>You are the librarian for a small church meeting in the catacombs outside of Rome. You have been tasked with building a representative collection of manuscripts of the various books of the Bible. Unfortunately, you have limited storage space. Therefore, your goal is to complete a library of three books from each of seven categories. You need to keep the books in the canon order and you can’t move a book once you’ve placed it. </p>
+
+                              <p>The game ends when one player completes their library. Points are earned for completing categories (with bonus points for being the first to do so) and points are lost for leaving spots empty. The player with the most points wins.</p>
+
+                            </div>
+                        </div>
+                        <a id="deck"></a>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <strong>Deck and Scorecard Description</strong>
+                            </div>
+                            <div class="card-body">
+                              <p>The <em>Roman Catacombs</em> deck of cards has 90 cards. The face of each card has the name of a book of the Bible and a scripture quote from that book.</p>
+
+                              <p>The backs of the cards and the box feature an ancient painting of Noah on the ark that was found in one of the catacombs near Rome where the early church met.</p>
+                              <div class="text-center" style="padding: 10px; width: 100%">
+                                <img class="img-responsive img-fluid" src="../assets/RCcard-front-back.png">
+                              </div>
+
+                              <p>The scorecard has 21 circles organized in 7 groups of 3. The 7 groups are labelled by categories of books in the Bible:
+                                <ul>
+                                  <li>Pentatuch</li>
+                                  <li>Historical Books</li>
+                                  <li>Wisdom Books</li>
+                                  <li>Prophets</li>
+                                  <li>Gospels and Acts</li>
+                                  <li>Paul's Epistles</li>
+                                  <li>General Epistles & Revelation</li>
+                                </ul>
+                              </p>
+
+                              <p>The back of the scorecards lists all of the books of the Bible organized into these categories and in canon order.  After the name of each book is a number in parentheses. This indicates how many cards for that book are in the <em>Roman Catacombs</em> deck.</p>
+                              <p>Note that the card faces are color coded to the category that book belongs to.</p>
+
+                              <div class="text-center" style="padding: 10px; width: 100%">
+                                <img src="../assets/RCSmallScorecardFrontBackV1.webp" width="100%">
+                              </div>
+                            </div>
+                        </div>
+                        <a id="play"></a>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <strong>How To Play</strong>
+                            </div>
+                            <div class="card-body">
+                              <p><em>Roman Catacombs</em> is a flip-and-write game. All the players are using the same cards each turn.</p>
+
+                              <p>At the beginning of the game, the deck is shuffled and divided into 3 piles, each containing approximately 30 cards. The piles are placed face down where all players can see them.</p>
+
+                              <p>The player with the most points at the end of the game wins.</p>
+
+                              <p>Each turn the top card from each pile is revealed by flipping it face up onto a discard pile next to the face down pile. Each player decides which of the three revealed books they are going to add to their library (if any). They write the name of that book (or an abbreviation) into one of the circles for the category that book is a part of. Each turn each player can only add one book (at most) to their library.</p>
+                              <p>It is important to carefully select which circle to write the book into because books cannot be moved to another circle, and the canon order of the books must be maintained.</p>
+
+                              <div class="text-center" style="padding: 10px; width: 100%">
+                                <img src="../assets/RCfirstplay.png" width="100%">
+                              </div>
+
+                              <p>Sometimes, especially late in the game, a player will not have a usable spot for any of the three revealed cards during a turn. In that turn the player passes without writing down any books.</p>
+
+                              <p>When a player fills all three spots in a category, they announce that they have done so and they read the verse on the card for the book that completed the category. If they are the first player to complete that category, they circle the larger of the two numbers under the category name. If they are the second or later, they circle the smaller of the two numbers. If two players both complete the same category on the same turn, if no one had previously completed that category they both circle the larger number.</p>
+
+                              <p>If all the cards in a pile are revealed before the game ends then those cards are shuffled, placed back face down and the game continues using the card on the top of the pile.</p>
+
+                              <p>The game ends when a player successfully fills in all 21 circles on their scorecard. At that point players add up the circled points they received for completing categories and subtract one point for each circle left unfilled.</p>
+
+                              <p>The player with the most points wins.</p>
+
+                              <div class="text-center" style="padding: 10px; width: 100%">
+                                <img src="../assets/RCgameend.png" width="100%">
+                              </div>
+
+                            </div>
+                        </div>
+                        <a id="buy"></a>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <strong>How to Buy</strong>
+                            </div>
+                            <div class="card-body">
+                              <p><em>If inventory is available, orders from the SDG Biblical Wisdom shop typically ship within a couple of days.<br />
+                                <div id='product-component-1705007824993'></div>
+<script type="text/javascript">
+/*<![CDATA[*/
+(function () {
+  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+  if (window.ShopifyBuy) {
+    if (window.ShopifyBuy.UI) {
+      ShopifyBuyInit();
+    } else {
+      loadScript();
+    }
+  } else {
+    loadScript();
+  }
+  function loadScript() {
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = scriptURL;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+    script.onload = ShopifyBuyInit;
+  }
+  function ShopifyBuyInit() {
+    var client = ShopifyBuy.buildClient({
+      domain: 'bd30ce-2.myshopify.com',
+      storefrontAccessToken: '7bf5f03bf3c7ba399d3ef67f8250c103',
+    });
+    ShopifyBuy.UI.onReady(client).then(function (ui) {
+      ui.createComponent('product', {
+        id: '8113289756821',
+        node: document.getElementById('product-component-1705007824993'),
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: {
+  "product": {
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "calc(25% - 20px)",
+          "margin-left": "20px",
+          "margin-bottom": "50px"
+        }
+      },
+      "button": {
+        "font-family": "Avant Garde, sans-serif",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#2d38e0"
+        },
+        "background-color": "#323ef9",
+        ":focus": {
+          "background-color": "#2d38e0"
+        },
+        "border-radius": "6px",
+        "padding-left": "20px",
+        "padding-right": "20px"
+      },
+      "quantityInput": {
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px"
+      }
+    },
+    "contents": {
+      "img": false,
+      "title": false,
+      "price": false
+    },
+    "text": {
+      "button": "Buy Roman Catacombs"
+    }
+  },
+  "productSet": {
+    "styles": {
+      "products": {
+        "@media (min-width: 601px)": {
+          "margin-left": "-20px"
+        }
+      }
+    }
+  },
+  "modalProduct": {
+    "contents": {
+      "img": false,
+      "imgWithCarousel": true,
+      "button": false,
+      "buttonWithQuantity": true
+    },
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "100%",
+          "margin-left": "0px",
+          "margin-bottom": "0px"
+        }
+      },
+      "button": {
+        "font-family": "Avant Garde, sans-serif",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#2d38e0"
+        },
+        "background-color": "#323ef9",
+        ":focus": {
+          "background-color": "#2d38e0"
+        },
+        "border-radius": "6px",
+        "padding-left": "20px",
+        "padding-right": "20px"
+      },
+      "quantityInput": {
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px"
+      }
+    },
+    "text": {
+      "button": "Add to cart"
+    }
+  },
+  "option": {},
+  "cart": {
+    "styles": {
+      "button": {
+        "font-family": "Avant Garde, sans-serif",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#2d38e0"
+        },
+        "background-color": "#323ef9",
+        ":focus": {
+          "background-color": "#2d38e0"
+        },
+        "border-radius": "6px"
+      }
+    },
+    "text": {
+      "total": "Subtotal",
+      "button": "Checkout"
+    }
+  },
+  "toggle": {
+    "styles": {
+      "toggle": {
+        "font-family": "Avant Garde, sans-serif",
+        "background-color": "#323ef9",
+        ":hover": {
+          "background-color": "#2d38e0"
+        },
+        ":focus": {
+          "background-color": "#2d38e0"
+        }
+      },
+      "count": {
+        "font-size": "14px"
+      }
+    }
+  }
+},
+      });
+    });
+  }
+})();
+/*]]>*/
+</script></p>
+                              <p>Otherwise you can order from The Game Crafter print-on-demand store.<br />
+                                <a class="btn btn-primary" href="https://www.thegamecrafter.com/games/permalink/976AC844-ACAC-11EB-B954-2ED76DF84D6F" role="button">Order</a></p>
+
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2024</span> SDG Strategy, LLC | To God be the glory</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <!-- Jquery -->
+        <script  src="https://code.jquery.com/jquery-3.7.1.slim.min.js"  integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="  crossorigin="anonymous"></script>
+        <!-- Core theme JS-->
+        <script src="../js/scripts.js"></script>
+
+    </body>
+</html>

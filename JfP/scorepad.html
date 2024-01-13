@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Journeys with Jesus Scorepad</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <!-- Favicon-->
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <link href="../css/styles.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script>
+  $( document ).ready(function() {
+
+    calculateScore();
+
+    $(":input").bind('keyup mouseup', function () {
+      console.log("input "+$(this).attr('id')+" changed");
+      if($(this).attr('type') == 'checkbox') {
+        console.log("checkbox, skipping");
+        return;
+      }
+      calculateScore();
+    });
+
+    $(":checkbox").change(function () {
+      console.log("input "+$(this).attr('id')+" changed");
+      if ($(this).is(':checked')) {
+          console.log($(this).attr('id') + ' is now checked');
+      } else {
+          console.log($(this).attr('id') + ' is now unchecked');
+      }
+      calculateScore();
+    });
+
+  });
+
+  function calculateScore() {
+    var totalscore = 0;
+
+    var lukeRegions = $(".LukeRegion:checked").length;
+    console.log("Luke Regions:"+lukeRegions);
+    $("#LukeRegions").text(4*lukeRegions);
+    totalscore += 4*lukeRegions;
+
+    var silasRegions = $(".SilasRegion:checked").length;
+    console.log("Silas Regions:"+silasRegions);
+    $("#SilasRegions").text(4*silasRegions);
+    totalscore += 4*silasRegions;
+
+    var titusRegions = $(".TitusRegion:checked").length;
+    console.log("Titus Regions:"+titusRegions);
+    $("#TitusRegions").text(4*titusRegions);
+    totalscore += 4*titusRegions;
+
+    var preachingPastoring = Number($('#Preached').val())*3 + Number($('#Called').val())*5;
+    $('#PreachingPastoring').text(preachingPastoring);
+    totalscore += preachingPastoring;
+
+    var missedCities = $(".city").length - $(".city:checked").length;
+    console.log("Total Cities:"+$(".city").length+" Checked Cities:"+$(".city:checked").length);
+    $(".city:checked").each(function( index ) {
+      console.log( index + ": " + $( this ).attr('id') );
+    });
+
+    $("#Cities").text("-"+Number(2*missedCities));
+    totalscore -= Number(2*missedCities);
+
+    $('#TotalScore').text(totalscore);
+
+
+
+  }
+
+  </script>
+  <style>
+  tr {padding-bottom: 5px;}
+  th {text-align: right;}
+  td {text-align: center;}
+  img{
+      max-width: 100%;
+      display: block;
+  }
+  body {
+      background-color: #FDEEB9;
+      max-width: 400px;
+  }
+  input[type='number']{ width: 30px;}
+  h1 {margin-top: 0;}
+  table {border: 0;}
+  h4 {font-size: 14pt;}
+  </style>
+</head>
+<body>
+    <a href="https://sdggames.fun/JfP/index.html" target="_blank"><img  class="img-responsive img-fluid" src="../assets/JfP Logo Long Red.png" /></a>
+<h1>Total Score: <span id='TotalScore'>-24</span></h1>
+<div id="scorepad">
+  <div style='background-color: lightgreen; padding: 10px;'>
+    <h4>Which Regions Did Luke Visit? (<span id='LukeRegions'>4</span> points)</h4>
+    <p>
+      <input type=checkbox class='LukeRegion' id='LukeMacedonia' checked disabled><span style='color: green; padding-left: 10px;'>Macedonia & Achaia</span><br />
+      <input type=checkbox class='LukeRegion' id='LukeAsia'><span style='color: purple; padding-left: 10px;'>Asia Minor</span><br />
+      <input type=checkbox class='LukeRegion' id='LukeGalatia'><span style='color: orange; padding-left: 10px;'>Galatia</span><br />
+      <input type=checkbox class='LukeRegion' id='LukeMediterranean'><span style='color: blue; padding-left: 10px;'>Mediterranean Islands</span>
+    </p>
+  </div>
+  <div style='background-color: moccasin; padding: 10px;'>
+    <h4>Which Regions Did Silas Visit? (<span id='SilasRegions'>4</span> points)</h4>
+    <p>
+      <input type=checkbox class='SilasRegion' id='SilasMacedonia'><span style='color: green; padding-left: 10px;'>Macedonia & Achaia</span><br />
+      <input type=checkbox class='SilasRegion' id='SilasAsia'><span style='color: purple; padding-left: 10px;'>Asia Minor</span><br />
+      <input type=checkbox class='SilasRegion' id='SilasGalatia' checked disabled><span style='color: orange; padding-left: 10px;'>Galatia</span><br />
+      <input type=checkbox class='SilasRegion' id='SilasMediterranean'><span style='color: blue; padding-left: 10px;'>Mediterranean Islands</span>
+    </p>
+  </div>
+  <div style='background-color: lightblue; padding: 10px;'>
+    <h4>Which Regions Did Titus Visit? (<span id='TitusRegions'>4</span> points)</h4>
+    <p>
+      <input type=checkbox class='TitusRegion' id='TitusMacedonia'><span style='color: green; padding-left: 10px;'>Macedonia & Achaia</span><br />
+      <input type=checkbox class='TitusRegion' id='TitusAsia'><span style='color: purple; padding-left: 10px;'>Asia Minor</span><br />
+      <input type=checkbox class='TitusRegion' id='TitusGalatia'><span style='color: orange; padding-left: 10px;'>Galatia</span><br />
+      <input type=checkbox class='TitusRegion' id='TitusMediterranean' checked disabled><span style='color: blue; padding-left: 10px;'>Mediterranean Islands</span>
+    </p>
+  </div>
+  <div style='background-color: lavender; padding: 10px;'>
+    <h4>Preaching/Pastoring (<span id='PreachingPastoring'>0</span> points)</h4>
+    <p><input type='number' value=0 style='width: 50px' id='Preached'> # of Times Preached <br />
+      <input type='number' value=0 style='width: 50px' id='Called'> # Called as Pastors
+    </p>
+  </div>
+  <div style='background-color: white; padding: 10px;'>
+    <h4>Cities Visited (<span id='Cities'>-30</span> points)</h4>
+  </div>
+  <div style='background-color: lightgreen; padding: 10px;'>
+    <p>
+      <input type=checkbox class='city' id='Neapolis'><span style='color: green; padding-left: 10px;'>Neapolis</span><br />
+      <input type=checkbox class='city' id='Philippi' checked disabled><span style='color: green; padding-left: 10px;'>Philippi</span><br />
+      <input type=checkbox class='city' id='Thessalonica'><span style='color: green; padding-left: 10px;'>Thessalonica</span><br />
+      <input type=checkbox class='city' id='Berea'><span style='color: green; padding-left: 10px;'>Berea</span><br />
+      <input type=checkbox class='city' id='MtOlympus'><span style='color: green; padding-left: 10px;'>Mt. Olympus</span><br />
+      <input type=checkbox class='city' id='Ambracia'><span style='color: green; padding-left: 10px;'>Ambracia</span><br />
+      <input type=checkbox class='city' id='Delphi'><span style='color: green; padding-left: 10px;'>Delphi</span><br />
+      <input type=checkbox class='city' id='Athens'><span style='color: green; padding-left: 10px;'>Athens</span><br />
+      <input type=checkbox class='city' id='Corinth'><span style='color: green; padding-left: 10px;'>Corinth</span><br />
+      <input type=checkbox class='city' id='Sparta'><span style='color: green; padding-left: 10px;'>Sparta</span>
+    </p>
+  </div>
+  <div style='background-color: lightblue; padding: 10px;'>
+    <p>
+      <input type=checkbox class='city' id='Crete' checked disabled><span style='color: blue; padding-left: 10px;'>Crete</span><br />
+      <input type=checkbox class='city' id='Patmos'><span style='color: blue; padding-left: 10px;'>Patmos</span><br />
+      <input type=checkbox class='city' id='Rhodes'><span style='color: blue; padding-left: 10px;'>Rhodes</span><br />
+      <input type=checkbox class='city' id='Cyprus'><span style='color: blue; padding-left: 10px;'>Cyprus</span>
+    </p>
+  </div>
+  <div style='background-color: moccasin; padding: 10px;'>
+    <p>
+      <input type=checkbox class='city' id='Perga'><span style='color: orange; padding-left: 10px;'>Perga</span><br />
+      <input type=checkbox class='city' id='Derbe'><span style='color: orange; padding-left: 10px;'>Derbe</span><br />
+      <input type=checkbox class='city' id='Lystra'><span style='color: orange; padding-left: 10px;'>Lystra</span><br />
+      <input type=checkbox class='city' id='Iconium'><span style='color: orange; padding-left: 10px;'>Iconium</span><br />
+      <input type=checkbox class='city' id='Colossae'><span style='color: orange; padding-left: 10px;'>Colossae</span><br />
+      <input type=checkbox class='city' id='Apamea'><span style='color: orange; padding-left: 10px;'>Apamea</span><br />
+      <input type=checkbox class='city' id='Antioch' checked disabled><span style='color: orange; padding-left: 10px;'>Antioch</span><br />
+      <input type=checkbox class='city' id='Pessinus'><span style='color: orange; padding-left: 10px;'>Pessinus</span><br />
+      <input type=checkbox class='city' id='Chalcedon'><span style='color: orange; padding-left: 10px;'>Chalcedon</span>
+    </p>
+  </div>
+  <div style='background-color: lavender; padding: 10px;'>
+    <p>
+      <input type=checkbox class='city' id='Troas'><span style='color: purple; padding-left: 10px;'>Troas</span><br />
+      <input type=checkbox class='city' id='Pergamum'><span style='color: purple; padding-left: 10px;'>Pergamum</span><br />
+      <input type=checkbox class='city' id='Thyatira'><span style='color: purple; padding-left: 10px;'>Thyatira</span><br />
+      <input type=checkbox class='city' id='Smyrna'><span style='color: purple; padding-left: 10px;'>Smyrna</span><br />
+      <input type=checkbox class='city' id='Ephesus'><span style='color: purple; padding-left: 10px;'>Ephesus</span><br />
+      <input type=checkbox class='city' id='Sardis'><span style='color: purple; padding-left: 10px;'>Sardis</span><br />
+      <input type=checkbox class='city' id='Philadelphia'><span style='color: purple; padding-left: 10px;'>Philadelphia</span><br />
+      <input type=checkbox class='city' id='Laodicea'><span style='color: purple; padding-left: 10px;'>Laodicea</span><br />
+      <input type=checkbox class='city' id='Miletus'><span style='color: purple; padding-left: 10px;'>Miletus</span><br />
+      <input type=checkbox class='city' id='Cridus'><span style='color: purple; padding-left: 10px;'>Cridus</span>
+    </p>
+  </div>
+</div>
+
+</body>
+</html>
