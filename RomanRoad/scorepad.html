@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SDGgames Scorepad</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="js/SDGgames.js"></script>
+  <link rel="stylesheet" href="css/SDGgames.css">
+  <script>
+    numplayers = sessionStorage.getItem("numplayers");
+    player1name = sessionStorage.getItem("player1name");
+    player2name = sessionStorage.getItem("player2name");
+    player3name = sessionStorage.getItem("player3name");
+    player4name = sessionStorage.getItem("player4name");
+    player5name = sessionStorage.getItem("player5name");
+    player6name = sessionStorage.getItem("player6name");
+
+    leader = "leader";
+    player1score = 0;
+    player2score = 0;
+    player3score = 0;
+    player4score = 0;
+    player5score = 0;
+    player6score = 0;
+    highestscore = 0;
+    round = 1;
+    newrow = "";
+    newrowscore = "";
+
+    $( document ).ready(function() {
+        $("#playingToLine").hide();
+        $("#gameover").hide();
+        $("#R1-scoring").hide();
+        $("#R1-namesDone").hide();
+        $("#player1name").hide();
+        $("#player2name").hide();
+        $("#player3name").hide();
+        $("#player4name").hide();
+        $("#player5name").hide();
+        $("#player6name").hide();
+        $("#playernames").hide();
+        if(numplayers < 1) $(".namesDone").prop("disabled",true);
+        $("#scorepad").hide();
+
+        // restore player information
+        $("input[name='numplayer'][value=" + numplayers + "]").attr('checked', 'checked');
+        $("#player1name").val(player1name);
+        $("#player2name").val(player2name);
+        $("#player3name").val(player3name);
+        $("#player4name").val(player4name);
+        $("#player5name").val(player5name);
+        $("#player6name").val(player6name);
+        if(numplayers == 2) {
+            $("#playernames").show();
+            $("#player1name").show();
+            $("#player2name").show();
+            $("#player3name").hide();
+            $("#player4name").hide();
+            $("#player5name").hide();
+            $("#player6name").hide();
+        }
+        if(numplayers == 3) {
+            $("#playernames").show();
+            $("#player1name").show();
+            $("#player2name").show();
+            $("#player3name").show();
+            $("#player4name").hide();
+            $("#player5name").hide();
+            $("#player6name").hide();
+        }
+        if(numplayers == 4) {
+            $("#playernames").show();
+            $("#player1name").show();
+            $("#player2name").show();
+            $("#player3name").show();
+            $("#player4name").show();
+            $("#player5name").hide();
+            $("#player6name").hide();
+        }
+        if(numplayers == 5) {
+            $("#playernames").show();
+            $("#player1name").show();
+            $("#player2name").show();
+            $("#player3name").show();
+            $("#player4name").show();
+            $("#player5name").show();
+            $("#player6name").hide();
+        }
+        if(numplayers == 6) {
+            $("#playernames").show();
+            $("#player1name").show();
+            $("#player2name").show();
+            $("#player3name").show();
+            $("#player4name").show();
+            $("#player5name").show();
+            $("#player6name").show();
+        }
+
+        /* reset game information */
+        $( document ).tooltip();
+
+        $("input[name='numplayer']").change(function() {
+            numplayers = this.value;
+            $("#playernames").show();
+            $("#player1name").show();
+
+            switch(this.value) {
+                case "2":
+                    $("#player2name").show();
+                    $("#player3name").hide();
+                    $("#player4name").hide();
+                    $("#player5name").hide();
+                    $("#player6name").hide();
+                    break;
+                case "3":
+                    $("#player2name").show();
+                    $("#player3name").show();
+                    $("#player4name").hide();
+                    $("#player5name").hide();
+                    $("#player6name").hide();
+                    break;
+                case "4":
+                    $("#player2name").show();
+                    $("#player3name").show();
+                    $("#player4name").show();
+                    $("#player5name").hide();
+                    $("#player6name").hide();
+                    break;
+                case "5":
+                    $("#player2name").show();
+                    $("#player3name").show();
+                    $("#player4name").show();
+                    $("#player5name").show();
+                    $("#player6name").hide();
+                    break;
+                default:
+                $("#player2name").show();
+                $("#player3name").show();
+                $("#player4name").show();
+                $("#player5name").show();
+                $("#player6name").show();
+            }
+        });
+
+        $(".namesDone").click(function() {
+            player1name = $("#player1name").val();
+            player2name = $("#player2name").val();
+            player3name = $("#player3name").val();
+            player4name = $("#player4name").val();
+            player5name = $("#player5name").val();
+            player6name = $("#player6name").val();
+
+            sessionStorage.setItem("numplayers", numplayers);
+            sessionStorage.setItem("player1name", player1name);
+            sessionStorage.setItem("player2name", player2name);
+            sessionStorage.setItem("player3name", player3name);
+            sessionStorage.setItem("player4name", player4name);
+            sessionStorage.setItem("player5name", player5name);
+            sessionStorage.setItem("player6name", player6name);
+
+
+            $("#names").hide(1000);
+            $("#scorepad").show(1000);
+        });
+        $("#R1-namesDone").click(function() {r1NamesDone();});
+        $("#R2-namesDone").click(function() {r2NamesDone();});
+
+        $("#openNames").click(function() {
+          $("#names").show(1000);
+          $("#scorepad").hide(1000);
+        });
+
+
+        $("#player1name").on('input',function() {
+          if(namescomplete()) $(".namesDone").prop("disabled",false);
+          else $(".namesDone").prop("disabled,true");
+        });
+        $("#player2name").on('input',function() {
+          if(namescomplete()) $(".namesDone").prop("disabled",false);
+          else $(".namesDone").prop("disabled",true);
+        });
+        $("#player3name").on('input',function() {
+          if(namescomplete()) $(".namesDone").prop("disabled",false);
+          else $(".namesDone").prop("disabled",true);
+        });
+        $("#player4name").on('input',function() {
+          if(namescomplete()) $(".namesDone").prop("disabled",false);
+          else $(".namesDone").prop("disabled",true);
+        });
+
+        $("#player5name").on('input',function() {
+          if(namescomplete()) $(".namesDone").prop("disabled",false);
+          else $(".namesDone").prop("disabled",true);
+        });
+
+        $("#player6name").on('input',function() {
+          if(namescomplete()) $(".namesDone").prop("disabled",false);
+          else $(".namesDone").prop("disabled",true);
+        });
+
+        $(".replay").click(function() {
+            location.reload();
+        });
+
+
+    });
+
+    function namescomplete()  {
+      numplayers = $("input[name='numplayer']:checked").val();
+
+      if(numplayers == 2) {
+        if((!$("#player1name").val()) ) {
+          return false;
+        }
+        if((!$("#player2name").val()) ) {
+          return false;
+        }
+      }
+       if(numplayers == 3) {
+        if((!$("#player1name").val()) ) {
+          return false;
+        }
+        if((!$("#player2name").val()) ) {
+          return false
+        }
+        if((!$("#player3name").val())) {
+          return false;
+        }
+      }
+       if(numplayers == 4) {
+        if((!$("#player1name").val()) ) {
+          return false;
+        }
+        if((!$("#player2name").val())) {
+          return false;
+        }
+        if((!$("#player3name").val())) {
+          return false;
+        }
+        if((!$("#player4name").val())) {
+          return false;
+        }
+      }
+       if(numplayers == 5) {
+        if((!$("#player1name").val()) ) {
+          return false;
+        }
+        if((!$("#player2name").val())) {
+          return false;
+        }
+        if((!$("#player3name").val())) {
+          return false;
+        }
+        if((!$("#player4name").val())) {
+          return false;
+        }
+        if((!$("#player5name").val())) {
+          return false;
+        }
+      }
+       if(numplayers == 6) {
+        if((!$("#player1name").val()) ) {
+          return false;
+        }
+        if((!$("#player2name").val())) {
+          return false;
+        }
+        if((!$("#player3name").val())) {
+          return false;
+        }
+        if((!$("#player4name").val())) {
+          return false;
+        }
+        if((!$("#player5name").val())) {
+          return false;
+        }
+        if((!$("#player6name").val())) {
+          return false;
+        }
+      }
+     return true;
+    }
+
+  </script>
+</head>
+<body>
+    <a href="https://sdggames.fun/RomanRoad/" target="_blank"><img src="../assets/SDG-Games-Blue.webp" height=50 /></a>
+<h1>Scorepad</h1>
+<div id="names">
+  <fieldset>
+    <legend>How many players?</legend>
+    <label for="2-player">2</label>
+    <input type="radio" name="numplayer" id="2-player" value="2" />
+    <label for="3-player">3</label>
+    <input type="radio" name="numplayer" id="3-player" value="3" />
+    <label for="4-player">4</label>
+    <input type="radio" name="numplayer" id="4-player" value="4" />
+    <label for="5-player">5</label>
+    <input type="radio" name="numplayer" id="5-player" value="5" />
+    <label for="6-player">6</label>
+    <input type="radio" name="numplayer" id="6-player" value="6" />
+  </fieldset>
+  <fieldset id="playernames">
+    <legend>What are the players' names?</legend>
+    <input type=text size=20 name="player1name" id="player1name" placeholder="Player One" /><br />
+    <input type=text size=20 name="player2name" id="player2name" placeholder="Player Two" /><br />
+    <input type=text size=20 name="player3name" id="player3name" placeholder="Player Three" /><br />
+    <input type=text size=20 name="player4name" id="player4name" placeholder="Player Four" /><br />
+    <input type=text size=20 name="player5name" id="player5name" placeholder="Player Five" /><br />
+    <input type=text size=20 name="player6name" id="player6name" placeholder="Player Six" /><br />
+  </fieldset>
+  <br />
+  <button class="namesDone" id="R2-namesDone">Let's Play!</button>
+</div>
+<div id="scorepad">
+    <div id="R2scorepad">
+      <div id="R2scoringinputs">
+        <table class="scoring-table" id="scoreTable">
+          <tr id="R2playertr">
+            <th class='th-right'>Players:</th>
+            <th><span id="R2col1name" class="col1">One</span></th>
+            <th><span id="R2col2name" class="col2">Two</span></th>
+            <th><span id="R2col3name" class="col3">Three</span></th>
+            <th><span id="R2col4name" class="col4">Four</span></th>
+            <th><span id="R2col5name" class="col5">Five</span></th>
+            <th><span id="R2col6name" class="col6">Six</span></th>
+          </tr>
+          <tr id="R2scoretr">
+            <th class='th-right'>Score:</th>
+            <th><span id="R2col1score" class="col1">0</span></th>
+            <th><span id="R2col2score" class="col2">0</span></th>
+            <th><span id="R2col3score" class="col3">0</span></th>
+            <th><span id="R2col4score" class="col4">0</span></th>
+            <th><span id="R2col5score" class="col5">0</span></th>
+            <th><span id="R2col6score" class="col6">0</span></th>
+          </tr>
+          <tr id="R2handtr">
+            <th class='th-right'>This Hand:</th>
+            <td><span id="col1this" class="col1"><input type=number size=4 id="score1" name="score1" value=0 /></span></td>
+            <td><span id="col2this" class="col2"><input type=number size=4 id="score2" name="score2" value=0 /></span></td>
+            <td><span id="col3this" class="col3"><input type=number size=4 id="score3" name="score3" value=0 /></span></td>
+            <td><span id="col4this" class="col4"><input type=number size=4 id="score4" name="score4" value=0 /></span></td>
+            <td><span id="col5this" class="col5"><input type=number size=4 id="score5" name="score5" value=0 /></span></td>
+            <td><span id="col6this" class="col6"><input type=number size=4 id="score6" name="score6" value=0 /></span></td>
+          </tr>
+          <tr>
+              <td></td></td><td colspan=6><button id="R2score" style="width: 100%; text-align: center;">Score</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+</div>
+
+</body>
+</html>
