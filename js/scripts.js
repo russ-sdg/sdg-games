@@ -11,5 +11,4 @@ const currentYear = new Date().getFullYear();
 $( document ).ready(function() {
     console.log( "ready!" );
     $(".current-year").text(currentYear);
-    $("#navigation").load("../navigation.html");
 });
