@@ -10839,3 +10839,7 @@ textarea.form-control-lg {
   font-family: loveloblack, sans-serif;
   color: blue;
 }
+.full-center {
+  width: 100%;
+  text-align: center; !important
+}
