@@ -13,5 +13,5 @@ $( document ).ready(function() {
     $(".current-year").text(currentYear);
     $("#main-nav").load("https://sdggames.fun/nav-div.html", function() {
         console.log( "Nav load was performed." );
-      });
+    });
 });
