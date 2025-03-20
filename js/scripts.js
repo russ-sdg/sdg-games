@@ -9,7 +9,7 @@
 const currentYear = new Date().getFullYear();
 
 $( document ).ready(function() {
-    console.log( "ready!" );
+    console.log( "ready to populate content!" );
     $(".current-year").text(currentYear);
     $("#main-nav").load("https://sdggames.fun/nav-div.html", function() {
         console.log( "Nav load was performed." );
