@@ -6,8 +6,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="js/SDGgames.js"></script>
-  <link rel="stylesheet" href="css/SDGgames.css">
+  <script src="../js/SDGgames.js"></script>
+  <link rel="stylesheet" href="../css/SDGgames.css">
   <script>
     numplayers = sessionStorage.getItem("numplayers");
     player1name = sessionStorage.getItem("player1name");
@@ -164,7 +164,7 @@
             $("#names").hide(1000);
             $("#scorepad").show(1000);
         });
-        $("#R1-namesDone").click(function() {r1NamesDone();});
+        //$("#R1-namesDone").click(function() namescomplete();}); //{r1NamesDone();});
         $("#R2-namesDone").click(function() {r2NamesDone();});
 
         $("#openNames").click(function() {
