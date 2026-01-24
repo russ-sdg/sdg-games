@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Journeys through Jerusalem - A Biblical Journey Building Game</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+    </head>
+    <body class="sb-nav-fixed">
+        <!-- Responsive navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='main-nav'></nav>
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <img class="img-responsive img-fluid" style="padding: 10px;" src="../assets/JtJ logo.webp" alt="Journeys through Jerusalem">
+                        <div class="row">
+                          <div class="col ml-auto">
+                            <div class="card bg-primary text-white mb-4">
+                              <div class="card-body d-flex align-items-center justify-content-between">
+                                <a class="text-white stretched-link text-decoration-none" href="#description">Game Description</a>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col ml-auto">
+                          <div class="card bg-primary text-white mb-4">
+                            <div class="card-body d-flex align-items-center justify-content-between">
+                              <a class="text-white stretched-link text-decoration-none" href="#components">Components</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col ml-auto">
+                              <div class="card bg-primary text-white mb-4">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                  <a class="text-white stretched-link text-decoration-none" href="#play">How to Play</a>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="col ml-auto">
+                              <div class="card bg-primary text-white mb-4">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                  <a class="text-white stretched-link text-decoration-none" href="#faq">FAQ</a>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="col ml-auto">
+                              <div class="card bg-primary text-white mb-4">
+                                <div class="card-body d-flex align-items-center justify-content-between">
+                                  <a class="text-white stretched-link text-decoration-none" href="#buy">How to Buy</a>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                        <a id="description"></a>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <strong>Game Description</strong>
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-6">
+                                  <p>Follow in the footsteps of Biblical Characters during Jesus' final days in Jerusalem. Move through the ancient city, visit key sites, and complete character journeys to earn points.</p>
+                                  <p><strong>Objective:</strong> Score the most points by completing character journeys. The game ends when any player completes at least one journey from each of three categories: <strong>Apostle</strong>, <strong>Friend of Jesus</strong>, and <strong>Enemy of Christ</strong>.</p>
+                                </div>
+                                <div class="col">
+                                  <div class="text-center" style="padding: 10px">
+                                    <img class="img-responsive" src="../assets/JtJ Mini Map .png">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <a id="components"></a>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <strong>Game Components</strong>
+                            </div>
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-6">
+                                  <p><strong>Individual Map Mats</strong> (1 per player): Each mat shows ancient Jerusalem witha  colorful path connecting 11 key Biblical sites*. The bottom left corner has an integrated tracking area where players mark visited sites.</p>
+                                  <p><strong>Player Tokens</strong> (1 per player, each a different color): Small cubes used to move around the map.</p>
+                                  <p><strong>Dry Erase Markers</strong> (1 per player): Used to track which sites have been visited.</p>
+                                  <p><strong>Six-sided Die</strong> (1): Used to indicate how many spaces players may move.</p>
+                                  <p><strong>Character Cards</strong> (18 total): Each card shows:</p>
+                                  <ul>
+                                    <li><strong>Character Name</strong></li>
+                                    <li><strong>Point Value:</strong> How much completing the journey scores.</li>
+                                    <li><strong>Biblical Sites:</strong> Places the character visited.</li>
+                                    <li><strong>Scripture References:</strong> Placing the character at each site.</li>
+                                    <li><strong>Category:</strong> Apostle, Friend of Jesus, or Enemy of Christ.</li>
+                                  </ul>
+                                  <p>* <em>Note that we don't know the exact location of most of the key sites in the game. We have used locations at or near those identified as likely spots by credible historians.</em></p>
+                                </div>
+                                <div class="col">
+                                  <div class="text-center" style="padding: 10px">
+                                    <img class="img-responsive" src="../assets/JtJtokens.png">
+                                    <img class="img-responsive" src="../assets/JtJ Dry Erase.png">
+                                  </div>
+                                </div>
+                              </div>
+                              <img class="img-responsive" src="../assets/JtJCards.webp">
+                            </div>
+                        </div>
+                        <a id="play"></a>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <strong>How To Play</strong>
+                            </div>
+                            <div class="card-body">
+                              <h4>Game Setup</h4>
+                              <div class="row">
+                                <div class="col">
+                                  <div class="text-center" style="padding: 10px">
+                                    <img class="img-responsive" width=400 src="../assets/JwJ Small Sample Play.png">
+                                  </div>
+                                </div>
+                                <div class="col-6">
+                                  <ul>
+                                    <li>Place the <strong>Game Board</strong> face up where everyone can reference it.</li>
+                                    <li>Deal 7 <strong>Place Cards</strong> to each player.</li>
+                                    <li>Place the remaining <strong>Place Cards</strong> face-down as a draw pile.</li>
+                                    <li>Take the top 4 cards from the draw pile and form 4 face-up draw piles.</li>
+                                    <li>Place the <strong>Journey Cards</strong> face-down as a draw pile.</li>
+                                    <li>Take the top 4 cards from the draw pile and place them face-up as in-play journeys.</li>
+                                    <li>Set the <strong>Scripture Memory Tokens</strong> aside for use during game play.</li>
+                                  </ul>
+                                </div>
+                              </div>
+                              <h4>Journeys</h4>
+                              <div class="row">
+                                <div class="col-7">
+                                  <p>The <strong>Journey Cards</strong> represent journeys taken by Jesus as recorded in the gospel accounts of the Holy Bible.</p>
+                                  <p>The card at right is a <strong>Journey Card</strong> for the journey from <em>Capernaum</em> (named at the top of the card) to <em>Nazareth</em> (named at the bottom of the card). As indicated in the four corners, completing this journey earns you 16 points. The dots on the map in the center show where the two endpoints of the journey are.</p>
+                                  <p>You complete one of these journeys by collecting a series of <strong>Place Cards</strong> to connect the two endpoints on a <strong>Journey Card</strong>. Journeys must follow the black lines representing roads or the white lines representing boat rides on the <strong>Gameboard</strong> and must include a <strong>Place Card</strong> for each place along the journey, including the starting and ending places.</p>
+                                </div>
+                                <div class="col">
+                                  <div class="text-center" style="padding: 10px">
+                                    <img class="img-responsive img-fluid" src="../assets/SmCapernaumNazarethV2.png">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col">
+                                  <div class="text-center" style="padding: 10px">
+                                    <img class="img-responsive" width=400 src="../assets/JwJ New Board.png">
+                                  </div>
+                                </div>
+                                <div class="col-6">
+                                  <p>Many journeys are between adjacent places which are directly connected to each other by a road or boat ride. These journeys require only two <strong>Place Cards</strong>, the one for the starting place and the one for the ending place. Longer journeys will require more <strong>Place Cards</strong>. For example, to complete the journey from Capernaum to Nazareth requires at least 4 <strong>Place Cards</strong> (e.g. Capernaum, Magdala, Cana, Nazareth). The longer the journey, the more points it is worth. </p>
+                                  <p>In presenting a journey, you lay down the <strong>Place Cards</strong> on top of each other, but with the name of the place underneath showing. You lay them down in order from one endpoint to the other. While laying down the cards, you point to the places on the <strong>Gameboard</strong> to show the route you are taking.</p>
+                                </div>
+                              </div>
+                              <p>You may choose, if possible, to extend a journey to complete another in-play journey. To do so, you lay additional <strong>Place Cards</strong> on top of the ending card of the journey until you have completed the additional journey. That additional journey must be complete and in order. An extended journey can start at any point in the original journey, reusing cards already played in the first journey, but only in the same order. See the example below.</p>
+                              <div class="text-center" style="padding: 10px">
+                                <img class="img-responsive img-fluid" src="../assets/Journey-Extension-Example.webp">
+                              </div>
+                              <p>You may extend to as many of the in-play journeys as possible given the Place Cards in your hand.</p>
+                              <h4>Wild Cards</h4>
+                              <div class="row">
+                                <div class="col-6">
+                                  <p>A <strong>REGION WILD CARD</strong> can be used to replace any place in that region (the places in the region are named on the <strong>Wild Card</strong> and have the same color name and dot as the region name on the <strong>Gameboard</strong>) in a journey. For example, in the journey from Capernaum to Nazareth, if you have the <strong>GALILEE WILD CARD</strong>, you can use it in place of Capernaum, Magdala, Cana, or Nazareth in the journey. You can use the <strong>ISRAEL NATIONAL WILD CARD</strong> to replace any place in a journey. When you play a <strong>Wild Card</strong>, you name the place it represents and it can only be used for that same place if you use it to play an extended journey.</p>
+                                <p>At any time, you may use an earned <strong>Scripture Memory Token</strong> as a <strong>Wild Card</strong> to replace any place in a journey. At the end of the turn you forfeit the <strong>Scripture Memory Token</strong>.</p>
+                                </div>
+                                <div class="col">
+                                  <div class="text-center" style="padding: 10px">
+                                    <img class="img-responsive" src="../assets/SmallGALILEEx10v2.png">
+                                  </div>
+                                </div>
+                              </div>
+                              <h4>Game Play</h4>
+                              <p>Players take turns. On your turn, you:
+                                <ul>
+                                  <li>May recite from memory a scripture from any one <strong>Place Card</strong> in your hand. If successful, receive a <strong>Scripture Memory Token</strong>.</li>
+                                  <li>Draw three additional <strong>Place Cards</strong> from the top of any mix of the draw piles, including the face-down draw pile.</strong></li>
+                                  <li>As necessary, immediately turn over cards from the face-down draw pile to fill any gaps in the face-up piles.</li>
+                                  <li>Present any completed in-play journeys and if possible extend those journeys to complete additional in-play journeys.</li>
+                                  <li>Immediately replace any completed <strong>Journey Cards</strong> with new in-play journeys from the draw pile. If possible you may complete these newly in-play journeys.</li>
+                                  <li>Remove from the game the <strong>Place Cards</strong> played for a journey.</li>
+                                  <li>Place the completed <strong>Journey Card(s)</strong> face-up in front of you to reflect the score you earned.</li>
+                                  <li>If you have fewer than 7 <strong>Place Cards</strong> in your hand, draw from the top of any pile as needed until you have 7 <strong>Place Cards</strong>. </li>
+                                  <li>Your turn is over.</li>
+                                </ul>
+                              </p>
+                              <h4>Ending the Game</h4>
+                              <p>The game ends when the last <strong>Journey Card</strong> is completed. If necessary, shuffle the played <strong>Place Cards</strong> and return them to the face-down draw pile.</p>
+                              <p>You win if you have the most total points earned from completed journeys and from earned but unplayed <strong>Scripture Memory Tokens</strong>, which are worth 5 points each.</p>
+                            </div>
+                        </div>
+                        <a id="faq"></a>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <strong>Frequently Asked Questions</strong>
+                            </div>
+                            <div class="card-body">
+                              <h5>How does the new edition of <em>Journeys with Jesus</em> differ from the original (Legacy) version?</h5>
+                              <p>The primary goal with the new edition was to bring the price down. To accomplish that we have reduced the number of cards included in the game, reduced the overall size of the <strong>Gameboard</strong>, eliminated the tuck box for the cards, and used a smaller game box. Specifically, we have eliminated the journeys that only appear in the Gospel of John and included only the journeys that appear in the synoptic gospels (Matthew, Mark, and Luke). This allowed us to reduce the number of <strong>Place Cards</strong> from 85 to 59, the number of <strong>Journey Cards</strong> from 23 to 13, and the number of <strong>Scripture Memory Tokens</strong> from 24 to 12. The <strong>Gameboard</strong> has gone from 18" x 18" down to 8" x 16" (the main map portion of the board has only been reduced slightly). The box has shrunk from 12" x 9.5" x 2" to 8.5" x 5" x 1.5". Because of the reduced card decks, the recommended maximum number of players has been reduced from 5 to 4 and the estimated game length has been reduced from 30-60 minutes to 15-30 minutes.</p>
+                              <h5>Are the eliminated cards still available?</h5>
+                              <p>All of the eliminated <strong>Journey Cards</strong> and <strong>Place Cards</strong> are available as a <em>Gospel of John Expansion Pack</em> which can be ordered from <a href="https://www.thegamecrafter.com/games/jwj-gospel-of-john-expansion">The Game Crafter</a>.</p>
+                              <h5>From which Bible translation are the scriptures on the cards taken?</h5>
+                              <p>All scriptures are taken from the <em>World English Bible</em>, which is in the public domain.</p>
+                              <h5>Who did the artwork on the box?</h5>
+                              <p>That artwork was created using the AI tool MidJourney.</p>
+                              <h5>Where did the satellite imagery come from for the <strong>Gameboard</strong> and <strong>Journey Cards</strong>?</h5>
+                              <p>Satellite images are from NASA's Visible Earth project.</p>
+                              <h5>There's a spot on the <strong>Gameboard</strong> labelled Countryside. What is that?</h5>
+                              <p>John 3:22 references an unnamed place in Judea. We have called this place “Countryside” and placed it on the <strong>Gameboard</strong> generally between Jerusalem and Sychar.</p>
+                              <h5>Why does Gennesaret appear on the <strong>Gameboard</strong> on the east side of the Sea of Galilee?</h5>
+                              <p>Gennesaret is believed to have been on the northwest coast of the Sea of Galilee, between Capernaum and Magdala. That portion of the map is already pretty crowded. Gennesaret is referenced in Matthew and Mark as being reached by boat, so we depict it in the game as being on the large lake, but not in precisely the right location.</p>
+                              <h5>Mount Hermon isn't mentioned in the New Testament. Why is it a journey destination?</h5>
+                              <p>Many scholars surmise that Mt. Herman may be where Jesus’ transfiguration took place. We don't know for sure, but we wanted to include the journeys to and from the transfiguration in the game, so we chose to use Mount Hermon to represent that destination.</p>
+                              <h5>What resources did you use to identify Biblical locations?</h5>
+                              <p>Our most useful reference tool was <a href="https://www.amazon.com/Crossway-Bible-Atlas-John-Currid/dp/1433501929/">The ESV Bible Atlas</a>, but other books we referenced include <a href="https://www.amazon.com/Understanding-Land-Bible-Biblical-Theological-Guide/dp/0875523994/">Understanding the Land of the Bible</a>, <a href="https://www.amazon.com/Wycliffe-Historical-Geography-Bible-Lands/dp/0802496997/">Wycliffe Historical Geography of Bible Lands</a>, and <a href="https://www.amazon.com/Whos-Who-Wheres-Where-Bible/dp/1593101112/">Who's Who and Where's Where in the Bible</a>. The online <a href="https://bibleatlas.org/">Bible Atlas</a> also proved helpful. Not all of these resources agree with each other. We did our best to accurately represent the location of different places and believe we have placed them in generally the right area, but perhaps not the precise longitude and lattitude.</p>
+                            </div>
+                        </div>
+                        <a id="variations"></a>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <strong>Game Variations</strong>
+                            </div>
+                            <div class="card-body">
+                              <h4>Game Variant Ideas:</h4>
+
+                              <ul>
+                                <li>We read often in the gospels about Jesus’ compassion. Similarly show compassion and grace to those in your game. For example, for young players, simply reading the scripture may be enough of an accomplishment to earn a <strong>Scripture Memory Token</strong>.</li>
+                                <li>When first learning to play, or in settings where everyone is focused on learning and having fun more than winning, players can place all of their <strong>Place Cards</strong> face up in front of them and players can help each other find completed journeys.</li>
+                                <li>A <a href="https://www.thegamecrafter.com/games/jwj-gospel-of-john-expansion">Gospel of John Expansion
+                                  Pack</a> is available for purchase which adds 10 additional <strong>Journey Cards</strong> and 26 additional <strong>Place Cards</strong>. These cards are simply added to the cards already in the game. All the other rules still apply.</li>
+                              </ul>
+
+                            </div>
+                        </div>
+                        <a id="buy"></a>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <strong>How to Buy</strong>
+                            </div>
+                            <div class="card-body">
+                              <p><em>If inventory is available, orders from the SDG Biblical Wisdom shop typically ship within a couple of days.<br />
+                                <div id='product-component-1705094370006'></div>
+<script type="text/javascript">
+/*<![CDATA[*/
+(function () {
+  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+  if (window.ShopifyBuy) {
+    if (window.ShopifyBuy.UI) {
+      ShopifyBuyInit();
+    } else {
+      loadScript();
+    }
+  } else {
+    loadScript();
+  }
+  function loadScript() {
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = scriptURL;
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+    script.onload = ShopifyBuyInit;
+  }
+  function ShopifyBuyInit() {
+    var client = ShopifyBuy.buildClient({
+      domain: 'bd30ce-2.myshopify.com',
+      storefrontAccessToken: '7bf5f03bf3c7ba399d3ef67f8250c103',
+    });
+    ShopifyBuy.UI.onReady(client).then(function (ui) {
+      ui.createComponent('product', {
+        id: '8122375864469',
+        node: document.getElementById('product-component-1705094370006'),
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: {
+  "product": {
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "calc(25% - 20px)",
+          "margin-left": "20px",
+          "margin-bottom": "50px"
+        }
+      },
+      "button": {
+        "font-family": "Avant Garde, sans-serif",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#2d38e0"
+        },
+        "background-color": "#323ef9",
+        ":focus": {
+          "background-color": "#2d38e0"
+        },
+        "border-radius": "6px",
+        "padding-left": "20px",
+        "padding-right": "20px"
+      },
+      "quantityInput": {
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px"
+      }
+    },
+    "contents": {
+      "img": false,
+      "title": false,
+      "price": false
+    },
+    "text": {
+      "button": "Buy Journeys with Jesus"
+    }
+  },
+  "productSet": {
+    "styles": {
+      "products": {
+        "@media (min-width: 601px)": {
+          "margin-left": "-20px"
+        }
+      }
+    }
+  },
+  "modalProduct": {
+    "contents": {
+      "img": false,
+      "imgWithCarousel": true,
+      "button": false,
+      "buttonWithQuantity": true
+    },
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "100%",
+          "margin-left": "0px",
+          "margin-bottom": "0px"
+        }
+      },
+      "button": {
+        "font-family": "Avant Garde, sans-serif",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#2d38e0"
+        },
+        "background-color": "#323ef9",
+        ":focus": {
+          "background-color": "#2d38e0"
+        },
+        "border-radius": "6px",
+        "padding-left": "20px",
+        "padding-right": "20px"
+      },
+      "quantityInput": {
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px"
+      }
+    },
+    "text": {
+      "button": "Add to cart"
+    }
+  },
+  "option": {},
+  "cart": {
+    "styles": {
+      "button": {
+        "font-family": "Avant Garde, sans-serif",
+        "font-size": "14px",
+        "padding-top": "15px",
+        "padding-bottom": "15px",
+        ":hover": {
+          "background-color": "#2d38e0"
+        },
+        "background-color": "#323ef9",
+        ":focus": {
+          "background-color": "#2d38e0"
+        },
+        "border-radius": "6px"
+      }
+    },
+    "text": {
+      "total": "Subtotal",
+      "button": "Checkout"
+    }
+  },
+  "toggle": {
+    "styles": {
+      "toggle": {
+        "font-family": "Avant Garde, sans-serif",
+        "background-color": "#323ef9",
+        ":hover": {
+          "background-color": "#2d38e0"
+        },
+        ":focus": {
+          "background-color": "#2d38e0"
+        }
+      },
+      "count": {
+        "font-size": "14px"
+      }
+    }
+  }
+},
+      });
+    });
+  }
+})();
+/*]]>*/
+</script></p>
+                              <p>Otherwise you can order from The Game Crafter print-on-demand store.<br />
+                                <a class="btn btn-primary" href="https://www.thegamecrafter.com/games/permalink/20EE5FA6-2839-11EC-9B2F-B463D18EBD9F" role="button">Order</a></p>
+
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2024</span> SDG Strategy, LLC | To God be the glory</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <!-- Jquery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <!-- Core theme JS-->
+        <script src="../js/scripts.js"></script>
+
+    </body>
+</html>
