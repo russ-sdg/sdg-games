@@ -33,12 +33,19 @@ export function newGame({ kind, rulesId, names, bots = 1 }) {
     acted: [],
     actions: 0,
     log: [],
+    lastPreach: null, // {seat, ev, cityId, called, n} - drives the Scripture panel
   };
 }
 
 export const rules = (s) => RULESETS[s.rulesId];
 export const isHumanSeat = (s, seat) => seat < s.sheets.length;
 export const sheetOf = (s, seat = s.actor) => s.sheets[seat];
+
+// tag the action just recorded with the round it happened in
+function stamp(s) {
+  const h = s.sheets[s.actor].history;
+  h[h.length - 1].round = s.round;
+}
 
 function push(s, text) {
   s.log.push({ round: s.round, text });
@@ -74,6 +81,7 @@ function startActor(s) {
 export function roll(state, rng = Math.random) {
   if (state.phase !== 'roll') throw new Error('not time to roll');
   const s = clone(state);
+  s.lastPreach = null;
   s.face = rollDie(rng);
   const who = s.seatNames[s.roller];
   if (s.face === 'choice') {
@@ -123,6 +131,7 @@ export function move(state, evId, edgeId) {
   const s = clone(state);
   const from = city(sheetOf(s).evangelists[evId].city).name;
   s.sheets[s.actor] = applyMove(s.sheets[s.actor], evId, edgeId);
+  stamp(s);
   const to = city(s.sheets[s.actor].evangelists[evId].city).name;
   s.acted.push(evId);
   s.actions += 1;
@@ -136,6 +145,8 @@ export function preach(state, evId) {
   const at = city(sheetOf(s).evangelists[evId].city).name;
   const r = applyPreach(s.sheets[s.actor], evId, rules(s));
   s.sheets[s.actor] = r.sheet;
+  stamp(s);
+  s.lastPreach = { seat: s.actor, ev: evId, cityId: city(r.sheet.evangelists[evId].city).id, called: r.called, n: (s.lastPreach?.n ?? 0) + 1 };
   s.acted.push(evId);
   s.actions += 1;
   push(s, r.called
@@ -148,6 +159,7 @@ export function endTurn(state) {
   if (!canEndTurn(state)) throw new Error('cannot end turn yet');
   const s = clone(state);
   if (s.actions === 0) push(s, `${s.seatNames[s.actor]} passes.`);
+  s.lastPreach = null;
   if (s.queue.length) {
     startActor(s);
     return s;

@@ -53,6 +53,8 @@ export function rollDie(rng = Math.random) {
 //   evangelists[id] = { city, regions[], preachedAt{city:count}, called, path[] }
 //   used[id]        = edge ids that evangelist has already travelled
 //   visited[]       = every city any of this player's evangelists has reached
+//   history[]       = every action in order: {k:'move',ev,from,to,edge} | {k:'preach',ev,city,called}
+//                     (game.js adds `round`); sheetAt() rebuilds the sheet at any step for replays
 
 export function newSheet() {
   const evangelists = {};
@@ -68,7 +70,7 @@ export function newSheet() {
     };
     if (!visited.includes(start)) visited.push(start);
   }
-  return { evangelists, used: { luke: [], silas: [], titus: [] }, visited };
+  return { evangelists, used: { luke: [], silas: [], titus: [] }, visited, history: [] };
 }
 
 export const clone = (x) => structuredClone(x);
@@ -90,6 +92,7 @@ export function applyMove(sheet, evId, edgeId) {
   const ev = s.evangelists[evId];
   const e = EDGE[edgeId];
   const to = otherEnd(e, ev.city);
+  (s.history ??= []).push({ k: 'move', ev: evId, from: ev.city, to, edge: edgeId });
   ev.city = to;
   ev.path.push(to);
   s.used[evId].push(edgeId);
@@ -110,9 +113,19 @@ export function applyPreach(sheet, evId, rules) {
   const s = clone(sheet);
   const ev = s.evangelists[evId];
   const called = wouldBeCalled(sheet, evId, rules);
+  (s.history ??= []).push({ k: 'preach', ev: evId, city: ev.city, called });
   ev.preachedAt[ev.city] = (ev.preachedAt[ev.city] ?? 0) + 1;
   if (called) ev.called = true;
   return { sheet: s, called };
+}
+
+// The sheet as it stood after the first `n` recorded actions (for replays).
+export function sheetAt(history, n, rules) {
+  let s = newSheet();
+  for (const h of history.slice(0, n)) {
+    s = h.k === 'move' ? applyMove(s, h.ev, h.edge) : applyPreach(s, h.ev, rules).sheet;
+  }
+  return s;
 }
 
 // What can this evangelist do with the rolled mode?
