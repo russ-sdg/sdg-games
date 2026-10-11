@@ -24,6 +24,16 @@
         <section id="setup" aria-labelledby="setup-title">
             <div class="row g-4">
                 <div class="col-lg-7">
+                    <div class="card shadow-sm border-success mb-4" id="join" hidden>
+                        <div class="card-body">
+                            <h2 class="h4">Join the table</h2>
+                            <p class="mb-2">Rules: <b id="join-rules"></b>. Who are you?</p>
+                            <div id="join-players" class="vstack gap-2 mb-3"></div>
+                            <button type="button" class="btn btn-success btn-lg" id="join-btn">Join</button>
+                            <p class="small text-muted mt-3 mb-0">Everyone plays on their own phone. When it's someone's turn to roll, they roll and tell the table what came up.</p>
+                        </div>
+                    </div>
+
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <h1 class="h3" id="setup-title">New game</h1>
@@ -45,6 +55,10 @@
                                         <label class="choice">
                                             <input type="radio" name="kind" value="pass" />
                                             <span><strong>Pass &amp; play</strong><small>2&ndash;5 people sharing this device, each with their own map.</small></span>
+                                        </label>
+                                        <label class="choice">
+                                            <input type="radio" name="kind" value="table" />
+                                            <span><strong>Same room, own phones</strong><small>Like the board game: everyone plays on their own phone. The roller rolls and says what came up; everyone moves.</small></span>
                                         </label>
                                     </div>
                                 </fieldset>
@@ -87,6 +101,17 @@
                                         <option>2</option><option>3</option><option>4</option><option>5</option>
                                     </select>
                                     <div id="player-names" class="row g-2"></div>
+                                </div>
+
+                                <div id="table-fields" class="mb-4" hidden>
+                                    <label class="form-label" for="table-count">Players at the table</label>
+                                    <select class="form-select w-auto mb-2" id="table-count">
+                                        <option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option>
+                                    </select>
+                                    <div id="table-names" class="vstack gap-2"></div>
+                                    <div class="form-text">Everyone must list the players in the <b>same order</b> (player 1 rolls first, then in turn). Pick which one is you. Easiest: one person fills this in and shares the invite link, then everyone else just taps their name.</div>
+                                    <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="invite-btn">Share invite link</button>
+                                    <span class="small text-muted ms-2" id="invite-msg" aria-live="polite"></span>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary btn-lg">Start the journeys</button>

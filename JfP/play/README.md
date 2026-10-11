@@ -12,7 +12,7 @@ Static site (no build step), served at `/JfP/play/` by Cloudflare Pages.
 - `js/map-data.js` - **generated** cities, regions, labels and routes
 - `js/scripture-data.js` - **generated** passages (World English Bible, public domain)
 - `assets/basemap.webp` - **generated** route-free base map (2400x1200)
-- `engine.test.js`, `features.test.js` - `cd JfP/play && node --test` (Node 20+, no dependencies)
+- `engine.test.js`, `features.test.js`, `table.test.js` - `cd JfP/play && node --test` (Node 20+, no dependencies)
 
 ## Rules implemented
 Roller: one to three evangelists, each moves or - if unable to move by the rolled mode - preaches.
@@ -47,3 +47,19 @@ Apamea) get a general preaching verse and a note saying so. Being called as past
 Each sheet records every action in `sheet.history`; `sheetAt()` in `engine.js` rebuilds the board at
 any step. The share image is drawn straight onto a canvas (no SVG round trip), using `Path2D` on the
 same route paths as the live board.
+
+## Same room, own phones (`kind: 'table'`)
+Recreates the physical game with no networking: each phone holds ONE sheet (seat `mySeat`) and the
+table coordinates out loud, exactly as with the real die.
+
+- The roller's phone rolls the die (`roll`) and shows "Tell the table: ...". Everyone else taps what
+  was announced (`announceRoll`; after Player's Choice, the mode the roller chose).
+- Everyone moves on their own phone (roller: 1-3 evangelists, others: 1), then ends their turn; the
+  roller advances to the next seat. Every phone is given the same player order, so each knows whose
+  roll comes next. `setRoller` fixes a phone that has drifted (a missed tap).
+- A phone cannot see the others' sheets, so it ends the game itself only when *its* player has all three
+  called. "Nobody can move" is for the table to call: everyone taps "The game is over" (`finishNow`).
+- Setup: one person lists the players and shares an invite link (`?table=1&rules=..&p=Ann&p=Ben..`);
+  the others open it and tap their own name. The screen is kept awake with the Wake Lock API.
+- `table.test.js` simulates several phones at one table (each knowing only its own sheet and the
+  announced rolls) and checks they stay in step through whole games.
