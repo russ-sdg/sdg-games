@@ -4,19 +4,19 @@ import {
   MODES, MODE_NAMES, EVANGELISTS, EV_NAMES, city, edge, score, wouldBeCalled, maxActions,
 } from './engine.js';
 import * as G from './game.js';
+import { boardSVG, legendHTML, tokenSpot, esc, EV_COLOR, REGION_COLOR } from './board.js';
+import { snippetFor } from './scripture.js';
+import { mountReplay, verseHTML } from './replay.js';
+import { drawShareImage, canvasToBlob } from './share.js';
 
 const SAVE_KEY = 'jfp-play-v1';
-const EV_COLOR = { luke: '#1f9d45', silas: '#ef7a1a', titus: '#2f66e0' };
-const EV_LETTER = { luke: 'L', silas: 'S', titus: 'T' };
-const REGION_COLOR = { mac: '#38b44a', asia: '#9b2fd6', gal: '#f2671e', isl: '#2446e8' };
-const TRAIL_WIDTH = [20, 12, 5]; // concentric so routes used by several evangelists stay readable
 const MODE_SHORT = { road: 'road', foot: 'footpath', boat: 'boat' };
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const $ = (sel) => document.querySelector(sel);
-const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 let state = null;
+let replayHandle = null;
 let ui = { selected: null, history: [], handoff: null, rolling: false, showLog: false };
 
 // ---- persistence ------------------------------------------------------------
@@ -79,6 +79,7 @@ function initSetup() {
 }
 
 function show(which) {
+  $('#verse').hidden = true;
   for (const id of ['setup', 'game', 'results']) $('#' + id).hidden = id !== which;
   window.scrollTo({ top: 0 });
 }
@@ -165,7 +166,21 @@ function render() {
   renderHud();
   renderBoard();
   renderSide();
+  renderVerse();
   renderHandoff();
+}
+
+// Scripture for the preach just made, as a dismissible toast (it does not shift the layout)
+function renderVerse() {
+  const el = $('#verse');
+  const lp = state.lastPreach;
+  if (!lp || state.phase !== 'act') { el.hidden = true; ui.verseKey = null; return; }
+  const key = `${state.round}:${lp.seat}:${lp.ev}:${lp.cityId}:${lp.n}`;
+  if (key !== ui.verseKey) { ui.verseKey = key; ui.verseOpen = true; }
+  el.hidden = !ui.verseOpen;
+  if (!ui.verseOpen) return;
+  el.innerHTML = `<button type="button" class="btn-close verse-close" aria-label="Close verse"></button>${verseHTML(snippetFor(lp.cityId, lp.called), EV_NAMES[lp.ev])}`;
+  el.querySelector('.verse-close').onclick = () => { ui.verseOpen = false; el.hidden = true; };
 }
 
 function renderHandoff() {
@@ -216,73 +231,10 @@ function renderBoard() {
   const acting = s.phase === 'act';
   const sel = acting ? ui.selected : null;
   const moves = sel ? G.evOptions(s, sel).moves : [];
-  const parts = [];
 
-  parts.push(`<image href="assets/basemap.webp" x="0" y="0" width="${MAP.width}" height="${MAP.height}"/>`);
-  for (const c of MAP.captions) {
-    parts.push(`<text class="caption" x="${c.x}" y="${c.y}" fill="${c.color}">${esc(c.text)}</text>`);
-  }
-  // every route, faintly; the rolled mode stands out
-  for (const e of MAP.edges) {
-    const dim = acting && e.mode !== s.mode ? ' dim' : '';
-    if (e.mode === 'boat') {
-      parts.push(`<path class="route boat-under${dim}" d="${e.d}"/><path class="route boat-over${dim}" d="${e.d}"/>`);
-    } else {
-      parts.push(`<path class="route ${e.mode}${dim}" d="${e.d}"/>`);
-    }
-  }
-  // trails: where each evangelist has been
-  const byEdge = {};
-  EVANGELISTS.forEach((ev, i) => sheet.used[ev].forEach((id) => (byEdge[id] ??= []).push(i)));
-  for (const [id, evs] of Object.entries(byEdge)) {
-    const d = edge(id).d;
-    [...evs].sort((a, b) => a - b).forEach((i, n) => {
-      parts.push(`<path class="trail" d="${d}" stroke="${EV_COLOR[EVANGELISTS[i]]}" stroke-width="${TRAIL_WIDTH[n]}" stroke-opacity=".9"/>`);
-    });
-  }
-  // candidate routes for the selected evangelist
-  for (const m of moves) {
-    parts.push(`<path class="cand" d="${edge(m.edge).d}" stroke="${EV_COLOR[sel]}"/>`);
-  }
-  // cities
-  for (const c of MAP.cities) {
-    const seen = sheet.visited.includes(c.id);
-    parts.push(`<circle class="dot${seen ? '' : ' unseen'}" cx="${c.x}" cy="${c.y}" r="${c.big ? 17 : 10}" fill="${REGION_COLOR[c.region]}"/>`);
-  }
-  // preaching rings (called = doubled)
-  EVANGELISTS.forEach((ev, i) => {
-    const e = sheet.evangelists[ev];
-    for (const [cid, n] of Object.entries(e.preachedAt)) {
-      const c = city(cid);
-      const r = (c.big ? 17 : 10) + 8 + i * 6;
-      parts.push(`<circle class="ring" cx="${c.x}" cy="${c.y}" r="${r}" stroke="${EV_COLOR[ev]}" ${n > 1 ? 'stroke-width="8"' : ''}/>`);
-      if (e.called && e.city === cid) parts.push(`<circle class="ring" cx="${c.x}" cy="${c.y}" r="${r + 7}" stroke="${EV_COLOR[ev]}"/>`);
-    }
-  });
-  for (const c of MAP.cities) {
-    const l = c.label;
-    parts.push(`<text class="city-label" x="${l.x}" y="${l.y}" transform="rotate(${l.rot} ${l.x} ${l.y})">${esc(c.name)}</text>`);
-  }
-  // evangelist tokens: parked on the side of the dot away from its label
-  EVANGELISTS.forEach((ev, i) => {
-    const e = sheet.evangelists[ev];
-    const c = city(e.city);
-    const [x, y] = tokenSpot(c, i);
-    const done = acting && (state.acted.includes(ev) || e.called);
-    parts.push(`<g class="token${sel === ev ? ' sel' : ''}${done || e.called ? ' done' : ''}" data-ev="${ev}" transform="translate(${x} ${y})" tabindex="0" role="button" aria-label="${EV_NAMES[ev]} in ${esc(c.name)}">
-      <circle r="19" fill="${EV_COLOR[ev]}"/><text>${EV_LETTER[ev]}</text></g>`);
-  });
-  // clickable destinations
-  for (const m of moves) {
-    const c = city(m.to);
-    parts.push(`<path class="hitpath" d="${edge(m.edge).d}" data-move="${m.edge}"/>`);
-    parts.push(`<g class="dest" data-move="${m.edge}" tabindex="0" role="button" aria-label="Move ${EV_NAMES[sel]} to ${esc(c.name)}">
-      <circle class="hit" cx="${c.x}" cy="${c.y}" r="38"/><circle class="pulse" cx="${c.x}" cy="${c.y}" r="${c.big ? 30 : 24}" stroke="${EV_COLOR[sel]}"/></g>`);
-  }
-
-  const keep = $('#board').scrollLeft;
-  $('#board').innerHTML = `<svg viewBox="0 0 ${MAP.width} ${MAP.height}" role="img" aria-label="Map of Greece and Asia Minor with the cities Paul visited">${parts.join('')}</svg>`;
   const board = $('#board');
+  const keep = board.scrollLeft;
+  board.innerHTML = boardSVG(sheet, { acting, mode: s.mode, sel, moves, acted: s.acted });
   board.scrollLeft = keep;
   if (sel && board.scrollWidth > board.clientWidth && ui.focusEv !== sel) {
     const [tx] = tokenSpot(city(sheet.evangelists[sel].city), EVANGELISTS.indexOf(sel));
@@ -302,24 +254,7 @@ function renderBoard() {
     ev.preventDefault();
     t.dataset.move ? doMove(t.dataset.move) : selectEv(t.dataset.ev);
   };
-
-  $('#legend').innerHTML = `
-    ${Object.entries(MAP.regions).map(([k, n]) => `<span class="key"><span class="chip" style="background:${REGION_COLOR[k]}"></span>${esc(n)}</span>`).join('')}
-    <span class="key"><span class="chip hollow" style="background:#ccc"></span>not yet visited (&minus;2 at the end)</span>
-    <span class="key">ring = preached &middot; double ring = called as pastor</span>`;
-}
-
-function tokenSpot(c, i) {
-  const l = c.label;
-  const w = c.name.length * 16;                     // rough label width at 31px Arial
-  const rad = (l.rot * Math.PI) / 180;
-  const lx = l.x + Math.cos(rad) * (w / 2) - Math.sin(rad) * -10;
-  const ly = l.y + Math.sin(rad) * (w / 2) + Math.cos(rad) * -10;
-  let dx = c.x - lx, dy = c.y - ly;
-  const len = Math.hypot(dx, dy) || 1;
-  dx /= len; dy /= len;
-  const d = (c.big ? 44 : 38) + 4;
-  return [c.x + dx * d - dy * (i - 1) * 36, c.y + dy * d + dx * (i - 1) * 36];
+  $('#legend').innerHTML = legendHTML();
 }
 
 function selectEv(ev) {
@@ -445,6 +380,13 @@ function renderResults() {
           <th class="text-end">Regions</th><th class="text-end">Preached</th><th class="text-end">Called</th><th class="text-end">Unvisited</th><th class="text-end">Total</th></tr></thead>
         <tbody>${rows}</tbody></table></div>
       ${res.map((r) => { const u = unvisited(r); return u.length ? `<p class="small text-muted mb-1"><b>${esc(r.name)}</b> never reached: ${u.map(esc).join(', ')}.</p>` : `<p class="small text-muted mb-1"><b>${esc(r.name)}</b> visited every city!</p>`; }).join('')}
+      <hr>
+      <h2 class="h5">Replay the journey${res.length > 1 ? 's' : ''}</h2>
+      <div id="replay"></div>
+      <hr>
+      <h2 class="h5">Share your result</h2>
+      <div id="share"></div>
+      <hr>
       <div class="d-flex flex-wrap gap-2 mt-3">
         <button class="btn btn-primary" id="again-btn">Play again</button>
         <button class="btn btn-outline-secondary" id="copy-btn">Copy result</button>
@@ -452,7 +394,11 @@ function renderResults() {
       </div>
       <p class="small text-muted mt-3 mb-0" id="copy-note" aria-live="polite"></p>
     </div></div>`;
+  replayHandle?.stop();
+  replayHandle = mountReplay($('#replay'), { players: res.map((r) => ({ name: r.name, sheet: r.sheet })), rules: rules() });
+  mountShare($('#share'), res);
   $('#again-btn').onclick = () => {
+    replayHandle?.stop();
     const s = state;
     startGame(G.newGame({ kind: s.kind, rulesId: s.rulesId, names: s.names, bots: s.seats - 1 }));
   };
@@ -460,6 +406,56 @@ function renderResults() {
     try { await navigator.clipboard.writeText(text); $('#copy-note').textContent = 'Copied!'; }
     catch { $('#copy-note').textContent = text; }
   };
+}
+
+function mountShare(root, res) {
+  const solo = state.kind === 'solo';
+  root.innerHTML = `
+    <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+      ${solo ? '' : `<select class="form-select w-auto" id="share-who" aria-label="Whose result">${res.map((r, i) => `<option value="${i}">${esc(r.name)}</option>`).join('')}</select>`}
+      <button class="btn btn-primary" id="share-dl" disabled>Download image</button>
+      <button class="btn btn-outline-primary" id="share-native" hidden>Share&hellip;</button>
+    </div>
+    <img class="share-preview img-fluid rounded border" alt="Your Journeys for Paul result card" width="1200" height="900" hidden>
+    <p class="small text-muted mt-2 mb-0" id="share-msg" aria-live="polite">Drawing your result card&hellip;</p>`;
+  const img = root.querySelector('.share-preview');
+  const msg = root.querySelector('#share-msg');
+  const dl = root.querySelector('#share-dl');
+  const nat = root.querySelector('#share-native');
+  const canvas = document.createElement('canvas');
+  let blob = null, url = null, who = 0;
+
+  const shareText = () => `I scored ${res[who].total} points in Journeys for Paul! https://sdggames.fun/JfP/play/`;
+
+  async function build() {
+    dl.disabled = true; nat.hidden = true;
+    try {
+      await drawShareImage(canvas, { name: res[who].name, sheet: res[who].sheet, rulesName: rules().name, rounds: state.round });
+      blob = await canvasToBlob(canvas);
+      if (url) URL.revokeObjectURL(url);
+      url = URL.createObjectURL(blob);
+      img.src = url; img.hidden = false; dl.disabled = false;
+      msg.textContent = '';
+      const file = new File([blob], 'journeys-for-paul.png', { type: 'image/png' });
+      nat.hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+    } catch (e) {
+      msg.textContent = 'Sorry, the result card could not be drawn in this browser.';
+    }
+  }
+  dl.onclick = () => {
+    const a = document.createElement('a');
+    a.href = url; a.download = `journeys-for-paul-${res[who].name.replace(/[^\w-]+/g, '-').toLowerCase()}.png`;
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+  nat.onclick = async () => {
+    try {
+      const file = new File([blob], 'journeys-for-paul.png', { type: 'image/png' });
+      await navigator.share({ files: [file], text: shareText(), url: 'https://sdggames.fun/JfP/play/' });
+    } catch { /* cancelled */ }
+  };
+  const sel = root.querySelector('#share-who');
+  if (sel) sel.onchange = () => { who = Number(sel.value); build(); };
+  build();
 }
 
 // ---- boot ---------------------------------------------------------------------

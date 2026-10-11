@@ -107,3 +107,32 @@
 @media (prefers-reduced-motion: reduce) {
     .die-img.rolling, .board .cand, .board .dest .pulse, .nudge { animation: none; }
 }
+
+/* scripture */
+.verse { margin: 0; font-family: Georgia, "Times New Roman", serif; }
+.verse-head { font: 600 .8rem system-ui, sans-serif; text-transform: uppercase; letter-spacing: .04em; color: #6c757d; margin-bottom: .35rem; }
+.verse blockquote { margin: 0 0 .35rem; font-size: 1.05rem; line-height: 1.45; font-style: italic; }
+.verse-ref { font-size: .9rem; }
+.verse-note { margin-top: .4rem; font: .82rem system-ui, sans-serif; color: #495057; }
+.verse-toast { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 1500; width: min(640px, calc(100vw - 24px));
+               max-height: 42vh; overflow: auto; background: #fffdf5; border: 1px solid #e6dcb8; border-left: 6px solid #c9a227;
+               border-radius: .5rem; padding: .8rem 2.4rem .8rem 1rem; box-shadow: 0 6px 24px rgba(0,0,0,.28); animation: rise .35s ease-out; }
+.verse-toast[hidden] { display: none; }
+.verse-close { position: absolute; top: .6rem; right: .6rem; }
+@keyframes rise { from { opacity: 0; transform: translate(-50%, 16px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+/* replay */
+.replay-tabs { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
+.replay-tabs[hidden] { display: none; }
+.replay-caption { margin: .6rem 0 .3rem; font-weight: 600; min-height: 1.5rem; }
+.replay-caption .step-no { font-weight: 400; color: #6c757d; margin-right: .5rem; }
+.dot-ev { display: inline-block; width: .8rem; height: .8rem; border-radius: 50%; margin-right: .35rem; }
+.replay-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+.replay-range { flex: 1 1 160px; min-width: 120px; margin: 0 .4rem; }
+.replay-verse { margin-top: .75rem; }
+.replay-verse .verse { background: #fffdf5; border-left: 6px solid #c9a227; border-radius: .4rem; padding: .7rem 1rem; }
+.board .flash { fill: none; stroke: #ffd43b; stroke-width: 36; stroke-linecap: round; opacity: .8; }
+.board .flash-dot { fill: none; stroke: #ffd43b; stroke-width: 12; animation: pulse 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.share-preview { max-width: 640px; width: 100%; height: auto; }
+@media (prefers-reduced-motion: reduce) { .verse-toast, .board .flash-dot { animation: none; } }
+@media (max-width: 767.98px) { .replay-board svg { width: 1000px; max-width: none; } }
