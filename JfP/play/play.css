@@ -30,6 +30,13 @@
 @keyframes wobble { 0% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } 100% { transform: rotate(-4deg); } }
 .swatch { width: 54px; height: 14px; flex: none; }
 
+/* the die picture */
+.die-img { height: 63px; width: auto; flex: none; filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)); }
+.die-img.rolling { animation: tumble .45s ease-in-out infinite; }
+@keyframes tumble { 0% { transform: rotate(0) translateY(0); } 25% { transform: rotate(-25deg) translateY(-10px); }
+                    50% { transform: rotate(0) translateY(0); } 75% { transform: rotate(25deg) translateY(-10px); } 100% { transform: rotate(0) translateY(0); } }
+.howto-die { float: right; width: 110px; height: auto; margin: 0 0 .5rem 1rem; }
+
 /* board */
 .board { padding: 0; overflow-x: auto; overflow-y: hidden; touch-action: manipulation; -webkit-overflow-scrolling: touch; }
 .board svg { display: block; width: 100%; height: auto; user-select: none; }
@@ -98,5 +105,5 @@
 .res-winner { background: #fff8d6; }
 
 @media (prefers-reduced-motion: reduce) {
-    .die.rolling, .board .cand, .board .dest .pulse, .nudge { animation: none; }
+    .die-img.rolling, .board .cand, .board .dest .pulse, .nudge { animation: none; }
 }
