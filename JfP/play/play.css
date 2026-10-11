@@ -1,0 +1,102 @@
+/* Journeys for Paul - online play */
+.jfp { --luke: #1f9d45; --silas: #ef7a1a; --titus: #2f66e0; max-width: 1500px; margin: 0 auto; }
+.jfp-logo { height: 54px; width: auto; max-width: 100%; }
+.ev-luke { color: var(--luke); } .ev-silas { color: var(--silas); } .ev-titus { color: var(--titus); }
+
+[hidden] { display: none !important; }
+
+/* setup */
+.choice-grid { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.choice { display: flex; gap: .6rem; align-items: flex-start; padding: .75rem; border: 2px solid #dee2e6; border-radius: .5rem; cursor: pointer; background: #fff; }
+.choice:hover { border-color: #adb5bd; }
+.choice:has(input:checked) { border-color: #0d6efd; background: #f1f7ff; }
+.choice:has(input:focus-visible) { outline: 3px solid #86b7fe; }
+.choice small { display: block; color: #6c757d; margin-top: .15rem; }
+
+/* HUD */
+.hud { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; padding: .75rem 1rem; margin-bottom: .75rem;
+       background: #212529; color: #fff; border-radius: .5rem; }
+.hud .who { font-size: 1.1rem; font-weight: 600; }
+.hud .sub { color: #ced4da; font-size: .9rem; }
+.hud .grow { flex: 1 1 260px; }
+.hud .btn-group-modes { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+/* die and mode badge */
+.die { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; min-width: 190px; height: 52px; padding: 0 .9rem;
+       border-radius: .6rem; background: #fff; color: #212529; font-weight: 700; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.3); }
+.die.rolling { animation: wobble .25s linear infinite; }
+.die.choice { background: #ffe8a3; }
+.die .q { font-size: 1.6rem; line-height: 1; }
+@keyframes wobble { 0% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } 100% { transform: rotate(-4deg); } }
+.swatch { width: 54px; height: 14px; flex: none; }
+
+/* board */
+.board { padding: 0; overflow-x: auto; overflow-y: hidden; touch-action: manipulation; -webkit-overflow-scrolling: touch; }
+.board svg { display: block; width: 100%; height: auto; user-select: none; }
+.board .city-label { font: 600 31px Arial, Helvetica, sans-serif; fill: #111; paint-order: stroke; stroke: #fff; stroke-width: 7px; stroke-linejoin: round; pointer-events: none; }
+.board .caption { font: 700 41px Arial, Helvetica, sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 6px; stroke-linejoin: round; pointer-events: none; opacity: .9; }
+.board .route { fill: none; stroke-linecap: round; transition: opacity .2s; }
+.board .route.road { stroke: #2b2b2b; stroke-width: 7; }
+.board .route.foot { stroke: #2b2b2b; stroke-width: 7; stroke-dasharray: 9 15; }
+.board .route.boat-under { stroke: #2b2b2b; stroke-width: 7; }
+.board .route.boat-over { stroke: #fff; stroke-width: 7; stroke-dasharray: 18 22; stroke-linecap: butt; }
+.board .dim { opacity: .22; }
+.board .trail { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.board .cand { fill: none; stroke-width: 12; stroke-linecap: round; stroke-dasharray: 2 22; animation: march .8s linear infinite; }
+@keyframes march { to { stroke-dashoffset: -24; } }
+.board .dot { stroke: #222; stroke-width: 3; }
+.board .dot.unseen { stroke: #fff; fill-opacity: .55; stroke-opacity: 1; }
+.board .ring { fill: none; stroke-width: 5; }
+.board .token { filter: drop-shadow(0 2px 2px rgba(0,0,0,.45)); cursor: pointer; }
+.board .token text { font: 800 20px Arial, sans-serif; fill: #fff; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.board .token.sel circle { stroke: #fff; stroke-width: 5; }
+.board .token circle { stroke: #fff; stroke-width: 3; }
+.board .token.done { opacity: .75; }
+.board .dest { cursor: pointer; }
+.board .dest .pulse { fill: none; stroke-width: 6; animation: pulse 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.board .dest .hit { fill: transparent; }
+.board .dest:focus-visible .pulse, .board .dest:hover .pulse { stroke-width: 10; }
+@keyframes pulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.25); opacity: .6; } }
+.board .hitpath { fill: none; stroke: transparent; stroke-width: 40; cursor: pointer; }
+
+.legend { display: flex; flex-wrap: wrap; gap: .25rem 1rem; align-items: center; }
+.legend .key { display: inline-flex; align-items: center; gap: .35rem; }
+.legend .chip { display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #222; }
+.legend .chip.hollow { border-color: #aaa; opacity: .6; }
+
+@media (max-width: 767.98px) {
+    .board svg { width: 1000px; max-width: none; }   /* big enough to read labels; the board scrolls sideways */
+    .jfp-logo { height: auto; }
+}
+
+/* side panel */
+.ev-card { border-left: 8px solid var(--c); border-radius: .5rem; background: #fff; padding: .6rem .75rem; margin-bottom: .6rem;
+           box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+.ev-card.sel { outline: 3px solid var(--c); }
+.ev-card.idle { opacity: .6; }
+.ev-card h3 { font-size: 1.05rem; margin: 0; color: var(--c); }
+.ev-card .meta { color: #495057; font-size: .88rem; }
+.region-chips { display: flex; gap: .3rem; flex-wrap: wrap; margin: .35rem 0; }
+.rchip { font-size: .72rem; padding: .08rem .45rem; border-radius: 1rem; border: 2px solid var(--rc); color: var(--rc); opacity: .45; background: #fff; }
+.rchip.on { background: var(--rc); color: #fff; opacity: 1; }
+.dest-list { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .4rem; }
+.dest-list .btn { --bs-btn-padding-y: .2rem; --bs-btn-padding-x: .55rem; --bs-btn-font-size: .85rem; }
+.actionbar { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
+.score-box table { font-size: .9rem; margin: 0; }
+.log { max-height: 220px; overflow: auto; font-size: .82rem; color: #495057; padding-left: 1.1rem; margin: 0; }
+.nudge { animation: nudge 1.4s ease-in-out infinite; }
+@keyframes nudge { 0%,100% { box-shadow: 0 0 0 0 rgba(13,110,253,.6); } 50% { box-shadow: 0 0 0 8px rgba(13,110,253,0); } }
+
+/* hand-off screen */
+.handoff { position: fixed; inset: 0; z-index: 2000; background: rgba(20,24,30,.96); display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; }
+.handoff[hidden] { display: none; }
+.handoff-card { padding: 2rem; }
+.handoff .text-muted { color: #adb5bd !important; }
+
+/* results */
+.res-table th, .res-table td { vertical-align: middle; }
+.res-winner { background: #fff8d6; }
+
+@media (prefers-reduced-motion: reduce) {
+    .die.rolling, .board .cand, .board .dest .pulse, .nudge { animation: none; }
+}

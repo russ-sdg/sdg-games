@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Play Journeys for Paul online, free. Send Luke, Silas and Titus to visit the churches of Paul's journeys by Roman road, footpath and boat." />
+    <title>Play Journeys for Paul Online - SDG Games</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="play.css" rel="stylesheet" />
+</head>
+<body class="sb-nav-fixed">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
+
+    <main class="jfp container-fluid px-3 px-lg-4 pb-5">
+        <div class="jfp-title d-flex flex-wrap align-items-center gap-3 py-3">
+            <a href="../index.html"><img class="jfp-logo" src="../../assets/JfP Logo Long Red.png" alt="Journeys for Paul" /></a>
+            <span class="badge text-bg-secondary">Play online</span>
+            <a class="ms-auto small" href="../index.html">About the game &amp; how to buy it</a>
+        </div>
+
+        <!-- ================= SETUP ================= -->
+        <section id="setup" aria-labelledby="setup-title">
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h1 class="h3" id="setup-title">New game</h1>
+
+                            <div id="resume" class="alert alert-info d-flex flex-wrap align-items-center gap-2" hidden>
+                                <span>You have a game in progress.</span>
+                                <button type="button" class="btn btn-sm btn-primary" id="resume-btn">Resume</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="discard-btn">Discard it</button>
+                            </div>
+
+                            <form id="setup-form" autocomplete="off">
+                                <fieldset class="mb-4">
+                                    <legend class="h6">How do you want to play?</legend>
+                                    <div class="choice-grid">
+                                        <label class="choice">
+                                            <input type="radio" name="kind" value="solo" checked />
+                                            <span><strong>Solo</strong><small>Play on your own against simulated opponents who roll the die.</small></span>
+                                        </label>
+                                        <label class="choice">
+                                            <input type="radio" name="kind" value="pass" />
+                                            <span><strong>Pass &amp; play</strong><small>2&ndash;5 people sharing this device, each with their own map.</small></span>
+                                        </label>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset class="mb-4">
+                                    <legend class="h6">Game length</legend>
+                                    <div class="choice-grid">
+                                        <label class="choice">
+                                            <input type="radio" name="rules" value="fast" checked />
+                                            <span><strong>Fast game</strong><small>An evangelist is called as pastor on a repeat preach, even after visiting only one region. Other players may have a stuck evangelist preach, not just move.</small></span>
+                                        </label>
+                                        <label class="choice">
+                                            <input type="radio" name="rules" value="long" />
+                                            <span><strong>Long game</strong><small>Being called needs two regions visited, and only the player who rolled may preach or be called. Everyone else can only travel.</small></span>
+                                        </label>
+                                    </div>
+                                </fieldset>
+
+                                <div id="solo-fields" class="mb-4">
+                                    <div class="row g-3">
+                                        <div class="col-sm-6">
+                                            <label class="form-label" for="solo-name">Your name</label>
+                                            <input class="form-control" id="solo-name" maxlength="20" placeholder="You" />
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label" for="bots">Simulated opponents</label>
+                                            <select class="form-select" id="bots">
+                                                <option value="1" selected>1 &ndash; you act on every roll</option>
+                                                <option value="2">2 &ndash; you roll every 3rd turn</option>
+                                                <option value="3">3 &ndash; you roll every 4th turn</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-text">Opponents only roll the die; you take the other-player action on their rolls, just as in a real game of that size.</div>
+                                </div>
+
+                                <div id="pass-fields" class="mb-4" hidden>
+                                    <label class="form-label" for="player-count">Players</label>
+                                    <select class="form-select w-auto mb-2" id="player-count">
+                                        <option>2</option><option>3</option><option>4</option><option>5</option>
+                                    </select>
+                                    <div id="player-names" class="row g-2"></div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-lg">Start the journeys</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="h5">How it works</h2>
+                            <p>Paul is detained and wants news of the churches he planted. Send his co-workers
+                                <b class="ev-luke">Luke</b> (starts in Philippi), <b class="ev-silas">Silas</b> (Antioch) and
+                                <b class="ev-titus">Titus</b> (Crete) to as many churches as you can.</p>
+                            <ul class="small">
+                                <li>The die gives a way to travel &ndash; <b>Roman Road</b>, <b>Footpath</b> or <b>Boat</b> &ndash; or <b>Player's Choice</b>.</li>
+                                <li>The roller acts with one to three evangelists; every other player acts with one.</li>
+                                <li>An evangelist <b>moves</b> along an unused route of that kind. If he can't move he can <b>preach</b> where he stands.</li>
+                                <li>Preach in the same city again (after visiting two regions in the long game) and he is <b>called as pastor</b> &ndash; his journey ends.</li>
+                                <li>The game ends when someone's three evangelists are all pastors, or nobody can travel.</li>
+                            </ul>
+                            <h3 class="h6">Scoring</h3>
+                            <ul class="small mb-0">
+                                <li>+4 for each region each evangelist has visited (the starting region counts)</li>
+                                <li>+3 for each time an evangelist preached</li>
+                                <li>+5 for each evangelist called as pastor</li>
+                                <li>&minus;2 for each city no evangelist visited</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= GAME ================= -->
+        <section id="game" hidden aria-label="Game board">
+            <div id="hud" class="hud" aria-live="polite"></div>
+            <div class="row g-3">
+                <div class="col-xl-8">
+                    <div id="board" class="board card shadow-sm"></div>
+                    <div class="legend small text-muted mt-2" id="legend"></div>
+                </div>
+                <div class="col-xl-4">
+                    <div id="side"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= RESULTS ================= -->
+        <section id="results" hidden aria-labelledby="results-title"></section>
+    </main>
+
+    <div id="handoff" class="handoff" role="dialog" aria-modal="true" aria-labelledby="handoff-title" hidden>
+        <div class="handoff-card">
+            <p class="mb-1 text-muted">Pass the device to</p>
+            <h2 id="handoff-title" class="display-6 mb-3"></h2>
+            <button type="button" class="btn btn-primary btn-lg" id="handoff-ok">I'm ready</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../../js/scripts.js"></script>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
