@@ -136,3 +136,14 @@
 .share-preview { max-width: 640px; width: 100%; height: auto; }
 @media (prefers-reduced-motion: reduce) { .verse-toast, .board .flash-dot { animation: none; } }
 @media (max-width: 767.98px) { .replay-board svg { width: 1000px; max-width: none; } }
+
+/* in-person table play */
+.seat-row { display: flex; align-items: center; gap: .6rem; }
+.seat-row input[type=radio] { flex: none; }
+.seats { display: flex; flex-wrap: wrap; gap: .35rem; margin: .4rem 0; }
+.seat { font-size: .85rem; padding: .15rem .6rem; border-radius: 1rem; border: 2px solid #ced4da; background: #fff; }
+.seat.me { border-color: #0d6efd; font-weight: 600; }
+.seat.rolling { background: #ffe08a; border-color: #c9a227; }
+.table-card .btn { --bs-btn-padding-y: .2rem; --bs-btn-font-size: .85rem; }
+.announce { display: flex; flex-wrap: wrap; gap: .5rem; }
+.say-it { font-size: 1.15rem; font-weight: 700; color: #ffd43b; }

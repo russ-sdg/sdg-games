@@ -1,9 +1,10 @@
-// Journeys for Paul - online play UI (solo + pass-and-play).
+// Journeys for Paul - online play UI (solo, pass-and-play and in-person own-phone play).
 import MAP from './map-data.js';
 import {
   MODES, MODE_NAMES, EVANGELISTS, EV_NAMES, city, edge, score, wouldBeCalled, maxActions,
 } from './engine.js';
 import * as G from './game.js';
+import { RULESETS, canTravelAny, allCalled } from './engine.js';
 import { boardSVG, legendHTML, tokenSpot, esc, EV_COLOR, REGION_COLOR } from './board.js';
 import { snippetFor } from './scripture.js';
 import { mountReplay, verseHTML } from './replay.js';
@@ -52,17 +53,51 @@ function initSetup() {
     const kind = form.querySelector('[name=kind]:checked').value;
     $('#solo-fields').hidden = kind !== 'solo';
     $('#pass-fields').hidden = kind !== 'pass';
+    $('#table-fields').hidden = kind !== 'table';
   }
   kindEls().forEach((el) => el.addEventListener('change', syncKind));
   count.addEventListener('change', drawNames);
   drawNames();
   syncKind();
 
+  // in-person table: every player is listed (same order on every phone) and one row is "me"
+  const tNames = $('#table-names');
+  const tCount = $('#table-count');
+  function drawTable() {
+    const prev = [...tNames.querySelectorAll('input[type=text]')].map((i) => i.value);
+    const me = tNames.querySelector('input[type=radio]:checked')?.value ?? '0';
+    tNames.innerHTML = '';
+    for (let i = 0; i < Number(tCount.value); i++) {
+      tNames.insertAdjacentHTML('beforeend', `<div class="seat-row">
+        <input type="radio" name="me" value="${i}" ${String(i) === me ? 'checked' : ''} aria-label="Player ${i + 1} is me">
+        <input type="text" class="form-control" maxlength="20" aria-label="Player ${i + 1} name" placeholder="Player ${i + 1}${i === 0 ? ' (rolls first)' : ''}" value="${esc(prev[i] ?? '')}"></div>`);
+    }
+  }
+  const readTable = () => ({
+    names: [...tNames.querySelectorAll('input[type=text]')].map((i, n) => i.value.trim() || `Player ${n + 1}`),
+    me: Number(tNames.querySelector('input[type=radio]:checked').value),
+  });
+  tCount.addEventListener('change', drawTable);
+  drawTable();
+
+  $('#invite-btn').onclick = async () => {
+    const link = inviteURL(form.querySelector('[name=rules]:checked').value, readTable().names);
+    const msg = $('#invite-msg');
+    try {
+      if (navigator.share) await navigator.share({ title: 'Journeys for Paul', text: 'Join our game of Journeys for Paul:', url: link });
+      else { await navigator.clipboard.writeText(link); msg.textContent = 'Link copied - send it to the others.'; }
+    } catch { msg.textContent = link; }
+  };
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const kind = form.querySelector('[name=kind]:checked').value;
     const rulesId = form.querySelector('[name=rules]:checked').value;
     const typed = [...names.querySelectorAll('input')].map((i, n) => i.value.trim() || `Player ${n + 1}`);
+    if (kind === 'table') {
+      const t = readTable();
+      return startGame(G.newGame({ kind, rulesId, names: t.names, me: t.me }));
+    }
     startGame(G.newGame({
       kind, rulesId,
       names: kind === 'solo' ? [$('#solo-name').value.trim() || 'You'] : typed,
@@ -78,16 +113,54 @@ function initSetup() {
   }
 }
 
+// ---- invite / join links (in-person table play) ------------------------------
+function inviteURL(rulesId, names) {
+  const q = new URLSearchParams({ table: '1', rules: rulesId });
+  names.forEach((n) => q.append('p', n));
+  return `${location.origin}${location.pathname}?${q}`;
+}
+
+function initJoin() {
+  const q = new URLSearchParams(location.search);
+  const players = q.getAll('p').map((n) => n.slice(0, 20));
+  const rulesId = q.get('rules');
+  if (q.get('table') !== '1' || players.length < 2 || players.length > 6 || !RULESETS[rulesId]) return;
+  $('#join').hidden = false;
+  $('#join-rules').textContent = RULESETS[rulesId].name;
+  $('#join-players').innerHTML = players.map((n, i) => `<label class="choice"><input type="radio" name="join-me" value="${i}" ${i === 0 ? 'checked' : ''}>
+    <span><strong>${esc(n)}</strong><small>${i === 0 ? 'Player 1 &ndash; rolls first' : `Player ${i + 1}`}</small></span></label>`).join('');
+  $('#join-btn').onclick = () => {
+    const me = Number(document.querySelector('[name=join-me]:checked').value);
+    history.replaceState(null, '', location.pathname);   // a reload resumes the game instead of re-joining
+    startGame(G.newGame({ kind: 'table', rulesId, names: players, me }));
+  };
+}
+
 function show(which) {
   $('#verse').hidden = true;
   for (const id of ['setup', 'game', 'results']) $('#' + id).hidden = id !== which;
   window.scrollTo({ top: 0 });
 }
 
+// keep the phone awake during an in-person game
+let wakeLock = null;
+async function keepAwake(on) {
+  try {
+    if (on && 'wakeLock' in navigator && !wakeLock) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } else if (!on && wakeLock) { await wakeLock.release(); wakeLock = null; }
+  } catch { /* not supported or refused: the game still works */ }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && state?.kind === 'table' && state.phase !== 'over') keepAwake(true);
+});
+
 function startGame(s) {
   state = s;
   ui = { selected: null, history: [], handoff: null, rolling: false, showLog: false };
   show('game');
+  keepAwake(s.kind === 'table');
   save();
   render();
 }
@@ -158,7 +231,7 @@ function dieFace(face) {
     ? `<span class="q">?</span><span>Player's Choice</span>`
     : `${swatch(face)}<span>${MODE_NAMES[face]}</span>`;
 }
-const sheetSeat = () => (state.kind === 'solo' ? 0 : activeSeat(state));
+const sheetSeat = () => (state.kind === 'pass' ? activeSeat(state) : 0);
 const mySheet = () => state.sheets[sheetSeat()];
 
 function render() {
@@ -193,10 +266,15 @@ function renderHandoff() {
 }
 
 function roleText() {
-  if (state.role === 'roller') return 'You rolled: move or preach with one to three evangelists.';
+  const table = state.kind === 'table';
+  if (state.role === 'roller') {
+    return table ? 'Tell the table what you rolled! Then move or preach with one to three evangelists.'
+      : 'You rolled: move or preach with one to three evangelists.';
+  }
+  const who = table ? state.seatNames[state.roller] : 'Another player';
   return rules().nonRollerMayPreach
-    ? 'Another player rolled: use one evangelist to move, or to preach if he cannot move.'
-    : 'Another player rolled: move one evangelist (only the roller may preach).';
+    ? `${who} rolled: use one evangelist to move, or to preach if he cannot move.`
+    : `${who} rolled: move one evangelist (only the roller may preach).`;
 }
 const rules = () => G.rules(state);
 
@@ -206,23 +284,31 @@ function renderHud() {
   const s = state;
   const who = s.seatNames[s.roller];
   const humanRoller = G.isHumanSeat(s, s.roller);
+  const table = s.kind === 'table';
   const head = `<div class="grow"><div class="who">`;
   let body = '';
-  if (s.phase === 'roll') {
-    body = `${dieImg(ui.rolling ? 'rolling' : '')}${head}Round ${s.round} &middot; ${humanRoller ? `${esc(who)}, roll the die` : `${esc(who)} is about to roll`}</div>
-      <div class="sub">${esc(rules().name)}${s.kind === 'solo' ? ' &middot; simulated opponents roll, you act' : ''}</div></div>
+  if (s.phase === 'roll' && table && !humanRoller) {
+    // in person: someone else rolls and says what came up
+    body = `${dieImg()}${head}Round ${s.round} &middot; ${esc(who)} is rolling</div>
+      <div class="sub">Listen for ${esc(who)}'s roll, then tap what they announced. (Player's Choice? Tap the way they chose.)</div></div>
+      <div class="announce">${MODES.map((m) => `<button class="btn btn-light btn-lg" data-announce="${m}">${swatch(m)} ${MODE_NAMES[m]}</button>`).join('')}</div>`;
+  } else if (s.phase === 'roll') {
+    body = `${dieImg(ui.rolling ? 'rolling' : '')}${head}Round ${s.round} &middot; ${humanRoller ? (table ? 'Your turn to roll' : `${esc(who)}, roll the die`) : `${esc(who)} is about to roll`}</div>
+      <div class="sub">${esc(rules().name)}${s.kind === 'solo' ? ' &middot; simulated opponents roll, you act' : table ? ' &middot; roll, then tell the table what came up' : ''}</div></div>
       <button class="btn btn-warning btn-lg nudge" id="roll-btn" ${ui.rolling ? 'disabled' : ''}>${humanRoller ? 'Roll' : `Roll for ${esc(who)}`}</button>`;
   } else if (s.phase === 'choose') {
-    body = `${dieImg()}${head}Player's Choice! ${esc(who)}, pick how everyone travels</div><div class="sub">All players will use the mode you choose.</div></div>
+    body = `${dieImg()}${head}Player's Choice! ${esc(who)}, pick how everyone travels</div><div class="sub">${table ? 'Tell the table which way you choose &ndash; everyone travels that way.' : 'All players will use the mode you choose.'}</div></div>
       <div class="btn-group-modes">${MODES.map((m) => `<button class="btn btn-light" data-mode="${m}">${swatch(m)} ${MODE_NAMES[m]}</button>`).join('')}</div>`;
   } else {
     const actor = s.seatNames[s.actor];
-    body = `${dieImg()}${head}${esc(actor)} &middot; Round ${s.round}</div><div class="sub">${roleText()}</div></div>
+    const say = table && s.role === 'roller' ? `<div class="say-it">Tell the table: &ldquo;${MODE_NAMES[s.mode]}!&rdquo;</div>` : '';
+    body = `${dieImg()}${head}${esc(actor)} &middot; Round ${s.round}</div><div class="sub">${roleText()}</div>${say}</div>
       <div class="die ${s.face === 'choice' ? 'choice' : ''}" title="${s.face === 'choice' ? 'Chosen with Player\'s Choice' : 'Rolled'}">${dieFace(s.mode)}</div>`;
   }
   $('#hud').innerHTML = body;
   const rb = $('#roll-btn'); if (rb) rb.onclick = doRoll;
   $('#hud').querySelectorAll('[data-mode]').forEach((b) => { b.onclick = () => commit(G.chooseMode(state, b.dataset.mode)); });
+  $('#hud').querySelectorAll('[data-announce]').forEach((b) => { b.onclick = () => commit(G.announceRoll(state, b.dataset.announce)); });
 }
 
 function renderBoard() {
@@ -304,6 +390,21 @@ function evCard(ev) {
       ${actions}</div>`;
 }
 
+function tableCard() {
+  const s = state;
+  const sheet = mySheet();
+  const seats = s.seatNames.map((n, i) => `<span class="seat${i === s.mySeat ? ' me' : ''}${i === s.roller ? ' rolling' : ''}">${i + 1}. ${esc(n)}${i === s.mySeat ? ' (you)' : ''}${i === s.roller ? ' &#127922;' : ''}</span>`).join('');
+  const stuck = !allCalled(sheet) && !canTravelAny(sheet);
+  return `<div class="card table-card mb-3"><div class="card-body py-2">
+    <div class="fw-semibold">The table</div>
+    <div class="seats">${seats}</div>
+    ${s.phase === 'roll' ? `<div class="small text-muted mb-1"><label for="roller-fix">Out of step? Whose roll is it:</label>
+      <select id="roller-fix" class="form-select form-select-sm d-inline-block w-auto">${s.seatNames.map((n, i) => `<option value="${i}" ${i === s.roller ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select></div>` : ''}
+    ${stuck ? '<div class="alert alert-warning small my-2 py-2">None of your evangelists can travel any more. If nobody at the table can either, the game is over.</div>' : ''}
+    <button type="button" class="btn btn-outline-danger mt-1" id="finish-btn">The game is over &ndash; show my score</button>
+  </div></div>`;
+}
+
 function renderSide() {
   const s = state;
   const sc = score(mySheet());
@@ -320,6 +421,7 @@ function renderSide() {
   const log = s.log.slice(-40).reverse().map((l) => `<li>${esc(l.text)}</li>`).join('');
   $('#side').innerHTML = `
     ${s.kind === 'pass' ? `<div class="mb-2 fw-semibold">${esc(s.seatNames[sheetSeat()])}'s map</div>` : ''}
+    ${s.kind === 'table' ? tableCard() : ''}
     ${EVANGELISTS.map(evCard).join('')}
     ${controls}
     <div class="card score-box mb-3"><div class="card-body py-2">
@@ -343,9 +445,14 @@ function renderSide() {
   };
   const end = $('#end-btn'); if (end) end.onclick = () => commit(G.endTurn(state));
   const undo = $('#undo-btn'); if (undo) undo.onclick = doUndo;
+  const fix = $('#roller-fix'); if (fix) fix.onchange = () => commit(G.setRoller(state, Number(fix.value)));
+  const fin = $('#finish-btn');
+  if (fin) fin.onclick = () => {
+    if (confirm('Is the game over? That is when someone has all three evangelists called as pastors, or nobody at the table can move.')) commit(G.finishNow(state));
+  };
   $('#quit-btn').onclick = () => {
     if (!confirm('Quit this game? Your progress will be lost.')) return;
-    state = null; save(); try { localStorage.removeItem(SAVE_KEY); } catch {}
+    state = null; keepAwake(false); save(); try { localStorage.removeItem(SAVE_KEY); } catch {}
     show('setup'); $('#resume').hidden = true;
   };
   $('#log-box').ontoggle = (e) => { ui.showLog = e.target.open; };
@@ -353,11 +460,12 @@ function renderSide() {
 
 // ---- results ----------------------------------------------------------------
 function renderResults() {
+  keepAwake(false);
   save();
   show('results');
   const res = G.results(state);
   const best = res[0].total;
-  const solo = state.kind === 'solo';
+  const solo = res.length === 1;
   const rows = res.map((r) => `<tr class="${r.total === best && res.length > 1 ? 'res-winner' : ''}">
       <th scope="row">${esc(r.name)}${r.total === best && res.length > 1 ? ' &#127942;' : ''}</th>
       ${EVANGELISTS.map((ev) => {
@@ -367,14 +475,16 @@ function renderResults() {
       <td class="text-end">${r.parts.regions}</td><td class="text-end">${r.parts.preaching}</td><td class="text-end">${r.parts.called}</td>
       <td class="text-end">${r.parts.unvisited} <small class="text-muted">(${r.unvisited})</small></td><td class="text-end fs-5"><b>${r.total}</b></td></tr>`).join('');
   const winners = res.filter((r) => r.total === best).map((r) => r.name);
-  const text = solo
+  const text = state.kind === 'table'
+    ? `I scored ${res[0].total} in Journeys for Paul at our table of ${state.seats}! https://sdggames.fun/JfP/play/`
+    : solo
     ? `I scored ${res[0].total} in Journeys for Paul (${rules().name.toLowerCase()})! Can you beat it? https://sdggames.fun/JfP/play/`
     : `${winners.join(' & ')} won Journeys for Paul with ${best} points! https://sdggames.fun/JfP/play/`;
   const unvisited = (r) => MAP.cities.filter((c) => !r.sheet.visited.includes(c.id)).map((c) => c.name);
   $('#results').innerHTML = `
     <div class="card shadow-sm"><div class="card-body">
-      <h1 class="h3" id="results-title">${solo ? `All journeys complete &ndash; ${res[0].total} points` : `${esc(winners.join(' & '))} ${winners.length > 1 ? 'tie' : 'wins'} with ${best} points`}</h1>
-      <p class="text-muted">${esc(rules().name)} &middot; ${state.round} round${state.round === 1 ? '' : 's'}</p>
+      <h1 class="h3" id="results-title">${solo ? `${state.kind === 'table' ? 'Your journeys are complete' : 'All journeys complete'} &ndash; ${res[0].total} points` : `${esc(winners.join(' & '))} ${winners.length > 1 ? 'tie' : 'wins'} with ${best} points`}</h1>
+      <p class="text-muted">${esc(rules().name)} &middot; ${state.round} round${state.round === 1 ? '' : 's'}${state.kind === 'table' ? ' &middot; compare scores with the rest of the table!' : ''}</p>
       <div class="table-responsive"><table class="table res-table align-middle">
         <thead><tr><th>Player</th>${EVANGELISTS.map((e) => `<th class="ev-${e}">${EV_NAMES[e]}</th>`).join('')}
           <th class="text-end">Regions</th><th class="text-end">Preached</th><th class="text-end">Called</th><th class="text-end">Unvisited</th><th class="text-end">Total</th></tr></thead>
@@ -400,7 +510,7 @@ function renderResults() {
   $('#again-btn').onclick = () => {
     replayHandle?.stop();
     const s = state;
-    startGame(G.newGame({ kind: s.kind, rulesId: s.rulesId, names: s.names, bots: s.seats - 1 }));
+    startGame(G.newGame({ kind: s.kind, rulesId: s.rulesId, names: s.kind === 'table' ? s.seatNames : s.names, bots: s.seats - 1, me: s.mySeat }));
   };
   $('#copy-btn').onclick = async () => {
     try { await navigator.clipboard.writeText(text); $('#copy-note').textContent = 'Copied!'; }
@@ -409,7 +519,7 @@ function renderResults() {
 }
 
 function mountShare(root, res) {
-  const solo = state.kind === 'solo';
+  const solo = res.length === 1;
   root.innerHTML = `
     <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
       ${solo ? '' : `<select class="form-select w-auto" id="share-who" aria-label="Whose result">${res.map((r, i) => `<option value="${i}">${esc(r.name)}</option>`).join('')}</select>`}
@@ -461,3 +571,4 @@ function mountShare(root, res) {
 // ---- boot ---------------------------------------------------------------------
 $('#handoff-ok').onclick = () => { ui.handoff = null; renderHandoff(); };
 initSetup();
+initJoin();
