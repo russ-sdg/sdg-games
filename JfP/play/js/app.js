@@ -126,11 +126,7 @@ function doRoll() {
   if (reduceMotion) return go();
   ui.rolling = true;
   render();
-  const faces = ['road', 'foot', 'boat', 'choice'];
-  let i = 0;
-  const die = $('#die');
-  const t = setInterval(() => { if (die) die.innerHTML = dieFace(faces[++i % 4]); }, 90);
-  setTimeout(() => { clearInterval(t); go(); }, 750);
+  setTimeout(go, 800);
 }
 
 function doMove(edgeId) {
@@ -189,6 +185,8 @@ function roleText() {
 }
 const rules = () => G.rules(state);
 
+const dieImg = (extra = '') => `<img class="die-img ${extra}" src="assets/die.svg" alt="The eight-sided die" width="72" height="63">`;
+
 function renderHud() {
   const s = state;
   const who = s.seatNames[s.roller];
@@ -196,16 +194,15 @@ function renderHud() {
   const head = `<div class="grow"><div class="who">`;
   let body = '';
   if (s.phase === 'roll') {
-    body = `${head}Round ${s.round} &middot; ${humanRoller ? `${esc(who)}, roll the die` : `${esc(who)} is about to roll`}</div>
+    body = `${dieImg(ui.rolling ? 'rolling' : '')}${head}Round ${s.round} &middot; ${humanRoller ? `${esc(who)}, roll the die` : `${esc(who)} is about to roll`}</div>
       <div class="sub">${esc(rules().name)}${s.kind === 'solo' ? ' &middot; simulated opponents roll, you act' : ''}</div></div>
-      <div id="die" class="die ${ui.rolling ? 'rolling' : ''}">${ui.rolling ? '<span class="q">?</span>' : '<span class="q">&#127922;</span><span>8-sided die</span>'}</div>
       <button class="btn btn-warning btn-lg nudge" id="roll-btn" ${ui.rolling ? 'disabled' : ''}>${humanRoller ? 'Roll' : `Roll for ${esc(who)}`}</button>`;
   } else if (s.phase === 'choose') {
-    body = `${head}Player's Choice! ${esc(who)}, pick how everyone travels</div><div class="sub">All players will use the mode you choose.</div></div>
+    body = `${dieImg()}${head}Player's Choice! ${esc(who)}, pick how everyone travels</div><div class="sub">All players will use the mode you choose.</div></div>
       <div class="btn-group-modes">${MODES.map((m) => `<button class="btn btn-light" data-mode="${m}">${swatch(m)} ${MODE_NAMES[m]}</button>`).join('')}</div>`;
   } else {
     const actor = s.seatNames[s.actor];
-    body = `${head}${esc(actor)} &middot; Round ${s.round}</div><div class="sub">${roleText()}</div></div>
+    body = `${dieImg()}${head}${esc(actor)} &middot; Round ${s.round}</div><div class="sub">${roleText()}</div></div>
       <div class="die ${s.face === 'choice' ? 'choice' : ''}" title="${s.face === 'choice' ? 'Chosen with Player\'s Choice' : 'Rolled'}">${dieFace(s.mode)}</div>`;
   }
   $('#hud').innerHTML = body;
