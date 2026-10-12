@@ -5,6 +5,7 @@ import { EVANGELISTS, MODES, RULESETS, newSheet, applyMove, applyPreach, sheetAt
 import { newGame, roll, chooseMode, move, preach, endTurn, canEndTurn, evOptions } from './js/game.js';
 import { snippetFor, TRANSLATION } from './js/scripture.js';
 import DATA from './js/scripture-data.js';
+import { shareMessage, nativeShareData, SHARE_URL } from './js/share.js';
 
 const ROAD = () => 0.0;
 function lcg(seed) {
@@ -111,5 +112,42 @@ test('scripture text is clean: no markup, no dangling punctuation', () => {
     assert.ok(!/[<>{}]/.test(v.text), v.ref);
     assert.ok(!/[,;:]$/.test(v.text), `${v.ref} ends mid-sentence`);
     assert.ok(!/\s{2,}/.test(v.text), v.ref);
+  }
+});
+
+test('the native share payload contains the link exactly once', () => {
+  const data = nativeShareData({ name: 'card.png' }, 58);
+  assert.equal(data.text, `I scored 58 points in Journeys for Paul! ${SHARE_URL}`);
+  assert.equal(data.text.split(SHARE_URL).length - 1, 1);
+  assert.ok(!('url' in data), 'a separate url field duplicates the link when apps join text and url');
+  assert.equal(shareMessage(-14).includes('-14'), true);
+});
+
+test('solo with no simulated opponents: you roll every turn and the game still completes', () => {
+  let g = newGame({ kind: 'solo', rulesId: 'fast', names: ['Me'], bots: 0 });
+  assert.equal(g.seats, 1);
+  assert.deepEqual(g.seatNames, ['Me']);
+  g = roll(g, ROAD);
+  assert.equal(g.role, 'roller');
+  g = move(g, 'luke', 'road:Neapolis~Philippi');
+  g = endTurn(g);
+  assert.equal(g.phase, 'roll');
+  assert.equal(g.roller, 0);                    // I roll again
+  assert.equal(g.round, 2);
+  for (let seed = 1; seed <= 20; seed++) {      // random full games end
+    const rng = lcg(seed * 31);
+    let h = newGame({ kind: 'solo', rulesId: seed % 2 ? 'fast' : 'long', names: ['Me'], bots: 0 });
+    for (let guard = 0; h.phase !== 'over'; guard++) {
+      assert.ok(guard < 20000, 'did not finish');
+      if (h.phase === 'roll') { h = roll(h, rng); continue; }
+      if (h.phase === 'choose') { h = chooseMode(h, MODES[Math.floor(rng() * 3)]); continue; }
+      const acts = [];
+      for (const ev of EVANGELISTS) {
+        const o = evOptions(h, ev);
+        o.moves.forEach((m) => acts.push(() => move(h, ev, m.edge)));
+        if (o.preach) acts.push(() => preach(h, ev));
+      }
+      h = canEndTurn(h) && (!acts.length || rng() < 0.3) ? endTurn(h) : acts[Math.floor(rng() * acts.length)]();
+    }
   }
 });
