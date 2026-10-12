@@ -85,3 +85,13 @@ the odd lapse (Casual only; a lapse is never a pointless call):
 In simulation (`bots.test.js`) a Sharp bot beats Steady, which beats Casual, in both rule sets. Bots do
 not try to rush the game to a close, so in the fast game a person who preaches with every evangelist
 can end it in about ten rolls, long before the bots have scored much.
+
+## Cache busting (after you change any script or play.css)
+Browsers can keep running an old cached copy of a script after a deploy (an old `app.js` with a new
+`game.js` is a broken game). So `index.html` gives every module and the stylesheet a content-hash URL
+(`?v=<hash>`, via an import map) and shows the hash as "version" in the page footer, and the root
+`_headers` file tells Cloudflare Pages to make browsers revalidate `/JfP/play/*` on every load.
+
+    node tools/stamp.mjs      # run after editing anything in js/ or play.css
+
+`stamp.test.js` fails if `index.html` is stale, so you can't forget.

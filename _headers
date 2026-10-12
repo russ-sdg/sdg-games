@@ -1,0 +1,4 @@
+# Cloudflare Pages: always revalidate the online game's files (a cheap 304 when nothing changed), so a
+# browser never keeps running an old copy of the game after an update.
+/JfP/play/*
+  Cache-Control: no-cache
