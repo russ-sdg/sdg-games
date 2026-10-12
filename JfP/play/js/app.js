@@ -8,7 +8,7 @@ import { RULESETS, canTravelAny, allCalled } from './engine.js';
 import { boardSVG, legendHTML, tokenSpot, esc, EV_COLOR, REGION_COLOR } from './board.js';
 import { snippetFor } from './scripture.js';
 import { mountReplay, verseHTML } from './replay.js';
-import { drawShareImage, canvasToBlob } from './share.js';
+import { drawShareImage, canvasToBlob, shareMessage, nativeShareData } from './share.js';
 
 const SAVE_KEY = 'jfp-play-v1';
 const MODE_SHORT = { road: 'road', foot: 'footpath', boat: 'boat' };
@@ -294,7 +294,7 @@ function renderHud() {
       <div class="announce">${MODES.map((m) => `<button class="btn btn-light btn-lg" data-announce="${m}">${swatch(m)} ${MODE_NAMES[m]}</button>`).join('')}</div>`;
   } else if (s.phase === 'roll') {
     body = `${dieImg(ui.rolling ? 'rolling' : '')}${head}Round ${s.round} &middot; ${humanRoller ? (table ? 'Your turn to roll' : `${esc(who)}, roll the die`) : `${esc(who)} is about to roll`}</div>
-      <div class="sub">${esc(rules().name)}${s.kind === 'solo' ? ' &middot; simulated opponents roll, you act' : table ? ' &middot; roll, then tell the table what came up' : ''}</div></div>
+      <div class="sub">${esc(rules().name)}${s.kind === 'solo' && s.seats > 1 ? ' &middot; simulated opponents roll, you act' : table ? ' &middot; roll, then tell the table what came up' : ''}</div></div>
       <button class="btn btn-warning btn-lg nudge" id="roll-btn" ${ui.rolling ? 'disabled' : ''}>${humanRoller ? 'Roll' : `Roll for ${esc(who)}`}</button>`;
   } else if (s.phase === 'choose') {
     body = `${dieImg()}${head}Player's Choice! ${esc(who)}, pick how everyone travels</div><div class="sub">${table ? 'Tell the table which way you choose &ndash; everyone travels that way.' : 'All players will use the mode you choose.'}</div></div>
@@ -535,8 +535,6 @@ function mountShare(root, res) {
   const canvas = document.createElement('canvas');
   let blob = null, url = null, who = 0;
 
-  const shareText = () => `I scored ${res[who].total} points in Journeys for Paul! https://sdggames.fun/JfP/play/`;
-
   async function build() {
     dl.disabled = true; nat.hidden = true;
     try {
@@ -560,7 +558,7 @@ function mountShare(root, res) {
   nat.onclick = async () => {
     try {
       const file = new File([blob], 'journeys-for-paul.png', { type: 'image/png' });
-      await navigator.share({ files: [file], text: shareText(), url: 'https://sdggames.fun/JfP/play/' });
+      await navigator.share(nativeShareData(file, res[who].total));
     } catch { /* cancelled */ }
   };
   const sel = root.querySelector('#share-who');

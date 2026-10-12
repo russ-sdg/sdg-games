@@ -3,6 +3,11 @@ import MAP from './map-data.js';
 import { EVANGELISTS, EV_NAMES, city, edge, score } from './engine.js';
 import { EV_COLOR, EV_LETTER, REGION_COLOR, TRAIL_WIDTH, tokenSpot } from './board.js';
 
+export const SHARE_URL = 'https://sdggames.fun/JfP/play/';
+export const shareMessage = (total) => `I scored ${total} points in Journeys for Paul! ${SHARE_URL}`;
+// The link lives in the text only. Passing it again as `url` makes many messaging apps paste it twice.
+export const nativeShareData = (file, total) => ({ files: [file], text: shareMessage(total) });
+
 export const SHARE_W = 1200;
 export const SHARE_H = 900;
 const MAP_Y = 110;
