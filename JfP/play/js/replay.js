@@ -12,8 +12,8 @@ export function describe(h) {
 }
 
 // players: [{name, sheet}] (final sheets, each with its `history`); rules: the ruleset used.
-export function mountReplay(root, { players, rules }) {
-  let pi = 0, step = 0, timer = null;
+export function mountReplay(root, { players, rules, start = 0 }) {
+  let pi = start, step = 0, timer = null;
   const hist = () => players[pi].sheet.history ?? [];
   const stop = () => { clearInterval(timer); timer = null; };
 
