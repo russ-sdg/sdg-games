@@ -7,22 +7,27 @@ import {
   anyOption, applyMove, applyPreach, maxActions, gameOver, allCalled, score, edge, city,
 } from './engine.js';
 
+import { planTurn, chooseModeFor, DEFAULT_LEVEL } from './bot.js';
+
 export const BOT_NAMES = ['Barnabas', 'Timothy', 'Priscilla'];
 
-// kind 'solo' : one human plus `bots` simulated opponents who only roll the die.
+// kind 'solo' : one human plus `bots` computer opponents. Each bot has its own sheet and plays every
+//               roll by the same rules as a person (see bot.js), so a solo game has a winner.
 // kind 'pass' : `names.length` humans sharing one device.
 // kind 'table': an in-person game where every player has their own phone. This device holds only
 //               ONE sheet (seat `me`); the other players' rolls are announced out loud and entered
 //               with announceRoll(), exactly like calling out the die in the physical game.
-export function newGame({ kind, rulesId, names, bots = 1, me = 0 }) {
-  const humans = kind === 'solo' ? [names[0] || 'You'] : kind === 'table' ? [names[me]] : names;
+export function newGame({ kind, rulesId, names, bots = 1, me = 0, botLevel = DEFAULT_LEVEL }) {
+  // `names`/`sheets` hold one entry per sheet kept on this device: a solo game keeps the bots' sheets too
+  const humans = kind === 'solo' ? [names[0] || 'You', ...BOT_NAMES.slice(0, bots)] : kind === 'table' ? [names[me]] : names;
   const seats = kind === 'solo' ? 1 + bots : names.length;
   return {
     v: 1,
     kind,
     rulesId,
     names: humans,
-    seatNames: kind === 'solo' ? [humans[0], ...BOT_NAMES.slice(0, bots)] : kind === 'table' ? names : humans,
+    seatNames: kind === 'table' ? names : humans,
+    botLevel,
     seats,
     mySeat: kind === 'table' ? me : 0,
     sheets: humans.map(() => newSheet()),
@@ -38,12 +43,15 @@ export function newGame({ kind, rulesId, names, bots = 1, me = 0 }) {
     actions: 0,
     log: [],
     lastPreach: null, // {seat, ev, cityId, called, n} - drives the Scripture panel
+    lastBot: {},      // seat -> what that bot did on the latest roll
   };
 }
 
 export const rules = (s) => RULESETS[s.rulesId];
 // seats whose moves are made on this device
-export const isHumanSeat = (s, seat) => (s.kind === 'table' ? seat === s.mySeat : seat < s.sheets.length);
+export const isHumanSeat = (s, seat) => (s.kind === 'table' ? seat === s.mySeat : s.kind === 'solo' ? seat === 0 : seat < s.sheets.length);
+// a computer opponent that keeps its own sheet (games saved before bots existed have none)
+export const isBotSeat = (s, seat) => s.kind === 'solo' && seat > 0 && seat < s.sheets.length;
 // index into s.sheets for a human seat (a table game keeps just this player's sheet)
 const idx = (s, seat) => (s.kind === 'table' ? 0 : seat);
 export const sheetOf = (s, seat = s.actor) => s.sheets[idx(s, seat)];
@@ -69,10 +77,41 @@ function actingQueue(s) {
   return q;
 }
 
-function beginActing(s, mode) {
+function beginActing(s, mode, rng = Math.random) {
   s.mode = mode;
+  runBots(s, rng);
   s.queue = actingQueue(s);
   startActor(s);
+}
+
+// Every bot plays this roll on its own sheet (as roller or as an "other player"), exactly like a person.
+function runBots(s, rng) {
+  s.lastBot = {};
+  for (let seat = 1; seat < s.sheets.length; seat++) {
+    if (!isBotSeat(s, seat)) continue;
+    const role = seat === s.roller ? 'roller' : 'other';
+    const { actions } = planTurn(s.sheets[seat], s.mode, role, rules(s), s.botLevel, rng);
+    const said = [];
+    for (const a of actions) {
+      const sheet = s.sheets[seat];
+      const ev = sheet.evangelists[a.ev];
+      let text;
+      if (a.type === 'move') {
+        const from = city(ev.city).name;
+        s.sheets[seat] = applyMove(sheet, a.ev, a.edge);
+        text = `${EV_NAMES[a.ev]} travels ${from} → ${city(s.sheets[seat].evangelists[a.ev].city).name}`;
+      } else {
+        const r = applyPreach(sheet, a.ev, rules(s));
+        s.sheets[seat] = r.sheet;
+        text = r.called ? `${EV_NAMES[a.ev]} is CALLED as pastor in ${city(ev.city).name}` : `${EV_NAMES[a.ev]} preaches in ${city(ev.city).name}`;
+      }
+      const h = s.sheets[seat].history;
+      h[h.length - 1].round = s.round;
+      said.push(text);
+      push(s, `${s.seatNames[seat]}: ${text}.`);
+    }
+    s.lastBot[seat] = said;
+  }
 }
 
 function startActor(s) {
@@ -98,13 +137,16 @@ export function roll(state, rng = Math.random) {
       push(s, `${who} rolled Player's Choice.`);
       return s;
     }
-    const mode = MODES[Math.floor(rng() * MODES.length)];
+    // a bot picks the way of travel that suits its own sheet best
+    const mode = isBotSeat(s, s.roller)
+      ? chooseModeFor(s.sheets[s.roller], 'roller', rules(s), s.botLevel, rng)
+      : MODES[Math.floor(rng() * MODES.length)];
     push(s, `${who} rolled Player's Choice and picked ${mode}.`);
-    beginActing(s, mode);
+    beginActing(s, mode, rng);
     return s;
   }
   push(s, `${who} rolled ${s.face}.`);
-  beginActing(s, s.face);
+  beginActing(s, s.face, rng);
   return s;
 }
 
@@ -139,11 +181,11 @@ export function finishNow(state) {
   return s;
 }
 
-export function chooseMode(state, mode) {
+export function chooseMode(state, mode, rng = Math.random) {
   if (state.phase !== 'choose' || !MODES.includes(mode)) throw new Error('cannot choose a mode now');
   const s = clone(state);
   push(s, `${s.seatNames[s.roller]} chose ${mode}.`);
-  beginActing(s, mode);
+  beginActing(s, mode, rng);
   return s;
 }
 
@@ -221,9 +263,10 @@ export function endTurn(state) {
   return s;
 }
 
+// Final standings. `mine` marks the player on this device (solo / table); ties keep that player first.
 export function results(state) {
-  return state.sheets.map((sheet, i) => ({ name: state.names[i], sheet, ...score(sheet) }))
-    .sort((a, b) => b.total - a.total);
+  return state.sheets.map((sheet, i) => ({ name: state.names[i], sheet, mine: state.kind === 'solo' ? i === 0 : state.kind === 'table', bot: isBotSeat(state, i), ...score(sheet) }))
+    .sort((a, b) => b.total - a.total || Number(b.mine) - Number(a.mine));
 }
 
 export { EVANGELISTS, EV_NAMES, edge };

@@ -3,7 +3,8 @@
 Static site (no build step), served at `/JfP/play/` by Cloudflare Pages.
 
 - `index.html`, `play.css`, `js/app.js` - UI (SVG board, setup, hand-off, results)
-- `js/game.js` - session state machine (solo with simulated opponents, pass-and-play)
+- `js/game.js` - session state machine (solo against computer opponents, pass-and-play, in-person table play)
+- `js/bot.js` - the computer opponents' brain: plans a legal turn for a sheet (three skill levels)
 - `js/engine.js` - pure rules: movement, preaching/called, scoring, end of game
 - `js/board.js` - SVG board drawing shared by the live game, the replay and the share image
 - `js/replay.js` - step-by-step replay of each player's journey (results screen)
@@ -12,7 +13,7 @@ Static site (no build step), served at `/JfP/play/` by Cloudflare Pages.
 - `js/map-data.js` - **generated** cities, regions, labels and routes
 - `js/scripture-data.js` - **generated** passages (World English Bible, public domain)
 - `assets/basemap.webp` - **generated** route-free base map (2400x1200)
-- `engine.test.js`, `features.test.js`, `table.test.js` - `cd JfP/play && node --test` (Node 20+, no dependencies)
+- `engine.test.js`, `features.test.js`, `table.test.js`, `bots.test.js` - `cd JfP/play && node --test` (Node 20+, no dependencies)
 
 ## Rules implemented
 Roller: one to three evangelists, each moves or - if unable to move by the rolled mode - preaches.
@@ -63,3 +64,24 @@ table coordinates out loud, exactly as with the real die.
   the others open it and tap their own name. The screen is kept awake with the Wake Lock API.
 - `table.test.js` simulates several phones at one table (each knowing only its own sheet and the
   announced rolls) and checks they stay in step through whole games.
+
+## Computer opponents (solo)
+Each bot has its own sheet and plays every roll by the same rules as a person: as the roller (up to
+three evangelists) or as an "other player" (one), with the fast/long preaching rules respected. A bot
+that rolls Player's Choice picks the way of travel that suits its own sheet.
+
+`bot.js` values every legal action in points - a city nobody has visited saves the -2 penalty (+2), a
+new region for that evangelist is +4, a preach is +3, and the preach that gets someone called is +5 but
+ends his travels, so a bot only does it once the evangelist is stuck or little is left to discover.
+Skill levels differ in noise, in how many hops ahead they look for unvisited cities and regions, and in
+the odd lapse (Casual only; a lapse is never a pointless call):
+
+| level  | idea                          |
+|--------|-------------------------------|
+| Casual | wanders about, makes mistakes |
+| Steady | sensible, short-sighted       |
+| Sharp  | plans several hops ahead      |
+
+In simulation (`bots.test.js`) a Sharp bot beats Steady, which beats Casual, in both rule sets. Bots do
+not try to rush the game to a close, so in the fast game a person who preaches with every evangelist
+can end it in about ten rolls, long before the bots have scored much.

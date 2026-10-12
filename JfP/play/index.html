@@ -50,7 +50,7 @@
                                     <div class="choice-grid">
                                         <label class="choice">
                                             <input type="radio" name="kind" value="solo" checked />
-                                            <span><strong>Solo</strong><small>Play on your own against simulated opponents who roll the die.</small></span>
+                                            <span><strong>Solo</strong><small>Play on your own against computer opponents who play their own maps.</small></span>
                                         </label>
                                         <label class="choice">
                                             <input type="radio" name="kind" value="pass" />
@@ -79,12 +79,12 @@
 
                                 <div id="solo-fields" class="mb-4">
                                     <div class="row g-3">
-                                        <div class="col-sm-6">
+                                        <div class="col-12">
                                             <label class="form-label" for="solo-name">Your name</label>
                                             <input class="form-control" id="solo-name" maxlength="20" placeholder="You" />
                                         </div>
-                                        <div class="col-sm-6">
-                                            <label class="form-label" for="bots">Simulated opponents</label>
+                                        <div class="col-sm-7">
+                                            <label class="form-label" for="bots">Opponents</label>
                                             <select class="form-select" id="bots">
                                                 <option value="0">0 &ndash; you roll every turn</option>
                                                 <option value="1" selected>1 &ndash; you roll every 2nd turn</option>
@@ -92,8 +92,16 @@
                                                 <option value="3">3 &ndash; you roll every 4th turn</option>
                                             </select>
                                         </div>
+                                        <div class="col-sm-5" id="skill-wrap">
+                                            <label class="form-label" for="bot-skill">Their skill</label>
+                                            <select class="form-select" id="bot-skill">
+                                                <option value="casual">Casual &ndash; wanders about</option>
+                                                <option value="steady" selected>Steady &ndash; sensible</option>
+                                                <option value="sharp">Sharp &ndash; plays to win</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="form-text">Opponents only roll the die; you take the other-player action on their rolls, just as in a real game of that size.</div>
+                                    <div class="form-text">Opponents are computer players. Each has their own map and plays by the same rules as you, using the same die rolls. The highest score wins.</div>
                                 </div>
 
                                 <div id="pass-fields" class="mb-4" hidden>
@@ -154,6 +162,7 @@
             <div id="hud" class="hud" aria-live="polite"></div>
             <div class="row g-3">
                 <div class="col-xl-8">
+                    <div id="view-bar" class="view-bar" hidden></div>
                     <div id="board" class="board card shadow-sm"></div>
                     <div class="legend small text-muted mt-2" id="legend"></div>
                 </div>

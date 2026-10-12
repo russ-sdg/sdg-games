@@ -55,6 +55,9 @@ function initSetup() {
     $('#pass-fields').hidden = kind !== 'pass';
     $('#table-fields').hidden = kind !== 'table';
   }
+  const syncBots = () => { $('#skill-wrap').hidden = Number($('#bots').value) === 0; };
+  $('#bots').addEventListener('change', syncBots);
+  syncBots();
   kindEls().forEach((el) => el.addEventListener('change', syncKind));
   count.addEventListener('change', drawNames);
   drawNames();
@@ -102,6 +105,7 @@ function initSetup() {
       kind, rulesId,
       names: kind === 'solo' ? [$('#solo-name').value.trim() || 'You'] : typed,
       bots: Number($('#bots').value),
+      botLevel: $('#bot-skill').value,
     }));
   });
 
@@ -158,7 +162,7 @@ document.addEventListener('visibilitychange', () => {
 
 function startGame(s) {
   state = s;
-  ui = { selected: null, history: [], handoff: null, rolling: false, showLog: false };
+  ui = { selected: null, history: [], handoff: null, rolling: false, showLog: false, viewSeat: null };
   show('game');
   keepAwake(s.kind === 'table');
   save();
@@ -231,6 +235,9 @@ function dieFace(face) {
     ? `<span class="q">?</span><span>Player's Choice</span>`
     : `${swatch(face)}<span>${MODE_NAMES[face]}</span>`;
 }
+// which sheet the board is showing: mine, or (solo) a computer opponent's, read-only
+const viewing = () => ui.viewSeat != null && G.isBotSeat(state, ui.viewSeat);
+const viewSheet = () => (viewing() ? state.sheets[ui.viewSeat] : mySheet());
 const sheetSeat = () => (state.kind === 'pass' ? activeSeat(state) : 0);
 const mySheet = () => state.sheets[sheetSeat()];
 
@@ -271,7 +278,7 @@ function roleText() {
     return table ? 'Tell the table what you rolled! Then move or preach with one to three evangelists.'
       : 'You rolled: move or preach with one to three evangelists.';
   }
-  const who = table ? state.seatNames[state.roller] : 'Another player';
+  const who = table || G.isBotSeat(state, state.roller) ? state.seatNames[state.roller] : 'Another player';
   return rules().nonRollerMayPreach
     ? `${who} rolled: use one evangelist to move, or to preach if he cannot move.`
     : `${who} rolled: move one evangelist (only the roller may preach).`;
@@ -294,7 +301,7 @@ function renderHud() {
       <div class="announce">${MODES.map((m) => `<button class="btn btn-light btn-lg" data-announce="${m}">${swatch(m)} ${MODE_NAMES[m]}</button>`).join('')}</div>`;
   } else if (s.phase === 'roll') {
     body = `${dieImg(ui.rolling ? 'rolling' : '')}${head}Round ${s.round} &middot; ${humanRoller ? (table ? 'Your turn to roll' : `${esc(who)}, roll the die`) : `${esc(who)} is about to roll`}</div>
-      <div class="sub">${esc(rules().name)}${s.kind === 'solo' && s.seats > 1 ? ' &middot; simulated opponents roll, you act' : table ? ' &middot; roll, then tell the table what came up' : ''}</div></div>
+      <div class="sub">${esc(rules().name)}${s.kind === 'solo' && s.seats > 1 ? ' &middot; opponents play their own maps' : table ? ' &middot; roll, then tell the table what came up' : ''}</div></div>
       <button class="btn btn-warning btn-lg nudge" id="roll-btn" ${ui.rolling ? 'disabled' : ''}>${humanRoller ? 'Roll' : `Roll for ${esc(who)}`}</button>`;
   } else if (s.phase === 'choose') {
     body = `${dieImg()}${head}Player's Choice! ${esc(who)}, pick how everyone travels</div><div class="sub">${table ? 'Tell the table which way you choose &ndash; everyone travels that way.' : 'All players will use the mode you choose.'}</div></div>
@@ -313,14 +320,16 @@ function renderHud() {
 
 function renderBoard() {
   const s = state;
-  const sheet = mySheet();
-  const acting = s.phase === 'act';
+  const watching = viewing();
+  const sheet = viewSheet();
+  const acting = !watching && s.phase === 'act';
   const sel = acting ? ui.selected : null;
   const moves = sel ? G.evOptions(s, sel).moves : [];
 
   const board = $('#board');
   const keep = board.scrollLeft;
   board.innerHTML = boardSVG(sheet, { acting, mode: s.mode, sel, moves, acted: s.acted });
+  renderViewBar();
   board.scrollLeft = keep;
   if (sel && board.scrollWidth > board.clientWidth && ui.focusEv !== sel) {
     const [tx] = tokenSpot(city(sheet.evangelists[sel].city), EVANGELISTS.indexOf(sel));
@@ -328,13 +337,14 @@ function renderBoard() {
   }
   ui.focusEv = sel;
   board.onclick = (ev) => {
+    if (watching) return;
     const mv = ev.target.closest('[data-move]');
     if (mv) return doMove(mv.dataset.move);
     const tok = ev.target.closest('[data-ev]');
     if (tok) selectEv(tok.dataset.ev);
   };
   board.onkeydown = (ev) => {
-    if (ev.key !== 'Enter' && ev.key !== ' ') return;
+    if (watching || (ev.key !== 'Enter' && ev.key !== ' ')) return;
     const t = ev.target.closest('[data-move],[data-ev]');
     if (!t) return;
     ev.preventDefault();
@@ -344,7 +354,7 @@ function renderBoard() {
 }
 
 function selectEv(ev) {
-  if (state.phase !== 'act' || !hasOptions(ev)) return;
+  if (viewing() || state.phase !== 'act' || !hasOptions(ev)) return;
   ui.selected = ui.selected === ev ? null : ev;
   render();
 }
@@ -390,6 +400,36 @@ function evCard(ev) {
       ${actions}</div>`;
 }
 
+function renderViewBar() {
+  const bar = $('#view-bar');
+  const bots = state.sheets.map((_, i) => i).filter((i) => G.isBotSeat(state, i));
+  bar.hidden = bots.length === 0;
+  if (!bots.length) return;
+  const pill = (seat, label) => `<button type="button" class="btn btn-sm ${(ui.viewSeat ?? 0) === seat || (seat === 0 && ui.viewSeat == null) ? 'btn-dark' : 'btn-outline-dark'}" data-view="${seat}">${esc(label)}</button>`;
+  bar.innerHTML = pill(0, 'My map') + bots.map((i) => pill(i, `${state.seatNames[i]}'s map`)).join('') +
+    (viewing() ? `<span class="note">Watching ${esc(state.seatNames[ui.viewSeat])} &ndash; read-only</span>` : '');
+  bar.onclick = (e) => {
+    const b = e.target.closest('[data-view]');
+    if (!b) return;
+    ui.viewSeat = Number(b.dataset.view) === 0 ? null : Number(b.dataset.view);
+    render();
+  };
+}
+
+function standingsCard() {
+  const s = state;
+  const rows = s.sheets.map((sheet, i) => ({ i, name: s.seatNames[i], sc: score(sheet), called: EVANGELISTS.filter((e) => sheet.evangelists[e].called).length }))
+    .sort((a, b) => b.sc.total - a.sc.total || a.i - b.i);
+  return `<div class="card standings mb-3"><div class="card-body py-2">
+    <div class="fw-semibold mb-1">Standings <span class="small text-muted fw-normal">if the game ended now</span></div>
+    ${rows.map((r) => `<div class="row-s${r.i === 0 ? ' me' : ''}">
+      <div><span class="name">${esc(r.name)}${r.i === 0 ? ' (you)' : ''}</span> <span class="small text-muted">&middot; ${r.called}/3 pastors</span>
+        ${r.i > 0 ? `<div class="did">${(s.lastBot?.[r.i] ?? []).length ? esc(s.lastBot[r.i].join(' \u00B7 ')) : 'has not moved yet'}</div>
+          <button type="button" class="btn btn-link" data-view="${r.i}">view map</button>` : ''}</div>
+      <div class="pts">${r.sc.total}</div></div>`).join('')}
+  </div></div>`;
+}
+
 function tableCard() {
   const s = state;
   const sheet = mySheet();
@@ -424,6 +464,7 @@ function renderSide() {
     ${s.kind === 'table' ? tableCard() : ''}
     ${EVANGELISTS.map(evCard).join('')}
     ${controls}
+    ${s.sheets.some((_, i) => G.isBotSeat(s, i)) ? standingsCard() : ''}
     <div class="card score-box mb-3"><div class="card-body py-2">
       <div class="d-flex justify-content-between"><b>Score if the game ended now</b><b>${sc.total}</b></div>
       <table class="table table-sm table-borderless"><tbody>
@@ -445,6 +486,7 @@ function renderSide() {
   };
   const end = $('#end-btn'); if (end) end.onclick = () => commit(G.endTurn(state));
   const undo = $('#undo-btn'); if (undo) undo.onclick = doUndo;
+  $('#side').querySelectorAll('[data-view]').forEach((b) => { b.onclick = () => { ui.viewSeat = Number(b.dataset.view); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }; });
   const fix = $('#roller-fix'); if (fix) fix.onchange = () => commit(G.setRoller(state, Number(fix.value)));
   const fin = $('#finish-btn');
   if (fin) fin.onclick = () => {
@@ -466,8 +508,9 @@ function renderResults() {
   const res = G.results(state);
   const best = res[0].total;
   const solo = res.length === 1;
+  const withBots = state.kind === 'solo' && res.some((r) => r.bot);
   const rows = res.map((r) => `<tr class="${r.total === best && res.length > 1 ? 'res-winner' : ''}">
-      <th scope="row">${esc(r.name)}${r.total === best && res.length > 1 ? ' &#127942;' : ''}</th>
+      <th scope="row">${esc(r.name)}${r.mine && withBots ? ' (you)' : ''}${r.bot ? ' <span class="badge text-bg-secondary">computer</span>' : ''}${r.total === best && res.length > 1 ? ' &#127942;' : ''}</th>
       ${EVANGELISTS.map((ev) => {
         const p = r.perEvangelist[ev];
         return `<td>${p.regions} region${p.regions === 1 ? '' : 's'} &middot; ${p.preaches} preach${p.preaches === 1 ? '' : 'es'}${p.called ? ' &middot; <b>pastor</b>' : ''}</td>`;
@@ -475,7 +518,22 @@ function renderResults() {
       <td class="text-end">${r.parts.regions}</td><td class="text-end">${r.parts.preaching}</td><td class="text-end">${r.parts.called}</td>
       <td class="text-end">${r.parts.unvisited} <small class="text-muted">(${r.unvisited})</small></td><td class="text-end fs-5"><b>${r.total}</b></td></tr>`).join('');
   const winners = res.filter((r) => r.total === best).map((r) => r.name);
-  const text = state.kind === 'table'
+  const me = res.find((r) => r.mine);
+  const rank = me ? res.filter((r) => r.total > me.total).length + 1 : 0;
+  const ordinal = (n) => ['', '1st', '2nd', '3rd', '4th'][n] ?? `${n}th`;
+  const opponents = res.filter((r) => r.bot).length;
+  const headline = withBots
+    ? (me.total === best
+      ? (winners.length > 1 ? `You tie for first with ${best} points` : `You win with ${best} points!`)
+      : `${esc(winners.join(' & '))} ${winners.length > 1 ? 'tie' : 'wins'} with ${best} points &ndash; you finished ${ordinal(rank)} with ${me.total}`)
+    : solo
+      ? `${state.kind === 'table' ? 'Your journeys are complete' : 'All journeys complete'} &ndash; ${res[0].total} points`
+      : `${esc(winners.join(' & '))} ${winners.length > 1 ? 'tie' : 'wins'} with ${best} points`;
+  const text = withBots
+    ? (me.total === best
+      ? `I beat ${opponents} computer opponent${opponents === 1 ? '' : 's'} in Journeys for Paul with ${me.total} points! https://sdggames.fun/JfP/play/`
+      : `I scored ${me.total} in Journeys for Paul against ${opponents} computer opponent${opponents === 1 ? '' : 's'}. Can you beat them? https://sdggames.fun/JfP/play/`)
+    : state.kind === 'table'
     ? `I scored ${res[0].total} in Journeys for Paul at our table of ${state.seats}! https://sdggames.fun/JfP/play/`
     : solo
     ? `I scored ${res[0].total} in Journeys for Paul (${rules().name.toLowerCase()})! Can you beat it? https://sdggames.fun/JfP/play/`
@@ -483,13 +541,13 @@ function renderResults() {
   const unvisited = (r) => MAP.cities.filter((c) => !r.sheet.visited.includes(c.id)).map((c) => c.name);
   $('#results').innerHTML = `
     <div class="card shadow-sm"><div class="card-body">
-      <h1 class="h3" id="results-title">${solo ? `${state.kind === 'table' ? 'Your journeys are complete' : 'All journeys complete'} &ndash; ${res[0].total} points` : `${esc(winners.join(' & '))} ${winners.length > 1 ? 'tie' : 'wins'} with ${best} points`}</h1>
+      <h1 class="h3" id="results-title">${headline}</h1>
       <p class="text-muted">${esc(rules().name)} &middot; ${state.round} round${state.round === 1 ? '' : 's'}${state.kind === 'table' ? ' &middot; compare scores with the rest of the table!' : ''}</p>
       <div class="table-responsive"><table class="table res-table align-middle">
         <thead><tr><th>Player</th>${EVANGELISTS.map((e) => `<th class="ev-${e}">${EV_NAMES[e]}</th>`).join('')}
           <th class="text-end">Regions</th><th class="text-end">Preached</th><th class="text-end">Called</th><th class="text-end">Unvisited</th><th class="text-end">Total</th></tr></thead>
         <tbody>${rows}</tbody></table></div>
-      ${res.map((r) => { const u = unvisited(r); return u.length ? `<p class="small text-muted mb-1"><b>${esc(r.name)}</b> never reached: ${u.map(esc).join(', ')}.</p>` : `<p class="small text-muted mb-1"><b>${esc(r.name)}</b> visited every city!</p>`; }).join('')}
+      ${res.filter((r) => !r.bot).map((r) => { const u = unvisited(r); return u.length ? `<p class="small text-muted mb-1"><b>${esc(r.name)}</b> never reached: ${u.map(esc).join(', ')}.</p>` : `<p class="small text-muted mb-1"><b>${esc(r.name)}</b> visited every city!</p>`; }).join('')}
       <hr>
       <h2 class="h5">Replay the journey${res.length > 1 ? 's' : ''}</h2>
       <div id="replay"></div>
@@ -505,12 +563,12 @@ function renderResults() {
       <p class="small text-muted mt-3 mb-0" id="copy-note" aria-live="polite"></p>
     </div></div>`;
   replayHandle?.stop();
-  replayHandle = mountReplay($('#replay'), { players: res.map((r) => ({ name: r.name, sheet: r.sheet })), rules: rules() });
+  replayHandle = mountReplay($('#replay'), { players: res.map((r) => ({ name: r.name, sheet: r.sheet })), rules: rules(), start: Math.max(0, res.findIndex((r) => r.mine)) });
   mountShare($('#share'), res);
   $('#again-btn').onclick = () => {
     replayHandle?.stop();
     const s = state;
-    startGame(G.newGame({ kind: s.kind, rulesId: s.rulesId, names: s.kind === 'table' ? s.seatNames : s.names, bots: s.seats - 1, me: s.mySeat }));
+    startGame(G.newGame({ kind: s.kind, rulesId: s.rulesId, names: s.kind === 'table' ? s.seatNames : s.names, bots: s.seats - 1, me: s.mySeat, botLevel: s.botLevel }));
   };
   $('#copy-btn').onclick = async () => {
     try { await navigator.clipboard.writeText(text); $('#copy-note').textContent = 'Copied!'; }
@@ -522,7 +580,7 @@ function mountShare(root, res) {
   const solo = res.length === 1;
   root.innerHTML = `
     <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
-      ${solo ? '' : `<select class="form-select w-auto" id="share-who" aria-label="Whose result">${res.map((r, i) => `<option value="${i}">${esc(r.name)}</option>`).join('')}</select>`}
+      ${solo ? '' : `<select class="form-select w-auto" id="share-who" aria-label="Whose result">${res.map((r, i) => `<option value="${i}" ${i === Math.max(0, res.findIndex((x) => x.mine)) ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select>`}
       <button class="btn btn-primary" id="share-dl" disabled>Download image</button>
       <button class="btn btn-outline-primary" id="share-native" hidden>Share&hellip;</button>
     </div>
@@ -533,7 +591,7 @@ function mountShare(root, res) {
   const dl = root.querySelector('#share-dl');
   const nat = root.querySelector('#share-native');
   const canvas = document.createElement('canvas');
-  let blob = null, url = null, who = 0;
+  let blob = null, url = null, who = Math.max(0, res.findIndex((r) => r.mine));
 
   async function build() {
     dl.disabled = true; nat.hidden = true;
