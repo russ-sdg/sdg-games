@@ -1,0 +1,44 @@
+/* Tyndale: page-specific styles (the shared design is css/product-page.css) */
+.ty-cta { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .9rem; margin: 1rem 0 .6rem; }
+.ty-cta .pp-shopify, .ty-cta .pp-shopify > *, .ty-cta .shopify-buy__product, .ty-cta .shopify-buy__btn-wrapper { margin: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; max-width: none !important; }
+.ty-cta .shopify-buy__btn { margin: 0 !important; min-height: 3.1rem; }
+.ty-cta .pp-btn { min-height: 3.1rem; display: inline-flex; align-items: center; margin: 0; }
+/* three cards fanned in the hero */
+.ty-fan { position: relative; max-width: 440px; width: 100%; margin-left: auto; aspect-ratio: 1.05; }
+.ty-fan img { position: absolute; width: 50%; height: auto; filter: drop-shadow(0 12px 22px rgba(0,0,0,.55)); }
+.ty-fan .c1 { left: 2%; top: 14%; transform: rotate(-11deg); }
+.ty-fan .c3 { right: 2%; top: 12%; transform: rotate(10deg); }
+.ty-fan .c2 { left: 24%; top: 0; z-index: 2; transform: rotate(-1deg); width: 52%; }
+.ty-two { display: grid; grid-template-columns: 1.3fr 1fr; gap: 2.2rem; align-items: start; }
+.ty-top { grid-template-columns: 1fr 1fr; margin-top: 1.4rem; }
+.ty-two figure, .ty-fig { margin: 0; }
+.ty-glimpse .pp-zoom, .ty-fig .pp-zoom { display: block; width: 100%; border-radius: 10px; overflow: hidden; box-shadow: 0 6px 18px rgba(35,42,92,.28); }
+.ty-glimpse img, .ty-fig img { width: 100%; height: auto; display: block; }
+.ty-fig { margin: 1rem 0; }
+.ty-wide { max-width: 640px; margin: 1.6rem auto 0; }
+.ty-cap { margin-top: .5rem; color: var(--pp-muted); font-size: .92rem; text-align: center; }
+.ty-sides, .ty-kinds { list-style: none; padding: 0; margin: 1.6rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+.ty-sides li, .ty-kinds li { background: var(--pp-surface); border: 1px solid var(--pp-line); border-radius: var(--pp-radius); padding: .9rem 1.1rem; }
+.ty-sides h3, .ty-kinds h4 { margin: 0 0 .3rem; font-size: 1.1rem; }
+.ty-sides p, .ty-kinds p { margin: 0; color: var(--pp-muted); }
+.ty-kinds { margin-top: .8rem; }
+.ty-red { color: #b3262e; } .ty-blue { color: #2a3f9e; }
+.ty-icons { list-style: none; padding: 0; }
+.ty-icons li { display: flex; gap: .8rem; align-items: center; margin: .5rem 0; }
+.ty-icons img { width: 56px; height: auto; flex: none; }
+.pp-acc .body h4 { font-size: 1.05rem; margin: 1.1rem 0 .4rem; }
+.pp-acc .body .ty-fig { max-width: 560px; }
+.ty-pair { display: flex; gap: .7rem; margin: .5rem 0 1rem; }
+.ty-pair .ty-mini { width: 100%; max-width: 150px; height: auto; border-radius: 6px; }
+.ty-mini { max-width: 150px; height: auto; }
+.ty-fold { margin-top: 1.4rem; }
+.ty-fold [data-gallery-title] { display: none; }
+.ty-var ul { margin: .6rem 0 1rem; }
+.ty-bio { max-width: 820px; }
+.ty-bio-lede p { font-size: 1.1rem; }
+@media (max-width: 860px) {
+  .ty-two, .ty-top { grid-template-columns: 1fr; }
+  .ty-fan { margin: 0 auto; max-width: 360px; }
+}
+
+@media (max-width: 860px) { .ty-cta { justify-content: center; } }
