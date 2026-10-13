@@ -1,43 +1,8 @@
-// Six Days: the animated sample game and the stack diagram. Illustrative only - it follows the rules as
+// Six Days: the animated sample game and the stack diagram (data and rules check: demo-core.js). Illustrative only - it follows the rules as
 // written on the page (the real cards carry artwork and a column of icons for each kind of creation).
 (function () {
-  var DAYS = [
-    { n: 1, name: 'Light', color: '#a85a05' },
-    { n: 2, name: 'Sky & sea', color: '#2a6fa8' },
-    { n: 3, name: 'Land & plants', color: '#2f7d46' },
-    { n: 4, name: 'Sun & moon', color: '#2a3490' },
-    { n: 5, name: 'Birds & fish', color: '#0b7777' },
-    { n: 6, name: 'Animals & mankind', color: '#8e4a3d' },
-  ];
-  var PLAYERS = ['Ann', 'Ben', 'Cy'];
-
-  // One entry per move. kind: start (first card of a new day) | add | close (Evening & Morning) | discard
-  var STEPS = [
-    { kind: 'setup', text: 'Setup: Day 1 starts face-up in the middle of the table. It only needs 1 day card, so it is already full.' },
-    { who: 'Ann', kind: 'start', day: 2, label: 'Sky', pts: 2, text: 'Ann draws a card and starts Day 2 by playing a Day 2 card next to Day 1. A new kind of creation on that day: 2 points.' },
-    { who: 'Ben', kind: 'add', day: 2, label: 'Sea', pts: 2, text: 'Ben adds a Day 2 card to the Day 2 stack. Sea is a new kind there: 2 points. Day 2 now has its 2 cards, so it is full.' },
-    { who: 'Cy', kind: 'close', day: 1, pts: 1, text: 'Cy plays an Evening & Morning card on the full Day 1: points equal to the day number, 1. Day 1 is closed.' },
-    { who: 'Ann', kind: 'start', day: 3, label: 'Land', pts: 2, text: 'Ann starts Day 3 with a Land card: 2 points.' },
-    { who: 'Ben', kind: 'close', day: 2, pts: 2, text: 'Ben closes the full Day 2 with Evening & Morning: 2 points.' },
-    { who: 'Cy', kind: 'add', day: 3, label: 'Land', pts: 1, text: 'Cy adds another Land card to Day 3. That kind is already there, so only 1 point.' },
-    { who: 'Ann', kind: 'discard', pts: 0, text: 'Ann has no useful play, so she discards a card face-up: 0 points.' },
-    { who: 'Ben', kind: 'add', day: 3, label: 'Plants', pts: 2, text: 'Ben adds Plants to Day 3: a new kind, 2 points. Day 3 has its 3 cards, so it is full.' },
-    { who: 'Cy', kind: 'close', day: 3, pts: 3, text: 'Cy closes Day 3 with Evening & Morning: 3 points. And so it goes, until all six days are full.' },
-  ];
-
-  function stateAt(i) {
-    var stacks = DAYS.map(function () { return { cards: [], closed: false }; });
-    stacks[0].cards.push('Light');
-    var pts = {};
-    PLAYERS.forEach(function (p) { pts[p] = 0; });
-    for (var k = 1; k <= i; k++) {
-      var s = STEPS[k];
-      if (s.kind === 'start' || s.kind === 'add') stacks[s.day - 1].cards.push(s.label);
-      if (s.kind === 'close') stacks[s.day - 1].closed = true;
-      if (s.who) pts[s.who] += s.pts;
-    }
-    return { stacks: stacks, pts: pts, last: i > 0 ? STEPS[i] : null };
-  }
+  var core = window.SixDaysCore;
+  var DAYS = core.DAYS, PLAYERS = core.PLAYERS, STEPS = core.STEPS, stateAt = core.stateAt;
 
   // The six stacks. `opts.labels` false draws plain blocks (for the diagram); `last` marks the move to animate.
   function boardHTML(state, opts) {
