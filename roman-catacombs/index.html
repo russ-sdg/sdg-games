@@ -1,342 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Roman Catacombs - A Flip and Write Game</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="../css/styles.css" rel="stylesheet" />
-    </head>
-    <body class="sb-nav-fixed">
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='main-nav'></nav>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <img class="img-responsive img-fluid" style="padding: 10px;" src="../assets/RomanCatacombsTitle.png" alt="Roman Catacombs">
-                        <div class="row">
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#description">Game Description</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#deck">Deck Description</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#play">How to Play</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#buy">How to Buy</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="scorepad.html">Scorepad</a>
-                                </div>
-                              </div>
-                          </div>
-                        </div>
-                        <a id="description"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Game Description</strong>
-                            </div>
-                            <div class="card-body">
-                              <p><em>Roman Catacombs</em> is a flip-and-write game with a Biblical theme.</p>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>Roman Catacombs - A Bible Flip-and-Write Game | SDG Games</title>
+<meta name="description" content="Be the librarian of a church in the catacombs of Rome: build a library of Scripture, in canon order. 1-6 players, ages 12+, 15-30 minutes." />
+<meta name="author" content="SDG Strategy, LLC" />
+<link rel="canonical" href="https://sdggames.fun/roman-catacombs/" />
 
-                              <p>You are the librarian for a small church meeting in the catacombs outside of Rome. You have been tasked with building a representative collection of manuscripts of the various books of the Bible. Unfortunately, you have limited storage space. Therefore, your goal is to complete a library of three books from each of seven categories. You need to keep the books in the canon order and you can’t move a book once you’ve placed it. </p>
+<!-- Open Graph / social share -->
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="SDG Games" />
+<meta property="og:title" content="Roman Catacombs - A Bible Flip-and-Write Game" />
+<meta property="og:description" content="Build a library of Scripture in the catacombs: three books from each of seven categories, in canon order." />
+<meta property="og:url" content="https://sdggames.fun/roman-catacombs/" />
+<meta property="og:image" content="https://sdggames.fun/assets/roman-catacombs/card-front-back.webp" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Roman Catacombs - A Bible Flip-and-Write Game" />
+<meta name="twitter:description" content="Build a library of Scripture in the catacombs: three books from each of seven categories, in canon order." />
+<meta name="twitter:image" content="https://sdggames.fun/assets/roman-catacombs/card-front-back.webp" />
 
-                              <p>The game ends when one player completes their library. Points are earned for completing categories (with bonus points for being the first to do so) and points are lost for leaving spots empty. The player with the most points wins.</p>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Roman Catacombs",
+  "description": "A flip-and-write Bible game. You are the librarian for a small church meeting in the catacombs outside Rome: build a library of three books from each of seven categories, keeping the books in canon order. 90 cards, each with a book of the Bible and a quote from it.",
+  "image": ["https://sdggames.fun/assets/roman-catacombs/card-front-back.webp"],
+  "brand": { "@type": "Brand", "name": "SDG Games" },
+  "category": "Card game",
+  "audience": { "@type": "PeopleAudience", "suggestedMinAge": 12 },
+  "url": "https://sdggames.fun/roman-catacombs/"
+}
+</script>
 
-                            </div>
-                        </div>
-                        <a id="deck"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Deck and Scorecard Description</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>The <em>Roman Catacombs</em> deck of cards has 90 cards. The face of each card has the name of a book of the Bible and a scripture quote from that book.</p>
+<link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap) -->
+<link href="../css/styles.css" rel="stylesheet" />
+<link href="../css/product-page.css?v=20261019" rel="stylesheet" />
+<link href="rc.css?v=20261019" rel="stylesheet" />
+<link rel="preload" as="image" href="../assets/roman-catacombs/card-front-back.webp" fetchpriority="high" />
 
-                              <p>The backs of the cards and the box feature an ancient painting of Noah on the ark that was found in one of the catacombs near Rome where the early church met.</p>
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img class="img-responsive img-fluid" src="../assets/RCcard-front-back.png">
-                              </div>
+<style>
+/* Roman Catacombs palette: dark umber and terracotta, from the catacomb painting on the card backs */
+.pp { --pp-primary: #4a2a18; --pp-accent: #a8321d; --pp-gold: #f0c36a; --pp-gold-ink: #2a1810;
+      --pp-hero: linear-gradient(135deg, #1e110a 0%, #4a2a18 55%, #8a4a2a 100%); }
+</style>
+</head>
+<body class="sb-nav-fixed pp">
+<a class="pp-skip" href="#idea">Skip to content</a>
+<!-- Responsive navbar (loaded from nav-div.html by ../js/scripts.js) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
 
-                              <p>The scorecard has 21 circles organized in 7 groups of 3. The 7 groups are labelled by categories of books in the Bible:
-                                <ul>
-                                  <li>Pentatuch</li>
-                                  <li>Historical Books</li>
-                                  <li>Wisdom Books</li>
-                                  <li>Prophets</li>
-                                  <li>Gospels and Acts</li>
-                                  <li>Paul's Epistles</li>
-                                  <li>General Epistles & Revelation</li>
-                                </ul>
-                              </p>
+<main>
+<!-- ============ HERO ============ -->
+<header class="pp-hero">
+  <div class="pp-wrap pp-hero-grid">
+    <div>
+      <p class="pp-eyebrow">A Bible flip-and-write game</p>
+      <h1>Roman Catacombs</h1>
+      <p class="pp-tagline">You&rsquo;re the librarian of a church hiding beneath Rome. Build a library of Scripture&nbsp;&mdash; and remember, you can&rsquo;t move a book once it&rsquo;s placed.</p>
+      <ul class="pp-facts" aria-label="Game facts">
+        <li>1&ndash;6 players</li>
+        <li>Ages 12+</li>
+        <li>15&ndash;30 min</li>
+        <li>90 cards</li>
+      </ul>
+      <div class="rc-cta">
+        <a class="pp-btn pp-btn-gold" href="#cards">See the cards</a>
+        <div id="buy-now" class="pp-shopify" data-state="live"></div>
+      </div>
+      <p class="pp-fine">Ships from the SDG Biblical Wisdom shop. Try the free <a href="scorepad.html" style="color:#fff">scorepad and card dealer</a> first.</p>
+    </div>
 
-                              <p>The back of the scorecards lists all of the books of the Bible organized into these categories and in canon order.  After the name of each book is a number in parentheses. This indicates how many cards for that book are in the <em>Roman Catacombs</em> deck.</p>
-                              <p>Note that the card faces are color coded to the category that book belongs to.</p>
+    <figure class="rc-hero-art">
+      <img src="../assets/roman-catacombs/card-front-back.webp" width="800" height="480" alt="A Roman Catacombs card back, showing an ancient catacomb painting of Noah in the ark, beside a card face for 1 John with a Scripture quote." />
+    </figure>
+  </div>
+</header>
 
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RCSmallScorecardFrontBackV1.webp" width="100%">
-                              </div>
-                            </div>
-                        </div>
-                        <a id="play"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How To Play</strong>
-                            </div>
-                            <div class="card-body">
-                              <p><em>Roman Catacombs</em> is a flip-and-write game. All the players are using the same cards each turn.</p>
+<!-- ============ STICKY TABS ============ -->
+<div class="pp-tabs">
+  <div class="pp-wrap">
+    <nav aria-label="On this page">
+      <a href="#idea">The Idea</a>
+      <a href="#cards">The Cards</a>
+      <a href="#play">How to Play</a>
+      <a href="#tools">Scorepad &amp; Play</a>
+      <a href="#buy">Get the Game</a>
+    </nav>
+    <a class="pp-btn pp-btn-primary" href="#buy">Get the game</a>
+  </div>
+</div>
 
-                              <p>At the beginning of the game, the deck is shuffled and divided into 3 piles, each containing approximately 30 cards. The piles are placed face down where all players can see them.</p>
+<!-- ============ THE IDEA ============ -->
+<section class="pp-band" id="idea" aria-labelledby="idea-h">
+  <div class="pp-wrap rc-two">
+    <div>
+      <h2 id="idea-h">A library with very little room</h2>
+      <p class="pp-lede">You are the librarian for a small church meeting in the catacombs outside of Rome. You&rsquo;ve been asked to build a representative collection of manuscripts of the books of the Bible &mdash; but storage space is limited.</p>
+      <p>Your goal: a library of <b>three books from each of seven categories</b>. Keep the books in canon order, and you can&rsquo;t move a book once you&rsquo;ve placed it.</p>
+      <p>The game ends when one player completes their library. Points are earned for completing categories (with a bonus for finishing first), and lost for every spot left empty. Most points wins.</p>
+    </div>
+    <figure>
+      <button type="button" class="pp-zoom" data-zoom="../assets/roman-catacombs/scorecard.webp" data-caption="The scorecard: 21 circles in 7 groups of 3. The back lists every book of the Bible, by category, with how many cards each has.">
+        <img src="../assets/roman-catacombs/scorecard.webp" width="1200" height="920" loading="lazy" alt="The Roman Catacombs scorecard: seven colored rows of three circles, each labelled with a category and its two scores, beside a list of the books of the Bible with their card counts." />
+      </button>
+      <figcaption class="rc-cap">The scorecard: 21 circles. The back lists every book.</figcaption>
+    </figure>
+  </div>
+  <div class="pp-wrap">
+    <h3 style="margin-top:2rem;font-size:1.3rem">Seven categories, three books each</h3>
+    <p class="pp-lede" style="margin:.2rem 0 0">Each category scores two ways: the larger number for the first player to complete it, the smaller for anyone after.</p>
+    <ul class="rc-shelves">
+      <li style="--c:#e8281f;--cd:#b81c14"><h3>Pentateuch</h3><p>Genesis to Deuteronomy</p><p class="pts">9 first &middot; 6 after</p></li>
+      <li style="--c:#ee6f1e;--cd:#b04a0a"><h3>Historical Books</h3><p>Joshua to Esther</p><p class="pts">7 first &middot; 5 after</p></li>
+      <li style="--c:#c8472a;--cd:#a8321d"><h3>Wisdom Books</h3><p>Job to Song of Solomon</p><p class="pts">10 first &middot; 7 after</p></li>
+      <li style="--c:#1f7a1f"><h3>Prophets</h3><p>Isaiah to Malachi</p><p class="pts">6 first &middot; 4 after</p></li>
+      <li style="--c:#1f1fe0"><h3>Gospels &amp; Acts</h3><p>Matthew to Acts</p><p class="pts">9 first &middot; 6 after</p></li>
+      <li style="--c:#3d1a7a"><h3>Paul&rsquo;s Epistles</h3><p>Romans to Philemon</p><p class="pts">7 first &middot; 5 after</p></li>
+      <li style="--c:#8a1fe8;--cd:#6b14b8"><h3>General Epistles &amp; Revelation</h3><p>Hebrews to Revelation</p><p class="pts">8 first &middot; 5 after</p></li>
+    </ul>
+  </div>
+</section>
 
-                              <p>The player with the most points at the end of the game wins.</p>
+<!-- ============ THE CARDS ============ -->
+<section class="pp-band alt" id="cards" aria-labelledby="cards-h">
+  <div class="pp-wrap">
+    <h2 id="cards-h">90 cards of Scripture</h2>
+    <p class="pp-lede">Each card face shows the name of a book of the Bible and a quote from it, color-coded by category. The backs and the box carry an ancient painting of Noah in the ark, found in one of the catacombs near Rome where the early church met. Tap any card to enlarge it.</p>
 
-                              <p>Each turn the top card from each pile is revealed by flipping it face up onto a discard pile next to the face down pile. Each player decides which of the three revealed books they are going to add to their library (if any). They write the name of that book (or an abbreviation) into one of the circles for the category that book is a part of. Each turn each player can only add one book (at most) to their library.</p>
-                              <p>It is important to carefully select which circle to write the book into because books cannot be moved to another circle, and the canon order of the books must be maintained.</p>
+    <!-- Filled from cards-data.js (made by roman-catacombs/tools/build-cards.py) -->
+    <div class="pp-gallery" data-gallery hidden>
+      <h3 data-gallery-title>A closer look at the cards</h3>
+      <div class="pp-chips" role="group" aria-label="Show cards from"></div>
+      <ul class="pp-grid"></ul>
+    </div>
+  </div>
+</section>
 
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RCfirstplay.png" width="100%">
-                              </div>
+<!-- ============ HOW TO PLAY ============ -->
+<section class="pp-band" id="play" aria-labelledby="play-h">
+  <div class="pp-wrap">
+    <h2 id="play-h">How to play</h2>
+    <p class="pp-lede">Everyone uses the same cards each turn. Flip three, pick one book for your library (or none), and write it in.</p>
 
-                              <p>Sometimes, especially late in the game, a player will not have a usable spot for any of the three revealed cards during a turn. In that turn the player passes without writing down any books.</p>
+    <ol class="pp-steps">
+      <li><h3>Flip three</h3><p>Deal the deck into 3 piles of about 30. Each turn, flip the top card of each pile.</p></li>
+      <li><h3>Choose one</h3><p>Each player may add one of the three books to their library, writing it in a circle of its category &mdash; or pass.</p></li>
+      <li><h3>Finish a category</h3><p>Fill all three circles, announce it, and read the verse on the card that completed it. First to finish scores the bigger number.</p></li>
+    </ol>
 
-                              <p>When a player fills all three spots in a category, they announce that they have done so and they read the verse on the card for the book that completed the category. If they are the first player to complete that category, they circle the larger of the two numbers under the category name. If they are the second or later, they circle the smaller of the two numbers. If two players both complete the same category on the same turn, if no one had previously completed that category they both circle the larger number.</p>
-
-                              <p>If all the cards in a pile are revealed before the game ends then those cards are shuffled, placed back face down and the game continues using the card on the top of the pile.</p>
-
-                              <p>The game ends when a player successfully fills in all 21 circles on their scorecard. At that point players add up the circled points they received for completing categories and subtract one point for each circle left unfilled.</p>
-
-                              <p>The player with the most points wins.</p>
-
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RCgameend.png" width="100%">
-                              </div>
-
-                            </div>
-                        </div>
-                        <a id="buy"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How to Buy</strong>
-                            </div>
-                            <div class="card-body">
-                              <p><em>If inventory is available, orders from the SDG Biblical Wisdom shop typically ship within a couple of days.<br />
-                                <div id='product-component-1705007824993'></div>
-<script type="text/javascript">
-/*<![CDATA[*/
-(function () {
-  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-  if (window.ShopifyBuy) {
-    if (window.ShopifyBuy.UI) {
-      ShopifyBuyInit();
-    } else {
-      loadScript();
-    }
-  } else {
-    loadScript();
-  }
-  function loadScript() {
-    var script = document.createElement('script');
-    script.async = true;
-    script.src = scriptURL;
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-    script.onload = ShopifyBuyInit;
-  }
-  function ShopifyBuyInit() {
-    var client = ShopifyBuy.buildClient({
-      domain: 'bd30ce-2.myshopify.com',
-      storefrontAccessToken: '7bf5f03bf3c7ba399d3ef67f8250c103',
-    });
-    ShopifyBuy.UI.onReady(client).then(function (ui) {
-      ui.createComponent('product', {
-        id: '8113289756821',
-        node: document.getElementById('product-component-1705007824993'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: {
-  "product": {
-    "styles": {
-      "product": {
-        "@media (min-width: 601px)": {
-          "max-width": "calc(25% - 20px)",
-          "margin-left": "20px",
-          "margin-bottom": "50px"
-        }
-      },
-      "button": {
-        "font-family": "Avant Garde, sans-serif",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        "background-color": "#323ef9",
-        ":focus": {
-          "background-color": "#2d38e0"
-        },
-        "border-radius": "6px",
-        "padding-left": "20px",
-        "padding-right": "20px"
-      },
-      "quantityInput": {
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px"
-      }
-    },
-    "contents": {
-      "img": false,
-      "title": false,
-      "price": false
-    },
-    "text": {
-      "button": "Buy Roman Catacombs"
-    }
-  },
-  "productSet": {
-    "styles": {
-      "products": {
-        "@media (min-width: 601px)": {
-          "margin-left": "-20px"
-        }
-      }
-    }
-  },
-  "modalProduct": {
-    "contents": {
-      "img": false,
-      "imgWithCarousel": true,
-      "button": false,
-      "buttonWithQuantity": true
-    },
-    "styles": {
-      "product": {
-        "@media (min-width: 601px)": {
-          "max-width": "100%",
-          "margin-left": "0px",
-          "margin-bottom": "0px"
-        }
-      },
-      "button": {
-        "font-family": "Avant Garde, sans-serif",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        "background-color": "#323ef9",
-        ":focus": {
-          "background-color": "#2d38e0"
-        },
-        "border-radius": "6px",
-        "padding-left": "20px",
-        "padding-right": "20px"
-      },
-      "quantityInput": {
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px"
-      }
-    },
-    "text": {
-      "button": "Add to cart"
-    }
-  },
-  "option": {},
-  "cart": {
-    "styles": {
-      "button": {
-        "font-family": "Avant Garde, sans-serif",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        "background-color": "#323ef9",
-        ":focus": {
-          "background-color": "#2d38e0"
-        },
-        "border-radius": "6px"
-      }
-    },
-    "text": {
-      "total": "Subtotal",
-      "button": "Checkout"
-    }
-  },
-  "toggle": {
-    "styles": {
-      "toggle": {
-        "font-family": "Avant Garde, sans-serif",
-        "background-color": "#323ef9",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        ":focus": {
-          "background-color": "#2d38e0"
-        }
-      },
-      "count": {
-        "font-size": "14px"
-      }
-    }
-  }
-},
-      });
-    });
-  }
-})();
-/*]]>*/
-</script></p>
-                              <p>Otherwise you can order from The Game Crafter print-on-demand store.<br />
-                                <a class="btn btn-primary" href="https://www.thegamecrafter.com/games/permalink/976AC844-ACAC-11EB-B954-2ED76DF84D6F" role="button">Order</a></p>
-
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
+    <div class="pp-acc">
+      <details open>
+        <summary>Setup</summary>
+        <div class="body"><p>Shuffle the deck and divide it into 3 piles of about 30 cards, face down where everyone can see them. Each player takes a scorecard.</p></div>
+      </details>
+      <details>
+        <summary>On each turn</summary>
+        <div class="body">
+          <p>Flip the top card of each pile onto a discard pile beside it. Each player decides which of the three revealed books, if any, to add to their library, and writes its name (or an abbreviation) in one of the circles for that book&rsquo;s category. Each player can add at most one book per turn.</p>
+          <p>Choose the circle carefully: a book can&rsquo;t be moved once written, and the canon order of the books must be kept.</p>
+          <p>Late in the game you may have no usable spot for any of the three cards. Then you simply pass.</p>
         </div>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2024</span> SDG Strategy, LLC | To God be the glory</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- Core theme JS-->
-        <script src="../js/scripts.js"></script>
+      </details>
+      <details>
+        <summary>Completing a category</summary>
+        <div class="body">
+          <p>When you fill all three circles of a category, announce it and read the verse on the card for the book that completed it. If you&rsquo;re the first player to complete that category, circle the larger of the two numbers under its name; if you&rsquo;re second or later, circle the smaller.</p>
+          <p>If two players complete the same category on the same turn and nobody had completed it before, both circle the larger number.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Running out of cards</summary>
+        <div class="body"><p>If every card in a pile is revealed before the game ends, shuffle that pile&rsquo;s cards, place them back face down, and carry on.</p></div>
+      </details>
+      <details>
+        <summary>Ending the game and scoring</summary>
+        <div class="body">
+          <p>The game ends when a player fills all 21 circles. Everyone adds up the points they circled for completed categories and subtracts <b>1 point for each circle left empty</b>. The most points wins.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Playing solo</summary>
+        <div class="body"><p>All the rules are the same, except that the game ends after 21 rounds. Any circles still empty then count against your score. The free <a href="scorepad.html">scorepad</a> can deal the cards for you.</p></div>
+      </details>
+    </div>
 
-    </body>
+    <div class="rc-sheets">
+      <figure>
+        <button type="button" class="pp-zoom" data-zoom="../assets/roman-catacombs/first-turn.webp" data-caption="The first turn: three cards are flipped. This player chose 1 Chronicles and wrote it into the middle circle of the Historical Books.">
+          <img src="../assets/roman-catacombs/first-turn.webp" width="1000" height="1000" loading="lazy" alt="Three piles with their top cards flipped: 1 Chronicles, Genesis and John. On the scorecard, 1 Chronicles has been written into the Historical Books row." />
+        </button>
+        <figcaption class="rc-cap">The first turn: 1 Chronicles, Genesis or John? This player picked 1 Chronicles.</figcaption>
+      </figure>
+      <figure>
+        <button type="button" class="pp-zoom" data-zoom="../assets/roman-catacombs/game-end.webp" data-caption="Near the end of a game: most circles are filled and several categories have been completed and circled.">
+          <img src="../assets/roman-catacombs/game-end.webp" width="1000" height="1000" loading="lazy" alt="A nearly finished scorecard with abbreviated book names written in most circles and the points circled for each completed category." />
+        </button>
+        <figcaption class="rc-cap">Near the end: the circles fill up, and the completed categories are circled.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCOREPAD & PLAY ============ -->
+<section class="pp-band alt" id="tools" aria-labelledby="tools-h">
+  <div class="pp-wrap">
+    <h2 id="tools-h">Free scorepad, books list and card dealer</h2>
+    <p class="pp-lede">No pencil handy? The free online scorepad keeps your library and your score for you.</p>
+    <ul class="rc-tools">
+      <li><h3>Scorepad</h3><p>Pick a book for each circle and see your score update as categories are completed.</p></li>
+      <li><h3>Books</h3><p>Keep track of which books have come up, and how many cards each has.</p></li>
+      <li><h3>Rules</h3><p>The full rules, including solo mode.</p></li>
+      <li><h3>Play</h3><p>Deals the three cards each turn from the full 90-card deck, so you can play without the physical cards.</p></li>
+    </ul>
+    <p><a class="pp-btn pp-btn-primary" href="scorepad.html">Open the scorepad</a></p>
+  </div>
+</section>
+
+<!-- ============ GET THE GAME ============ -->
+<section class="pp-cta" id="buy" aria-labelledby="buy-h">
+  <div class="pp-wrap">
+    <h2 id="buy-h">Get Roman Catacombs</h2>
+    <p>If inventory is available, orders from the SDG Biblical Wisdom shop typically ship within a couple of days.</p>
+    <div class="pp-shopify" data-state="live"></div>
+    <p class="pp-fine" style="margin-top:1rem">Otherwise you can order from <a href="https://www.thegamecrafter.com/games/permalink/976AC844-ACAC-11EB-B954-2ED76DF84D6F" style="color:#fff">The Game Crafter</a> print-on-demand store.</p>
+  </div>
+</section>
+</main>
+
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+<div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+</footer>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- Core theme JS-->
+<script src="../js/scripts.js"></script>
+
+<!-- ===== Page settings ===== -->
+<script>
+window.SDG_PRODUCT = {
+  // On sale now: the Shopify product id below turns each ".pp-shopify" spot into a buy button.
+  productId: '8113289756821',
+  buttonText: 'Buy Roman Catacombs',
+};
+</script>
+<script src="../js/product-core.js?v=20261019"></script>
+<script src="cards-data.js?v=20261019"></script>
+<script src="../js/product-gallery.js?v=20261019"></script>
+<script src="../js/product-page.js?v=20261019"></script>
+</body>
 </html>

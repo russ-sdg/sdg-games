@@ -1,0 +1,30 @@
+/* Roman Catacombs: page-specific styles (the shared design is css/product-page.css) */
+.rc-cta { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .9rem; margin: 1rem 0 .6rem; }
+.rc-cta .pp-shopify, .rc-cta .pp-shopify > *, .rc-cta .shopify-buy__product, .rc-cta .shopify-buy__btn-wrapper { margin: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; max-width: none !important; }
+.rc-cta .shopify-buy__btn { margin: 0 !important; min-height: 3.1rem; }
+.rc-cta .pp-btn { min-height: 3.1rem; display: inline-flex; align-items: center; margin: 0; }
+.rc-hero-art { margin: 0; max-width: 560px; width: 100%; margin-left: auto; }
+.rc-hero-art img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 24px rgba(0,0,0,.5)); }
+.rc-two { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.2rem; align-items: center; }
+.rc-two figure { margin: 0; }
+.rc-two img, .rc-sheets img { width: 100%; height: auto; display: block; }
+.rc-two .pp-zoom, .rc-sheets .pp-zoom { display: block; width: 100%; }
+figcaption.rc-cap { margin-top: .5rem; color: var(--pp-muted); font-size: .92rem; text-align: center; }
+.rc-shelves { list-style: none; padding: 0; margin: 1.4rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: .9rem; }
+.rc-shelves li { background: var(--pp-surface); border: 1px solid var(--pp-line); border-top: 6px solid var(--c); border-radius: var(--pp-radius); padding: .8rem 1rem; }
+.rc-shelves h3 { margin: 0; font-size: 1.05rem; color: var(--cd, var(--c)); }
+.rc-shelves p { margin: .15rem 0 0; color: var(--pp-muted); font-size: .92rem; }
+.rc-shelves .pts { margin-top: .5rem; font-weight: 700; color: var(--pp-ink); font-size: .95rem; }
+.rc-sheets { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-top: 2rem; }
+.rc-sheets figure { margin: 0; }
+.rc-sheets img { background: rgba(0,0,0,.04); border-radius: 10px; }
+.rc-tools { list-style: none; padding: 0; margin: 1.2rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: .9rem; }
+.rc-tools li { background: var(--pp-surface); border: 1px solid var(--pp-line); border-radius: var(--pp-radius); padding: .9rem 1rem; }
+.rc-tools h3 { margin: 0 0 .25rem; font-size: 1.05rem; }
+.rc-tools p { margin: 0; color: var(--pp-muted); }
+/* card faces are small scans: show them a bit larger, but never wider than the screen */
+.pp-lightbox img { width: auto; height: min(78vh, 560px); max-width: 94vw; object-fit: contain; }
+@media (max-width: 860px) {
+  .rc-two, .rc-sheets { grid-template-columns: 1fr; }
+  .rc-hero-art { margin: 0 auto; }
+}
