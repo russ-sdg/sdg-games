@@ -39,7 +39,7 @@
 .tcard .tag { position: absolute; left: 4px; right: 4px; bottom: 4px; background: rgba(33,37,41,.88); color: #fff; font-size: .75rem; font-weight: 700; padding: .1rem .3rem; border-radius: 6px; text-align: center; }
 .tray-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem; }
 .deck-back { max-width: 130px; }
-.deck-back img { width: 100%; display: block; }
+.deck-back img { width: 100%; height: auto; display: block; }
 
 /* shelves */
 .shelf { background: #fff; border-left: 8px solid var(--c); border-radius: .5rem; padding: .6rem .75rem .75rem; margin-bottom: .7rem; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
