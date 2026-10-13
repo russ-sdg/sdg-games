@@ -123,8 +123,7 @@ async function computerMove(actor, my) {
   const sup = E.isSupporterPawn(S, actor.pawnId);
   S = E.agentMove(S, actor.pawnId, roll, to, { share: sup ? A.supporterShares : undefined });
   const r = S.lastResult;
-  const shared = !sup || A.supporterShares(r);
-  say(`${nm} (rolled ${roll}) → ${to}: ${shared ? describe(r) : 'nothing to report'}.`);
+  say(`${nm} (rolled ${roll}) → ${to}: ${sup ? 'nothing to report' : describe(r)}.`);
   save(); render();
   if (S.over) return;
   await sleep(250);

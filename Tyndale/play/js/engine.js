@@ -215,7 +215,8 @@ export function agentMove(state, pawnId, roll, pos, opts = {}) {
   if (!sup && ans.loc === 'here') { note(s, `${s.seats[pawn.seat].name} has captured "that notorious heretic Tyndale"!`); return Object.assign(finish(s, 'agents', 'captured'), { result }); }
   // what is shared: everyone's findings go into the pool, except the Secret Supporter's, which are private unless they choose to share
   const share = sup ? (opts.share ? !!opts.share(ans) : false) : true;
-  if (share) { s.found[pos] = rec; s.obs.push({ round: s.round, pos, loc: ans.loc, bible: ans.bible }); } else { s.private[pos] = rec; s.pobs.push({ round: s.round, pos, loc: ans.loc, bible: ans.bible }); }
+  if (share && sup) rec.loc = 'not';                         // the Supporter only ever says "Nothing to Report": near/far stays private
+  if (share) { s.found[pos] = rec; s.obs.push({ round: s.round, pos, loc: rec.loc, bible: ans.bible }); } else { s.private[pos] = rec; s.pobs.push({ round: s.round, pos, loc: ans.loc, bible: ans.bible }); }
   const rp = s.reports[pawn.seat] || (s.reports[pawn.seat] = { n: 0, nothing: 0 });
   rp.n += 1; if (!share || ans.bible === 'nothing') rp.nothing += 1;   // withholding is reported as "Nothing to Report" 
   // the Secret Supporter picks up a publication that has not reached London, and ships it from the next Coastal City
