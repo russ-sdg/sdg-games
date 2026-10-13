@@ -7,10 +7,10 @@
   var DAYS = [
     { n: 1, name: 'Light', color: '#a85a05' },
     { n: 2, name: 'Sky', color: '#2a6fa8' },
-    { n: 3, name: 'Land & plants', color: '#2f7d46' },
-    { n: 4, name: 'Sun & moon', color: '#2a3490' },
-    { n: 5, name: 'Birds & fish', color: '#0b7777' },
-    { n: 6, name: 'Animals & mankind', color: '#8e4a3d' },
+    { n: 3, name: 'Earth, Seas, and Plants', color: '#2f7d46' },
+    { n: 4, name: 'Sun, Moon, Stars', color: '#2a3490' },
+    { n: 5, name: 'Birds and Fish', color: '#0b7777' },
+    { n: 6, name: 'Animals and Mankind', color: '#8e4a3d' },
   ];
   var PLAYERS = ['Ann', 'Ben', 'Cy'];
 

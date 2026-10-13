@@ -21,7 +21,9 @@
   document.querySelectorAll('.pp-day[data-day]').forEach(function (li) {
     var art = li.querySelector('.pp-day-art');
     if (!art || li.querySelector('.pp-zoom')) return;
-    var c = data.cards.filter(function (x) { return x.group === 'day' + li.getAttribute('data-day'); })[0];
+    var mine = data.cards.filter(function (x) { return x.group === 'day' + li.getAttribute('data-day'); });
+    var want = (li.getAttribute('data-feature') || '').toLowerCase();       // optional: show this card (by name) rather than the first
+    var c = mine.filter(function (x) { return x.name.toLowerCase() === want; })[0] || mine[0];
     if (!c) return;
     var n = li.getAttribute('data-day');
     art.outerHTML = '<button type="button" class="pp-zoom pp-day-art" data-zoom="' + full(c) + '" data-caption="' + esc(title(c)) + '">' +

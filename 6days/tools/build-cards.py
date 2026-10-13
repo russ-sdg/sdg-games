@@ -21,8 +21,8 @@ WIDTHS = (480, 960, 1120)
 EXPECTED = 47        # distinct card designs (the 72-card deck repeats some)
 
 GROUPS = [
-    ('day1', 'Day 1', 'Light'), ('day2', 'Day 2', 'Sky'), ('day3', 'Day 3', 'Land & plants'),
-    ('day4', 'Day 4', 'Sun & moon'), ('day5', 'Day 5', 'Birds & fish'), ('day6', 'Day 6', 'Animals & mankind'),
+    ('day1', 'Day 1', 'Light'), ('day2', 'Day 2', 'Sky'), ('day3', 'Day 3', 'Earth, Seas, and Plants'),
+    ('day4', 'Day 4', 'Sun, Moon, Stars'), ('day5', 'Day 5', 'Birds and Fish'), ('day6', 'Day 6', 'Animals and Mankind'),
     ('evening-morning', 'Evening & Morning', 'Closes a full day'), ('points', 'Points', 'Point cards'),
 ]
 EXT = ('.png', '.jpg', '.jpeg', '.webp')

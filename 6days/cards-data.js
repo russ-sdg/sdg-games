@@ -25,22 +25,22 @@ window.SDG_CARDS = {
   {
    "id": "day3",
    "label": "Day 3",
-   "title": "Land & plants"
+   "title": "Earth, Seas, and Plants"
   },
   {
    "id": "day4",
    "label": "Day 4",
-   "title": "Sun & moon"
+   "title": "Sun, Moon, Stars"
   },
   {
    "id": "day5",
    "label": "Day 5",
-   "title": "Birds & fish"
+   "title": "Birds and Fish"
   },
   {
    "id": "day6",
    "label": "Day 6",
-   "title": "Animals & mankind"
+   "title": "Animals and Mankind"
   },
   {
    "id": "evening-morning",
