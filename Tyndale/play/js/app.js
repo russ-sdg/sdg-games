@@ -31,7 +31,7 @@ const you = () => S.seats[0];
 const humanIn = () => !you().out;
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function say(text) { S = E.logPublic(S, text); }
-const describe = (r) => `${LOC_TEXT[r.loc].toLowerCase()}; ${r.bible === 'rumors' ? 'rumors of a translation nearby' : r.bible === 'nothing' ? 'nothing to report' : 'found ' + E.PUB_NAMES[r.bible]}`;
+const describe = (r) => (r.bible === 'rumors' ? 'rumors of a translation nearby' : r.bible === 'nothing' ? 'nothing to report' : 'found ' + E.PUB_NAMES[r.bible]);
 
 function ask({ title, text = '', list = null, choices }) {
   return new Promise((resolve) => {
@@ -123,8 +123,7 @@ async function computerMove(actor, my) {
   const sup = E.isSupporterPawn(S, actor.pawnId);
   S = E.agentMove(S, actor.pawnId, roll, to, { share: sup ? A.supporterShares : undefined });
   const r = S.lastResult;
-  const shared = !sup || A.supporterShares(r);
-  say(`${nm} (rolled ${roll}) → ${to}: ${shared ? describe(r) : 'nothing to report'}.`);
+  say(`${nm} (rolled ${roll}) → ${to}: ${sup ? 'nothing to report' : describe(r)}.`);
   save(); render();
   if (S.over) return;
   await sleep(250);
