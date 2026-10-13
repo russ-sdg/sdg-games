@@ -1,6 +1,7 @@
 // Roman Catacombs: scorecard and solo play (UI). Rules live in engine.js.
 import { CATS, BOOKS, cardBook } from './books.js';
 import * as E from './engine.js';
+import { drawShareImage, canvasToBlob, nativeShareData, shareMessage } from './share.js';
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
@@ -103,7 +104,38 @@ function showSheet(final) {
     <tr><td>Empty slots (${r.empty})</td><td>${r.empty ? '−' + r.empty : '0'}</td></tr>
     <tr class="final-total"><td>Total</td><td>${r.total}</td></tr></tbody></table>`;
   $('#final-again').textContent = final ? 'Play again' : 'New game';
+  mountShare($('#final-body'), r.total);
   $('#final').showModal();
+}
+
+// Share your library as a picture: native share sheet where the browser offers it, plus a download.
+async function mountShare(root, total) {
+  const box = document.createElement('div');
+  box.className = 'share-box';
+  box.innerHTML = `<div class="share-actions"><button type="button" class="btn btn-primary btn-sm" id="share-dl" disabled>Download image</button>
+    <button type="button" class="btn btn-outline-primary btn-sm" id="share-native" hidden>Share\u2026</button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="share-copy">Copy text</button></div>
+    <img class="share-preview" alt="Your finished Roman Catacombs library" width="1200" height="1050" hidden>
+    <p class="small text-muted mb-0" id="share-msg" aria-live="polite">Drawing your result card\u2026</p>`;
+  root.appendChild(box);
+  const img = box.querySelector('.share-preview'), msg = box.querySelector('#share-msg');
+  const dl = box.querySelector('#share-dl'), nat = box.querySelector('#share-native'), copy = box.querySelector('#share-copy');
+  copy.onclick = async () => {
+    try { await navigator.clipboard.writeText(shareMessage(total)); msg.textContent = 'Copied. Paste it anywhere.'; }
+    catch { msg.textContent = shareMessage(total); }
+  };
+  try {
+    const canvas = drawShareImage(document.createElement('canvas'), state);
+    const blob = await canvasToBlob(canvas);
+    const url = URL.createObjectURL(blob);
+    img.src = url; img.hidden = false; dl.disabled = false; msg.textContent = '';
+    const file = new File([blob], 'roman-catacombs.png', { type: 'image/png' });
+    nat.hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+    dl.onclick = () => { const a = document.createElement('a'); a.href = url; a.download = 'roman-catacombs.png'; document.body.appendChild(a); a.click(); a.remove(); };
+    nat.onclick = async () => { try { await navigator.share(nativeShareData(file, total)); } catch { /* cancelled */ } };
+  } catch {
+    msg.textContent = 'Sorry, the result card could not be drawn in this browser. You can still copy the text.';
+  }
 }
 
 // ---- rendering -----------------------------------------------------------------------------------------------------
