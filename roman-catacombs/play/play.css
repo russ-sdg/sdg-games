@@ -79,3 +79,8 @@
 .final-table td:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
 .final-total td { font-weight: 800; font-size: 1.1rem; border-bottom: 0; }
 .rules h3 { margin-top: 1rem; }
+
+.rc-dialog { max-height: 92vh; overflow: auto; }
+.share-box { margin: .4rem 0 .8rem; padding-top: .7rem; border-top: 1px solid #e9ecef; }
+.share-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
+.share-preview { width: 100%; height: auto; display: block; border-radius: .5rem; border: 1px solid #dee2e6; margin-bottom: .4rem; }
