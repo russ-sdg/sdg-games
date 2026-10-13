@@ -62,7 +62,12 @@
   function friendlyMailchimpMessage(result, msg) {
     const plain = String(msg || '').replace(/<[^>]*>/g, ' ').replace(/&amp;/g, '&').replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"')
       .replace(/^\s*\d+\s*-\s*/, '').replace(/\s+/g, ' ').trim();
-    if (result === 'success') return 'Thank you! Check your inbox and tap the confirmation link to finish signing up.';
+    if (result === 'success') {
+      // double opt-in audiences answer "Almost finished... confirm your email"; single opt-in ones just say thanks
+      return /almost finished|confirm/i.test(plain)
+        ? 'Thank you! Check your inbox and tap the confirmation link to finish signing up.'
+        : "Thank you! You're on the list.";
+    }
     if (/already subscribed/i.test(plain)) return "You're already on the list. Thank you!";
     if (/too many|recent signup|try again/i.test(plain)) return 'Please wait a moment and try again.';
     return plain || 'Sorry, that did not work. Please try again.';

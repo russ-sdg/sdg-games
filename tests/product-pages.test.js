@@ -80,6 +80,15 @@ for (const page of PAGES) {
     for (const f of forms) assert.match(f[0], /role="status"/);
   });
 
+  test(`${page}: if Mailchimp is connected, the address is a valid Mailchimp form URL`, () => {
+    const url = /mailchimpUrl:\s*'([^']*)'/.exec(html)[1];
+    if (!url) return;                                         // not connected yet: the page shows an "opening soon" message
+    const jsonp = require('../js/product-core.js').mailchimpJsonpUrl(url, 'a@b.co', 'cb');
+    assert.ok(jsonp, 'mailchimpUrl is not a Mailchimp https subscribe URL with u and id');
+    const q = new URL(jsonp).searchParams;
+    assert.ok(q.has(`b_${q.get('u')}_${q.get('id')}`), 'honeypot field name');
+  });
+
   test(`${page}: one price everywhere, a real launch date, and cache-busted shared assets`, () => {
     const prices = new Set([...html.matchAll(/\$\d+\.\d\d/g)].map((m) => m[0]));
     const jsonPrice = /"price"\s*:\s*"?(\d+\.\d\d)/.exec(html);
