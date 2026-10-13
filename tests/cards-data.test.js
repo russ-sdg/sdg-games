@@ -16,8 +16,8 @@ test('the list is complete and consistent with the artwork folder (run: python3 
   const sources = data.groups.flatMap((g) => fs.existsSync(path.join(SRC, g.id)) ? fs.readdirSync(path.join(SRC, g.id)).filter((f) => EXT.test(f)) : []);
   assert.equal(data.cards.length, sources.length, 'artwork was added or removed without rebuilding cards-data.js');
   assert.equal(data.total, data.cards.length);
-  assert.equal(data.expected, 72);
-  assert.ok(data.total <= 72, 'more than 72 cards');
+  assert.equal(data.expected, 47);
+  assert.ok(data.total <= 47, 'more than 47 designs');
 });
 
 test('every card has its images, valid group, unique id, and landscape shape', () => {
@@ -40,9 +40,9 @@ test('no orphaned generated images', () => {
   for (const f of fs.readdirSync(dir)) assert.ok(used.has(f), `${f} is not in cards-data.js`);
 });
 
-test('the first batch of Day 5 and Day 6 art is present', () => {
+test('the final art set is present', () => {
   const has = (id) => data.cards.some((c) => c.id === id);
-  for (const id of ['day5-sea-creatures', 'day6-mankind', 'day6-approval', 'day6-animals', 'day6-livestock', 'day4-moon']) assert.ok(has(id), id);
+  for (const id of ['day5-sea-creatures-09', 'day6-mankind-01', 'day6-approval-02', 'day6-animals-03', 'day6-livestock-04', 'day4-moon-22']) assert.ok(has(id), id);
 });
 
 test('a card back, if present, is portrait, has its images and is not counted as a card', () => {

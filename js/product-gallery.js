@@ -32,7 +32,7 @@
   var host = document.querySelector('[data-gallery]');
   if (!host) return;
   host.hidden = false;
-  host.querySelector('[data-gallery-title]').textContent = data.total >= data.expected ? 'Browse all ' + data.total + ' cards' : 'A closer look at the cards';
+  host.querySelector('[data-gallery-title]').textContent = data.total >= data.expected ? 'Browse all ' + data.total + ' card designs' : 'A closer look at the cards';
   var counts = {};
   var back = data.back && { src: data.back.src, widths: data.back.widths, w: data.back.w, h: data.back.h, group: 'back', name: 'Card back' };
   if (back) counts.back = 1;

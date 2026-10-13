@@ -18,7 +18,7 @@ SRC = os.path.join(ROOT, 'assets', '6days', 'cards-source')
 OUT = os.path.join(ROOT, 'assets', '6days', 'cards')
 DATA = os.path.join(ROOT, '6days', 'cards-data.js')
 WIDTHS = (480, 960, 1120)
-EXPECTED = 72
+EXPECTED = 47        # distinct card designs (the 72-card deck repeats some)
 
 GROUPS = [
     ('day1', 'Day 1', 'Light'), ('day2', 'Day 2', 'Sky'), ('day3', 'Day 3', 'Land & plants'),
