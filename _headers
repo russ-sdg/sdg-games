@@ -9,6 +9,9 @@
   Cache-Control: no-cache
 /js/product-core.js
   Cache-Control: no-cache
+/js/product-gallery.js
+  Cache-Control: no-cache
+
 /js/product-page.js
   Cache-Control: no-cache
 /6days/*

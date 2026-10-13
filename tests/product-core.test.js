@@ -59,7 +59,9 @@ test('mailchimp: the email is encoded safely in the URL', () => {
 });
 
 test('mailchimp messages become one friendly sentence', () => {
-  assert.match(C.friendlyMailchimpMessage('success', 'Almost finished...'), /^Thank you!/);
+  assert.match(C.friendlyMailchimpMessage('success', 'Almost finished... We need to confirm your email address.'), /confirmation link/);
+  assert.equal(C.friendlyMailchimpMessage('success', 'Thank you for subscribing!'), "Thank you! You're on the list.");   // single opt-in
+  assert.equal(C.friendlyMailchimpMessage('success', ''), "Thank you! You're on the list.");
   assert.equal(C.friendlyMailchimpMessage('error', '0 - Please enter a value'), 'Please enter a value');
   assert.equal(C.friendlyMailchimpMessage('error', 'x@y.com is already subscribed to list SDG Games. <a href="https://x">Click here to update your profile.</a>'), "You're already on the list. Thank you!");
   assert.equal(C.friendlyMailchimpMessage('error', 'Too many subscribe attempts for this email address'), 'Please wait a moment and try again.');

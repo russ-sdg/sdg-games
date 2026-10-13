@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""Build the Six Days card gallery from the original card art.
+
+  python3 6days/tools/build-cards.py            (run from the repo root)
+
+Put the artwork in assets/6days/cards-source/, one folder per group, any file names:
+  day1 day2 day3 day4 day5 day6 evening-morning points
+and, if you have it, a folder named back holding the one card-back image (it stays portrait and is not counted in the 72).
+Portrait files (the print layout, text turned sideways) are rotated to landscape. For every card it writes WebP
+files at 480, 960 and 1120 px wide to assets/6days/cards/ and a list of them to 6days/cards-data.js, which the page
+reads. Re-running is safe: files that are already up to date are skipped.
+"""
+import json, os, re, sys
+from PIL import Image
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+SRC = os.path.join(ROOT, 'assets', '6days', 'cards-source')
+OUT = os.path.join(ROOT, 'assets', '6days', 'cards')
+DATA = os.path.join(ROOT, '6days', 'cards-data.js')
+WIDTHS = (480, 960, 1120)
+EXPECTED = 47        # distinct card designs (the 72-card deck repeats some)
+
+GROUPS = [
+    ('day1', 'Day 1', 'Light'), ('day2', 'Day 2', 'Sky'), ('day3', 'Day 3', 'Land & plants'),
+    ('day4', 'Day 4', 'Sun & moon'), ('day5', 'Day 5', 'Birds & fish'), ('day6', 'Day 6', 'Animals & mankind'),
+    ('evening-morning', 'Evening & Morning', 'Closes a full day'), ('points', 'Points', 'Point cards'),
+]
+EXT = ('.png', '.jpg', '.jpeg', '.webp')
+
+def pretty(slug):
+    s = re.sub(r'[-_]+', ' ', slug).strip()
+    s = ' '.join(w if w in ('and', 'of', 'the') else w[:1].upper() + w[1:] for w in s.split())
+    return s.replace(' and ', ' & ')
+
+def sort_key(name):
+    m = re.match(r'(\d+)', name)
+    return (0, int(m.group(1)), name) if m else (1, 0, name)
+
+def main():
+    os.makedirs(OUT, exist_ok=True)
+    cards, made, kept, wanted = [], 0, 0, set()
+    for gid, label, title in GROUPS:
+        folder = os.path.join(SRC, gid)
+        files = sorted((f for f in os.listdir(folder) if f.lower().endswith(EXT)), key=sort_key) if os.path.isdir(folder) else []
+        for f in files:
+            slug = re.sub(r'[^a-z0-9]+', '-', os.path.splitext(f)[0].lower()).strip('-')
+            cid = f'{gid}-{slug}'
+            path = os.path.join(folder, f)
+            im = None
+            for w in WIDTHS:
+                out = os.path.join(OUT, f'{cid}-{w}.webp')
+                wanted.add(os.path.basename(out))
+                if os.path.exists(out) and os.path.getmtime(out) >= os.path.getmtime(path):
+                    kept += 1
+                    continue
+                if im is None:
+                    im = Image.open(path).convert('RGBA' if gid == 'points' else 'RGB')
+                    if im.height > im.width:
+                        im = im.rotate(90, expand=True)          # print layout -> landscape (counter-clockwise)
+                t = im if w >= im.width else im.resize((w, round(w * im.height / im.width)), Image.LANCZOS)
+                t.save(out, quality=82, method=6)
+                made += 1
+            probe = Image.open(os.path.join(OUT, f'{cid}-{WIDTHS[-1]}.webp'))
+            # "approval-2", "approval-3" are different cards with the same name: the number only keeps the file names apart
+            name = 'Evening & Morning' if gid == 'evening-morning' else pretty(re.sub(r'-\d+$', '', slug) if not re.fullmatch(r'\d+', slug) else slug)
+            cards.append({'id': cid, 'group': gid, 'name': name, 'src': f'../assets/6days/cards/{cid}',
+                          'widths': [w for w in WIDTHS if w <= probe.width] or [probe.width], 'w': probe.width, 'h': probe.height})
+    back = None
+    bdir = os.path.join(SRC, 'back')
+    bfiles = sorted(f for f in os.listdir(bdir) if f.lower().endswith(EXT)) if os.path.isdir(bdir) else []
+    if bfiles:
+        path = os.path.join(bdir, bfiles[0])
+        im = None
+        for w in (480, 960):
+            out = os.path.join(OUT, f'back-{w}.webp')
+            wanted.add(os.path.basename(out))
+            if os.path.exists(out) and os.path.getmtime(out) >= os.path.getmtime(path):
+                continue
+            im = im or Image.open(path).convert('RGB')
+            (im if w >= im.width else im.resize((w, round(w * im.height / im.width)), Image.LANCZOS)).save(out, quality=82, method=6)
+        probe = Image.open(os.path.join(OUT, 'back-960.webp'))
+        back = {'src': '../assets/6days/cards/back', 'widths': [480, 960], 'w': probe.width, 'h': probe.height}
+    for f in os.listdir(OUT):                                    # drop outputs whose source card was removed or renamed
+        if f.endswith('.webp') and f not in wanted:
+            os.remove(os.path.join(OUT, f))
+    data = {'total': len(cards), 'expected': EXPECTED,
+            'back': back, 'groups': [{'id': g, 'label': l, 'title': t} for g, l, t in GROUPS], 'cards': cards}
+    with open(DATA, 'w') as fh:
+        fh.write('// Generated by 6days/tools/build-cards.py from assets/6days/cards-source/. Do not edit by hand.\n')
+        fh.write('window.SDG_CARDS = ' + json.dumps(data, indent=1) + ';\n')
+    per = {g: sum(c['group'] == g for c in cards) for g, _, _ in GROUPS}
+    print(f'{len(cards)} of {EXPECTED} cards ({made} images written, {kept} up to date):', ', '.join(f'{g} {n}' for g, n in per.items()))
+
+main()
