@@ -2,3 +2,14 @@
 # browser never keeps running an old copy of the game after an update.
 /JfP/play/*
   Cache-Control: no-cache
+
+# Product pages: the shared stylesheet/scripts and the pages themselves always revalidate, so a launch-day edit
+# (price, buy button) reaches visitors straight away.
+/css/product-page.css
+  Cache-Control: no-cache
+/js/product-core.js
+  Cache-Control: no-cache
+/js/product-page.js
+  Cache-Control: no-cache
+/6days/*
+  Cache-Control: no-cache
