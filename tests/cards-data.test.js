@@ -36,10 +36,18 @@ test('every card has its images, valid group, unique id, and landscape shape', (
 test('no orphaned generated images', () => {
   const dir = path.join(ROOT, 'assets/6days/cards');
   const used = new Set(data.cards.flatMap((c) => c.widths.map((w) => `${c.id}-${w}.webp`)));
+  if (data.back) data.back.widths.forEach((w) => used.add(`back-${w}.webp`));
   for (const f of fs.readdirSync(dir)) assert.ok(used.has(f), `${f} is not in cards-data.js`);
 });
 
 test('the first batch of Day 5 and Day 6 art is present', () => {
   const has = (id) => data.cards.some((c) => c.id === id);
   for (const id of ['day5-sea-creatures', 'day6-mankind', 'day6-approval', 'day6-animals', 'day6-livestock', 'day4-moon']) assert.ok(has(id), id);
+});
+
+test('a card back, if present, is portrait, has its images and is not counted as a card', () => {
+  if (!data.back) return;
+  assert.ok(data.back.h > data.back.w);
+  for (const w of data.back.widths) assert.ok(fs.existsSync(path.join(ROOT, '6days', `${data.back.src}-${w}.webp`)));
+  assert.ok(!data.cards.some((c) => c.group === 'back'));
 });
