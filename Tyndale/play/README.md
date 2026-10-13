@@ -1,0 +1,15 @@
+# Tyndale: play online
+
+Free online version of the Tyndale board game. Static files only (no server).
+
+- `index.html`, `play.css`, `js/app.js`: the page and UI (hunt mode: you are a Bishop's Agent, a computer is Tyndale).
+- `js/engine.js`: the rules, as pure functions on a plain state object. `js/ai.js`: the computer Tyndale and computer Agents.
+- `js/board-data.js`: the 11x11 board (point colours, Printing Centres, Coastal Cities and their distance to London).
+  **`check.html` draws this data over the board image so it can be verified by eye.**
+- `engine.test.js`: `node --test` in this folder. `tools/sim.mjs`: computer-vs-computer simulation for balance checks.
+
+Rule interpretations to confirm: London is a destination only (not a Printing Centre for publishing); "near" for the Secret
+Supporter's card means within 3 steps; a second step is allowed only after a first step onto a blue spot (plus earned bonus moves);
+the Secret Supporter exists with 4+ Agent players.
+
+Planned: play as Tyndale against computer Agents; pass-and-play on one device.
