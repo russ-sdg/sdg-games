@@ -16,3 +16,6 @@
   Cache-Control: no-cache
 /6days/*
   Cache-Control: no-cache
+
+/JfP/jfp.css
+  Cache-Control: no-cache
