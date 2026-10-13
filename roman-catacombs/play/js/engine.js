@@ -8,8 +8,9 @@ export { cardBook as trayBook };                     // the book on a card id
 export const bookName = (b) => BOOKS[b].name;
 
 export const ROUNDS = 21;                       // solo game length
-export const MODES = { scorecard: 'scorecard', solo: 'solo', bots: 'bots' };
-export const isRound = (state) => state.mode === MODES.solo || state.mode === MODES.bots;   // modes where the game deals the cards
+export const MODES = { scorecard: 'scorecard', solo: 'solo', bots: 'bots', table: 'table' };
+export const isRound = (state) => state.mode !== MODES.scorecard;                         // modes where the game deals the cards
+export const isManual = (state) => state.mode === MODES.scorecard || state.mode === MODES.table;   // modes where you say whether you finished a category first
 
 const clone = (s) => structuredClone(s);
 export const catOf = (slot) => Math.floor(slot / 3);
@@ -122,7 +123,7 @@ function settle(s) {
   CATS.forEach((c, ci) => {
     if (isComplete(s, ci) && !s.claims[c.id]) s.claims[c.id] = s.mode === MODES.solo || !s.taken[c.id] ? 'first' : 'later';
   });
-  if (s.library.every((b) => b !== null)) s.over = s.mode === MODES.solo ? true : s.over;
+  if (s.library.every((b) => b !== null)) s.over = s.mode === MODES.solo || s.mode === MODES.table ? true : s.over;
   return s;
 }
 

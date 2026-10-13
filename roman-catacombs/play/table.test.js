@@ -137,3 +137,65 @@ test('in a race, stronger computers score higher on average (sharp > steady > ca
   assert.ok(total.steady > total.casual + 5, `steady ${total.steady} should clearly beat casual ${total.casual}`);
   assert.ok(total.sharp > total.steady + 2, `sharp ${total.sharp} should beat steady ${total.steady}`);
 });
+
+test('table codes round-trip the seed and reject junk', () => {
+  for (const seed of [0, 1, 35, 123456789, 4294967295]) assert.equal(T.parseCode(T.tableCode(seed)), seed);
+  assert.equal(T.tableCode(4294967295).length <= 7, true);
+  assert.equal(T.parseCode('  ab-12 '), parseInt('AB12', 36));
+  assert.equal(T.parseCode(''), null);
+  assert.equal(T.parseCode('ZZZZZZZZ'), null);
+});
+
+test('two phones with the same code deal identical cards every round, including after the deck is reshuffled', () => {
+  const code = T.tableCode(987654321);
+  let a = T.newTableGame({ seed: T.parseCode(code) }), b = T.newTableGame({ seed: T.parseCode(code) });
+  for (let r = 1; r <= 70; r++) { a = T.nextRound(a); b = T.nextRound(b); assert.deepEqual(a.tray, b.tray); assert.equal(a.round, r); }
+  assert.notDeepEqual(T.newTableGame({ seed: 1 }) && T.trayAt(1, 1), T.trayAt(2, 1));
+});
+
+test('a phone that is out of step can jump to the right round, but not after placing a book', () => {
+  let s = T.nextRound(T.newTableGame({ seed: 5 }));
+  s = T.nextRound(s);
+  const at5 = T.goToRound(s, 5);
+  assert.equal(at5.round, 5);
+  assert.deepEqual(at5.tray, T.trayAt(5, 5));
+  assert.deepEqual(T.goToRound(at5, 2).tray, T.trayAt(5, 2));
+  const opts = [0, 1, 2].filter((i) => E.trayOptions(s, i).length);
+  const placed = E.placeFromTray(s, opts[0], E.trayOptions(s, opts[0])[0]);
+  assert.throws(() => T.goToRound(placed, 4), /undo/);
+  assert.throws(() => T.goToRound(s, 0), /bad round/);
+});
+
+test('table play: you say whether you were first; books cannot be taken back out; a full library ends your game', () => {
+  let s = T.newTableGame({ seed: 9 });
+  s = T.nextRound(s);
+  assert.throws(() => E.clearSlot(s, 0), /cannot be moved/);
+  // another player already finished Pentateuch
+  const t = E.setTaken(s, 'pentateuch', true);
+  let u = structuredClone(t); u.library[0] = B('Genesis'); u.library[1] = B('Exodus'); u.tray = ['Leviticus1v1', 'Joshua1v1', 'Ruth1v1'];
+  u = E.placeFromTray(u, 0, 2);
+  assert.equal(u.claims.pentateuch, 'later');
+  assert.equal(E.score(E.setClaim(u, 'pentateuch', 'first')).categories[0].points, 9);
+  let f = T.nextRound(T.newTableGame({ seed: 9 }));
+  CATS.forEach((c, ci) => { for (let k = 0; k < 3; k++) f.library[ci * 3 + k] = c.lo + k; });
+  f.library[20] = null; f.tray = ['Revelation1v1', 'Jude1v1', 'Matthew1v1']; f.placedThisRound = null;
+  f = E.placeFromTray(f, 0, 20);
+  assert.equal(f.over, true);
+  assert.equal(E.score(f).total, 56);
+  assert.throws(() => T.nextRound(f), /game over/);
+});
+
+test('finishTable ends the game when someone else announced a full library', () => {
+  let s = T.nextRound(T.newTableGame({ seed: 4 }));
+  s = T.finishTable(s);
+  assert.equal(s.over, true);
+  assert.throws(() => T.finishTable(s), /game over/);
+});
+
+test('bots mode still behaves (the table changes did not break it)', () => {
+  assert.equal(E.isRound(T.newTable({ bots: 1 })), true);
+  assert.equal(E.isManual(T.newTable({ bots: 1 })), false);
+  assert.equal(E.isManual(E.newState()), true);
+  assert.equal(E.isManual(T.newTableGame({ seed: 1 })), true);
+  assert.equal(E.isRound(E.newState()), false);
+});

@@ -76,3 +76,41 @@ export function standings(state) {
   return rows.sort((a, b) => b.total - a.total || Number(b.you) - Number(a.you));
 }
 export const skillName = (k) => (SKILLS[k] || SKILLS.steady).name;
+
+// ---- same room, own phones ---------------------------------------------------------------------------------------
+// No server: every phone deals the same cards because the table code is the shuffle seed. Each player taps for the
+// next round on their own phone, and says out loud when they complete a category (the rules' announcement).
+export const tableCode = (seed) => (seed >>> 0).toString(36).toUpperCase();
+export function parseCode(text) {
+  const t = String(text || '').trim().toUpperCase().replace(/[^0-9A-Z]/g, '');
+  if (!t || t.length > 7) return null;
+  const n = parseInt(t, 36);
+  return Number.isFinite(n) && n >= 0 && n <= 0xffffffff ? n : null;
+}
+export function newTableGame({ seed = 1 } = {}) { return E.newState({ mode: E.MODES.table, seed }); }
+
+function needTable(state) { if (state.mode !== E.MODES.table) throw new Error('only at a shared table'); if (state.over) throw new Error('game over'); }
+
+// Flip the next three cards.
+export function nextRound(state) {
+  needTable(state);
+  const s = structuredClone(state);
+  s.round += 1; s.tray = trayAt(s.seed, s.round); s.placedThisRound = null;
+  return s;
+}
+// Put this phone on a given round (to get back in step with the table). Not once you have placed a book this round.
+export function goToRound(state, round) {
+  needTable(state);
+  if (state.placedThisRound !== null) throw new Error('undo your placement first');
+  if (!Number.isInteger(round) || round < 1) throw new Error('bad round');
+  const s = structuredClone(state);
+  s.round = round; s.tray = trayAt(s.seed, round); s.placedThisRound = null;
+  return s;
+}
+// The game is over (someone announced a full library).
+export function finishTable(state) {
+  needTable(state);
+  const s = structuredClone(state);
+  s.over = true; s.endReason = 'complete'; s.tray = []; s.placedThisRound = null;
+  return s;
+}

@@ -8,7 +8,7 @@
     <title>Roman Catacombs Scorecard &amp; Play Online - SDG Games</title>
     <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
     <link href="../../css/styles.css" rel="stylesheet" />
-    <link href="play.css?v=20261024" rel="stylesheet" />
+    <link href="play.css?v=20261025" rel="stylesheet" />
 </head>
 <body class="sb-nav-fixed">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
@@ -27,6 +27,10 @@
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <h1 class="h3" id="setup-title">New game</h1>
+                            <div id="invite" class="alert alert-success d-flex flex-wrap align-items-center gap-2" hidden>
+                                <span>You were invited to table <b id="invite-code"></b>.</span>
+                                <button type="button" class="btn btn-sm btn-success" id="invite-join">Join the table</button>
+                            </div>
                             <div id="resume" class="alert alert-info d-flex flex-wrap align-items-center gap-2" hidden>
                                 <span id="resume-text">You have a game in progress.</span>
                                 <button type="button" class="btn btn-sm btn-primary" id="resume-btn">Resume</button>
@@ -41,10 +45,17 @@
                                         <span><b>Solo &mdash; 21 rounds</b><small>Play on your own. Each round the game flips three cards; you add one book to your library, or pass. Empty slots count against you.</small></span></label>
                                     <label class="choice"><input type="radio" name="mode" value="bots" />
                                         <span><b>Solo vs computer opponents</b><small>Race 1 to 5 computer librarians. Everyone sees the same three cards each round; the game ends when someone fills all 21 slots. Most points wins.</small></span></label>
-                                    <label class="choice is-soon"><input type="radio" name="mode" value="table" disabled />
-                                        <span><b>Same room, own phones</b><small>Coming soon.</small></span></label>
+                                    <label class="choice"><input type="radio" name="mode" value="table" />
+                                        <span><b>Same room, own phones</b><small>Like the card game: everyone plays on their own phone with the same flipped cards. One person starts a table and shares the code; any number of players can join. No sign-up, nothing sent anywhere.</small></span></label>
                                 </div>
                             </fieldset>
+                            <div id="table-fields" class="row g-3 mb-3" hidden>
+                                <div class="col-sm-6"><label class="form-label" for="table-role">What would you like to do?</label>
+                                    <select class="form-select" id="table-role"><option value="new" selected>Start a new table</option><option value="join">Join a table</option></select></div>
+                                <div class="col-sm-6" id="table-code-wrap" hidden><label class="form-label" for="table-code">Table code</label>
+                                    <input class="form-control text-uppercase" id="table-code" maxlength="9" autocomplete="off" placeholder="e.g. 1A2B3C4" /></div>
+                                <p class="small text-muted mb-0" id="table-msg" aria-live="polite">Each round, everyone taps to flip the next three cards at the same time. You say it out loud when you complete a category, and tick "Someone has completed this" when another player does.</p>
+                            </div>
                             <div id="bots-fields" class="row g-3 mb-3" hidden>
                                 <div class="col-sm-6"><label class="form-label" for="bot-count">Computer opponents</label>
                                     <select class="form-select" id="bot-count"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
@@ -107,6 +118,8 @@
                     <p>The game ends when a player fills all 21 circles. Add up the circled points and subtract <b>1 point for each empty circle</b>. The most points wins.</p>
                     <h3 class="h6">Solo</h3>
                     <p>The rules are the same, except the game ends after 21 rounds. Circles still empty then count against you.</p>
+                    <h3 class="h6">Same room, own phones</h3>
+                    <p>One player starts a table and shares the invite link or the table code. Everyone who joins sees the same three cards each round, so you play with the same rules as the card game, each on your own phone. Tap to flip the next round together. When you complete a category, say so out loud; the app asks whether you were first. If another player announces one, tick <b>Someone has completed this</b> on that category. When someone fills all 21 circles, everyone taps <b>The game is over</b> to see their score. If your phone gets out of step, use the round buttons under the cards.</p>
                     <h3 class="h6">Against computer opponents</h3>
                     <p>Everyone sees the same three cards each round and chooses at the same time. The game ends when someone fills all 21 circles (or if nobody can place another book). If two players complete a category in the same round and nobody had before, both score the larger number. Most points wins.</p>
                     <h3 class="h6">Using this page</h3>
@@ -149,6 +162,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
-    <script type="module" src="js/app.js?v=20261024"></script>
+    <script type="module" src="js/app.js?v=20261025"></script>
 </body>
 </html>
