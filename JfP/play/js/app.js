@@ -280,8 +280,8 @@ function roleText() {
   }
   const who = table || G.isBotSeat(state, state.roller) ? state.seatNames[state.roller] : 'Another player';
   return rules().nonRollerMayPreach
-    ? `${who} rolled: use one evangelist to move, or to preach if he cannot move.`
-    : `${who} rolled: move one evangelist (only the roller may preach).`;
+    ? `${who} rolled: you may use one evangelist to move, or to preach if he cannot move.`
+    : `${who} rolled: you may move one evangelist (only the roller may preach).`;
 }
 const rules = () => G.rules(state);
 
@@ -452,11 +452,12 @@ function renderSide() {
   if (s.phase === 'act') {
     const can = G.canEndTurn(s);
     const forced = s.actions === 0 && G.nothingToDo(s);
+    const optional = s.role === 'other' && s.actions === 0 && !forced;     // a non-roller may act, but doesn't have to
     const next = s.queue.length && s.kind === 'pass' ? s.seatNames[s.queue[0]] : null;
     controls = `<div class="actionbar">
-      <button class="btn btn-primary${G.nothingToDo(s) ? ' nudge' : ''}" id="end-btn" ${can ? '' : 'disabled'}>${forced ? 'No move possible &ndash; pass' : next ? `End turn &rarr; ${esc(next)}` : 'End turn'}</button>
+      <button class="btn btn-primary${G.nothingToDo(s) ? ' nudge' : ''}" id="end-btn" ${can ? '' : 'disabled'}>${forced ? 'No move possible &ndash; pass' : optional ? `Don't act${next ? ` &rarr; ${esc(next)}` : ''}` : next ? `End turn &rarr; ${esc(next)}` : 'End turn'}</button>
       <button class="btn btn-outline-secondary" id="undo-btn" ${ui.history.length ? '' : 'disabled'}>Undo</button></div>
-      <p class="small text-muted">${s.role === 'roller' ? `${s.actions}/3 actions used.` : `${s.actions}/1 action used.`}${can ? '' : ' Pick an evangelist, then a highlighted city on the map.'}</p>`;
+      <p class="small text-muted">${s.role === 'roller' ? `${s.actions}/3 actions used.` : `${s.actions}/1 action used.`}${can ? (optional ? ' Acting is optional for you: pick an evangelist, or skip.' : '') : ' Pick an evangelist, then a highlighted city on the map.'}</p>`;
   }
   const log = s.log.slice(-40).reverse().map((l) => `<li>${esc(l.text)}</li>`).join('');
   $('#side').innerHTML = `
