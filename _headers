@@ -19,3 +19,8 @@
 
 /JfP/jfp.css
   Cache-Control: no-cache
+
+/JfP/scorepad.js
+  Cache-Control: no-cache
+/JfP/scorepad.css
+  Cache-Control: no-cache
