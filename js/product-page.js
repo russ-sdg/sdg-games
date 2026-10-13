@@ -73,7 +73,11 @@
       var email = input.value.trim();
       if (form.querySelector('.pp-honey').value) return say('Thank you!', true);        // a bot filled the hidden field
       if (!core.isValidEmail(email)) return say('Please enter a valid email address.', false);
-      if (!cfg.mailchimpUrl) return say('Preview only: the email signup is not connected to Mailchimp yet, so nothing was sent.', false);
+      if (!cfg.mailchimpUrl) {            // Mailchimp not connected yet: be honest and point people somewhere useful
+        msg.className = 'pp-signup-msg is-ok';
+        msg.innerHTML = 'Email signup is opening very soon. For now, follow <a href="https://blog.sdggames.fun/" style="color:inherit;text-decoration:underline">our news</a> for the launch announcement.';
+        return;
+      }
       var cb = 'sdgMailchimp' + (++seq);
       var url = core.mailchimpJsonpUrl(cfg.mailchimpUrl, email, cb, cfg.mailchimpTags);
       if (!url) return say('The signup is not set up correctly yet. Please try again later.', false);
