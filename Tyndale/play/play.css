@@ -1,0 +1,71 @@
+/* Tyndale: play online. Matches the other SDG Games online games; palette from the Tyndale product page. */
+.ty { --ty-ink: #232a5c; --ty-red: #a3262e; --ty-gold: #f0c36a; max-width: 1200px; margin: 0 auto; }
+.ty [hidden] { display: none !important; }
+.ty-logo { height: 44px; width: auto; max-width: 100%; }
+
+.choice-grid { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.choice { display: flex; gap: .6rem; align-items: flex-start; padding: .75rem; border: 2px solid #dee2e6; border-radius: .5rem; cursor: pointer; background: #fff; }
+.choice:hover { border-color: #adb5bd; }
+.choice:has(input:checked) { border-color: var(--ty-ink); background: #f0f2fb; }
+.choice:has(input:focus-visible) { outline: 3px solid #86b7fe; }
+.choice small { display: block; color: #5c636a; margin-top: .15rem; }
+.choice.is-soon { opacity: .6; cursor: default; background: #f1f3f5; }
+
+/* status bar */
+.ty-bar { position: sticky; top: 0; z-index: 30; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; padding: .55rem 1rem; margin: 0 0 .75rem;
+          background: var(--ty-ink); color: #fff; border-radius: 0 0 .6rem .6rem; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+.ty-bar-main { font-weight: 700; font-size: 1.1rem; flex: 1 1 10rem; }
+.ty-bar-pubs { display: flex; gap: .35rem; align-items: center; font-size: .85rem; }
+.ty-bar-pubs .lbl { color: #ced4da; margin-right: .2rem; }
+.pub-chip { display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; border: 2px dashed #8c93c9; color: #8c93c9; font-weight: 800; }
+.pub-chip.on { background: var(--ty-gold); border: 2px solid var(--ty-gold); color: #1b1b2e; }
+
+/* board */
+.ty-board-wrap { background: #1b1b2e; border-radius: .6rem; padding: .35rem; }
+.ty-board { display: block; width: 100%; height: auto; touch-action: manipulation; border-radius: .4rem; background: #e9dcc0; }
+.ty-board .hit { fill: transparent; cursor: pointer; }
+.ty-board .hit:hover { fill: rgba(240,195,106,.35); }
+.ty-board .tgt { fill: rgba(240,195,106,.45); stroke: #a3262e; stroke-width: 3; cursor: pointer; }
+.ty-board .tgt:hover, .ty-board .tgt:focus-visible { fill: rgba(240,195,106,.85); outline: none; stroke-width: 5; }
+.ty-board .pulse { animation: typulse 1.1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes typulse { 50% { transform: scale(1.18); } }
+@media (prefers-reduced-motion: reduce) { .ty-board .pulse { animation: none; } }
+.ty-board text { font-family: system-ui, sans-serif; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.mk-pub { fill: #f0c36a; stroke: #1b1b2e; stroke-width: 2.5; }
+.mk-rumor { fill: #fff4d6; stroke: #a3262e; stroke-width: 2.5; stroke-dasharray: 4 3; }
+.mk-none { fill: rgba(255,255,255,.75); stroke: #6c757d; stroke-width: 1.5; }
+
+/* side panel */
+.ty-card { background: #fff; border: 1px solid #dee2e6; border-radius: .6rem; padding: .85rem; margin-bottom: .75rem; }
+.ty-card h2 { font-size: 1.05rem; margin: 0 0 .5rem; }
+.ty-banner { background: #fff4d6; border: 1px solid var(--ty-gold); border-radius: .6rem; padding: .6rem .8rem; margin-bottom: .75rem; font-weight: 600; }
+.ty-roll { display: inline-grid; place-items: center; width: 3.4rem; height: 3.4rem; border-radius: .6rem; background: var(--ty-ink); color: #fff; font-size: 2rem; font-weight: 800; margin-right: .6rem; }
+.pawn-pick { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
+.pawn-pick button { border: 2px solid #adb5bd; background: #fff; border-radius: 2rem; padding: .25rem .8rem; font-weight: 600; }
+.pawn-pick button[aria-pressed=true] { border-color: var(--ty-ink); background: var(--ty-ink); color: #fff; }
+.pawn-pick button:disabled { opacity: .45; }
+.report { display: flex; gap: .5rem; }
+.report figure { margin: 0; flex: 1 1 0; text-align: center; }
+.report img { width: 100%; height: auto; border-radius: .4rem; box-shadow: 0 2px 6px rgba(0,0,0,.3); }
+.report figcaption { font-size: .8rem; color: #495057; margin-top: .25rem; }
+.seat-list { list-style: none; padding: 0; margin: 0; font-size: .9rem; }
+.seat-list li { display: flex; align-items: center; gap: .5rem; padding: .15rem 0; }
+.seat-dot { width: 1rem; height: 1rem; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px #6c757d; flex: none; }
+.seat-list .out { color: #868e96; text-decoration: line-through; }
+.ty-log { list-style: none; padding: 0; margin: 0; max-height: 14rem; overflow: auto; font-size: .85rem; }
+.ty-log li { padding: .2rem 0; border-bottom: 1px solid #f1f3f5; }
+.ty-log .rd { color: #868e96; margin-right: .3rem; }
+
+/* dialogs */
+.ty-dialog { border: 0; border-radius: .8rem; padding: 1.2rem; max-width: min(34rem, 94vw); box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+.ty-dialog::backdrop { background: rgba(15,16,32,.6); }
+.pick-list { display: grid; gap: .4rem; margin: .5rem 0; }
+.pick-list label { display: flex; gap: .5rem; align-items: center; padding: .4rem .6rem; border: 2px solid #dee2e6; border-radius: .5rem; cursor: pointer; }
+.pick-list label:has(input:checked) { border-color: var(--ty-ink); background: #f0f2fb; }
+.pick-actions { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; margin-top: .8rem; }
+.big-stat { font-size: 2.6rem; font-weight: 800; line-height: 1; color: var(--ty-ink); }
+.scripture-list { list-style: none; padding: 0; margin: .4rem 0 0; }
+.scripture-list li { padding: .3rem .6rem; margin-bottom: .3rem; border-radius: .4rem; background: #f0f2fb; }
+.scripture-list li.pending { background: #fff4d6; }
+.scripture-list li.no { background: #f1f3f5; color: #6c757d; }
+.scripture-list small { color: #495057; display: block; }

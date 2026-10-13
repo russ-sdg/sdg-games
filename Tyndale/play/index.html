@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Play Tyndale online: hunt William Tyndale across Reformation-era Europe before the English Bible reaches London." />
+    <title>Play Tyndale Online - SDG Games</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="play.css?v=20261028" rel="stylesheet" />
+</head>
+<body class="sb-nav-fixed">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
+
+    <main class="ty container-fluid px-3 pb-5">
+        <div class="ty-title d-flex flex-wrap align-items-center gap-3 py-3">
+            <a href="../index.html"><img class="ty-logo" src="../../assets/TyndalelogoV1.png" alt="Tyndale" /></a>
+            <span class="badge text-bg-secondary">Play online</span>
+            <a class="ms-auto small" href="../index.html">About the game &amp; how to buy it</a>
+        </div>
+
+        <!-- ================= SETUP ================= -->
+        <section id="setup" aria-labelledby="setup-title">
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h1 class="h3" id="setup-title">New game</h1>
+                            <div id="resume" class="alert alert-info d-flex flex-wrap align-items-center gap-2" hidden>
+                                <span id="resume-text">You have a game in progress.</span>
+                                <button type="button" class="btn btn-sm btn-primary" id="resume-btn">Resume</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="discard-btn">Discard it</button>
+                            </div>
+                            <fieldset class="mb-3">
+                                <legend class="h6">How do you want to play?</legend>
+                                <div class="choice-grid">
+                                    <label class="choice"><input type="radio" name="mode" value="hunt" checked />
+                                        <span><b>Hunt Tyndale</b><small>You are a Bishop's Agent. A computer plays Tyndale, moving in secret; the game answers your questions with the right cards. Catch him before the Old Testament reaches London.</small></span></label>
+                                    <label class="choice is-soon"><input type="radio" name="mode" value="tyndale" disabled />
+                                        <span><b>Be Tyndale</b><small>Coming soon: plan the secret route while computer Agents hunt you.</small></span></label>
+                                    <label class="choice is-soon"><input type="radio" name="mode" value="pass" disabled />
+                                        <span><b>Pass &amp; play</b><small>Coming soon: 2 to 6 people on one device, with the app as referee.</small></span></label>
+                                </div>
+                            </fieldset>
+                            <div class="row g-3 mb-3">
+                                <div class="col-sm-6"><label class="form-label" for="agents">Bishop's Agent players (you and computers)</label>
+                                    <select class="form-select" id="agents">
+                                        <option value="1">1 &ndash; you, with 4 pawns</option>
+                                        <option value="2">2 &ndash; you and a computer, 2 pawns each</option>
+                                        <option value="3">3 &ndash; you and 2 computers</option>
+                                        <option value="4" selected>4 &ndash; you and 3 computers, with a Secret Supporter</option>
+                                        <option value="5">5 &ndash; you and 4 computers, with a Secret Supporter</option>
+                                    </select></div>
+                                <div class="col-sm-6"><label class="form-label" for="skill">Tyndale's skill</label>
+                                    <select class="form-select" id="skill">
+                                        <option value="casual">Casual &ndash; wanders, takes risks</option>
+                                        <option value="steady" selected>Steady &ndash; keeps clear of the Agents</option>
+                                        <option value="sharp">Sharp &ndash; slips past the Agents</option>
+                                    </select></div>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="hint" />
+                                <label class="form-check-label" for="hint">Show a heat map of where Tyndale might be (easier)</label>
+                            </div>
+                            <p class="small text-muted" id="supp-note">With 4 or more Agent players, one computer Agent is secretly Tyndale's Supporter. They look like an ordinary Agent but only ever report &ldquo;Nothing to Report&rdquo;.</p>
+                            <button type="button" class="btn btn-primary btn-lg" id="start-btn">Start the hunt</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="h5">How it works</h2>
+                            <ul class="small mb-0">
+                                <li>Tyndale is translating the Bible into English. He must <b>print</b> each part at a new Printing Centre and <b>ship</b> it from a Coastal City to London.</li>
+                                <li>Each turn you <b>roll</b> (1 to 3), move a pawn, and the game tells you whether Tyndale is there and whether he left a translation, or rumors of one, in that city.</li>
+                                <li>Land on Tyndale and you win. If the <b>Old Testament</b> reaches London first, he does.</li>
+                                <li>The clues he leaves form a trail: follow it to the end.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= GAME ================= -->
+        <section id="game" hidden aria-label="The hunt">
+            <div class="ty-bar" role="status" aria-live="polite">
+                <div class="ty-bar-main" id="bar-main"></div>
+                <div class="ty-bar-pubs" id="bar-pubs" aria-label="Scripture delivered to London"></div>
+                <div class="ty-bar-actions"><button type="button" class="btn btn-sm btn-outline-light" id="menu-btn">New game</button></div>
+            </div>
+            <div class="row g-3">
+                <div class="col-lg-8">
+                    <div class="ty-board-wrap"><svg id="board" class="ty-board" viewBox="0 0 800 800" role="img" aria-label="The game board: a map of England and Europe with a grid"></svg></div>
+                    <div class="ty-legend small text-muted mt-2" id="legend"></div>
+                </div>
+                <div class="col-lg-4" id="side"></div>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="accuse" class="ty-dialog" aria-labelledby="accuse-title">
+        <form method="dialog">
+            <h2 class="h5" id="accuse-title"></h2>
+            <p id="accuse-text"></p>
+            <div id="accuse-list" class="pick-list"></div>
+            <div class="pick-actions" id="accuse-actions"></div>
+        </form>
+    </dialog>
+    <dialog id="final" class="ty-dialog" aria-labelledby="final-title">
+        <form method="dialog">
+            <h2 class="h5" id="final-title"></h2>
+            <div id="final-body"></div>
+            <div class="pick-actions"><button type="button" class="btn btn-outline-secondary" id="final-route">Show his route</button><button value="again" class="btn btn-primary" id="final-again">New game</button><button value="close" class="btn btn-outline-secondary">Close</button></div>
+        </form>
+    </dialog>
+
+    <footer class="py-5 bg-dark">
+        <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class="current-year">2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../../js/scripts.js"></script>
+    <script type="module" src="js/app.js?v=20261028"></script>
+</body>
+</html>
