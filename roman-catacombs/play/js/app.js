@@ -29,7 +29,7 @@ function commit(next, { fresh = false } = {}) {
   ui.selected = null;
   save();
   render();
-  if (state.mode === E.MODES.scorecard && before) {
+  if (E.isManual(state) && before) {
     const done = CATS.findIndex((c, ci) => E.isComplete(state, ci) && !E.isComplete(before, ci));
     if (done >= 0 && !before.claims[CATS[done].id]) askFirst(done);
   }
@@ -37,10 +37,11 @@ function commit(next, { fresh = false } = {}) {
 }
 
 function startGame(mode, opts = ui.last || {}) {
-  const seed = crypto.getRandomValues(new Uint32Array(1))[0];
+  const seed = mode === E.MODES.table && opts.seed !== undefined ? opts.seed : crypto.getRandomValues(new Uint32Array(1))[0];
   ui.tab = 'library';
-  ui.last = opts;
-  commit(mode === E.MODES.bots ? T.newTable({ bots: opts.bots || 2, skill: opts.skill || 'steady', seed }) : E.newState({ mode, seed }), { fresh: true });
+  ui.last = { bots: opts.bots, skill: opts.skill };                // a new game never reuses a table code
+  commit(mode === E.MODES.bots ? T.newTable({ bots: opts.bots || 2, skill: opts.skill || 'steady', seed })
+    : mode === E.MODES.table ? T.newTableGame({ seed }) : E.newState({ mode, seed }), { fresh: true });
   $('#setup').hidden = true; $('#game').hidden = false;
   window.scrollTo({ top: 0 });
 }
@@ -50,7 +51,9 @@ function showSetup() {
   const saved = loadSaved();
   $('#resume').hidden = !saved;
   if (saved) $('#resume-text').textContent = saved.mode === E.MODES.solo ? `Solo game in progress (round ${saved.round} of ${E.ROUNDS}).`
-    : saved.mode === E.MODES.bots ? `Game against ${saved.rivals.length} computer${saved.rivals.length > 1 ? 's' : ''} in progress (round ${saved.round}).` : 'A scorecard in progress.';
+    : saved.mode === E.MODES.bots ? `Game against ${saved.rivals.length} computer${saved.rivals.length > 1 ? 's' : ''} in progress (round ${saved.round}).`
+      : saved.mode === E.MODES.table ? `Table ${T.tableCode(saved.seed)} in progress (round ${saved.round}).` : 'A scorecard in progress.';
+  showInvite();
 }
 
 // ---- dialogs -----------------------------------------------------------------------------------------------------
@@ -156,8 +159,9 @@ function render() {
   $('#score').textContent = sc.total;
   const filled = 21 - sc.empty;
   const bots = state.mode === E.MODES.bots;
-  const roundText = state.over ? 'Game over' : state.round ? (bots ? `Round ${state.round}` : `Round ${state.round} of ${E.ROUNDS}`) : 'Ready to flip';
-  $('#bar-sub').textContent = solo ? `${roundText} · ${filled} of 21 slots filled${bots ? ` · vs ${state.rivals.length}` : ''}` : `Scorecard · ${filled} of 21 slots filled`;
+  const roundText = state.over ? 'Game over' : state.round ? (bots || state.mode === E.MODES.table ? `Round ${state.round}` : `Round ${state.round} of ${E.ROUNDS}`) : 'Ready to flip';
+  const table = state.mode === E.MODES.table;
+  $('#bar-sub').textContent = solo ? `${table ? 'Same room · ' : ''}${roundText} · ${filled} of 21 slots filled${bots ? ` · vs ${state.rivals.length}` : ''}` : `Scorecard · ${filled} of 21 slots filled`;
   $('#undo-btn').disabled = !ui.history.length;
   document.querySelectorAll('.rc-tabs [role=tab]').forEach((t) => {
     const on = t.id === `tab-${ui.tab}`;
@@ -170,30 +174,39 @@ function render() {
   renderBooks(solo);
 }
 
+const tableBar = () => `<div class="table-code">Table <b>${T.tableCode(state.seed)}</b>
+  <button type="button" class="btn btn-sm btn-outline-primary" id="invite-share">Share invite</button>
+  <button type="button" class="btn btn-sm btn-outline-secondary" id="invite-copy">Copy link</button>
+  <span class="small text-muted" id="invite-note" aria-live="polite"></span></div>`;
+
 function renderTray(solo) {
   const el = $('#tray');
   if (!solo) { el.innerHTML = ''; return; }
-  if (state.over) { el.innerHTML = `<div class="tray"><h2>Game over</h2><p class="hint mb-2">Your final score is ${E.score(state).total}.</p><button type="button" class="btn btn-primary" id="again-btn">Play again</button> <button type="button" class="btn btn-outline-secondary" id="sheet-btn">Score sheet</button></div>`; return; }
+  const bots = state.mode === E.MODES.bots, table = state.mode === E.MODES.table;
+  if (state.over) { el.innerHTML = `<div class="tray"><h2>Game over</h2><p class="hint mb-2">Your final score is ${E.score(state).total}.</p><button type="button" class="btn btn-primary" id="again-btn">${table ? 'New game' : 'Play again'}</button> <button type="button" class="btn btn-outline-secondary" id="sheet-btn">Score sheet</button></div>`; return; }
   if (state.round === 0) {
-    el.innerHTML = `<div class="tray"><h2>Your deck is shuffled</h2><p class="hint">Each round three cards are flipped and you may add one of the books to your library${state.mode === E.MODES.bots ? ` &mdash; while ${state.rivals.length === 1 ? 'a computer librarian races you' : `${state.rivals.length} computer librarians race you`} for the first-to-finish points` : ''}.</p>
+    el.innerHTML = `<div class="tray"><h2>${table ? 'Ready when the table is' : 'Your deck is shuffled'}</h2>
+      ${table ? tableBar() : ''}
+      <p class="hint">${table ? 'Everyone with the same table code sees the same cards. Count down together, then everyone taps to flip the first three. Say it out loud when you complete a category.'
+        : `Each round three cards are flipped and you may add one of the books to your library${bots ? ` &mdash; while ${state.rivals.length === 1 ? 'a computer librarian races you' : `${state.rivals.length} computer librarians race you`} for the first-to-finish points` : ''}.`}</p>
       <div class="deck-back mb-2"><img src="${IMG}back-600.webp" alt="The face-down deck" width="600" height="818"></div>
       <button type="button" class="btn btn-primary btn-lg" id="flip-btn">Flip the first three cards</button></div>`;
     return;
   }
   const placed = state.placedThisRound;
-  const bots = state.mode === E.MODES.bots;
-  const last = bots ? state.library.every((b) => b !== null) : state.round >= E.ROUNDS;
-  const tip = placed !== null ? 'Placed. Flip the next three when you are ready.'
+  const last = bots ? state.library.every((b) => b !== null) : table ? false : state.round >= E.ROUNDS;
+  const tip = placed !== null ? (table ? 'Placed. When everyone is ready, flip the next three.' : 'Placed. Flip the next three when you are ready.')
     : E.mustPass(state) ? 'None of these can go anywhere right now, so you pass.'
       : ui.selected === null ? 'Tap a card, then tap a glowing slot to place it. Or pass.' : `Tap a glowing slot for ${BOOKS[cardBook(state.tray[ui.selected])].name}.`;
-  el.innerHTML = `<div class="tray"><h2>Round ${state.round}${bots ? '' : ` of ${E.ROUNDS}`}</h2><p class="hint">${esc(tip)}</p>
+  const roundFix = table ? `<div class="round-fix small text-muted">Out of step with the table? <button type="button" class="btn btn-sm btn-outline-secondary" id="round-minus" aria-label="Previous round" ${placed !== null || state.round < 2 ? 'disabled' : ''}>&minus;</button> round ${state.round} <button type="button" class="btn btn-sm btn-outline-secondary" id="round-plus" aria-label="Next round without placing" ${placed !== null ? 'disabled' : ''}>+</button></div>` : '';
+  el.innerHTML = `<div class="tray"><h2>Round ${state.round}${bots || table ? '' : ` of ${E.ROUNDS}`}</h2>${table ? tableBar() : ''}<p class="hint">${esc(tip)}</p>
     <div class="tray-cards">${state.tray.map((id, i) => {
       const opts = E.trayOptions(state, i).length;
       const cls = `tcard${ui.selected === i ? ' sel' : ''}${placed !== null && placed !== i ? ' dim' : ''}${placed === null && !opts ? ' dim' : ''}`;
       return `<button type="button" class="${cls}" data-tray="${i}" ${placed !== null || !opts ? 'disabled' : ''} aria-label="${esc(BOOKS[cardBook(id)].name)}${placed === i ? ', placed' : !opts && placed === null ? ', cannot be placed' : ''}">
-        <img src="${IMG}${id}-250.webp" alt="" width="250" height="341">${placed === i ? '<span class="tag">Placed ✔</span>' : ''}</button>`;
+        <img src="${IMG}${id}-250.webp" alt="" width="250" height="341">${placed === i ? '<span class="tag">Placed \u2714</span>' : ''}</button>`;
     }).join('')}</div>
-    <div class="tray-actions"><button type="button" class="btn btn-primary" id="flip-btn">${last ? 'Finish the game' : placed !== null ? 'Flip the next three' : 'Pass – flip the next three'}</button></div></div>`;
+    <div class="tray-actions"><button type="button" class="btn btn-primary" id="flip-btn">${last ? 'Finish the game' : placed !== null ? 'Flip the next three' : table ? 'Pass \u2013 flip the next three' : 'Pass \u2013 flip the next three'}</button>${table ? '<button type="button" class="btn btn-outline-danger" id="table-finish">The game is over</button>' : ''}</div>${roundFix}</div>`;
 }
 
 const ordinal = (n) => `${n}${['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : Math.min(n % 10, 4) % 4] || 'th'}`;
@@ -217,9 +230,9 @@ function renderShelves(solo) {
     const pts = done ? E.categoryPoints(state, ci) : null;
     const how = state.claims[c.id];
     const chip = done
-      ? `<button type="button" class="pts done" data-claim="${c.id}" ${solo ? 'disabled' : ''} title="${how === 'later' ? 'Completed after another player' : 'Completed first'}">${pts} pts · ${how === 'later' ? 'after' : 'first'}</button>`
+      ? `<button type="button" class="pts done" data-claim="${c.id}" ${E.isManual(state) ? '' : 'disabled'} title="${how === 'later' ? 'Completed after another player' : 'Completed first'}">${pts} pts · ${how === 'later' ? 'after' : 'first'}</button>`
       : `<span class="pts">${c.first} first / ${c.second} after</span>`;
-    const taken = !solo && !done ? `<label class="taken"><input type="checkbox" data-taken="${c.id}" ${state.taken[c.id] ? 'checked' : ''}> Someone has completed this</label>` : '';
+    const taken = E.isManual(state) && !done ? `<label class="taken"><input type="checkbox" data-taken="${c.id}" ${state.taken[c.id] ? 'checked' : ''}> Someone has completed this</label>` : '';
     const slots = [0, 1, 2].map((k) => {
       const s = ci * 3 + k, b = state.library[s];
       const label = `${c.label}, slot ${k + 1}: ${b === null ? 'empty' : BOOKS[b].name}`;
@@ -256,7 +269,7 @@ document.addEventListener('click', (e) => {
     return;
   }
   const claim = t.closest('[data-claim]');
-  if (claim && !solo) { const id = claim.dataset.claim; commit(E.setClaim(state, id, state.claims[id] === 'later' ? 'first' : 'later')); return; }
+  if (claim && E.isManual(state)) { const id = claim.dataset.claim; commit(E.setClaim(state, id, state.claims[id] === 'later' ? 'first' : 'later')); return; }
   const book = t.closest('.bk[data-book]');
   if (book && !solo) {
     const b = Number(book.dataset.book), at = E.slotOf(state, b);
@@ -264,8 +277,13 @@ document.addEventListener('click', (e) => {
     else { const legal = E.legalSlotsFor(state, b); if (legal.length === 1) commit(E.place(state, legal[0], b)); else if (legal.length) openBookSlotPicker(b, legal); }
     return;
   }
-  if (t.closest('#flip-btn')) { commit(state.mode === E.MODES.bots ? T.flipRound(state) : E.flip(state), { fresh: true }); return; }
-  if (t.closest('#again-btn')) { startGame(state.mode); return; }
+  if (t.closest('#flip-btn')) { commit(state.mode === E.MODES.bots ? T.flipRound(state) : state.mode === E.MODES.table ? T.nextRound(state) : E.flip(state), { fresh: true }); return; }
+  if (t.closest('#round-minus')) { if (state.round > 1) commit(T.goToRound(state, state.round - 1), { fresh: true }); return; }
+  if (t.closest('#round-plus')) { commit(T.goToRound(state, state.round + 1), { fresh: true }); return; }
+  if (t.closest('#table-finish')) { if (confirm('End the game and see your score? Do this when someone has announced a full library.')) commit(T.finishTable(state), { fresh: true }); return; }
+  if (t.closest('#invite-share')) { shareInvite(); return; }
+  if (t.closest('#invite-copy')) { copyInvite(); return; }
+  if (t.closest('#again-btn')) { state.mode === E.MODES.table ? (state = null, ui.history = [], save(), showSetup()) : startGame(state.mode); return; }
   if (t.closest('#sheet-btn') || t.closest('#sum-btn')) { showSheet(solo && state.over); return; }
 });
 document.addEventListener('change', (e) => {
@@ -278,10 +296,49 @@ $('#menu-btn').addEventListener('click', () => {
   if (state && !state.over && state.library.some((b) => b !== null) && !confirm('Leave this game? Your current library will be lost.')) return;
   state = null; ui.history = []; save(); showSetup();
 });
-$('#start-btn').addEventListener('click', () => startGame(document.querySelector('input[name=mode]:checked').value, { bots: Number($('#bot-count').value), skill: $('#bot-skill').value }));
-document.querySelectorAll('input[name=mode]').forEach((r) => r.addEventListener('change', () => { $('#bots-fields').hidden = document.querySelector('input[name=mode]:checked').value !== 'bots'; }));
+$('#start-btn').addEventListener('click', () => {
+  const mode = document.querySelector('input[name=mode]:checked').value;
+  const opts = { bots: Number($('#bot-count').value), skill: $('#bot-skill').value };
+  if (mode === E.MODES.table && $('#table-role').value === 'join') {
+    const seed = T.parseCode($('#table-code').value);
+    if (seed === null) { $('#table-msg').textContent = 'That code does not look right. It is up to 7 letters and numbers.'; return; }
+    opts.seed = seed;
+  }
+  startGame(mode, opts);
+});
+const syncSetup = () => {
+  const mode = document.querySelector('input[name=mode]:checked').value;
+  $('#bots-fields').hidden = mode !== 'bots';
+  $('#table-fields').hidden = mode !== 'table';
+  $('#table-code-wrap').hidden = $('#table-role').value !== 'join';
+  $('#start-btn').textContent = mode === 'table' && $('#table-role').value === 'join' ? 'Join the table' : mode === 'table' ? 'Start a table' : 'Start';
+};
+document.querySelectorAll('input[name=mode]').forEach((r) => r.addEventListener('change', syncSetup));
+$('#table-role').addEventListener('change', syncSetup);
+// An invite link carries the table code: ?table=CODE
+function inviteCode() { try { return T.parseCode(new URLSearchParams(location.search).get('table')); } catch { return null; } }
+function showInvite() {
+  const seed = inviteCode();
+  const box = $('#invite');
+  box.hidden = seed === null;
+  if (seed === null) return;
+  $('#invite-code').textContent = T.tableCode(seed);
+  $('#invite-join').onclick = () => startGame(E.MODES.table, { seed });
+}
+const inviteLink = () => `${location.origin}${location.pathname}?table=${T.tableCode(state.seed)}`;
+async function shareInvite() {
+  const url = inviteLink();
+  try { if (navigator.share) { await navigator.share({ title: 'Join my Roman Catacombs table', text: `Join my Roman Catacombs table (code ${T.tableCode(state.seed)}):`, url }); return; } } catch { return; }
+  copyInvite();
+}
+async function copyInvite() {
+  const note = $('#invite-note');
+  try { await navigator.clipboard.writeText(inviteLink()); if (note) note.textContent = 'Link copied. Send it to the others.'; }
+  catch { if (note) note.textContent = inviteLink(); }
+}
+syncSetup();
 $('#resume-btn').addEventListener('click', () => { state = loadSaved(); ui.history = []; $('#setup').hidden = true; $('#game').hidden = false; render(); });
 $('#discard-btn').addEventListener('click', () => { try { localStorage.removeItem(KEY); } catch { /* ignore */ } $('#resume').hidden = true; });
-$('#final').addEventListener('close', () => { if ($('#final').returnValue === 'again') { const m = state && state.mode; state = null; ui.history = []; save(); m === E.MODES.scorecard ? showSetup() : startGame(m); } $('#final').returnValue = ''; });
+$('#final').addEventListener('close', () => { if ($('#final').returnValue === 'again') { const m = state && state.mode; state = null; ui.history = []; save(); E.isManual({ mode: m }) ? showSetup() : startGame(m); } $('#final').returnValue = ''; });
 
 showSetup();

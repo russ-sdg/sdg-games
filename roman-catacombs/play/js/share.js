@@ -20,6 +20,7 @@ export const describe = (state) => {
     const st = standings(state), place = st.findIndex((x) => x.you) + 1;
     return `vs ${state.rivals.length} computer${state.rivals.length > 1 ? 's' : ''} \u00b7 ${ORD(place)} of ${st.length} \u00b7 ${state.round} rounds`;
   }
+  if (state.mode === MODES.table) return `Same room \u00b7 ${state.round} rounds`;
   return 'Scorecard';
 };
 

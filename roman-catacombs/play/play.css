@@ -104,3 +104,8 @@
 .rb.empty { color: #8a9097; }
 .log { list-style: none; padding: 0; margin: 0; font-size: .88rem; color: #343a40; }
 .log li { padding: .1rem 0; }
+
+/* same room, own phones */
+.table-code { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; margin: .1rem 0 .6rem; }
+.table-code b { font-size: 1.25rem; letter-spacing: .08em; font-variant-numeric: tabular-nums; background: #fff6d6; border: 2px solid #f0c36a; border-radius: .5rem; padding: .05rem .5rem; }
+.round-fix { margin-top: .7rem; display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
