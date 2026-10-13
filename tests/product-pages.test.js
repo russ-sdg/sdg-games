@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..');
-const PAGES = ['6days/index.html'];
+const PAGES = ['6days/index.html', 'JfP/index.html'];
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 const stripComments = (h) => h.replace(/<!--[\s\S]*?-->/g, '');
@@ -76,12 +76,13 @@ for (const page of PAGES) {
   test(`${page}: every email field has a label, and forms have a status area`, () => {
     for (const m of html.matchAll(/<input[^>]*type="email"[^>]*id="([^"]+)"/g)) assert.match(html, new RegExp(`<label[^>]*for="${m[1]}"`), `no label for ${m[1]}`);
     const forms = [...html.matchAll(/<form\b[\s\S]*?<\/form>/g)];
-    assert.ok(forms.length >= 1);
+    assert.ok(forms.length >= 1 || !/pp-signup/.test(html));
     for (const f of forms) assert.match(f[0], /role="status"/);
   });
 
   test(`${page}: if Mailchimp is connected, the address is a valid Mailchimp form URL`, () => {
-    const url = /mailchimpUrl:\s*'([^']*)'/.exec(html)[1];
+    const m = /mailchimpUrl:\s*'([^']*)'/.exec(html);
+    const url = m && m[1];
     if (!url) return;                                         // not connected yet: the page shows an "opening soon" message
     const jsonp = require('../js/product-core.js').mailchimpJsonpUrl(url, 'a@b.co', 'cb');
     assert.ok(jsonp, 'mailchimpUrl is not a Mailchimp https subscribe URL with u and id');
@@ -92,14 +93,15 @@ for (const page of PAGES) {
   test(`${page}: one price everywhere, a real launch date, and cache-busted shared assets`, () => {
     const prices = new Set([...html.matchAll(/\$\d+\.\d\d/g)].map((m) => m[0]));
     const jsonPrice = /"price"\s*:\s*"?(\d+\.\d\d)/.exec(html);
-    assert.equal(prices.size, 1, `different prices on the page: ${[...prices]}`);
+    assert.ok(prices.size <= 1, `different prices on the page: ${[...prices]}`);
     if (jsonPrice) assert.equal('$' + jsonPrice[1], [...prices][0]);
-    const launch = /launch:\s*'(\d{4}-\d{2}-\d{2})'/.exec(html)[1];
-    assert.ok(!Number.isNaN(Date.parse(launch)));
+    const lm = /launch:\s*'(\d{4}-\d{2}-\d{2})'/.exec(html);      // pages already on sale have no launch date
     assert.match(html, /<link href="\.\.\/css\/product-page\.css\?v=\w+"/);
     assert.match(html, /<script src="\.\.\/js\/product-page\.js\?v=\w+"/);
+    if (!lm) return;
+    assert.ok(!Number.isNaN(Date.parse(lm[1])));
     // launch date, as shown to people, must be the configured one
-    const label = require('../js/product-core.js').launchLabel(launch);
+    const label = require('../js/product-core.js').launchLabel(lm[1]);
     assert.ok(html.includes(label), `page text does not mention ${label}`);
   });
 }

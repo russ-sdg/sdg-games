@@ -1,360 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Journeys for Paul - A Biblical Journey Building Game</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="../css/styles.css" rel="stylesheet" />
-    </head>
-    <body class="sb-nav-fixed">
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='main-nav'></nav>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>Journeys for Paul - A Biblical Journey Game | SDG Games</title>
+<meta name="description" content="Send three evangelists to the churches Paul planted. A Bible journey game for 2-4 players, ages 12+, 15-30 min, $34.99, with a free online version." />
+<meta name="author" content="SDG Strategy, LLC" />
+<link rel="canonical" href="https://sdggames.fun/JfP/" />
 
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <img class="img-responsive img-fluid" style="padding: 10px;" src="../assets/JfP Logo Long Red.png" alt="Journeys for Paul">
-                        <div class="row">
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#description">Game Description</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#play">How to Play</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#variations">Variations</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#buy">How to Buy</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-success text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="play/">Play Online</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="scorepad.html">Scorepad</a>
-                                </div>
-                              </div>
-                          </div>
-                        </div>
-                        <a id="description"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Game Description</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>The Apostle Paul is unfortunately detained, but wants to hear how the churches he planted are doing. He asks his co-laborers <span style='color: green'>Luke</span>, <span style='color: blue'>Titus</span>, and <span style='color: orange'>Silas</span> to visit the churches in the regions of <span style='color: green'>Macedonia & Achia</span> (in present day Greece), <span style='color: purple'>Asia Minor</span>, <span style='color: orange'>Galatia</span> (both in present day Turkey), and the <span style='color: blue'> Islands of the Mediterranean</span>.</p>
-                              <p>Note that most, but not all of the cities on the map are referenced in the New Testament in relation to Paul's church planting journeys. The cities not mentioned in the New Testament were real cities in Paul's time and might or might not have had churches planted during Paul's life. For the purpose of the game, we will assume they did, but we don't really know.</p>
-                              <h4>Your Job</h4>
-                              <p>Your objective is to visit as many churches as possible.</p>
-                              <p>To do so, you direct the movements of these three evangelists:<br />
-                                <span style='color: green'>Luke</span> starts in <span style='color: green'>Philippi</span>,<br />
-                                <span style='color: blue'>Titus</span> starts on <span style='color: blue'>Crete</span>,<br />
-                                <span style='color: orange'>Silas</span> starts in <span style='color: orange'>Antioch</span>.
-                              </p>
-                              <p>They can travel by one of three methods:<br />
-                                <img width=50 src='../assets/JfP road horizontal.png'>Roman Road,<br />
-                                <img width=50 src='../assets/JfP footpath horizontal.png'>Footpath, or<br />
-                                <img width=50 src='../assets/JfP boat horizontal.png'>Boat.<br />
-                              </p>
-                            </div>
-                        </div>
-                        <a id="play"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How To Play</strong>
-                            </div>
-                            <div class="card-body">
-                              <h4>Components/Setup</h4>
-                              <p>Each player takes a Map/Scoring sheet and three highlighters (<span style='color: green'>Green</span>, <span style='color: orange'>Orange</span>, and <span style='color: blue'>Blue</span>).</p>
-                              <p>Cities on the map are divided into four regions for scoring, indicated by the color of each city dot:<br />
-                                <img width=30 src='../assets/JfP Green Dot.png'>The combined <span style='color: green'>Macedonia & Achaia</span><br />
-                                <img width=30 src='../assets/JfP Purple Dot.png'><span style='color: purple'>Asia Minor</span><br />
-                                <img width=30 src='../assets/JfP Orange Dot.png'><span style='color: orange'>Galatia</span><br />
-                                <img width=30 src='../assets/JfP Blue Dot.png'><span style='color: blue'>The Mediterranean Islands</span>
-                              </p>
-                              <p>The highlighters are used to record the actions of the three evangelists:<br />
-                                <span style='background-color: mediumspringgreen; color: black;'>Green</span> for <span style='color: green'>Luke</span> (who begins in <span style='color: green'>Philippi</span>)</br>
-                                <span style='background-color: moccasin; color: black;'>Orange</span> for <span style='color: orange'>Silas</span> (who begins in <span style='color: orange'>Antioch</span>)</br>
-                                <span style='background-color: lightblue; color: black;'>Blue</span> for <span style='color: blue'>Titus</span> (who begins on <span style='color: blue'>Crete</span>)</br>
-                              </p>
-                              <p>The game die has 8 sides, representing 3 modes of travel and a "Player's Choice":<br />
-                                <img width=40 src='../assets/road-d8-v2-outlined.png'>Roman Road<br />
-                                <img width=40 src='../assets/ftpath-d8-v2-outlined.png'>Footpath<br />
-                                <img width=40 src='../assets/boat-d8-v2-outlined.png'>Boat<br />
-                                <img width=40 src='../assets/wild-d8-v2-outlined.png'>Player's Choice
+<!-- Open Graph / social share -->
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="SDG Games" />
+<meta property="og:title" content="Journeys for Paul - A Biblical Journey Game" />
+<meta property="og:description" content="Send three evangelists to the churches Paul planted. Play free online, or get the game." />
+<meta property="og:url" content="https://sdggames.fun/JfP/" />
+<meta property="og:image" content="https://sdggames.fun/assets/jfp/end-scorecard.webp" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Journeys for Paul - A Biblical Journey Game" />
+<meta name="twitter:description" content="Send three evangelists to the churches Paul planted. Play free online, or get the game." />
+<meta name="twitter:image" content="https://sdggames.fun/assets/jfp/end-scorecard.webp" />
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Journeys for Paul",
+  "description": "A roll-and-travel Bible game. Direct Luke, Silas and Titus along Roman roads, footpaths and sea routes to visit the churches Paul planted, and score for the regions you reach and the churches you serve.",
+  "image": ["https://sdggames.fun/assets/jfp/end-scorecard.webp"],
+  "brand": { "@type": "Brand", "name": "SDG Games" },
+  "category": "Board game",
+  "url": "https://sdggames.fun/JfP/",
+  "offers": { "@type": "Offer", "price": "34.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://sdggames.fun/JfP/" }
+}
+</script>
 
-                              <h4>Game Play</h4>
-                            <p>Players take turns rolling the 8-sided die to determine the mode of travel for the turn. If the die shows the Player's Choice question mark, then the player who rolled announces which of the modes of travel to use this turn.</p>
-                            <p>The player who rolled takes one of two actions with ONE to THREE of the evangelists (<span style='color: green'>Luke</span>, <span style='color: orange'>Silas</span>, and/or <span style='color: blue'>Titus</span>). All other players MAY choose ONE of the evangelists with which to take one of the two actions:
-                              <ol>
-                                <li>If the evangelist can move using the mode of travel, then draw a line along that route to the next city. An evangelist cannot re-use a route between two cities (in either direction), but other evangelists can.</li>
-                                <li>If an evangelist cannot move, announce that he is PREACHING in that city. If this is the first time he has preached in that city then circle the city dot with his color. If this is the second (or more) time, and the evangelist has visited at least two regions, circle the dot again and announce that the evangelist has been CALLED as a PASTOR. (That evangelist can no longer travel.)</li>
-                              </ol>
-                            </p>
-                            <p>If neither of those actions can be taken for any of the evangelists, then that player passes for this turn.</p>
-                              <p>For example, if the first player rolls a Road, then he could move Luke from Philippi to Neapolis, move Silas from Antioch to Iconium, and have Titus preach on Crete, as shown below.</p>
-                              <div class="text-center" style="padding: 10px">
-                                <img class="img-responsive img-fluid" src="../assets/JfP Game Start Scorecard v1.png">
-                              </div>
+<link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap) -->
+<link href="../css/styles.css" rel="stylesheet" />
+<link href="../css/product-page.css?v=20261016" rel="stylesheet" />
+<link href="jfp.css?v=20261016" rel="stylesheet" />
+<link rel="preload" as="image" href="../assets/jfp/end-scorecard.webp" fetchpriority="high" />
 
-                              <h4>Ending the Game</h4>
-                              <p>The game ends when one player has had all three evangelists called as pastors or none of the players can move any of their evangelists.</p>
-                              <p>At that point, everyone calculates their score using the Scoring section of their Map/Scoring sheet:
-                                <ul>
-                                  <li>Four points are scored for each region visited by each of the evangelists.</li>
-                                  <li>Three points are scored for each time any evangelist preached (only counting one time for the city where the evangelist is called as pastor).</li>
-                                  <li>Five points are scored for each evangelist called as a pastor.</li>
-                                  <li>Two points are deducted for any city not visited by any evangelist.</li>
-                                </ul>
-                              </p>
-                              <p>The highest score wins the game.</p>
-                              <p>See the example below:</p>
-                              <div class="text-center" style="padding: 10px">
-                                <img class="img-responsive img-fluid" src="../assets/JfP Game End Scorecard v1.png">
-                              </div>
-                            </div>
-                        </div>
-                        <a id="variations"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Game Variations</strong>
-                            </div>
-                            <div class="card-body">
-                              <h4>Game Variant Ideas:</h4>
+<style>
+/* Journeys for Paul palette: deep sea blue and map blue with the logo's red, taken from the box and map art */
+.pp { --pp-primary: #17325c; --pp-accent: #b3241f; --pp-gold: #f6c453; --pp-gold-ink: #1b2a44;
+      --pp-hero: linear-gradient(135deg, #0f2342 0%, #17325c 55%, #2a6a9a 100%); }
+</style>
+</head>
+<body class="sb-nav-fixed pp">
+<a class="pp-skip" href="#story">Skip to content</a>
+<!-- Responsive navbar (loaded from nav-div.html by ../js/scripts.js) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
 
-                              <ul>
-                                <li>For a potentially longer game, only allow players to PREACH or be CALLED on their turn (when they are the ones rolling the die).</li>
-                                <li>For a potentially shorter game, allow evangelists to be CALLED without having visited multiple regions.</li>
-                              </ul>
+<main>
+<!-- ============ HERO ============ -->
+<header class="pp-hero">
+  <div class="pp-wrap pp-hero-grid">
+    <div>
+      <p class="pp-eyebrow">A biblical journey game</p>
+      <h1>Journeys for Paul</h1>
+      <p class="pp-tagline">Paul is in prison and wants news of the churches he planted. Send his co&#8209;workers to find out&nbsp;&mdash; and see who visits the most.</p>
+      <ul class="pp-facts" aria-label="Game facts">
+        <li>2&ndash;4 players</li>
+        <li>Ages 12+</li>
+        <li>15&ndash;30 min</li>
+        <li>Free online version</li>
+      </ul>
+      <p class="pp-launch"><strong>$34.99</strong></p>
+      <div class="jfp-cta">
+        <a class="pp-btn pp-btn-gold" href="play/">Play free online</a>
+        <div id="buy-now" class="pp-shopify" data-state="live"></div>
+      </div>
+      <p class="pp-fine">Solo against computer opponents, pass&#8209;and&#8209;play, or everyone on their own phone. No sign&#8209;up.</p>
+    </div>
 
-                            </div>
-                        </div>
-                        <a id="buy"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How to Buy</strong>
-                            </div>
-                            <div class="card-body">
-                              <p><em>Journeys for Paul</em> is exclusively available from the SDG Biblical Wisdom shop.<br />
-                                <div id='product-component-1705161446733'></div>
-<script type="text/javascript">
-/*<![CDATA[*/
-(function () {
-  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-  if (window.ShopifyBuy) {
-    if (window.ShopifyBuy.UI) {
-      ShopifyBuyInit();
-    } else {
-      loadScript();
-    }
-  } else {
-    loadScript();
-  }
-  function loadScript() {
-    var script = document.createElement('script');
-    script.async = true;
-    script.src = scriptURL;
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-    script.onload = ShopifyBuyInit;
-  }
-  function ShopifyBuyInit() {
-    var client = ShopifyBuy.buildClient({
-      domain: 'bd30ce-2.myshopify.com',
-      storefrontAccessToken: '7bf5f03bf3c7ba399d3ef67f8250c103',
-    });
-    ShopifyBuy.UI.onReady(client).then(function (ui) {
-      ui.createComponent('product', {
-        id: '8122523943061',
-        node: document.getElementById('product-component-1705161446733'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: {
-  "product": {
-    "styles": {
-      "product": {
-        "@media (min-width: 601px)": {
-          "max-width": "calc(25% - 20px)",
-          "margin-left": "20px",
-          "margin-bottom": "50px"
-        }
-      },
-      "button": {
-        "font-family": "Avant Garde, sans-serif",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        "background-color": "#323ef9",
-        ":focus": {
-          "background-color": "#2d38e0"
-        },
-        "border-radius": "6px",
-        "padding-left": "20px",
-        "padding-right": "20px"
-      },
-      "quantityInput": {
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px"
-      }
-    },
-    "contents": {
-      "img": false,
-      "title": false,
-      "price": false
-    },
-    "text": {
-      "button": "Buy Journeys for Paul"
-    }
-  },
-  "productSet": {
-    "styles": {
-      "products": {
-        "@media (min-width: 601px)": {
-          "margin-left": "-20px"
-        }
-      }
-    }
-  },
-  "modalProduct": {
-    "contents": {
-      "img": false,
-      "imgWithCarousel": true,
-      "button": false,
-      "buttonWithQuantity": true
-    },
-    "styles": {
-      "product": {
-        "@media (min-width: 601px)": {
-          "max-width": "100%",
-          "margin-left": "0px",
-          "margin-bottom": "0px"
-        }
-      },
-      "button": {
-        "font-family": "Avant Garde, sans-serif",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        "background-color": "#323ef9",
-        ":focus": {
-          "background-color": "#2d38e0"
-        },
-        "border-radius": "6px",
-        "padding-left": "20px",
-        "padding-right": "20px"
-      },
-      "quantityInput": {
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px"
-      }
-    },
-    "text": {
-      "button": "Add to cart"
-    }
-  },
-  "option": {},
-  "cart": {
-    "styles": {
-      "button": {
-        "font-family": "Avant Garde, sans-serif",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        "background-color": "#323ef9",
-        ":focus": {
-          "background-color": "#2d38e0"
-        },
-        "border-radius": "6px"
-      }
-    },
-    "text": {
-      "total": "Subtotal",
-      "button": "Checkout"
-    }
-  },
-  "toggle": {
-    "styles": {
-      "toggle": {
-        "font-family": "Avant Garde, sans-serif",
-        "background-color": "#323ef9",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        ":focus": {
-          "background-color": "#2d38e0"
-        }
-      },
-      "count": {
-        "font-size": "14px"
-      }
-    }
-  }
-},
-      });
-    });
-  }
-})();
-/*]]>*/
-</script></p>
+    <figure class="jfp-hero-art">
+      <button type="button" class="pp-zoom" data-zoom="../assets/jfp/end-scorecard.webp" data-caption="A finished game: three evangelists&rsquo; journeys marked on the map, and the scoring panel filled in. This player scored 84.">
+        <img src="../assets/jfp/end-scorecard.webp" width="800" height="400" alt="A finished Journeys for Paul map sheet. Green, orange and blue lines trace three evangelists across Greece, Turkey and the islands, with circles on the cities where they preached. The scoring panel on the right adds up to 84." />
+      </button>
+      <figcaption>A finished game: three journeys and a score of 84.</figcaption>
+    </figure>
+  </div>
+</header>
 
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
+<!-- ============ STICKY TABS ============ -->
+<div class="pp-tabs">
+  <div class="pp-wrap">
+    <nav aria-label="On this page">
+      <a href="#story">The Story</a>
+      <a href="#play">How to Play</a>
+      <a href="#online">Play Online</a>
+      <a href="#variations">Variations</a>
+      <a href="#buy">Get the Game</a>
+    </nav>
+    <a class="pp-btn pp-btn-primary" href="play/">Play free</a>
+  </div>
+</div>
+
+<!-- ============ THE STORY ============ -->
+<section class="pp-band" id="story" aria-labelledby="story-h">
+  <div class="pp-wrap jfp-two">
+    <div>
+      <h2 id="story-h">Paul wants news from the churches</h2>
+      <p class="pp-lede">The Apostle Paul is detained, but he wants to hear how the churches he planted are doing. He asks his co&#8209;workers <b class="jfp-luke">Luke</b>, <b class="jfp-titus">Titus</b> and <b class="jfp-silas">Silas</b> to visit them across Macedonia &amp; Achaia (present&#8209;day Greece), Asia Minor and Galatia (present&#8209;day Turkey), and the islands of the Mediterranean.</p>
+      <p>Most &mdash; but not all &mdash; of the cities on the map are linked in the New Testament to Paul&rsquo;s church&#8209;planting journeys. The others were real cities of his day that might or might not have had churches planted in Paul&rsquo;s lifetime. For the game we assume they did, though we don&rsquo;t really know.</p>
+      <h3>Your job</h3>
+      <p>Visit as many churches as you can. You direct three evangelists, each starting in a different place and each marked in his own colour:</p>
+      <ul class="jfp-evs">
+        <li><span class="dot" style="background:#2e9b47"></span><b class="jfp-luke">Luke</b> starts in <b>Philippi</b></li>
+        <li><span class="dot" style="background:#e8851c"></span><b class="jfp-silas">Silas</b> starts in <b>Antioch</b></li>
+        <li><span class="dot" style="background:#2a62d6"></span><b class="jfp-titus">Titus</b> starts on <b>Crete</b></li>
+      </ul>
+    </div>
+    <figure class="jfp-glimpse">
+      <button type="button" class="pp-zoom" data-zoom="../assets/jfp/glimpse.webp" data-caption="A glimpse of the map: roads (solid lines), footpaths (dashed) and sea routes, with cities colour-coded by region.">
+        <img src="../assets/jfp/glimpse.webp" width="400" height="300" loading="lazy" alt="A close view of the Journeys for Paul map around Asia Minor and Galatia, with solid road lines, dashed footpaths and cities coloured by region." />
+      </button>
+      <figcaption>Roads, footpaths and sea routes link the cities.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- Three ways to travel + four regions -->
+<section class="pp-band alt" aria-labelledby="travel-h">
+  <div class="pp-wrap">
+    <h2 id="travel-h">Three ways to travel, four regions to reach</h2>
+    <div class="jfp-two jfp-info">
+      <div>
+        <h3>Travel</h3>
+        <p>Evangelists move by one of three methods &mdash; the die decides which each turn.</p>
+        <ul class="jfp-icons">
+          <li><img src="../assets/JfP road horizontal.png" width="75" height="30" alt="" />Roman Road</li>
+          <li><img src="../assets/JfP footpath horizontal.png" width="75" height="30" alt="" />Footpath</li>
+          <li><img src="../assets/JfP boat horizontal.png" width="75" height="30" alt="" />Boat</li>
+        </ul>
+        <p>The 8&#8209;sided die shows Road, Footpath or Boat &mdash; or a question mark, <b>Player&rsquo;s Choice</b>, which lets the roller pick the mode.</p>
+        <ul class="jfp-dice" aria-label="Die faces">
+          <li><img src="../assets/road-d8-v2-outlined.png" width="60" height="54" alt="Road face" /></li>
+          <li><img src="../assets/ftpath-d8-v2-outlined.png" width="60" height="54" alt="Footpath face" /></li>
+          <li><img src="../assets/boat-d8-v2-outlined.png" width="60" height="54" alt="Boat face" /></li>
+          <li><img src="../assets/wild-d8-v2-outlined.png" width="60" height="54" alt="Player&rsquo;s Choice face" /></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Regions</h3>
+        <p>City dots are coloured by region, and each region an evangelist visits scores.</p>
+        <ul class="jfp-icons">
+          <li><img src="../assets/JfP Green Dot.png" width="26" height="26" alt="" /><span style="color:#2a7a3b"><b>Macedonia &amp; Achaia</b></span></li>
+          <li><img src="../assets/JfP Purple Dot.png" width="26" height="26" alt="" /><span style="color:#7d2d8a"><b>Asia Minor</b></span></li>
+          <li><img src="../assets/JfP Orange Dot.png" width="26" height="26" alt="" /><span style="color:#a8570b"><b>Galatia</b></span></li>
+          <li><img src="../assets/JfP Blue Dot.png" width="26" height="26" alt="" /><span style="color:#2250b8"><b>The Mediterranean Islands</b></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW TO PLAY ============ -->
+<section class="pp-band" id="play" aria-labelledby="play-h">
+  <div class="pp-wrap">
+    <h2 id="play-h">How to play</h2>
+    <p class="pp-lede">Roll the die, move your evangelists, and mark every step on your own map. Every roll is a chance for everyone to act.</p>
+
+    <ol class="pp-steps">
+      <li><h3>Roll</h3><p>Players take turns rolling the die to set the mode of travel for the turn. On a Player&rsquo;s Choice, the roller names the mode.</p></li>
+      <li><h3>Move or preach</h3><p>The roller acts with one to three evangelists. Every other player may act with one. Move along a route, or preach where you stand.</p></li>
+      <li><h3>Get called</h3><p>Preach in a city twice (after visiting two regions) and the evangelist is <em>called as a pastor</em> &mdash; worth the most points, and his travelling ends.</p></li>
+    </ol>
+
+    <div class="pp-acc">
+      <details open>
+        <summary>Components &amp; setup</summary>
+        <div class="body">
+          <p>Each player takes a Map/Scoring sheet and three highlighters: <b class="jfp-luke">green for Luke</b>, <b class="jfp-silas">orange for Silas</b> and <b class="jfp-titus">blue for Titus</b>. The highlighters record each evangelist&rsquo;s actions on the map.</p>
+          <p>Cities are divided into four regions for scoring, shown by the colour of each city&rsquo;s dot. Luke begins in Philippi, Silas in Antioch and Titus on Crete.</p>
         </div>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2024</span> SDG Strategy, LLC | To God be the glory</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- Core theme JS-->
-        <script src="../js/scripts.js"></script>
+      </details>
+      <details>
+        <summary>A turn, in detail</summary>
+        <div class="body">
+          <p>The player who rolled takes one of two actions with <b>one to three</b> of the evangelists. All other players <i>may</i> choose <b>one</b> evangelist and take one of the same two actions:</p>
+          <ul>
+            <li><b>Move.</b> If the evangelist can move by the rolled mode, draw a line along that route to the next city. An evangelist can&rsquo;t reuse a route between two cities (in either direction), though other evangelists can.</li>
+            <li><b>Preach.</b> If an evangelist can&rsquo;t move, announce that he is preaching in that city. The first time, circle the city dot in his colour. The second time (or more), if he has visited at least two regions, circle it again and announce he has been <b>called as a pastor</b>. He can no longer travel.</li>
+          </ul>
+          <p>If none of the evangelists can do either, that player passes for the turn.</p>
+          <p>For example, on a Road roll the first player could move Luke from Philippi to Neapolis, move Silas from Antioch to Iconium, and have Titus preach on Crete.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Ending the game</summary>
+        <div class="body"><p>The game ends when one player has all three evangelists called as pastors, or when no player can move any of their evangelists. Everyone then totals their score on the Scoring panel of their sheet.</p></div>
+      </details>
+      <details>
+        <summary>Scoring</summary>
+        <div class="body"><ul>
+          <li><b>+4</b> for each region visited by each evangelist.</li>
+          <li><b>+3</b> for each time any evangelist preached (counting once for the city where an evangelist is called as pastor).</li>
+          <li><b>+5</b> for each evangelist called as a pastor.</li>
+          <li><b>&minus;2</b> for each city not visited by any evangelist.</li>
+        </ul>
+        <p>The highest score wins.</p></div>
+      </details>
+    </div>
 
-    </body>
+    <div class="jfp-sheets">
+      <figure>
+        <button type="button" class="pp-zoom" data-zoom="../assets/jfp/start-scorecard.webp" data-caption="The start of a game: each player marks their own map and scoring sheet.">
+          <img src="../assets/jfp/start-scorecard.webp" width="800" height="400" loading="lazy" alt="A blank Journeys for Paul map and scoring sheet at the start of a game." />
+        </button>
+        <figcaption>The start: your map and scoring sheet.</figcaption>
+      </figure>
+      <figure>
+        <button type="button" class="pp-zoom" data-zoom="../assets/jfp/end-scorecard.webp" data-caption="A finished game: three journeys and the scoring panel filled in. This player scored 84.">
+          <img src="../assets/jfp/end-scorecard.webp" width="800" height="400" loading="lazy" alt="A finished map and scoring sheet showing three evangelists&rsquo; journeys and a total of 84 points." />
+        </button>
+        <figcaption>The end: 3 regions each for Luke and Silas, 4 for Titus, 11 preaches, 3 called, 2 cities missed: 84 points.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLAY ONLINE ============ -->
+<section class="pp-band alt" id="online" aria-labelledby="online-h">
+  <div class="pp-wrap">
+    <h2 id="online-h">Play it free, right now</h2>
+    <p class="pp-lede">The whole game runs in your browser &mdash; nothing to install, no account. Try it before you buy, or keep playing when the board game is packed away.</p>
+    <ul class="pp-types jfp-modes">
+      <li class="pp-type"><h3>Solo</h3><p>Play against computer opponents who each plan their own journey by the same rules, at three skill levels.</p></li>
+      <li class="pp-type"><h3>Pass &amp; play</h3><p>Two or more people share one device, each with their own map.</p></li>
+      <li class="pp-type"><h3>Same room, own phones</h3><p>Like the table game: the roller announces the roll, and everyone moves on their own phone.</p></li>
+    </ul>
+    <p>You also get a Scripture snippet each time an evangelist preaches or is called, a replay of each player&rsquo;s route, and a shareable image of your finished map. Choose a <b>fast game</b> or a <b>longer game</b>.</p>
+    <p><a class="pp-btn pp-btn-primary" href="play/">Start a free game</a> &nbsp; <a href="scorepad.html">Playing the board game? Open the scorepad</a></p>
+  </div>
+</section>
+
+<!-- ============ VARIATIONS ============ -->
+<section class="pp-band" id="variations" aria-labelledby="variations-h">
+  <div class="pp-wrap">
+    <h2 id="variations-h">Game variations</h2>
+    <ul class="jfp-var">
+      <li><h3>A longer game</h3><p>Only allow players to preach or be called on their own turn &mdash; when they are the one rolling the die.</p></li>
+      <li><h3>A shorter game</h3><p>Allow evangelists to be called without having visited multiple regions.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ GET THE GAME ============ -->
+<section class="pp-cta" id="buy" aria-labelledby="buy-h">
+  <div class="pp-wrap">
+    <h2 id="buy-h">Get Journeys for Paul</h2>
+    <p><strong>$34.99</strong> &middot; available exclusively from the SDG Biblical Wisdom shop.</p>
+    <div class="pp-shopify" data-state="live"></div>
+    <p class="pp-fine" style="margin-top:1rem">Want to try first? <a href="play/" style="color:#fff">Play it free online</a>.</p>
+  </div>
+</section>
+</main>
+
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+<div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+</footer>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- Core theme JS-->
+<script src="../js/scripts.js"></script>
+
+<!-- ===== Page settings ===== -->
+<script>
+window.SDG_PRODUCT = {
+  // On sale now: the Shopify product id below turns each ".pp-shopify" spot into a buy button.
+  productId: '8122523943061',
+  buttonText: 'Buy Journeys for Paul',
+};
+</script>
+<script src="../js/product-core.js?v=20261016"></script>
+<script src="../js/product-page.js?v=20261016"></script>
+</body>
 </html>

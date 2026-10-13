@@ -1,0 +1,32 @@
+/* Journeys for Paul: page-specific styles (the shared design is css/product-page.css) */
+.jfp-cta { display: flex; flex-wrap: wrap; align-items: center; gap: .9rem; margin: 1rem 0 .6rem; }
+.jfp-cta .pp-shopify { min-height: 2.8rem; }
+.jfp-hero-art { margin: 0; max-width: 560px; width: 100%; margin-left: auto; }
+.jfp-hero-art .pp-zoom { display: block; width: 100%; border-radius: 10px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,.45); background: #dbeafe; }
+.jfp-hero-art img { width: 100%; height: auto; display: block; }
+.jfp-hero-art figcaption { margin-top: .6rem; text-align: center; color: rgba(255,255,255,.93); font-size: .92rem; }
+.jfp-two { display: grid; grid-template-columns: 1.3fr 1fr; gap: 2.2rem; align-items: start; }
+.jfp-info { grid-template-columns: 1fr 1fr; }
+.jfp-glimpse { margin: 0; }
+.jfp-glimpse .pp-zoom, .jfp-sheets .pp-zoom { display: block; width: 100%; border-radius: 10px; overflow: hidden; box-shadow: 0 6px 18px rgba(23,50,92,.25); }
+.jfp-glimpse img, .jfp-sheets img { width: 100%; height: auto; display: block; }
+.jfp-glimpse figcaption, .jfp-sheets figcaption { margin-top: .5rem; color: var(--pp-muted); font-size: .92rem; text-align: center; }
+.jfp-luke { color: #1f7a35; } .jfp-silas { color: #a85a05; } .jfp-titus { color: #2250b8; }
+.jfp-evs, .jfp-icons, .jfp-dice, .jfp-var { list-style: none; padding: 0; margin: .8rem 0; }
+.jfp-evs li { display: flex; align-items: center; gap: .6rem; padding: .35rem 0; font-size: 1.05rem; }
+.jfp-evs .dot { width: 1.1rem; height: 1.1rem; border-radius: 50%; flex: none; }
+.jfp-icons li { display: flex; align-items: center; gap: .8rem; padding: .3rem 0; }
+.jfp-dice { display: flex; flex-wrap: wrap; gap: .6rem; }
+.jfp-sheets { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-top: 2rem; }
+.jfp-sheets figure { margin: 0; }
+.jfp-modes { list-style: none; padding: 0; }
+.jfp-var { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.jfp-var li { background: var(--pp-surface); border: 1px solid var(--pp-line); border-radius: var(--pp-radius); padding: 1.1rem 1.25rem; }
+.jfp-var h3 { margin: 0 0 .3rem; font-size: 1.15rem; }
+.jfp-var p { margin: 0; }
+@media (max-width: 860px) {
+  .jfp-two, .jfp-info, .jfp-sheets, .jfp-var { grid-template-columns: 1fr; }
+  .jfp-hero-art { margin: 0 auto; }
+}
+.jfp-two h3, .jfp-var h3 { font-weight: 700; font-size: 1.2rem; margin: 1.2rem 0 .3rem; }
+.jfp-info h3 { margin-top: 0; }
