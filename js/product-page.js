@@ -35,29 +35,44 @@
     Object.keys(byId).forEach(function (id) { var s = document.getElementById(id); if (s) io.observe(s); });
   }
 
-  // ---- lightbox for card art ---------------------------------------------------------
-  var zoomers = [].slice.call(document.querySelectorAll('[data-zoom]'));
-  if (zoomers.length && typeof HTMLDialogElement === 'function') {
-    var dlg = document.createElement('dialog');
-    dlg.className = 'pp-lightbox';
-    dlg.setAttribute('aria-label', 'Card viewer');
-    dlg.innerHTML = '<figure><img alt=""><figcaption></figcaption></figure><div class="bar"><button type="button" data-d="-1">&larr; Previous</button><button type="button" data-d="1">Next &rarr;</button><button type="button" data-d="0">Close</button></div>';
-    document.body.appendChild(dlg);
-    var img = dlg.querySelector('img'), cap = dlg.querySelector('figcaption'), cur = 0;
-    var show = function (i) {
-      cur = (i + zoomers.length) % zoomers.length;
-      img.src = zoomers[cur].getAttribute('data-zoom');
-      img.alt = cap.textContent = zoomers[cur].getAttribute('data-caption') || '';
+  // ---- lightbox for card art -------------------------------------------------------------------------------------
+  // Works on whatever [data-zoom] images are visible right now (so a filtered gallery steps through just the shown cards),
+  // and on ones added after the page loaded. The same card shown in several places appears once.
+  if (typeof HTMLDialogElement === 'function') {
+    var dlg, img, cap, list = [], cur = 0;
+    var build = function () {
+      dlg = document.createElement('dialog');
+      dlg.className = 'pp-lightbox';
+      dlg.setAttribute('aria-label', 'Card viewer');
+      dlg.innerHTML = '<figure><img alt=""><figcaption></figcaption></figure><div class="bar"><button type="button" data-d="-1">&larr; Previous</button><button type="button" data-d="1">Next &rarr;</button><button type="button" data-d="0">Close</button></div>';
+      document.body.appendChild(dlg);
+      img = dlg.querySelector('img'); cap = dlg.querySelector('figcaption');
+      dlg.addEventListener('click', function (e) {
+        var d = e.target.getAttribute && e.target.getAttribute('data-d');
+        if (d === '0' || e.target === dlg) dlg.close();
+        else if (d) show(cur + Number(d));
+      });
+      dlg.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft') show(cur - 1);
+        if (e.key === 'ArrowRight') show(cur + 1);
+      });
     };
-    zoomers.forEach(function (z, i) { z.addEventListener('click', function () { show(i); dlg.showModal(); }); });
-    dlg.addEventListener('click', function (e) {
-      var d = e.target.getAttribute && e.target.getAttribute('data-d');
-      if (d === '0' || e.target === dlg) dlg.close();
-      else if (d) show(cur + Number(d));
-    });
-    dlg.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowLeft') show(cur - 1);
-      if (e.key === 'ArrowRight') show(cur + 1);
+    var show = function (i) {
+      cur = (i + list.length) % list.length;
+      img.src = list[cur].url;
+      img.alt = cap.textContent = list[cur].caption;
+    };
+    document.addEventListener('click', function (e) {
+      var z = e.target.closest && e.target.closest('[data-zoom]');
+      if (!z) return;
+      if (!dlg) build();
+      var seen = {};
+      var scope = z.closest('.pp-grid') || document;   // opened from the gallery: step through just the cards shown there
+      list = [].slice.call(scope.querySelectorAll('[data-zoom]')).filter(function (n) { return n.offsetParent !== null; })
+        .map(function (n) { return { url: n.getAttribute('data-zoom'), caption: n.getAttribute('data-caption') || '' }; })
+        .filter(function (x) { if (seen[x.url]) return false; seen[x.url] = true; return true; });
+      show(Math.max(0, list.map(function (x) { return x.url; }).indexOf(z.getAttribute('data-zoom'))));
+      dlg.showModal();
     });
   }
 
