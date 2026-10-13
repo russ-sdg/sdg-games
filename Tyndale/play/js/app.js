@@ -31,7 +31,7 @@ const you = () => S.seats[0];
 const humanIn = () => !you().out;
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function say(text) { S = E.logPublic(S, text); }
-const describe = (r) => `${LOC_TEXT[r.loc].toLowerCase()}; ${r.bible === 'rumors' ? 'rumors of a translation nearby' : r.bible === 'nothing' ? 'nothing to report' : 'found ' + E.PUB_NAMES[r.bible]}`;
+const describe = (r) => (r.bible === 'rumors' ? 'rumors of a translation nearby' : r.bible === 'nothing' ? 'nothing to report' : 'found ' + E.PUB_NAMES[r.bible]);
 
 function ask({ title, text = '', list = null, choices }) {
   return new Promise((resolve) => {
