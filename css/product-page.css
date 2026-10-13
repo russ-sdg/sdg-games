@@ -175,3 +175,8 @@
 @media (max-width: 860px) { .pp-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 560px) { .pp-grid { grid-template-columns: repeat(2, 1fr); gap: .7rem; } }
 @media (max-width: 480px) { .pp-days { gap: .7rem; } .pp-day-art .num { font-size: 3rem; } .pp-tabs .pp-btn { display: none; } }
+
+/* The Shopify buy button in the closing call to action: centered, without Shopify's own margins */
+.pp-cta .pp-shopify { display: flex; justify-content: center; }
+.pp-cta .pp-shopify, .pp-cta .pp-shopify > *, .pp-cta .shopify-buy__product, .pp-cta .shopify-buy__btn-wrapper { margin-left: 0 !important; margin-right: 0 !important; max-width: none !important; width: auto !important; }
+.pp-cta .shopify-buy__btn-wrapper { margin: 0 !important; }
