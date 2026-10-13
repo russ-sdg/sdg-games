@@ -262,3 +262,18 @@ test('randomised games always finish and never break an invariant', () => {
     }
   }
 });
+
+test('a non-roller may decline to act; the roller may not while anything is possible', () => {
+  let g = newGame({ kind: 'pass', rulesId: 'fast', names: ['A', 'B'] });
+  g = roll(g, ROAD);
+  assert.equal(canEndTurn(g), false);                 // roller has moves available
+  g = move(g, 'luke', 'road:Neapolis~Philippi');
+  g = endTurn(g);                                     // roller done
+  assert.equal(g.role, 'other');
+  assert.equal(nothingToDo(g), false);                // B could move...
+  assert.equal(canEndTurn(g), true);                  // ...but "may" act, so B can decline
+  const before = JSON.stringify(g.sheets[1]);
+  g = endTurn(g);
+  assert.equal(JSON.stringify(g.sheets[1]), before);
+  assert.ok(g.log.some((l) => /B chooses not to act/.test(l.text)));
+});

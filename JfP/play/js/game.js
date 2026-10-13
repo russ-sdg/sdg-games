@@ -201,9 +201,10 @@ export function nothingToDo(state) {
   return !anyOption(sheetOf(state), state.mode, state.role, rules(state), state.acted);
 }
 
-// May the actor end their turn now? (Not before acting, unless they truly cannot.)
+// May the actor end their turn now? The roller must act if anything at all is possible; every other player
+// "may" act, so they can always decline.
 export function canEndTurn(state) {
-  return state.phase === 'act' && (state.actions > 0 || nothingToDo(state));
+  return state.phase === 'act' && (state.role === 'other' || state.actions > 0 || nothingToDo(state));
 }
 
 export function move(state, evId, edgeId) {
@@ -239,7 +240,10 @@ export function preach(state, evId) {
 export function endTurn(state) {
   if (!canEndTurn(state)) throw new Error('cannot end turn yet');
   const s = clone(state);
-  if (s.actions === 0) push(s, `${s.seatNames[s.actor]} passes.`);
+  if (s.actions === 0) {
+    const could = s.role === 'other' && !nothingToDo(state);        // chose not to use an optional action
+    push(s, `${s.seatNames[s.actor]} ${could ? 'chooses not to act' : 'passes'}.`);
+  }
   s.lastPreach = null;
   if (s.queue.length) {
     startActor(s);
