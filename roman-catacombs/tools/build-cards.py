@@ -3,7 +3,7 @@
 
   python3 roman-catacombs/tools/build-cards.py          (run from the repo root)
 
-The 90 card faces are the ones the scorepad's Play mode deals: the list `cardImages` in js/Catacombs.js, with
+The 90 card faces are the ones the scorepad's Play mode deals: the list `DECK` in roman-catacombs/play/js/books.js, with
 each face in assets/<name>sm.png. This converts them to WebP (assets/roman-catacombs/cards/), sorts them into
 the seven categories in canon order, and writes roman-catacombs/cards-data.js for the product page gallery.
 """
@@ -35,8 +35,8 @@ BOOKS = [  # canon order: (group, display name)
 TOKEN = {b.replace(' ', '').replace('ofSolomon', ''): (g, b, i) for i, (g, b) in enumerate(BOOKS)}   # 'Song' -> Song of Solomon
 
 def main():
-    src = open(os.path.join(ROOT, 'js', 'Catacombs.js'), encoding='utf-8').read()
-    names = json.loads(re.search(r'cardImages = (\[.*?\]);', src).group(1))
+    src = open(os.path.join(ROOT, 'roman-catacombs', 'play', 'js', 'books.js'), encoding='utf-8').read()
+    names = json.loads(re.search(r'DECK = (\[.*?\]);', src, re.S).group(1))
     os.makedirs(OUT, exist_ok=True)
     cards, wanted = [], set()
     for n in names:
