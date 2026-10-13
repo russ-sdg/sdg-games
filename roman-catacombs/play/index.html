@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Roman Catacombs scorecard and online play: keep score for your board game, or play solo against the deck." />
+    <title>Roman Catacombs Scorecard &amp; Play Online - SDG Games</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="play.css?v=20261021" rel="stylesheet" />
+</head>
+<body class="sb-nav-fixed">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
+
+    <main class="rc container-fluid px-3 pb-5">
+        <div class="rc-title d-flex flex-wrap align-items-center gap-3 py-3">
+            <a href="../index.html"><img class="rc-logo" src="../../assets/RomanCatacombsTitle.png" alt="Roman Catacombs" /></a>
+            <span class="badge text-bg-secondary">Scorecard &amp; play</span>
+            <a class="ms-auto small" href="../index.html">About the game</a>
+        </div>
+
+        <!-- ================= SETUP ================= -->
+        <section id="setup" aria-labelledby="setup-title">
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h1 class="h3" id="setup-title">New game</h1>
+                            <div id="resume" class="alert alert-info d-flex flex-wrap align-items-center gap-2" hidden>
+                                <span id="resume-text">You have a game in progress.</span>
+                                <button type="button" class="btn btn-sm btn-primary" id="resume-btn">Resume</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="discard-btn">Discard it</button>
+                            </div>
+                            <fieldset class="mb-3">
+                                <legend class="h6">How do you want to use it?</legend>
+                                <div class="choice-grid">
+                                    <label class="choice"><input type="radio" name="mode" value="scorecard" checked />
+                                        <span><b>Scorecard</b><small>Playing with the real cards? Fill in your library and it keeps your score. Any number of players: everyone uses their own phone.</small></span></label>
+                                    <label class="choice"><input type="radio" name="mode" value="solo" />
+                                        <span><b>Solo &mdash; 21 rounds</b><small>Play on your own. Each round the game flips three cards; you add one book to your library, or pass. Empty slots count against you.</small></span></label>
+                                    <label class="choice is-soon"><input type="radio" name="mode" value="bots" disabled />
+                                        <span><b>Solo vs computer opponents</b><small>Coming soon.</small></span></label>
+                                    <label class="choice is-soon"><input type="radio" name="mode" value="table" disabled />
+                                        <span><b>Same room, own phones</b><small>Coming soon.</small></span></label>
+                                </div>
+                            </fieldset>
+                            <button type="button" class="btn btn-primary btn-lg" id="start-btn">Start</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="h5">How it works</h2>
+                            <ul class="small mb-0">
+                                <li>You are a librarian: fill <b>3 books in each of 7 categories</b>, in canon order. A book can't move once placed.</li>
+                                <li>Complete a category <b>first</b> for the bigger score; after someone else, the smaller.</li>
+                                <li>Every empty slot is <b>&minus;1</b>.</li>
+                                <li>The game ends when someone fills all 21 slots (or after 21 rounds, solo).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= GAME ================= -->
+        <section id="game" hidden aria-label="Your library">
+            <div class="rc-bar" role="status" aria-live="polite">
+                <div class="rc-bar-main"><span class="lbl">Score</span> <span class="num" id="score">-21</span></div>
+                <div class="rc-bar-sub" id="bar-sub"></div>
+                <div class="rc-bar-actions">
+                    <button type="button" class="btn btn-sm btn-outline-light" id="sum-btn">Score sheet</button>
+                    <button type="button" class="btn btn-sm btn-outline-light" id="undo-btn">Undo</button>
+                    <button type="button" class="btn btn-sm btn-outline-light" id="menu-btn">New game</button>
+                </div>
+            </div>
+
+            <div class="rc-tabs" role="tablist" aria-label="Sections">
+                <button type="button" role="tab" id="tab-library" aria-controls="panel-library" aria-selected="true">Library</button>
+                <button type="button" role="tab" id="tab-books" aria-controls="panel-books" aria-selected="false">Books</button>
+                <button type="button" role="tab" id="tab-rules" aria-controls="panel-rules" aria-selected="false">Rules</button>
+            </div>
+
+            <div id="panel-library" role="tabpanel" aria-labelledby="tab-library">
+                <div id="tray"></div>
+                <div id="shelves"></div>
+            </div>
+            <div id="panel-books" role="tabpanel" aria-labelledby="tab-books" hidden></div>
+            <div id="panel-rules" role="tabpanel" aria-labelledby="tab-rules" hidden>
+                <div class="card shadow-sm"><div class="card-body rules">
+                    <h2 class="h5">The rules</h2>
+                    <p>Roman Catacombs is a flip-and-write game. All the players use the same cards each turn.</p>
+                    <p>Deal the shuffled deck into 3 piles of about 30 cards. Each turn, flip the top card of each pile. Each player may add <b>one</b> of the three books to their library &mdash; or none &mdash; by writing it in a circle of that book's category. A book can't be moved once placed, and the books in a category must stay in canon order.</p>
+                    <p>Late in the game you may have no usable spot for any of the three cards. Then you pass.</p>
+                    <p>When you fill all three circles of a category, announce it and read the verse on the card that completed it. The first player to complete a category circles the larger number; later players circle the smaller. If two players finish on the same turn and nobody had finished before, both take the larger number.</p>
+                    <p>If a pile runs out before the game ends, shuffle its cards, turn them face down and carry on.</p>
+                    <p>The game ends when a player fills all 21 circles. Add up the circled points and subtract <b>1 point for each empty circle</b>. The most points wins.</p>
+                    <h3 class="h6">Solo</h3>
+                    <p>The rules are the same, except the game ends after 21 rounds. Circles still empty then count against you.</p>
+                    <h3 class="h6">Using this page</h3>
+                    <p class="mb-0">In <b>Scorecard</b> mode, tap a slot (or a book in the Books tab) to place it; the page only offers books that keep canon order. When you complete a category it asks whether you were first. Tap the points chip on a category to switch between first and later.</p>
+                </div></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- slot / book chooser -->
+    <dialog id="pick" class="rc-dialog" aria-labelledby="pick-title">
+        <form method="dialog">
+            <h2 class="h5" id="pick-title"></h2>
+            <p class="small text-muted" id="pick-sub"></p>
+            <div id="pick-list" class="pick-list"></div>
+            <div class="pick-actions"><button type="button" class="btn btn-outline-danger btn-sm" id="pick-clear" hidden>Take this book out</button><button value="cancel" class="btn btn-outline-secondary">Cancel</button></div>
+        </form>
+    </dialog>
+    <!-- were you first? -->
+    <dialog id="claim" class="rc-dialog" aria-labelledby="claim-title">
+        <form method="dialog">
+            <h2 class="h5" id="claim-title"></h2>
+            <p>Were you the first player to complete it? (Finishing on the same turn as the first player counts as first.)</p>
+            <div class="pick-actions"><button value="first" class="btn btn-primary" id="claim-first"></button><button value="later" class="btn btn-outline-primary" id="claim-later"></button></div>
+        </form>
+    </dialog>
+    <!-- final -->
+    <dialog id="final" class="rc-dialog" aria-labelledby="final-title">
+        <form method="dialog">
+            <h2 class="h5" id="final-title"></h2>
+            <div id="final-body"></div>
+            <div class="pick-actions"><button value="again" class="btn btn-primary" id="final-again">New game</button><button value="close" class="btn btn-outline-secondary">Close</button></div>
+        </form>
+    </dialog>
+
+    <footer class="py-5 bg-dark">
+        <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class="current-year">2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../../js/scripts.js"></script>
+    <script type="module" src="js/app.js?v=20261021"></script>
+</body>
+</html>

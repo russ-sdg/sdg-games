@@ -27,3 +27,6 @@
 
 /roman-catacombs/rc.css
   Cache-Control: no-cache
+
+/roman-catacombs/play/*
+  Cache-Control: no-cache

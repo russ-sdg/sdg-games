@@ -9,9 +9,9 @@ const ROOT = path.join(__dirname, '..');
 const ctx = { window: {} };
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'roman-catacombs/cards-data.js'), 'utf8'), ctx);
 const data = JSON.parse(JSON.stringify(ctx.window.SDG_CARDS));
-const deck = JSON.parse(/cardImages = (\[.*?\]);/.exec(fs.readFileSync(path.join(ROOT, 'js/Catacombs.js'), 'utf8'))[1]);
+const deck = JSON.parse(/DECK = (\[.*?\]);/s.exec(fs.readFileSync(path.join(ROOT, 'roman-catacombs/play/js/books.js'), 'utf8'))[1]);
 
-test('the gallery has exactly the 90 cards the scorepad deals (run: python3 roman-catacombs/tools/build-cards.py)', () => {
+test('the gallery has exactly the 90 cards the online game deals (run: python3 roman-catacombs/tools/build-cards.py)', () => {
   assert.equal(deck.length, 90);
   assert.deepEqual(data.cards.map((c) => c.id).sort(), [...deck].sort());
   assert.equal(data.total, 90);
