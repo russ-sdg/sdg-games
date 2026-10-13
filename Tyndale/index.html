@@ -1,563 +1,410 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Tyndale - A Hidden Movement Game</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="../css/styles.css" rel="stylesheet" />
-    </head>
-    <body class="sb-nav-fixed">
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='main-nav'></nav>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <img class="img-responsive img-fluid" style="padding: 10px;" src="../assets/TyndalelogoV1.png" alt="Tyndale">
-                        <div class="row">
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#description">Game Description</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#deck">Game Elements</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#play">How to Play</a>
-                                </div>
-                              </div>
-                          </div>
-                         <div class="col ml-auto">
-                            <div class="card bg-primary text-white mb-4">
-                              <div class="card-body d-flex align-items-center justify-content-between">
-                                <a class="text-white stretched-link text-decoration-none" href="#variations">Variations</a>
-                              </div>
-                            </div>
-                        </div>
-                        <div class="col ml-auto">
-                          <div class="card bg-primary text-white mb-4">
-                            <div class="card-body d-flex align-items-center justify-content-between">
-                              <a class="text-white stretched-link text-decoration-none" href="#williamtyndale">William Tyndale</a>
-                            </div>
-                          </div>
-                      </div>
-                      <div class="col ml-auto">
-                        <div class="card bg-primary text-white mb-4">
-                          <div class="card-body d-flex align-items-center justify-content-between">
-                            <a class="text-white stretched-link text-decoration-none" href="#buy">How to Buy</a>
-                          </div>
-                        </div>
-                    </div>
-                  </div>
-                        <a id="description"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Game Description</strong>
-                            </div>
-                            <div class="card-body">
-                              <p><em>Tyndale</em> is a hidden movement game. One player is on the run, trying to complete translation, printing, and shipping of the Bible while the other players try to track him down based on clues Tyndale leaves behind.</p>
-                              <p>William Tyndale has fled England to Europe with the mission of translating the Bible from the original Hebrew and Greek into English. The Bishop of London is determined to stop him. Tyndale will need to move around Europe to avoid capture. As he completes translation of portions of scripture, he must visit a new Printing Centre to get each one printed, and then get the printed copies to a Coastal City for shipment to England.</p>
-                              <p>At the beginning of the game, Tyndale has completed translation of the New Testament. He needs to get it to a Printing Centre to get it published and then to a Coastal City, so that he can ship it and begin working on translating the Pentatuch. At each city that he visits, he will “leave behind” copies of his most recently published translation (if any). These will be clues for those chasing or helping him. Once a published translation reaches a Coastal City, it independently (in the hands of trusted merchants) begins the journey across the English Channel or North Sea and then the English countryside towards London.</p>
-                              <p>The game may be played by two to six players and typically takes 30 to 90 minutes to play.</p>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>Tyndale - A Hidden Movement Game | SDG Games</title>
+<meta name="description" content="One player is William Tyndale on the run, getting the Bible into English; the rest hunt him by his clues. 2-6 players, ages 12+, 30-90 min, $49.99." />
+<meta name="author" content="SDG Strategy, LLC" />
+<link rel="canonical" href="https://sdggames.fun/Tyndale/" />
 
-                            </div>
-                        </div>
-                        <a id="deck"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Game Elements</strong>
-                            </div>
-                            <div class="card-body">
-                              <h4>Gameboard</h4>
-                              <div class="text-center" style="padding: 10px; max-width: 100%">
-                                <img src="../assets/TyndaleBoard.png" width="100%">
-                              </div>
-                              <ul>
-                                <li>The gameboard represents a map of England and Europe.</li>
-                                <li>The map is overlaid with a grid.</li>
-                                <li>The vertical grid lines are labeled A-K and the horizontal gird lines are labeled 1-11.</li>
-                                <li>On land, the intersections of the grid lines are cities and towns. On water, the intersecting locations are also legal moves (by boat), but aren't labeled.</li>
-                                <li>Printing Centres are cities marked by a large circle and labeled with the city name.</li>
-                                <li>Coastal Cities are cities or towns that are one step away from a water location.</li>
-                                <li>Cities and towns loyal to the Pope are colored Red.</li>
-                                <li>Cities and towns sympathetic to the Reformation are colored Blue.</li>
-                              </ul>
+<!-- Open Graph / social share -->
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="SDG Games" />
+<meta property="og:title" content="Tyndale - A Hidden Movement Game" />
+<meta property="og:description" content="One player is on the run, getting the Bible into English. Everyone else tracks him down by his clues. 2-6 players." />
+<meta property="og:url" content="https://sdggames.fun/Tyndale/" />
+<meta property="og:image" content="https://sdggames.fun/assets/tyndale/board.webp" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Tyndale - A Hidden Movement Game" />
+<meta name="twitter:description" content="One player is on the run, getting the Bible into English. Everyone else tracks him down by his clues." />
+<meta name="twitter:image" content="https://sdggames.fun/assets/tyndale/board.webp" />
 
-                              <h4>Pawns</h4>
-                              <img style="float: right;" alt="Pawns" src="../assets/TyndalePawns.png" />
-                              <ul>
-                                <li>There will be 4 or 5 pawns moving from location to location on the Gameboard.</li>
-                                <li>These pawns represent the Bishop’s Agents who are searching for Tyndale. (Although one might be a Secret Supporter who is actually helping him.)</li>
-                                <li>Pawns move vertically and horizontally along the grid lines on the Gameboard.</li>
-                              </ul>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Tyndale",
+  "description": "A hidden movement board game for 2-6 players, 30-90 minutes. One player is William Tyndale, translating, printing and shipping the Bible across Reformation-era Europe; the others are the Bishop’s Agents tracking him down from the clues he leaves behind.",
+  "image": ["https://sdggames.fun/assets/tyndale/board.webp"],
+  "brand": { "@type": "Brand", "name": "SDG Games" },
+  "category": "Board game",
+  "url": "https://sdggames.fun/Tyndale/",
+  "audience": { "@type": "PeopleAudience", "suggestedMinAge": 12 },
+  "offers": { "@type": "Offer", "price": "49.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://sdggames.fun/Tyndale/" }
+}
+</script>
 
-                              <img style="float: left;" alt="Pawns" src="../assets/TyndaleDie.png" />
-                              <h4>Die</h4>
-                              <p>The game uses a 6 sided die with values 1, 2, and 3.</p>
-                              <h4>Scorecards</h4>
-                              <ul>
-                                <li>Each player gets a Scorecard.</li>
-                                <li>Each Scorecard shows a simplified representation of the Gameboard.</li>
-                                <li>Tyndale's Scorecard has a blue border. He uses his Scorecard to record where he has left copies of his Publications.</li>
-                                <li>Bishop’s Agents' Scorecards have a red border. They use their Scorecards to record clues that they find as they search for Tyndale.</li>
-                                <li>The small numbers next to Coastal Cities indicate their distance from London.</li>
-                              </ul>
-                              <div class="text-center" style="padding: 10px; max-width: 100%">
-                                <img src="../assets/TyndaleScorecard.webp" width="100%">
-                              </div>        
-                              <h4>Cards</h4>
-                              <p>There are four types of cards used in the game.</p>
-                              <h5>Tyndale Card</h5>
-                              <p>The player playing as William Tyndale gets this card.</p>
-                              <img style="width: 50%; max-width: 150px;" alt="Tyndale Card Back" src="../assets/TyndaleCardBack.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Tyndale Card" src="../assets/TyndaleTyndaleCard.png" />
-                              <h5>Bishop's Agents Cards</h5>
-                              <p>If there are 5 or 6 players, each of the Bishop's Agent players will blindly draw a card to find out whether or not they are the Secret Supporter of Tyndale.</p>
-                              <img style="width: 50%; max-width: 150px;" alt="Back of Bishop's Agent Cards" src="../assets/TyndaleBishopsBack.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Stephen Vaughn" src="../assets/TyndaleVaughnCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="William Holt" src="../assets/TyndaleHoltCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="John Dobneck" src="../assets/TyndaleDobneckCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="John Stokesley" src="../assets/TyndaleStokesleyCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Thomas More" src="../assets/TyndaleMoreCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Henry Phillips" src="../assets/TyndalePhillipsCard.png" />
-                              <h5>Tyndale Location Cards</h5>
-                              <p>When asked, Tyndale uses these cards to let the other players know whether or not he is in their location.</p>
-                              <img style="width: 50%; max-width: 150px;" alt="Card Back" src="../assets/TyndaleHereCardBack.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Here Card" src="../assets/TyndaleHereCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Not Here Card" src="../assets/TyndaleNotHereCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Near Card" src="../assets/TyndaleNearCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Far Card" src="../assets/TyndaleFarCard.png" />
-                              <h5>Tyndale's Bible Cards</h5>
-                              <p>When asked, Tyndale uses these cards to let the other players know whether or not he has left any translations in their location.</p>
-                              <img style="width: 50%; max-width: 150px;" alt="Tyndale Bible Card Back" src="../assets/TyndaleBibleBack.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Nothing Here" src="../assets/TyndaleNothingCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Rumors of a Translation" src="../assets/TyndaleRumorsCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="New Testament" src="../assets/TyndaleNewTestamentCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Pentateuch" src="../assets/TyndalePentateuchCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Historical Books" src="../assets/TyndaleHistoricalCard.png" />
-                              <img style="width: 50%; max-width: 150px;" alt="Old Testament" src="../assets/TyndaleOldTestamentCard.png" />
+<link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap) -->
+<link href="../css/styles.css" rel="stylesheet" />
+<link href="../css/product-page.css?v=20261026" rel="stylesheet" />
+<link href="ty.css?v=20261027" rel="stylesheet" />
+<link rel="preload" as="image" href="../assets/tyndale/cards/tyndale-480.webp" fetchpriority="high" />
 
-                            </div>
-                        </div>
-                        <a id="play"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How To Play</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>The meaningful events in the game are:</p>
-                              <ul>
-                                <li>The <strong>translation</strong> of scripture.</li>
-                                <li>The <strong>publication</strong> of a <strong>translation</strong>.</li>
-                                <li>The <strong>shipment</strong> of a <strong>publication</strong>.</li>
-                                <li>The <strong>arrival</strong> of a <strong>shipment</strong> in London.</li>
-                                <li>The <strong>capture</strong> of William Tyndale.</li>
-                              </ul>
-                              <p>The portions of scripture translated, published, and shipped are:</p>
-                              <ul>
-                                <li>The New Testament (<strong>N</strong>)</li>
-                                <li>The Pentateuch (<strong>P</strong>): Genesis, Exodus, Leviticus, Numbers, Deuteronomy</li>
-                                <li>The Historical Books (<strong>H</strong>): Joshua, Judges, Ruth, 1 & 2 Samuel, 1 & 2 Kings, and 1 & 2 Chronicles</li>
-                                <li>The Entire Old Testament (<strong>O</strong>)</li>
-                              </ul>
-                              <p>The game ends either when:</p>
-                              <ul>
-                                <li>William Tyndale is captured (the Bishop's Agents win), or</li>
-                                <li>The Old Testament reaches London (Tyndale and his Secret Supporter win).</li>
-                              </ul>
-                              <h4>Game Setup</h4>
-                              <ul>
-                                <li>One player will be William Tyndale. This player takes the blue Scorecard. He does not have a pawn because his moves are secret.</li>
-                                <li>Each of the other players takes a red Scorecard.</li>
-                                <li>There will always be at least 4 Bishop's Agents (pawns) searching for Tyndale.</li>
-                                <li>If there are 5 or 6 players, the players searching for Tyndale each blindly draw a card from the Bishop's Agent cards.</li>
-                                <li>There is one "Secret Supporter" card - if a player draws this card, that player will secretly try to help Tyndale. This player can withhold information from others.</li>
-                                <li>Each player secretly shows their card to the Tyndale player so that he knows who (if anyone) is on his side.</li>
-                                <li>If there are fewer than 5 players, there will be 4 pawns and one or more players will control more than one pawn.</li>
-                                <li>If there are 5 players, there will be 4 pawns, one per non-Tyndale player.</li>
-                                <li>If there are 6 players, there will be 5 pawns.</li>
-                                <li>Players choose their pawns and place them on any location on the board (no more than one pawn per location).</li>
-                                <li>After the Bishop's Agents have placed their pawns (and shown their cards to Tyndale if appropriate), Tyndale chooses any location as his starting point. If he chooses a Printing Centre, he publishes the New Testament in that city and writes an "N" in the corresponding circle on his Scoresheet. He circles the "N" under Bonus Moves to indicate that he has earned a bonus move. If that city is also a Coastal City, he immediately ships the New Testament and translates the Pentateuch.</li>
-                              </ul>
-                              <p>Players take turns, starting with Tyndale, and going in clockwise order. If a player is controlling more than one pawn, that player moves each pawn in turn before play advances to the next player.</p>
-                              <h4>Tyndale's Turn</h4>
-                              <p>If you are Tyndale, on your turn:</p>
-                              <ol>
-                                <li>Decide your next move. You can move horizontally or vertically to an adjacent spot on the map. If that spot is blue, you can move a second time to an adjacent spot. If you have unused Bonus Moves, you can choose to use one (or more) of your unused Bonus Moves to advance one (or more) additional adjacent spot(s). When you use an earned Bonus Move, strike through that letter under Bonus Moves to indicate it is no longer available. You can pass through, but not finish on a spot occupied by a Bishop's Agent.</li>
-                                <li>Write the letter representing the most recent <strong>publication</strong> (N, P, H, or O) in the circle on your Scorecard associated with each of your moves. If you've previously visited this location with a different <strong>publication</strong>, replace the previous letter with the most recent <strong>publication</strong> letter.</li>
-                                <li>If the spot where you finish is a Printing Centre that you have not previously visited and you have a <strong>translation</strong> that has not yet been <strong>published</strong>, then you get it <strong>published</strong> in this city. Circle the letter for this translation under Bonus Moves. This gives you one extra move in a future turn. Your next goal is to take this publication to a Coastal City to <strong>ship</strong> it to London.</li>
-                                <li>If the spot where you finish is a Coastal City and you have a <strong>publication</strong> that has not yet shipped, then send that <strong>shipment</strong> on its journey. Find the small number near the city on the Scorecard indicating the number of moves it will take for the <strong>shipment</strong> to reach London and circle that number next to the appropriate letter in the table at the top of your Scorecard. If it will take more than 10 moves, instead of a number you will find a "+" and will circle the "+". Once you have <strong>shipped</strong> a <strong>publication</strong>, you immediately complete the next <strong>translation</strong>. Your next goal is to take this new <strong>translation</strong> to a Printing Centre you have not previously visited to get it <strong>published</strong>.</li>
-                                <li>If you have any <strong>shipments</strong> that have not yet arrived in London, cross off the next number (starting with 1) in the row for that <strong>publication</strong>. When you cross off the circled number, announce to all players which <strong>shipment</strong> has now arrived in London. If the <strong>Old Testament</strong> arrives in London, the game is over and Tyndale (and his Secret Supporter) has won.</li>
-                              </ol>
-                              <h5>Example</h5>
-                              <div class="text-center" style="padding: 10px; max-width: 100%">
-                                <img src="../assets/TyndaleExample.png" width="100%">
-                              </div>
-                              <ul>
-                                <li>Tyndale starts in Antwerp (E5) where he <strong>publishes</strong> and <strong>ships</strong> the New Testament. He writes an "N" in the circle at E5 and circles the number "3" in the "N" row in the table in the top left of the scorecard. He also earns the "N" bonus move.</li>
-                                <li>On his first turn he moves to Cologne (F5) where he <strong>publishes</strong> the Pentateuch. He writes a "P" in the circle at F5 and crosses off the "1" in the "N" row of the table. He also earns the "P" bonus move.</li>
-                                <li>On his second turn he moves to F4 where he <strong>ships</strong> the Pentateuch. He writes a "P" in the circle at F4, circles the "5" in the "P" row of the table, and crosses off the "2" in the "N" row.</li>
-                                <li>His third turn he moves to H4. He writes a "P" in the circles at G4 and H4, crosses off the "3" in the "N" row and the "1" in the "P" row of the table and announces that the New Testament has <strong>arrived</strong> in London.</li>
-                              </ul>
-                              <p>During this third round, two of the Bishop's Agents receive clues from Tyndale.</p>
-                              <p>One moves to E6 and receives:</p>
-                              <img style="float: right; max-width: 50%" alt="Rumors of a Translation" src="../assets/TyndaleRumorsCard.png" />
-                              <img style="max-width: 50%" alt="I Am NOT Here" src="../assets/TyndaleNotHereCard.png" />
-                              <p>Another moves to G4 and receives:</p>
-                              <img style="float: right; max-width: 50%" alt="The Pentateuch" src="../assets/TyndalePentateuchCard.png" />
-                              <img style="max-width: 50%" alt="I Am NOT Here" src="../assets/TyndaleNotHereCard.png" />
-                              <h4>Bishop's Agent's Turn</h4>
-                              <p>For all other players, on your turn:</p>
-                              <ol>
-                                <li>Roll the die to determine how many spaces to move.</li>
-                                <li>Move your pawn the number of spaces indicated by the die. You may pass through, but not finish on a space populated by another Bishop's Agent.</li>
-                                <li>You may ask Tyndale if there's anything in the final location where you land. He will hand you two cards. Tyndale cannot lie.
-                                  <ol>
-                                    <li>One card indicates whether or not he is in that location. For Bishop's Agents, this will simply say whether or not he is there, but for the Secret Supporter, the card might say that he is "near" or "far". If you are not the Secret Supporter and you have landed on Tyndale's location, announce that you have captured "that notorious heretic Tyndale." The Bishop's Agents have won the game.</li>
-                                    <li>The second card indicates whether or not there are any <strong>publications</strong> in that city, or if there are "rumors of a translation" - meaning an adjacent (horizontal or vertical) space has a <strong>publication</strong>. You can mark what you learned in the corresponding circle on your Scorecard. You can also share this information with other players. If there is nothing in that city, the appropriate response is "Nothing to Report".</li>
-                                  </ol>
-                                </li>
-                              </ol>
-                              <p>Note that Tyndale only leaves copies of his <strong>publications</strong> (clues) where he personally travels. (When he travels by boat on water spaces, he leaves <strong>publications</strong> with fishermen he encounters at each water location.) But once he <strong>ships</strong> a <strong>publication</strong>, there will NOT be any clues along the route that the <strong>publication</strong> is traveling on its way to London.</p>
-                              <h5>Example</h5>
-                              <div class="text-center" style="padding: 10px; max-width: 100%">
-                                <img src="../assets/BishopsAgentsExample.png" width="100%">
-                              </div>
-                              <ul>
-                                <li>You start in Prague (K6).</li>
-                                <li>On your first turn, you roll a "3" and move to Nuremburg (I7).</li>
-                                <li>You ask Tyndale what's there. He gives you the two cards shown below. You place an "X" in the I7 circle.</li>
-                              </ul>
-                              <img style="float: right; max-width: 50%" alt="Nothing Here" src="../assets/TyndaleNothingCard.png" />
-                              <img style="max-width: 50%" alt="I Am NOT Here" src="../assets/TyndaleNotHereCard.png" />
-                              <ul>
-                                <li>On your second turn, you roll a "2" and move to Strasburg (G7).</li>
-                                <li>You again ask Tyndale and he gives you the same two cards. you place an "X" in G7.</li>
-                                <li>On your third turn, you roll a "3" and move to E6.</li>
-                                <li>You again ask Tyndale and this time he gives you the two cards shown below. You place an "R" in E6.</li>
-                              </ul>
-                              <img style="float: right; max-width: 50%" alt="Nothing Here" src="../assets/TyndaleRumorsCard.png" />
-                              <img style="max-width: 50%" alt="I Am NOT Here" src="../assets/TyndaleNotHereCard.png" />
-                              <p>Each turn, your fellow Bishop's Agents are also sharing the information that they have received and you also mark that information on your scorecard.</p>
+<style>
+/* Tyndale palette: night ink and Reformation blue with the board's papal red */
+.pp { --pp-primary: #232a5c; --pp-accent: #a3262e; --pp-gold: #f0c36a; --pp-gold-ink: #1b1b2e;
+      --pp-hero: linear-gradient(135deg, #0f1020 0%, #232a5c 55%, #7a1f26 100%); }
+</style>
+</head>
+<body class="sb-nav-fixed pp">
+<a class="pp-skip" href="#game">Skip to content</a>
+<!-- Responsive navbar (loaded from nav-div.html by ../js/scripts.js) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
 
-                              <h4>Special considerations for the Secret Supporter</h4>
-                              <p>If you are the Secret Supporter, you may have the opportunity to help Tyndale escape persecution and get the English Bible to the English people. There are two ways that you can help, if you feel so led.</p>
-                              <p>The first way is by carrying a <strong>published</strong> translation to the coast for <strong>shipping</strong>. If Tyndale tells you that there is a <strong>publication</strong> in a city that you visit that hasn't yet <strong>arrived</strong> in London, by next visiting a Coastal City, you will be carrying that <strong>publication</strong> with you. If Tyndale hasn't yet <strong>shipped</strong> that <strong>publication</strong> (only he knows), he will track your movements and appropriately record the <strong>shipment</strong> when you reach the Coastal City.</p>
-                              <p>The second way you can help is by NOT helping the Bishop's Agents. Lying and deceit are an abomination to God and a violation of the ninth commandment. However, the fifth commandment ("thou shalt not murder") includes the positive requirement of preserving human life. Sharing everything you know with the Bishop's Agents may lead to Tyndale's capture and unjust execution.</p>
-                              <p>While Bishop's Agents are allowed to share information with each other, they aren't required to. If the cards shown by Tyndale indicate that there are no translations at a location and he is not there, the appropriate response to other players is "Nothing to Report". Tyndale's Secret Supporter may also choose not to report it if she finds rumors, translations, or Tyndale himself. A simple "Nothing to Report" will both protect Tyndale and avoid sinning.</p>
+<main>
+<!-- ============ HERO ============ -->
+<header class="pp-hero">
+  <div class="pp-wrap pp-hero-grid">
+    <div>
+      <p class="pp-eyebrow">A hidden movement game</p>
+      <h1>Tyndale</h1>
+      <p class="pp-tagline">One player is on the run, getting the Bible into English. Everyone else is hunting him by the clues he leaves behind.</p>
+      <ul class="pp-facts" aria-label="Game facts">
+        <li>2&ndash;6 players</li>
+        <li>Ages 12+</li>
+        <li>30&ndash;90 min</li>
+        <li>Hidden movement</li>
+      </ul>
+      <p class="pp-launch"><strong>$49.99</strong></p>
+      <div class="ty-cta">
+        <a class="pp-btn pp-btn-gold" href="#play">How to play</a>
+        <div id="buy-now" class="pp-shopify" data-state="live"></div>
+      </div>
+      <p class="pp-fine">Ships from the SDG Biblical Wisdom shop.</p>
+    </div>
 
-                              <h4>Exposing the Secret Supporter</h4>
-                              <p>While playing the game, Bishop's Agents may begin to suspect that one of their own is actually a Secret Supporter of Tyndale's efforts.</p>
-                              <p>Any Bishop's Agent may accuse another of being a Secret Supporter, but only immediately following the announcement of the <strong>arrival</strong> of a <strong>publication</strong> in London. All Bishop's Agents players will vote on whether or not to formally charge the accused. A majority vote results in charges.</p>
-                              <p>If charged, the accused player must show their Bishop's Agent card to reveal whether or not they are the Secret Supporter.</p>
-                              <p>If they are the Secret Supporter, then they are out of the game. Their pawn is removed from the board and they can no longer take turns. If they were carrying a <strong>publication</strong> for Tyndale, that is lost and Tyndale must find another way to get the <strong>publication</strong> to a Coastal City for <strong>shipment</strong>.</p>
-                              <p>If they are not the Secret Supporter, then the one making the false accusation is out of the game. Their pawn is removed from the board and they can no longer take turns.</p>
-                            </div>
-                              
-                        </div>
-                        <a id="variations"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Variations</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>In the days of William Tyndale, Roman Catholic Church officials were very much focused on earning salvation through their meritorious service to the church. Therefore, it seems appropriate to introduce a competitive element to this largely cooperative game.</p>
-                              <p>In this variant, called <em>Meritocracy</em>, Bishop's Agents earn points for each of a number of accomplishments in the search for Tyndale:
-                              <ul>
-                                <li><strong>10 points:</strong> Being the first to find a particular translation in a city.</li>
-                                <li><strong>20 points:</strong> Finding (and burning) where a particular translation was printed.</li>
-                                <li><strong>20 points:</strong> Finding where a particular translation shipped for England.</li>
-                                <li><strong>50 points:</strong> Successfully uncovering the Secret Supporter.</li>
-                                <li><strong>50 points:</strong> Finding "that notorious heretic" William Tyndale.</li>
-                              </ul></p>
-                              <p>To implement these additional game features:
-                                <ol>
-                                  <li>If you are the first to uncover a particular translation (New Testament, Pentateuch, Historical Books, or Old Testament) in any city, then announce that you have found it, mark your Scorecard as normal, but also circle the city. Only one player can earn points for each of the translations.</li>
-                                  <li>If you believe that you have found the city where a translation was printed (whether or not that is true is irrelevant), announce that you have found where that translation was printed, mark your Scorecard as normal, but also circle the city. It is possible for multiple players to earn points for finding what they believe to be the city were a given translation was printed.</li>
-                                  <li>If you believe that you have found the city from which a translation was shipped to England (whether or not that is true is irrelevant), announce that you have found where that translation was shipped, mark your Scorecard as normal, but also circle the city. It is possible for multiple players to earn points for finding what they believe to be the city were a given translation was shipped.</li>
-                                  <li>If you accuse the Secret Supporter, gain support of your fellow players to bring charges, and successfully uncover the Secret Supporter, draw a star in the top right corner of your Scorecard.</li>
-                                  <li>If you find William Tyndale, draw a star in the top left corner of your Scorecard.</li>
-                                  <li>At the end of the game, add up your points.<ul>
-                                    <li>You get 50 points if you have a star in the top left of your Scorecard.</li>
-                                    <li>You get 50 points if you have a star in the top right of your Scorecard.</li>
-                                    <li>You get 20 points for each circled printing centre.</li>
-                                    <li>You get 20 points for each circled coastal city.</li>
-                                    <li>You get 10 points for each additional circled city.</li>
-                                  </ul></li>
-                                  <li>If Tyndale is caught before the Old Testament reaches London, then the player with the most points wins.</li>
-                                </ol>
-                              </p>
-                                
+    <div class="ty-fan" aria-hidden="true">
+      <img class="c1" src="../assets/tyndale/cards/here-480.webp" width="480" height="655" alt="" />
+      <img class="c3" src="../assets/tyndale/cards/more-480.webp" width="480" height="655" alt="" />
+      <img class="c2" src="../assets/tyndale/cards/tyndale-480.webp" width="480" height="655" alt="" />
+    </div>
+  </div>
+</header>
 
-                            </div>
-                        </div>                        
-                        <a id="williamtyndale"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>William Tyndale</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>William Tyndale is a mystery. He lived much of his life in hiding, so there were no portraits ever made of him during his lifetime. There is no contemporary biography that gives specific details of his life. We can infer some things about him from public university records, public records that seem to be about his brothers, public land records, and some writings about him by his contemporaries, many of whom hated him and wanted him dead. So, whatever you hear about William Tyndale, you need to realize that it’s probably someone’s best guess, and not a for-certain fact. That includes what you are about to read.</p>
-                              <p>William Tyndale was born sometime around 1494, give or take a few years. He was almost certainly from somewhere in Gloucestershire, probably near the border of Wales, so about 100 miles or so west of London, and about 50 miles west of Oxford.</p>
-                              <p>Some think the name Tynedale refers to the family originally being from the Dales (or hills) along the Tyne river, in Northern England. The family may have had to relocate when they ended up on the wrong side of one of England’s earlier civil wars.</p>
-                              <p>But his family were landowners of some level of wealth. Williams’ older brother shows up in public records as being fairly prominent in the area. His younger brother would later get into some trouble for supporting William’s efforts to bring the Word of God into England.</p>
-                              <p>As the middle son, William wasn’t going to inherit his father’s land, so he was a good candidate for the ministry. He was sent to Oxford, entering the university probably when he was 13 or 14 years old. He earned his Bachelor of Arts degree in 1512 and his Master of Arts degree in Philosophy in 1515. Although the universities were basically under church control, there was no theology taught until the Masters level and even then the focus was more on logic and wordcraft than on meaning and spirituality.</p>
-                              <p>Tyndale later wrote: “In the universities they have ordained that no man shall look on the scripture until he be trained in heathen learning eight or nine years, and armed with false principles, with which he is clean shut out of the understanding of scripture: and at this first coming unto the university he is sworn that he shall not defame the university, whatsoever he seeth; and when he first taketh first degree, he is sworn that he shall hold no opinion condemned by the church, but what such opinions be, that he shall know, and then, when they be admitted to study divinity, because the scripture is locked up with such false expositions and with false principles of natural philosophy, that they cannot enter in, they go about the outside, and dispute all their lives about words and vain opinions, pertaining as much unto the healing of a man’s heel as the health of his soul; provided yet always, lest God give his singular grace unto any person, that none may preach except he be admitted of the bishops.”</p>
-                              <p>After graduating, Tyndale was required to teach a year at Oxford. He also was ordained as a priest at some point. But it seems that, as soon as he could, he left Oxford for Cambridge. Tyndale was gifted in languages and he may have gone there to study Greek.</p>
-                              <p>Oxford traces its history to the 11th or 12th century. Cambridge was founded in the 13th century by some professors who had fled a local dispute in Oxford. Many of the leaders of the yet future English Reformation would come out of Cambridge. Oxford was where many of the reformation’s staunchest foes were trained, men that would become Tyndale’s mortal enemies. When Bloody Mary reintroduced Catholicism to England, many of the Cambridge-trained reformers were burned in Oxford. There’s a monument to them today in Oxford.</p>
-                              <p>Tyndale would’ve arrived in Cambridge around 1517. When Luther’s writings started arriving from the continent, there was a group of reform minded men who would meet at the White Horse Inn in Cambridge to discuss these writings. It is possible that Tyndale was among them. It seems that Tyndale was at least beginning to question the Catholic Church’s ways by the time he left Cambridge in 1521.</p>
-                              <p>He left to return to Gloucestershire where he served as tutor for the family of Sir John Walsh at Little Sodbury Manor.</p>
-                              <p>While in Gloucestershire, Tyndale was not quiet about his seemingly radical thoughts. In addition to his duties teaching the children, he would also preach at times in nearby villages. At some point he was summoned by the vicar general of the diocese, John Bell, to a gathering of clergy in Gloucestershire. Bell accused Tyndale of spreading seditious and heretical teaching. Writing about it later Tyndale said that Bell “threatened me grievously, and reviled me, and berated me as though I had been a dog”  - but he was released with only a reprimand.</p>
-                              <p>Various members of the clergy would often come to be fed at the Walsh table at Little Sodbury, and Tyndale would be at the table with them, debating about church doctrine, and especially about the authority of Scripture. In a famous confrontation, one of these guests said to Tyndale “We were better to be without God’s law than the Pope’s.” - meaning that he would rather have the church’s traditions than the Bible.</p>
-                              <p>Tyndale responded “I defy the Pope and all his laws, and if God spare my life ere many years, I will cause a boy that driveth the plow, shall know more of the scripture than thou dost.”</p>
-                              <p>This seems to be the moment that focused William Tyndale on his life’s work - translating the Bible from the original languages into English.</p>
-                              <p>Unfortunately, that was against the law. In 1408 in response to John Wycliffe’s previous translation of the Latin Vulgate Bible into English, the Archbishop of Canterbury established the Constitutions of Oxford, which forbade anyone from translating scripture into English without the express permission of the Bishops. It even forbade the people from reading the Bible in English.</p>
-                              <p>So in 1523 William Tyndale went to London to ask the Bishop of London to sponsor him in doing just that. The Bishop at the time was Cuthbert Tunstall, a friend of Desiderius Erasmus. Tunstall had actually traveled with Erasmus to Brussels, Ghent, and Bruge and helped him with his Greek New Testament project.</p>
-                              <p>Erasmus spent several years in England as a professor at Cambridge. He never learned English, but had no problem operating in the academic world entirely in Latin. Some of the men who became powerful leaders in England had strong ties to Erasmus. In 1516, Erasmus published a new Latin translation of the New Testament based on the best Greek manuscripts. His book laid the Greek alongside the Latin and it became a very helpful tool to those creating new translations of the Bible. Martin Luther used it to translate the New Testament into German in 1522. Erasmus was a proponent of translating the Bible into the common language in each country, but the church was opposed to any translations other than Latin.</p>
-                              <p>Tyndale hoped that the Bishop would agree with Erasmus’ positive views on Bible translation and would take Tyndale into his employment to create an authorized English Bible. Unfortunately, Luther’s German New Testament had recently been published and Luther’s writings seemed to be fueling the Peasant’s Revolt in Germany. </p>
-                              <p>Tyndale translated a particularly challenging ancient Greek document and had it delivered to the Bishop via Sir Harry Guilford, a friend of Sir John Walsh. This was meant to demonstrate to the Bishop his translation skills. But when Tyndale met with Tunstall, the bishop indicated that he couldn’t afford to take him on, but encouraged him to find another sponsor in London. In reality, it seems that Tunstall exerted pressure on everyone who could possibly help Tyndale to not support him in any way. The bishop wanted Tyndale close, so he could keep his eye on him, but didn’t want to give him any chance to succeed.</p>
-                              <p>Tyndale ended up staying with Humphrey Monmouth, a wealthy London cloth merchant. He stayed in London for a year, still hoping to find a sponsor for his translation project. He preached a little, and he likely worked on his translation of the New Testament. He also became aware of a secret society called the Christian Brethren, an association of wealthy cloth merchants who financed and smuggled in forbidden books and pamphlets supporting the reformation. The brethren financed Tyndale's work in the beginning and later helped bring his books into England.</p>
-                              <p>Once Tyndale realized that he would never find support for his translation work in England, he left for Europe. He probably went to Germany, but for the next dozen years he would constantly be on the run, trying to avoid capture.</p>
-                              <p>Tyndale had mastered Greek, but there were no Hebrew experts in England. It appears that he may have made his way to Luther’s Wittenberg and studied Hebrew there. There is a cryptic entry in the registrar's records at the University in Wittenberg around that time for an Englishman named William Dalton. If you reverse the two syllables in Tyndale, you get Dal-Tyne.</p>
-                              <p>From this point on, Tyndale is best known for his writings, especially his translation of the Bible from the original languages into English.</p>
-                              <p>The first part of the Bible that William translated was the New Testament. He found a printer in Cologne, Germany who would print it for him. In those days, printing a book was a very hard and slow process. Each page had to be printed separately using a hand-operated printing press. Unfortunately, in the middle of printing, Catholic loyalist John Dobneck discovered what was happening and called for the authorities to arrest William and capture the translation. William found out and he and his assistant fled to a safer place with the translation. In 1526, the New Testament was finally printed in Worms, Germany and secretly shipped to England for the people to read.</p>
-                              <p>The next part of the Bible that William translated was the first 5 books of the Old Testament: Genesis, Exodus, Leviticus, Numbers, and Deuteronomy. This collection of books is also called the Books of Moses, the Law, or the Pentateuch (which is Greek for “five books”). William had to learn Hebrew to be able to do this translation, so it was very hard. After he translated these first five books, he took a ship to a city where he hoped to get it printed. Unfortunately, the ship sank. William and his assistant survived, but the translation sank to the bottom of the sea. William had to start over. Finally, in 1530, the Pentateuch was published in Antwerp, Belgium and shipped to England.</p>
-                              <p>The next portion of scripture that William translated is most of what we often call the Historical Books. The books he translated were Joshua, Judges, Ruth, 1 Samuel, 2 Samuel, 1 Kings, 2 Kings, 1 Chronicles, and 2 Chronicles. These were printed in Antwerp in 1531 and secretly shipped to England for all to read.</p>
-                              <p>That year he also published the translation of the book of Jonah.</p>
-                              <p>In 1534, Tyndale published a revised version of the New Testament with a large number of corrections. For example, he had originally replaced the word “Priest” from the Latin Vulgate with the word “Senior.” In the 1534 edition, he changed this to “Elder”.</p>
-                              <p>It was the New Testament of 1526 that really aroused the furor of the church leadership in London. Until Tyndale’s English translation started showing up in England, the idea of the Bible in English was just a concept. Wycliffe’s translation from centuries before was so hard to read that it didn’t really do much for the average Englishman, but Tyndale’s translation was beautiful and powerful. It immediately became a best seller and everyday people were reading it. It was affordable enough for day laborers to buy and small enough to be easily concealed.</p>
-                              <p>The Bishops immediately attacked it, claiming it had thousands of errors and couldn’t be trusted. They collected as many copies of the book as they could, even buying them at a premium price, and then they burned them. This helped fund Tyndale's continuing work and made people even more interested in reading the Bible. It also made people question even more the validity of church leaders who would burn the very Word of God.</p>
-                              <p>It also sparked a written war over theology. Thomas More specifically attacked three of Tyndale’s word choices. Where the Catholic Church had translated Ekklesia to be the Latin word for Church, Tyndale translated it as Congregation, since Rome had turned “Church” into an overbearing institution, while Tyndale thought the Bible focused on the gathered body of believers who make up the church. The Catholics had translated the New Testament Greek Presbuteros as the Latin word for the same word used for Priest in the Old Testament. Tyndale saw New Covenant ministers playing a very different role. He initially translated this word “Senior”, but as mentioned above, in his 1534 revision he changed it to “Elder”. Finally, the Catholic Bible had translated the Greek word Agape as “charity” but Tyndale translated it as “love”. Tyndale defended these word choices in his response to More. That opened the door for debates on other topics.</p>
-                              <p>The King of England during this time was King Henry VIII. Henry wanted a male heir. His first wife, Catherine, was getting beyond child bearing age and had only given him a daughter. Henry wanted the marriage annulled, but the Pope wouldn’t allow it. Eventually this led to England’s separation from the Catholic church and Henry declaring himself the head of the English church, but this battle took several years. Henry’s first request to the Pope to annul his marriage with Catherine was in 1527 and the split with Rome happened in 1533. This was exactly the time when Tyndale was writing.</p>
-                              <p>Tyndale wrote a book called <em>The Obedience of a Christian Man</em> that included this line that Henry really liked: “God hath made the king in every realm judge over all, and over him there is no judge. He that judgeth the king judgeth God and he that layeth hands on the king layeth hands on God, and he that resisteth the king resisteth God and damneth God’s law and ordinance.”</p>
-                              <p>Tyndale thought it was the English church leaders pushing Henry to seek an annulment, not Henry’s own selfish desires, so he wrote <em>The Practice of Prelates</em>, ultimately providing a Biblical argument against the divorce. Henry was very much not a fan of this one and fired up the clergy even more to fight against and find Tyndale.</p>
-                              <p>One of Thomas More’s books, titled <em>Confutation of Tyndale’s Answer</em> was half a million words long, more than two Moby Dick’s or a single War and Peace. There wasn’t much More could say to defend the Roman church’s errors in light of what the Bible said, so instead he made personal attacks against Tyndale and repeated himself. A lot. Here’s one small quote “Judge good Christian reader whether it be possible that he [Tyndale] be any better than a beast out of whose brutish beastly mouth cometh such a filthy foam.”</p>
-                              <p>Tyndale published three types of books.</p>
-                              <p>Of course, the most important are his translations of Scripture. Sometimes the publication just included the scripture. Other times it included some commentary and explanation. He published the entire New Testament and the Old Testament through 2 Chronicles, plus the prophet Jonah. After his death, a couple of the men that had assisted him completed the Old Testament, but not from the original languages.</p>
-                              <p>He also published expositions of scripture including <em>The Parable of the Wicked Mammon</em> (or the Parable of the Unjust Steward from Luke 16), an <em>Exposition of the First Epistle of John</em>, and an <em>Exposition of Matthew 5 - 7</em> (the Sermon on the Mount).</p>
-                              <p>The third type of publication dealt with theological topics. To some extent, his expositions did as well. <em>The Parable of the Wicked Mammon</em> made a strong case for justification by faith alone. I’ve already mentioned <em>The Obedience of a Christian Man</em> and <em>The Practice of Prelates</em>. His <em>An Answer to Sir Thomas More</em> covered many topics. His book on <em>The Lord’s Supper</em> attacked the beliefs and practices of the Catholic church on that topic. And his <em>A Pathway Into Holy Scripture</em> explains the importance of the distinction between law and gospel.</p>
-                              <p>In 1535, things seemed to be going well. King Henry VIII had finally broken from the Roman Church, even though it was for all the wrong reasons and not a very theologically correct reformation, but he had counselors around him guiding things in the right direction. Many church leaders remained faithful to the Catholic Church and refused to recognize Henry as head of the church. They were imprisoned and many executed. More was imprisoned in the Tower of London and eventually would be beheaded.</p>
-                              <p>Maybe Tyndale let his guard down.</p>
-                              <p>He met an Englishman, the son of a member of Parliament and an Oxford graduate. He was charismatic and good at bluffing. His name was Henry Phillips. What Tyndale didn’t know was that Henry had amassed huge gambling debts.</p>
-                              <p>We don’t know who hired Phillips. It might have been More, even from his prison cell. Or perhaps it was the current Bishop of London John Stokesley. Both More and Stokesley had been very active in persecuting what they called heretics, those who held to Biblical views. More would keep heretics bound in his garden for whipping at his convenience and Stokesley bragged on his deathbed of ordering the execution of 30 heretics during his life.</p>
-                              <p>Whoever it was, it appears that Phillips was offered a lot of money to not only capture Tyndale but to see him executed. Phillips led Tyndale into a trap in Antwerp, Belgium. He was imprisoned in a dark, cold, and wet dungeon at Vilvoorde Castle, also in Belgium. After more than a year, he was brutally executed.</p>
-                              <p>His final prayer was for God to open the King of England’s eyes to the need of his people for a Bible in their own language.</p>
-                              <p>Amazingly, that prayer was answered just a few years later. King Henry VIII ordered that a Bible in English be provided to each church in England and used in church services. Miles Coverdale, who had helped Tyndale, was commissioned to produce it and most of The Great Bible, as it became known, was Tyndale’s translation. Tyndale's translation also made up a large part of the King James Bible in 1611 and most English translations since that time use many of the turns of phrase that William Tyndale originated.</p>
-                            </div>
-                        </div>
-                        <a id="buy"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How to Buy</strong>
-                            </div>
-                            <div class="card-body">
-                              <p><em>Tyndale</em> is available from the SDG Biblical Wisdom store.</p>
-                              <div id='product-component-1731683359506'></div>
-                              <script type="text/javascript">
-                              /*<![CDATA[*/
-                              (function () {
-                                var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-                                if (window.ShopifyBuy) {
-                                  if (window.ShopifyBuy.UI) {
-                                    ShopifyBuyInit();
-                                  } else {
-                                    loadScript();
-                                  }
-                                } else {
-                                  loadScript();
-                                }
-                                function loadScript() {
-                                  var script = document.createElement('script');
-                                  script.async = true;
-                                  script.src = scriptURL;
-                                  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-                                  script.onload = ShopifyBuyInit;
-                                }
-                                function ShopifyBuyInit() {
-                                  var client = ShopifyBuy.buildClient({
-                                    domain: 'bd30ce-2.myshopify.com',
-                                    storefrontAccessToken: '7bf5f03bf3c7ba399d3ef67f8250c103',
-                                  });
-                                  ShopifyBuy.UI.onReady(client).then(function (ui) {
-                                    ui.createComponent('product', {
-                                      id: '8650469638293',
-                                      node: document.getElementById('product-component-1731683359506'),
-                                      moneyFormat: '%24%7B%7Bamount%7D%7D',
-                                      options: {
-                                "product": {
-                                  "styles": {
-                                    "product": {
-                                      "@media (min-width: 601px)": {
-                                        "max-width": "calc(25% - 20px)",
-                                        "margin-left": "20px",
-                                        "margin-bottom": "50px"
-                                      }
-                                    },
-                                    "button": {
-                                      "font-family": "Avant Garde, sans-serif",
-                                      "font-size": "14px",
-                                      "padding-top": "15px",
-                                      "padding-bottom": "15px",
-                                      ":hover": {
-                                        "background-color": "#2d38e0"
-                                      },
-                                      "background-color": "#323ef9",
-                                      ":focus": {
-                                        "background-color": "#2d38e0"
-                                      },
-                                      "border-radius": "6px",
-                                      "padding-left": "20px",
-                                      "padding-right": "20px"
-                                    },
-                                    "quantityInput": {
-                                      "font-size": "14px",
-                                      "padding-top": "15px",
-                                      "padding-bottom": "15px"
-                                    }
-                                  },
-                                  "contents": {
-                                    "img": false,
-                                    "title": false,
-                                    "price": false
-                                  },
-                                  "text": {
-                                    "button": "Buy Tyndale"
-                                  }
-                                },
-                                "productSet": {
-                                  "styles": {
-                                    "products": {
-                                      "@media (min-width: 601px)": {
-                                        "margin-left": "-20px"
-                                      }
-                                    }
-                                  }
-                                },
-                                "modalProduct": {
-                                  "contents": {
-                                    "img": false,
-                                    "imgWithCarousel": true,
-                                    "button": false,
-                                    "buttonWithQuantity": true
-                                  },
-                                  "styles": {
-                                    "product": {
-                                      "@media (min-width: 601px)": {
-                                        "max-width": "100%",
-                                        "margin-left": "0px",
-                                        "margin-bottom": "0px"
-                                      }
-                                    },
-                                    "button": {
-                                      "font-family": "Avant Garde, sans-serif",
-                                      "font-size": "14px",
-                                      "padding-top": "15px",
-                                      "padding-bottom": "15px",
-                                      ":hover": {
-                                        "background-color": "#2d38e0"
-                                      },
-                                      "background-color": "#323ef9",
-                                      ":focus": {
-                                        "background-color": "#2d38e0"
-                                      },
-                                      "border-radius": "6px",
-                                      "padding-left": "20px",
-                                      "padding-right": "20px"
-                                    },
-                                    "quantityInput": {
-                                      "font-size": "14px",
-                                      "padding-top": "15px",
-                                      "padding-bottom": "15px"
-                                    }
-                                  },
-                                  "text": {
-                                    "button": "Add to cart"
-                                  }
-                                },
-                                "option": {},
-                                "cart": {
-                                  "styles": {
-                                    "button": {
-                                      "font-family": "Avant Garde, sans-serif",
-                                      "font-size": "14px",
-                                      "padding-top": "15px",
-                                      "padding-bottom": "15px",
-                                      ":hover": {
-                                        "background-color": "#2d38e0"
-                                      },
-                                      "background-color": "#323ef9",
-                                      ":focus": {
-                                        "background-color": "#2d38e0"
-                                      },
-                                      "border-radius": "6px"
-                                    }
-                                  },
-                                  "text": {
-                                    "total": "Subtotal",
-                                    "button": "Checkout"
-                                  }
-                                },
-                                "toggle": {
-                                  "styles": {
-                                    "toggle": {
-                                      "font-family": "Avant Garde, sans-serif",
-                                      "background-color": "#323ef9",
-                                      ":hover": {
-                                        "background-color": "#2d38e0"
-                                      },
-                                      ":focus": {
-                                        "background-color": "#2d38e0"
-                                      }
-                                    },
-                                    "count": {
-                                      "font-size": "14px"
-                                    }
-                                  }
-                                }
-                              },
-                                    });
-                                  });
-                                }
-                              })();
-                              /*]]>*/
-                              </script>
+<!-- ============ STICKY TABS ============ -->
+<div class="pp-tabs">
+  <div class="pp-wrap">
+    <nav aria-label="On this page">
+      <a href="#game">The Game</a>
+      <a href="#parts">What&rsquo;s in the Box</a>
+      <a href="#play">How to Play</a>
+      <a href="#variations">Variations</a>
+      <a href="#williamtyndale">William Tyndale</a>
+      <a href="#buy">Get the Game</a>
+    </nav>
+    <a class="pp-btn pp-btn-primary" href="#buy">Get the game</a>
+  </div>
+</div>
 
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
+<!-- ============ THE GAME ============ -->
+<section class="pp-band" id="game" aria-labelledby="game-h">
+  <div class="pp-wrap ty-two">
+    <div>
+      <h2 id="game-h">The race for God&rsquo;s Word</h2>
+      <p class="pp-lede"><em>Tyndale</em> is a hidden movement game. One player is on the run, trying to complete translation, printing, and shipping of the Bible while the other players try to track him down based on clues Tyndale leaves behind.</p>
+      <p>William Tyndale has fled England to Europe with the mission of translating the Bible from the original Hebrew and Greek into English. The Bishop of London is determined to stop him. Tyndale will need to move around Europe to avoid capture. As he completes translation of portions of scripture, he must visit a new Printing Centre to get each one printed, and then get the printed copies to a Coastal City for shipment to England.</p>
+      <p>At the beginning of the game, Tyndale has completed translation of the New Testament. He needs to get it to a Printing Centre to get it published and then to a Coastal City, so that he can ship it and begin working on translating the Pentateuch. At each city that he visits, he will “leave behind” copies of his most recently published translation (if any). These will be clues for those chasing or helping him. Once a published translation reaches a Coastal City, it independently (in the hands of trusted merchants) begins the journey across the English Channel or North Sea and then the English countryside towards London.</p>
+      <p>The game may be played by two to six players and typically takes 30 to 90 minutes to play.</p>
+    </div>
+    <figure class="ty-glimpse">
+      <button type="button" class="pp-zoom" data-zoom="../assets/tyndale/glimpse.webp" data-caption="The Bishop’s Agents’ pawns searching the board.">
+        <img src="../assets/tyndale/glimpse.webp" width="400" height="300" loading="lazy" alt="Coloured pawns of the Bishop’s Agents standing on the Tyndale game board." />
+      </button>
+      <figcaption class="ty-cap">The Bishop&rsquo;s Agents close in.</figcaption>
+    </figure>
+  </div>
+  <div class="pp-wrap">
+    <ul class="ty-sides">
+      <li><h3>If you are Tyndale</h3><p>Move in secret, publish each translation at a new Printing Centre, then ship it from a Coastal City. You may not lie, but every city you visit leaves a clue.</p></li>
+      <li><h3>If you are a Bishop&rsquo;s Agent</h3><p>Roll, move, and ask Tyndale what is in the city where you land. Piece the clues together, and catch him before the Old Testament reaches London.</p></li>
+      <li><h3>If you draw the Secret Supporter</h3><p>You look like a Bishop&rsquo;s Agent, but you are quietly helping Tyndale. You may stay silent, but you may never lie.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ WHAT'S IN THE BOX ============ -->
+<section class="pp-band alt" id="parts" aria-labelledby="parts-h">
+  <div class="pp-wrap">
+    <h2 id="parts-h">What&rsquo;s in the box</h2>
+    <p class="pp-lede">A map of England and Europe, pawns, a die, scorecards for every player, and four kinds of cards. Tap a picture to enlarge it.</p>
+
+    <div class="ty-two ty-top">
+      <figure class="ty-fig">
+        <button type="button" class="pp-zoom" data-zoom="../assets/tyndale/board.webp" data-caption="The gameboard: a grid over a map of England and Europe. Red cities are loyal to the Pope; blue cities sympathise with the Reformation.">
+          <img src="../assets/tyndale/board.webp" width="800" height="800" loading="lazy" alt="The Tyndale gameboard: a map of England and Europe overlaid with a lettered and numbered grid, with large circles for Printing Centres such as London, Antwerp, Cologne and Wittenberg." />
+        </button>
+        <figcaption class="ty-cap">The gameboard</figcaption>
+      </figure>
+      <div>
+        <h3>Gameboard</h3>
+        <ul>
+          <li>The gameboard represents a map of England and Europe, overlaid with a grid. The vertical lines are labeled A&ndash;K and the horizontal lines 1&ndash;11.</li>
+          <li>On land, the intersections are cities and towns. On water, the intersections are also legal moves (by boat), but aren&rsquo;t labeled.</li>
+          <li><b>Printing Centres</b> are cities marked by a large circle and labeled with the city name.</li>
+          <li><b>Coastal Cities</b> are cities or towns one step away from a water location.</li>
+          <li>Cities and towns loyal to the Pope are <b class="ty-red">red</b>; those sympathetic to the Reformation are <b class="ty-blue">blue</b>.</li>
+        </ul>
+        <h3>Pawns and die</h3>
+        <ul class="ty-icons">
+          <li><img src="../assets/tyndale/pawns.webp" width="100" height="100" loading="lazy" alt="" /><span>4 or 5 pawns are the Bishop&rsquo;s Agents searching for Tyndale (although one might be a Secret Supporter). They move vertically and horizontally along the grid lines.</span></li>
+          <li><img src="../assets/tyndale/die.webp" width="60" height="60" loading="lazy" alt="" /><span>The game uses a 6-sided die with values 1, 2 and 3.</span></li>
+        </ul>
+        <h3>Scorecards</h3>
+        <ul>
+          <li>Each player gets a scorecard showing a simplified board.</li>
+          <li><b>Tyndale&rsquo;s</b> has a blue border: he records where he has left copies of his publications.</li>
+          <li>The <b>Bishop&rsquo;s Agents&rsquo;</b> have red borders: they record the clues they find.</li>
+          <li>The small numbers next to Coastal Cities are their distance from London.</li>
+        </ul>
+      </div>
+    </div>
+
+    <figure class="ty-fig ty-wide">
+      <button type="button" class="pp-zoom" data-zoom="../assets/tyndale/scorecard.webp" data-caption="The scorecards: the red-bordered Bishop’s Agent scorecard in front of Tyndale’s blue-bordered one, which has the bonus-move and shipment tables.">
+        <img src="../assets/tyndale/scorecard.webp" width="800" height="800" loading="lazy" alt="A red-bordered Bishop’s Agent scorecard in front of Tyndale’s blue-bordered scorecard, with the bonus moves and shipment tables." />
+      </button>
+      <figcaption class="ty-cap">Scorecards: Bishop&rsquo;s Agent (red) and Tyndale (blue)</figcaption>
+    </figure>
+
+    <h3 style="margin-top:2rem;font-size:1.3rem">Four kinds of cards</h3>
+    <ul class="ty-kinds">
+      <li><h4>Tyndale card</h4><p>The player playing William Tyndale gets this card.</p></li>
+      <li><h4>Bishop&rsquo;s Agent cards</h4><p>With 5 or 6 players, each Agent blindly draws one to learn whether they are the Secret Supporter.</p></li>
+      <li><h4>Location cards</h4><p>When asked, Tyndale uses these to say whether he is in that location: here, not here, near or far.</p></li>
+      <li><h4>Bible cards</h4><p>When asked, Tyndale uses these to say whether he has left any translations in that location.</p></li>
+    </ul>
+
+    <!-- Collapsed by default. Filled from cards-data.js (made by Tyndale/tools/build-cards.py) -->
+    <div class="pp-acc ty-fold">
+      <details id="all-cards">
+        <summary>Browse all 21 cards</summary>
+        <div class="body">
+          <div class="pp-gallery" data-gallery hidden>
+            <h3 data-gallery-title>A closer look at the cards</h3>
+            <div class="pp-chips" role="group" aria-label="Show cards from"></div>
+            <ul class="pp-grid"></ul>
+          </div>
         </div>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2024</span> SDG Strategy, LLC | To God be the glory</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- Core theme JS-->
-        <script src="../js/scripts.js"></script>
+      </details>
+    </div>
+  </div>
+</section>
 
-    </body>
+<!-- ============ HOW TO PLAY ============ -->
+<section class="pp-band" id="play" aria-labelledby="play-h">
+  <div class="pp-wrap">
+    <h2 id="play-h">How to play</h2>
+    <p class="pp-lede">The game ends in one of two ways: the Bishop&rsquo;s Agents <b>capture Tyndale</b> and win, or the <b>Old Testament reaches London</b> and Tyndale and his Secret Supporter win.</p>
+
+    <ol class="pp-steps">
+      <li><h3>Tyndale moves in secret</h3><p>He translates, publishes at a new Printing Centre, and ships from a Coastal City, leaving copies of his work in every city he visits.</p></li>
+      <li><h3>The Agents search</h3><p>Each Agent rolls and moves, then asks Tyndale about the city where they landed. He hands over two cards, and he cannot lie.</p></li>
+      <li><h3>Shipments sail</h3><p>Once a translation is shipped it travels to London on its own. When one arrives, Tyndale announces it, and the Agents may accuse a Secret Supporter.</p></li>
+    </ol>
+
+    <div class="pp-acc">
+      <details open>
+        <summary>The story of a turn: events and portions of scripture</summary>
+        <div class="body"><p>The meaningful events in the game are:</p>
+<ul>
+<li>The <strong>translation</strong> of scripture.</li>
+<li>The <strong>publication</strong> of a <strong>translation</strong>.</li>
+<li>The <strong>shipment</strong> of a <strong>publication</strong>.</li>
+<li>The <strong>arrival</strong> of a <strong>shipment</strong> in London.</li>
+<li>The <strong>capture</strong> of William Tyndale.</li>
+</ul>
+<p>The portions of scripture translated, published, and shipped are:</p>
+<ul>
+<li>The New Testament (<strong>N</strong>)</li>
+<li>The Pentateuch (<strong>P</strong>): Genesis, Exodus, Leviticus, Numbers, Deuteronomy</li>
+<li>The Historical Books (<strong>H</strong>): Joshua, Judges, Ruth, 1 &amp; 2 Samuel, 1 &amp; 2 Kings, and 1 &amp; 2 Chronicles</li>
+<li>The Entire Old Testament (<strong>O</strong>)</li>
+</ul>
+<p>The game ends either when:</p>
+<ul>
+<li>William Tyndale is captured (the Bishop's Agents win), or</li>
+<li>The Old Testament reaches London (Tyndale and his Secret Supporter win).</li>
+</ul></div>
+      </details>
+      <details>
+        <summary>Game setup</summary>
+        <div class="body">
+<ul>
+<li>One player will be William Tyndale. This player takes the blue Scorecard. He does not have a pawn because his moves are secret.</li>
+<li>Each of the other players takes a red Scorecard.</li>
+<li>There will always be at least 4 Bishop's Agents (pawns) searching for Tyndale.</li>
+<li>If there are 5 or 6 players, the players searching for Tyndale each blindly draw a card from the Bishop's Agent cards.</li>
+<li>There is one "Secret Supporter" card - if a player draws this card, that player will secretly try to help Tyndale. This player can withhold information from others.</li>
+<li>Each player secretly shows their card to the Tyndale player so that he knows who (if anyone) is on his side.</li>
+<li>If there are fewer than 5 players, there will be 4 pawns and one or more players will control more than one pawn.</li>
+<li>If there are 5 players, there will be 4 pawns, one per non-Tyndale player.</li>
+<li>If there are 6 players, there will be 5 pawns.</li>
+<li>Players choose their pawns and place them on any location on the board (no more than one pawn per location).</li>
+<li>After the Bishop's Agents have placed their pawns (and shown their cards to Tyndale if appropriate), Tyndale chooses any location as his starting point. If he chooses a Printing Centre, he publishes the New Testament in that city and writes an "N" in the corresponding circle on his Scoresheet. He circles the "N" under Bonus Moves to indicate that he has earned a bonus move. If that city is also a Coastal City, he immediately ships the New Testament and translates the Pentateuch.</li>
+</ul>
+<p>Players take turns, starting with Tyndale, and going in clockwise order. If a player is controlling more than one pawn, that player moves each pawn in turn before play advances to the next player.</p></div>
+      </details>
+      <details>
+        <summary>Tyndale&rsquo;s turn</summary>
+        <div class="body">
+<p>If you are Tyndale, on your turn:</p>
+<ol>
+<li>Decide your next move. You can move horizontally or vertically to an adjacent spot on the map. If that spot is blue, you can move a second time to an adjacent spot. If you have unused Bonus Moves, you can choose to use one (or more) of your unused Bonus Moves to advance one (or more) additional adjacent spot(s). When you use an earned Bonus Move, strike through that letter under Bonus Moves to indicate it is no longer available. You can pass through, but not finish on a spot occupied by a Bishop's Agent.</li>
+<li>Write the letter representing the most recent <strong>publication</strong> (N, P, H, or O) in the circle on your Scorecard associated with each of your moves. If you've previously visited this location with a different <strong>publication</strong>, replace the previous letter with the most recent <strong>publication</strong> letter.</li>
+<li>If the spot where you finish is a Printing Centre that you have not previously visited and you have a <strong>translation</strong> that has not yet been <strong>published</strong>, then you get it <strong>published</strong> in this city. Circle the letter for this translation under Bonus Moves. This gives you one extra move in a future turn. Your next goal is to take this publication to a Coastal City to <strong>ship</strong> it to London.</li>
+<li>If the spot where you finish is a Coastal City and you have a <strong>publication</strong> that has not yet shipped, then send that <strong>shipment</strong> on its journey. Find the small number near the city on the Scorecard indicating the number of moves it will take for the <strong>shipment</strong> to reach London and circle that number next to the appropriate letter in the table at the top of your Scorecard. If it will take more than 10 moves, instead of a number you will find a "+" and will circle the "+". Once you have <strong>shipped</strong> a <strong>publication</strong>, you immediately complete the next <strong>translation</strong>. Your next goal is to take this new <strong>translation</strong> to a Printing Centre you have not previously visited to get it <strong>published</strong>.</li>
+<li>If you have any <strong>shipments</strong> that have not yet arrived in London, cross off the next number (starting with 1) in the row for that <strong>publication</strong>. When you cross off the circled number, announce to all players which <strong>shipment</strong> has now arrived in London. If the <strong>Old Testament</strong> arrives in London, the game is over and Tyndale (and his Secret Supporter) has won.</li>
+</ol>
+<h4>Example</h4>
+<figure class="ty-fig"><button type="button" class="pp-zoom" data-zoom="../assets/tyndale/example-tyndale.webp" data-caption="Tyndale’s scorecard in the example below."><img src="../assets/tyndale/example-tyndale.webp" width="884" height="891" loading="lazy" alt="Tyndale’s scorecard in the example below." /></button></figure>
+<ul>
+<li>Tyndale starts in Antwerp (E5) where he <strong>publishes</strong> and <strong>ships</strong> the New Testament. He writes an "N" in the circle at E5 and circles the number "3" in the "N" row in the table in the top left of the scorecard. He also earns the "N" bonus move.</li>
+<li>On his first turn he moves to Cologne (F5) where he <strong>publishes</strong> the Pentateuch. He writes a "P" in the circle at F5 and crosses off the "1" in the "N" row of the table. He also earns the "P" bonus move.</li>
+<li>On his second turn he moves to F4 where he <strong>ships</strong> the Pentateuch. He writes a "P" in the circle at F4, circles the "5" in the "P" row of the table, and crosses off the "2" in the "N" row.</li>
+<li>His third turn he moves to H4. He writes a "P" in the circles at G4 and H4, crosses off the "3" in the "N" row and the "1" in the "P" row of the table and announces that the New Testament has <strong>arrived</strong> in London.</li>
+</ul>
+<p>During this third round, two of the Bishop's Agents receive clues from Tyndale.</p>
+<p>One moves to E6 and receives:</p>
+<div class="ty-pair"><img class="ty-mini" src="../assets/tyndale/cards/rumors-480.webp" width="480" height="655" loading="lazy" alt="Rumors of a Translation" />
+<img class="ty-mini" src="../assets/tyndale/cards/not-here-480.webp" width="480" height="655" loading="lazy" alt="I Am NOT Here" /></div><p>Another moves to G4 and receives:</p>
+<div class="ty-pair"><img class="ty-mini" src="../assets/tyndale/cards/pentateuch-480.webp" width="480" height="655" loading="lazy" alt="The Pentateuch" />
+<img class="ty-mini" src="../assets/tyndale/cards/not-here-480.webp" width="480" height="655" loading="lazy" alt="I Am NOT Here" /></div>
+      </details>
+      <details>
+        <summary>A Bishop&rsquo;s Agent&rsquo;s turn</summary>
+        <div class="body">
+<p>For all other players, on your turn:</p>
+<ol>
+<li>Roll the die to determine how many spaces to move.</li>
+<li>Move your pawn the number of spaces indicated by the die. You may pass through, but not finish on a space populated by another Bishop's Agent.</li>
+<li>You may ask Tyndale if there's anything in the final location where you land. He will hand you two cards. Tyndale cannot lie.
+<ol>
+<li>One card indicates whether or not he is in that location. For Bishop's Agents, this will simply say whether or not he is there, but for the Secret Supporter, the card might say that he is "near" or "far". If you are not the Secret Supporter and you have landed on Tyndale's location, announce that you have captured "that notorious heretic Tyndale." The Bishop's Agents have won the game.</li>
+<li>The second card indicates whether or not there are any <strong>publications</strong> in that city, or if there are "rumors of a translation" - meaning an adjacent (horizontal or vertical) space has a <strong>publication</strong>. You can mark what you learned in the corresponding circle on your Scorecard. You can also share this information with other players. If there is nothing in that city, the appropriate response is "Nothing to Report".</li>
+</ol>
+</li>
+</ol>
+<p>Note that Tyndale only leaves copies of his <strong>publications</strong> (clues) where he personally travels. (When he travels by boat on water spaces, he leaves <strong>publications</strong> with fishermen he encounters at each water location.) But once he <strong>ships</strong> a <strong>publication</strong>, there will NOT be any clues along the route that the <strong>publication</strong> is traveling on its way to London.</p>
+<h4>Example</h4>
+<figure class="ty-fig"><button type="button" class="pp-zoom" data-zoom="../assets/tyndale/example-agent.webp" data-caption="A Bishop’s Agent’s scorecard in the example below."><img src="../assets/tyndale/example-agent.webp" width="884" height="891" loading="lazy" alt="A Bishop’s Agent’s scorecard in the example below." /></button></figure>
+<ul>
+<li>You start in Prague (K6).</li>
+<li>On your first turn, you roll a "3" and move to Nuremburg (I7).</li>
+<li>You ask Tyndale what's there. He gives you the two cards shown below. You place an "X" in the I7 circle.</li>
+</ul>
+<div class="ty-pair"><img class="ty-mini" src="../assets/tyndale/cards/nothing-480.webp" width="480" height="655" loading="lazy" alt="Nothing Here" />
+<img class="ty-mini" src="../assets/tyndale/cards/not-here-480.webp" width="480" height="655" loading="lazy" alt="I Am NOT Here" /></div><ul>
+<li>On your second turn, you roll a "2" and move to Strasburg (G7).</li>
+<li>You again ask Tyndale and he gives you the same two cards. you place an "X" in G7.</li>
+<li>On your third turn, you roll a "3" and move to E6.</li>
+<li>You again ask Tyndale and this time he gives you the two cards shown below. You place an "R" in E6.</li>
+</ul>
+<div class="ty-pair"><img class="ty-mini" src="../assets/tyndale/cards/rumors-480.webp" width="480" height="655" loading="lazy" alt="Nothing Here" />
+<img class="ty-mini" src="../assets/tyndale/cards/not-here-480.webp" width="480" height="655" loading="lazy" alt="I Am NOT Here" /></div><p>Each turn, your fellow Bishop's Agents are also sharing the information that they have received and you also mark that information on your scorecard.</p></div>
+      </details>
+      <details>
+        <summary>Special considerations for the Secret Supporter</summary>
+        <div class="body">
+<p>If you are the Secret Supporter, you may have the opportunity to help Tyndale escape persecution and get the English Bible to the English people. There are two ways that you can help, if you feel so led.</p>
+<p>The first way is by carrying a <strong>published</strong> translation to the coast for <strong>shipping</strong>. If Tyndale tells you that there is a <strong>publication</strong> in a city that you visit that hasn't yet <strong>arrived</strong> in London, by next visiting a Coastal City, you will be carrying that <strong>publication</strong> with you. If Tyndale hasn't yet <strong>shipped</strong> that <strong>publication</strong> (only he knows), he will track your movements and appropriately record the <strong>shipment</strong> when you reach the Coastal City.</p>
+<p>The second way you can help is by NOT helping the Bishop's Agents. Lying and deceit are an abomination to God and a violation of the ninth commandment. However, the fifth commandment ("thou shalt not murder") includes the positive requirement of preserving human life. Sharing everything you know with the Bishop's Agents may lead to Tyndale's capture and unjust execution.</p>
+<p>While Bishop's Agents are allowed to share information with each other, they aren't required to. If the cards shown by Tyndale indicate that there are no translations at a location and he is not there, the appropriate response to other players is "Nothing to Report". Tyndale's Secret Supporter may also choose not to report it if she finds rumors, translations, or Tyndale himself. A simple "Nothing to Report" will both protect Tyndale and avoid sinning.</p></div>
+      </details>
+      <details>
+        <summary>Exposing the Secret Supporter</summary>
+        <div class="body">
+<p>While playing the game, Bishop's Agents may begin to suspect that one of their own is actually a Secret Supporter of Tyndale's efforts.</p>
+<p>Any Bishop's Agent may accuse another of being a Secret Supporter, but only immediately following the announcement of the <strong>arrival</strong> of a <strong>publication</strong> in London. All Bishop's Agents players will vote on whether or not to formally charge the accused. A majority vote results in charges.</p>
+<p>If charged, the accused player must show their Bishop's Agent card to reveal whether or not they are the Secret Supporter.</p>
+<p>If they are the Secret Supporter, then they are out of the game. Their pawn is removed from the board and they can no longer take turns. If they were carrying a <strong>publication</strong> for Tyndale, that is lost and Tyndale must find another way to get the <strong>publication</strong> to a Coastal City for <strong>shipment</strong>.</p>
+<p>If they are not the Secret Supporter, then the one making the false accusation is out of the game. Their pawn is removed from the board and they can no longer take turns.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VARIATIONS ============ -->
+<section class="pp-band alt" id="variations" aria-labelledby="variations-h">
+  <div class="pp-wrap">
+    <h2 id="variations-h">Variation: Meritocracy</h2>
+    <div class="ty-var"><p>In the days of William Tyndale, Roman Catholic Church officials were very much focused on earning salvation through their meritorious service to the church. Therefore, it seems appropriate to introduce a competitive element to this largely cooperative game.</p>
+<p>In this variant, called <em>Meritocracy</em>, Bishop's Agents earn points for each of a number of accomplishments in the search for Tyndale:</p><ul>
+<li><strong>10 points:</strong> Being the first to find a particular translation in a city.</li>
+<li><strong>20 points:</strong> Finding (and burning) where a particular translation was printed.</li>
+<li><strong>20 points:</strong> Finding where a particular translation shipped for England.</li>
+<li><strong>50 points:</strong> Successfully uncovering the Secret Supporter.</li>
+<li><strong>50 points:</strong> Finding "that notorious heretic" William Tyndale.</li>
+</ul></p>
+<p>To implement these additional game features:
+<ol>
+<li>If you are the first to uncover a particular translation (New Testament, Pentateuch, Historical Books, or Old Testament) in any city, then announce that you have found it, mark your Scorecard as normal, but also circle the city. Only one player can earn points for each of the translations.</li>
+<li>If you believe that you have found the city where a translation was printed (whether or not that is true is irrelevant), announce that you have found where that translation was printed, mark your Scorecard as normal, but also circle the city. It is possible for multiple players to earn points for finding what they believe to be the city were a given translation was printed.</li>
+<li>If you believe that you have found the city from which a translation was shipped to England (whether or not that is true is irrelevant), announce that you have found where that translation was shipped, mark your Scorecard as normal, but also circle the city. It is possible for multiple players to earn points for finding what they believe to be the city were a given translation was shipped.</li>
+<li>If you accuse the Secret Supporter, gain support of your fellow players to bring charges, and successfully uncover the Secret Supporter, draw a star in the top right corner of your Scorecard.</li>
+<li>If you find William Tyndale, draw a star in the top left corner of your Scorecard.</li>
+<li>At the end of the game, add up your points.<ul>
+<li>You get 50 points if you have a star in the top left of your Scorecard.</li>
+<li>You get 50 points if you have a star in the top right of your Scorecard.</li>
+<li>You get 20 points for each circled printing centre.</li>
+<li>You get 20 points for each circled coastal city.</li>
+<li>You get 10 points for each additional circled city.</li>
+</ul></li>
+<li>If Tyndale is caught before the Old Testament reaches London, then the player with the most points wins.</li>
+</ol>
+</p></div>
+  </div>
+</section>
+
+<!-- ============ WILLIAM TYNDALE ============ -->
+<section class="pp-band" id="williamtyndale" aria-labelledby="wt-h">
+  <div class="pp-wrap ty-bio">
+    <h2 id="wt-h">William Tyndale</h2>
+    <div class="ty-bio-lede"><p>William Tyndale is a mystery. He lived much of his life in hiding, so there were no portraits ever made of him during his lifetime. There is no contemporary biography that gives specific details of his life. We can infer some things about him from public university records, public records that seem to be about his brothers, public land records, and some writings about him by his contemporaries, many of whom hated him and wanted him dead. So, whatever you hear about William Tyndale, you need to realize that it’s probably someone’s best guess, and not a for-certain fact. That includes what you are about to read.</p></div>
+    <div class="pp-acc">
+      <details>
+        <summary>Read the rest of his story</summary>
+        <div class="body"><p>William Tyndale was born sometime around 1494, give or take a few years. He was almost certainly from somewhere in Gloucestershire, probably near the border of Wales, so about 100 miles or so west of London, and about 50 miles west of Oxford.</p><p>Some think the name Tynedale refers to the family originally being from the Dales (or hills) along the Tyne river, in Northern England. The family may have had to relocate when they ended up on the wrong side of one of England’s earlier civil wars.</p><p>But his family were landowners of some level of wealth. Williams’ older brother shows up in public records as being fairly prominent in the area. His younger brother would later get into some trouble for supporting William’s efforts to bring the Word of God into England.</p><p>As the middle son, William wasn’t going to inherit his father’s land, so he was a good candidate for the ministry. He was sent to Oxford, entering the university probably when he was 13 or 14 years old. He earned his Bachelor of Arts degree in 1512 and his Master of Arts degree in Philosophy in 1515. Although the universities were basically under church control, there was no theology taught until the Masters level and even then the focus was more on logic and wordcraft than on meaning and spirituality.</p><p>Tyndale later wrote: “In the universities they have ordained that no man shall look on the scripture until he be trained in heathen learning eight or nine years, and armed with false principles, with which he is clean shut out of the understanding of scripture: and at this first coming unto the university he is sworn that he shall not defame the university, whatsoever he seeth; and when he first taketh first degree, he is sworn that he shall hold no opinion condemned by the church, but what such opinions be, that he shall know, and then, when they be admitted to study divinity, because the scripture is locked up with such false expositions and with false principles of natural philosophy, that they cannot enter in, they go about the outside, and dispute all their lives about words and vain opinions, pertaining as much unto the healing of a man’s heel as the health of his soul; provided yet always, lest God give his singular grace unto any person, that none may preach except he be admitted of the bishops.”</p><p>After graduating, Tyndale was required to teach a year at Oxford. He also was ordained as a priest at some point. But it seems that, as soon as he could, he left Oxford for Cambridge. Tyndale was gifted in languages and he may have gone there to study Greek.</p><p>Oxford traces its history to the 11th or 12th century. Cambridge was founded in the 13th century by some professors who had fled a local dispute in Oxford. Many of the leaders of the yet future English Reformation would come out of Cambridge. Oxford was where many of the reformation’s staunchest foes were trained, men that would become Tyndale’s mortal enemies. When Bloody Mary reintroduced Catholicism to England, many of the Cambridge-trained reformers were burned in Oxford. There’s a monument to them today in Oxford.</p><p>Tyndale would’ve arrived in Cambridge around 1517. When Luther’s writings started arriving from the continent, there was a group of reform minded men who would meet at the White Horse Inn in Cambridge to discuss these writings. It is possible that Tyndale was among them. It seems that Tyndale was at least beginning to question the Catholic Church’s ways by the time he left Cambridge in 1521.</p><p>He left to return to Gloucestershire where he served as tutor for the family of Sir John Walsh at Little Sodbury Manor.</p><p>While in Gloucestershire, Tyndale was not quiet about his seemingly radical thoughts. In addition to his duties teaching the children, he would also preach at times in nearby villages. At some point he was summoned by the vicar general of the diocese, John Bell, to a gathering of clergy in Gloucestershire. Bell accused Tyndale of spreading seditious and heretical teaching. Writing about it later Tyndale said that Bell “threatened me grievously, and reviled me, and berated me as though I had been a dog”  - but he was released with only a reprimand.</p><p>Various members of the clergy would often come to be fed at the Walsh table at Little Sodbury, and Tyndale would be at the table with them, debating about church doctrine, and especially about the authority of Scripture. In a famous confrontation, one of these guests said to Tyndale “We were better to be without God’s law than the Pope’s.” - meaning that he would rather have the church’s traditions than the Bible.</p><p>Tyndale responded “I defy the Pope and all his laws, and if God spare my life ere many years, I will cause a boy that driveth the plow, shall know more of the scripture than thou dost.”</p><p>This seems to be the moment that focused William Tyndale on his life’s work - translating the Bible from the original languages into English.</p><p>Unfortunately, that was against the law. In 1408 in response to John Wycliffe’s previous translation of the Latin Vulgate Bible into English, the Archbishop of Canterbury established the Constitutions of Oxford, which forbade anyone from translating scripture into English without the express permission of the Bishops. It even forbade the people from reading the Bible in English.</p><p>So in 1523 William Tyndale went to London to ask the Bishop of London to sponsor him in doing just that. The Bishop at the time was Cuthbert Tunstall, a friend of Desiderius Erasmus. Tunstall had actually traveled with Erasmus to Brussels, Ghent, and Bruge and helped him with his Greek New Testament project.</p><p>Erasmus spent several years in England as a professor at Cambridge. He never learned English, but had no problem operating in the academic world entirely in Latin. Some of the men who became powerful leaders in England had strong ties to Erasmus. In 1516, Erasmus published a new Latin translation of the New Testament based on the best Greek manuscripts. His book laid the Greek alongside the Latin and it became a very helpful tool to those creating new translations of the Bible. Martin Luther used it to translate the New Testament into German in 1522. Erasmus was a proponent of translating the Bible into the common language in each country, but the church was opposed to any translations other than Latin.</p><p>Tyndale hoped that the Bishop would agree with Erasmus’ positive views on Bible translation and would take Tyndale into his employment to create an authorized English Bible. Unfortunately, Luther’s German New Testament had recently been published and Luther’s writings seemed to be fueling the Peasant’s Revolt in Germany. </p><p>Tyndale translated a particularly challenging ancient Greek document and had it delivered to the Bishop via Sir Harry Guilford, a friend of Sir John Walsh. This was meant to demonstrate to the Bishop his translation skills. But when Tyndale met with Tunstall, the bishop indicated that he couldn’t afford to take him on, but encouraged him to find another sponsor in London. In reality, it seems that Tunstall exerted pressure on everyone who could possibly help Tyndale to not support him in any way. The bishop wanted Tyndale close, so he could keep his eye on him, but didn’t want to give him any chance to succeed.</p><p>Tyndale ended up staying with Humphrey Monmouth, a wealthy London cloth merchant. He stayed in London for a year, still hoping to find a sponsor for his translation project. He preached a little, and he likely worked on his translation of the New Testament. He also became aware of a secret society called the Christian Brethren, an association of wealthy cloth merchants who financed and smuggled in forbidden books and pamphlets supporting the reformation. The brethren financed Tyndale's work in the beginning and later helped bring his books into England.</p><p>Once Tyndale realized that he would never find support for his translation work in England, he left for Europe. He probably went to Germany, but for the next dozen years he would constantly be on the run, trying to avoid capture.</p><p>Tyndale had mastered Greek, but there were no Hebrew experts in England. It appears that he may have made his way to Luther’s Wittenberg and studied Hebrew there. There is a cryptic entry in the registrar's records at the University in Wittenberg around that time for an Englishman named William Dalton. If you reverse the two syllables in Tyndale, you get Dal-Tyne.</p><p>From this point on, Tyndale is best known for his writings, especially his translation of the Bible from the original languages into English.</p><p>The first part of the Bible that William translated was the New Testament. He found a printer in Cologne, Germany who would print it for him. In those days, printing a book was a very hard and slow process. Each page had to be printed separately using a hand-operated printing press. Unfortunately, in the middle of printing, Catholic loyalist John Dobneck discovered what was happening and called for the authorities to arrest William and capture the translation. William found out and he and his assistant fled to a safer place with the translation. In 1526, the New Testament was finally printed in Worms, Germany and secretly shipped to England for the people to read.</p><p>The next part of the Bible that William translated was the first 5 books of the Old Testament: Genesis, Exodus, Leviticus, Numbers, and Deuteronomy. This collection of books is also called the Books of Moses, the Law, or the Pentateuch (which is Greek for “five books”). William had to learn Hebrew to be able to do this translation, so it was very hard. After he translated these first five books, he took a ship to a city where he hoped to get it printed. Unfortunately, the ship sank. William and his assistant survived, but the translation sank to the bottom of the sea. William had to start over. Finally, in 1530, the Pentateuch was published in Antwerp, Belgium and shipped to England.</p><p>The next portion of scripture that William translated is most of what we often call the Historical Books. The books he translated were Joshua, Judges, Ruth, 1 Samuel, 2 Samuel, 1 Kings, 2 Kings, 1 Chronicles, and 2 Chronicles. These were printed in Antwerp in 1531 and secretly shipped to England for all to read.</p><p>That year he also published the translation of the book of Jonah.</p><p>In 1534, Tyndale published a revised version of the New Testament with a large number of corrections. For example, he had originally replaced the word “Priest” from the Latin Vulgate with the word “Senior.” In the 1534 edition, he changed this to “Elder”.</p><p>It was the New Testament of 1526 that really aroused the furor of the church leadership in London. Until Tyndale’s English translation started showing up in England, the idea of the Bible in English was just a concept. Wycliffe’s translation from centuries before was so hard to read that it didn’t really do much for the average Englishman, but Tyndale’s translation was beautiful and powerful. It immediately became a best seller and everyday people were reading it. It was affordable enough for day laborers to buy and small enough to be easily concealed.</p><p>The Bishops immediately attacked it, claiming it had thousands of errors and couldn’t be trusted. They collected as many copies of the book as they could, even buying them at a premium price, and then they burned them. This helped fund Tyndale's continuing work and made people even more interested in reading the Bible. It also made people question even more the validity of church leaders who would burn the very Word of God.</p><p>It also sparked a written war over theology. Thomas More specifically attacked three of Tyndale’s word choices. Where the Catholic Church had translated Ekklesia to be the Latin word for Church, Tyndale translated it as Congregation, since Rome had turned “Church” into an overbearing institution, while Tyndale thought the Bible focused on the gathered body of believers who make up the church. The Catholics had translated the New Testament Greek Presbuteros as the Latin word for the same word used for Priest in the Old Testament. Tyndale saw New Covenant ministers playing a very different role. He initially translated this word “Senior”, but as mentioned above, in his 1534 revision he changed it to “Elder”. Finally, the Catholic Bible had translated the Greek word Agape as “charity” but Tyndale translated it as “love”. Tyndale defended these word choices in his response to More. That opened the door for debates on other topics.</p><p>The King of England during this time was King Henry VIII. Henry wanted a male heir. His first wife, Catherine, was getting beyond child bearing age and had only given him a daughter. Henry wanted the marriage annulled, but the Pope wouldn’t allow it. Eventually this led to England’s separation from the Catholic church and Henry declaring himself the head of the English church, but this battle took several years. Henry’s first request to the Pope to annul his marriage with Catherine was in 1527 and the split with Rome happened in 1533. This was exactly the time when Tyndale was writing.</p><p>Tyndale wrote a book called <em>The Obedience of a Christian Man</em> that included this line that Henry really liked: “God hath made the king in every realm judge over all, and over him there is no judge. He that judgeth the king judgeth God and he that layeth hands on the king layeth hands on God, and he that resisteth the king resisteth God and damneth God’s law and ordinance.”</p><p>Tyndale thought it was the English church leaders pushing Henry to seek an annulment, not Henry’s own selfish desires, so he wrote <em>The Practice of Prelates</em>, ultimately providing a Biblical argument against the divorce. Henry was very much not a fan of this one and fired up the clergy even more to fight against and find Tyndale.</p><p>One of Thomas More’s books, titled <em>Confutation of Tyndale’s Answer</em> was half a million words long, more than two Moby Dick’s or a single War and Peace. There wasn’t much More could say to defend the Roman church’s errors in light of what the Bible said, so instead he made personal attacks against Tyndale and repeated himself. A lot. Here’s one small quote “Judge good Christian reader whether it be possible that he [Tyndale] be any better than a beast out of whose brutish beastly mouth cometh such a filthy foam.”</p><p>Tyndale published three types of books.</p><p>Of course, the most important are his translations of Scripture. Sometimes the publication just included the scripture. Other times it included some commentary and explanation. He published the entire New Testament and the Old Testament through 2 Chronicles, plus the prophet Jonah. After his death, a couple of the men that had assisted him completed the Old Testament, but not from the original languages.</p><p>He also published expositions of scripture including <em>The Parable of the Wicked Mammon</em> (or the Parable of the Unjust Steward from Luke 16), an <em>Exposition of the First Epistle of John</em>, and an <em>Exposition of Matthew 5 - 7</em> (the Sermon on the Mount).</p><p>The third type of publication dealt with theological topics. To some extent, his expositions did as well. <em>The Parable of the Wicked Mammon</em> made a strong case for justification by faith alone. I’ve already mentioned <em>The Obedience of a Christian Man</em> and <em>The Practice of Prelates</em>. His <em>An Answer to Sir Thomas More</em> covered many topics. His book on <em>The Lord’s Supper</em> attacked the beliefs and practices of the Catholic church on that topic. And his <em>A Pathway Into Holy Scripture</em> explains the importance of the distinction between law and gospel.</p><p>In 1535, things seemed to be going well. King Henry VIII had finally broken from the Roman Church, even though it was for all the wrong reasons and not a very theologically correct reformation, but he had counselors around him guiding things in the right direction. Many church leaders remained faithful to the Catholic Church and refused to recognize Henry as head of the church. They were imprisoned and many executed. More was imprisoned in the Tower of London and eventually would be beheaded.</p><p>Maybe Tyndale let his guard down.</p><p>He met an Englishman, the son of a member of Parliament and an Oxford graduate. He was charismatic and good at bluffing. His name was Henry Phillips. What Tyndale didn’t know was that Henry had amassed huge gambling debts.</p><p>We don’t know who hired Phillips. It might have been More, even from his prison cell. Or perhaps it was the current Bishop of London John Stokesley. Both More and Stokesley had been very active in persecuting what they called heretics, those who held to Biblical views. More would keep heretics bound in his garden for whipping at his convenience and Stokesley bragged on his deathbed of ordering the execution of 30 heretics during his life.</p><p>Whoever it was, it appears that Phillips was offered a lot of money to not only capture Tyndale but to see him executed. Phillips led Tyndale into a trap in Antwerp, Belgium. He was imprisoned in a dark, cold, and wet dungeon at Vilvoorde Castle, also in Belgium. After more than a year, he was brutally executed.</p><p>His final prayer was for God to open the King of England’s eyes to the need of his people for a Bible in their own language.</p><p>Amazingly, that prayer was answered just a few years later. King Henry VIII ordered that a Bible in English be provided to each church in England and used in church services. Miles Coverdale, who had helped Tyndale, was commissioned to produce it and most of The Great Bible, as it became known, was Tyndale’s translation. Tyndale's translation also made up a large part of the King James Bible in 1611 and most English translations since that time use many of the turns of phrase that William Tyndale originated.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GET THE GAME ============ -->
+<section class="pp-cta" id="buy" aria-labelledby="buy-h">
+  <div class="pp-wrap">
+    <h2 id="buy-h">Get Tyndale</h2>
+    <p><strong>$49.99</strong> &middot; <em>Tyndale</em> is available from the SDG Biblical Wisdom store.</p>
+    <div class="pp-shopify" data-state="live"></div>
+  </div>
+</section>
+</main>
+
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+<div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+</footer>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- Core theme JS-->
+<script src="../js/scripts.js"></script>
+
+<!-- ===== Page settings ===== -->
+<script>
+window.SDG_PRODUCT = {
+  // On sale now: the Shopify product id below turns each ".pp-shopify" spot into a buy button.
+  productId: '8650469638293',
+  buttonText: 'Buy Tyndale',
+};
+</script>
+<script src="../js/product-core.js?v=20261026"></script>
+<script src="cards-data.js?v=20261026"></script>
+<script src="../js/product-gallery.js?v=20261026"></script>
+<script src="../js/product-page.js?v=20261026"></script>
+</body>
 </html>

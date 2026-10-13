@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..');
-const PAGES = ['6days/index.html', 'JfP/index.html', 'roman-catacombs/index.html'];
+const PAGES = ['6days/index.html', 'JfP/index.html', 'roman-catacombs/index.html', 'Tyndale/index.html'];
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 const stripComments = (h) => h.replace(/<!--[\s\S]*?-->/g, '');

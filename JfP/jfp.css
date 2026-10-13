@@ -33,3 +33,5 @@
 }
 .jfp-two h3, .jfp-var h3 { font-weight: 700; font-size: 1.2rem; margin: 1.2rem 0 .3rem; }
 .jfp-info h3 { margin-top: 0; }
+
+@media (max-width: 860px) { .jfp-cta { justify-content: center; } }

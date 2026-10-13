@@ -30,3 +30,6 @@
 
 /roman-catacombs/play/*
   Cache-Control: no-cache
+
+/Tyndale/ty.css
+  Cache-Control: no-cache
