@@ -1,0 +1,45 @@
+/* Journeys for Paul scorepad: matches the online game (JfP/play) */
+.sp { --luke: #1f9d45; --silas: #ef7a1a; --titus: #2f66e0; --mac: #38b44a; --asia: #9b2fd6; --gal: #f2671e; --isl: #2446e8;
+      max-width: 900px; margin: 0 auto; }
+.sp-logo { height: 54px; width: auto; max-width: 100%; }
+.sp [hidden] { display: none !important; }
+
+/* sticky total */
+.sp-total { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 1rem; padding: .7rem 1rem; margin: 0 0 1rem;
+            background: #212529; color: #fff; border-radius: 0 0 .6rem .6rem; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+.sp-total .label { font-weight: 600; font-size: 1.05rem; flex: 1; }
+.sp-total .num { font-size: 2.2rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; min-width: 3.2rem; text-align: right; }
+.sp-total small { display: block; font-weight: 400; color: #ced4da; font-size: .8rem; }
+
+.sp-card { background: #fff; border-radius: .6rem; padding: .9rem 1rem; margin-bottom: .9rem; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+.sp-card h2 { font-size: 1.1rem; margin: 0 0 .15rem; display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; }
+.sp-card h2 .pts { font-variant-numeric: tabular-nums; font-weight: 800; }
+.sp-hint { color: #5c636a; font-size: .88rem; margin: 0 0 .6rem; }
+.sp-ev { border-left: 8px solid var(--c); }
+.sp-ev h2 { color: var(--c); }
+
+/* pill checkboxes */
+.pills { display: flex; flex-wrap: wrap; gap: .45rem; }
+.pill { position: relative; }
+.pill input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.pill span { display: inline-block; padding: .35rem .8rem; border-radius: 2rem; border: 2px solid var(--rc); color: var(--rcd, var(--rc)); background: #fff; font-weight: 600; font-size: .95rem; line-height: 1.25; min-height: 2.4rem; }
+.pill input:checked + span { background: var(--rc); color: #fff; }
+.pill input:focus-visible + span { outline: 3px solid #86b7fe; outline-offset: 2px; }
+.pill input:disabled { cursor: default; }
+.pill input:disabled + span::after { content: " \1F512"; font-size: .8em; }
+.r-mac { --rc: var(--mac); --rcd: #23812f; } .r-asia { --rc: var(--asia); } .r-gal { --rc: var(--gal); --rcd: #b24a0c; } .r-isl { --rc: var(--isl); }
+
+/* steppers */
+.stepper { display: flex; align-items: center; gap: .6rem; padding: .35rem 0; }
+.stepper .name { flex: 1; font-weight: 600; }
+.stepper .name small { display: block; font-weight: 400; color: #5c636a; }
+.stepper button { width: 2.8rem; height: 2.8rem; border-radius: 50%; border: 2px solid #212529; background: #fff; font-size: 1.5rem; line-height: 1; font-weight: 700; }
+.stepper button:disabled { opacity: .35; }
+.stepper button:active:not(:disabled) { background: #e9ecef; }
+.stepper output { min-width: 2.4rem; text-align: center; font-size: 1.5rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.sp-region h3 { font-size: .95rem; margin: .8rem 0 .4rem; color: var(--rcd, var(--rc)); }
+.sp-actions { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin: 1rem 0 2rem; }
+.sp-breakdown { width: 100%; border-collapse: collapse; margin-top: .3rem; }
+.sp-breakdown td { padding: .25rem 0; border-bottom: 1px solid #e9ecef; }
+.sp-breakdown td:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }

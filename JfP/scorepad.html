@@ -1,186 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Journeys with Jesus Scorepad</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-  <!-- Favicon-->
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-  <link href="../css/styles.css" rel="stylesheet" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script>
-  $( document ).ready(function() {
-
-    calculateScore();
-
-    $(":input").bind('keyup mouseup', function () {
-      console.log("input "+$(this).attr('id')+" changed");
-      if($(this).attr('type') == 'checkbox') {
-        console.log("checkbox, skipping");
-        return;
-      }
-      calculateScore();
-    });
-
-    $(":checkbox").change(function () {
-      console.log("input "+$(this).attr('id')+" changed");
-      if ($(this).is(':checked')) {
-          console.log($(this).attr('id') + ' is now checked');
-      } else {
-          console.log($(this).attr('id') + ' is now unchecked');
-      }
-      calculateScore();
-    });
-
-  });
-
-  function calculateScore() {
-    var totalscore = 0;
-
-    var lukeRegions = $(".LukeRegion:checked").length;
-    console.log("Luke Regions:"+lukeRegions);
-    $("#LukeRegions").text(4*lukeRegions);
-    totalscore += 4*lukeRegions;
-
-    var silasRegions = $(".SilasRegion:checked").length;
-    console.log("Silas Regions:"+silasRegions);
-    $("#SilasRegions").text(4*silasRegions);
-    totalscore += 4*silasRegions;
-
-    var titusRegions = $(".TitusRegion:checked").length;
-    console.log("Titus Regions:"+titusRegions);
-    $("#TitusRegions").text(4*titusRegions);
-    totalscore += 4*titusRegions;
-
-    var preachingPastoring = Number($('#Preached').val())*3 + Number($('#Called').val())*5;
-    $('#PreachingPastoring').text(preachingPastoring);
-    totalscore += preachingPastoring;
-
-    var missedCities = $(".city").length - $(".city:checked").length;
-    console.log("Total Cities:"+$(".city").length+" Checked Cities:"+$(".city:checked").length);
-    $(".city:checked").each(function( index ) {
-      console.log( index + ": " + $( this ).attr('id') );
-    });
-
-    $("#Cities").text("-"+Number(2*missedCities));
-    totalscore -= Number(2*missedCities);
-
-    $('#TotalScore').text(totalscore);
-
-
-
-  }
-
-  </script>
-  <style>
-  tr {padding-bottom: 5px;}
-  th {text-align: right;}
-  td {text-align: center;}
-  img{
-      max-width: 100%;
-      display: block;
-  }
-  body {
-      background-color: #FDEEB9;
-      max-width: 400px;
-  }
-  input[type='number']{ width: 30px;}
-  h1 {margin-top: 0;}
-  table {border: 0;}
-  h4 {font-size: 14pt;}
-  </style>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>Journeys for Paul Scorepad | SDG Games</title>
+<meta name="description" content="A free scorepad for the Journeys for Paul board game: tick the regions and cities your evangelists reached and it adds up your score." />
+<link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+<link href="../css/styles.css" rel="stylesheet" />
+<link href="scorepad.css?v=20261018" rel="stylesheet" />
 </head>
-<body>
-    <a href="https://sdggames.fun/JfP/index.html" target="_blank"><img  class="img-responsive img-fluid" src="../assets/JfP Logo Long Red.png" /></a>
-<h1>Total Score: <span id='TotalScore'>-24</span></h1>
-<div id="scorepad">
-  <div style='background-color: lightgreen; padding: 10px;'>
-    <h4>Which Regions Did Luke Visit? (<span id='LukeRegions'>4</span> points)</h4>
-    <p>
-      <input type=checkbox class='LukeRegion' id='LukeMacedonia' checked disabled><span style='color: green; padding-left: 10px;'>Macedonia & Achaia</span><br />
-      <input type=checkbox class='LukeRegion' id='LukeAsia'><span style='color: purple; padding-left: 10px;'>Asia Minor</span><br />
-      <input type=checkbox class='LukeRegion' id='LukeGalatia'><span style='color: orange; padding-left: 10px;'>Galatia</span><br />
-      <input type=checkbox class='LukeRegion' id='LukeMediterranean'><span style='color: blue; padding-left: 10px;'>Mediterranean Islands</span>
-    </p>
-  </div>
-  <div style='background-color: moccasin; padding: 10px;'>
-    <h4>Which Regions Did Silas Visit? (<span id='SilasRegions'>4</span> points)</h4>
-    <p>
-      <input type=checkbox class='SilasRegion' id='SilasMacedonia'><span style='color: green; padding-left: 10px;'>Macedonia & Achaia</span><br />
-      <input type=checkbox class='SilasRegion' id='SilasAsia'><span style='color: purple; padding-left: 10px;'>Asia Minor</span><br />
-      <input type=checkbox class='SilasRegion' id='SilasGalatia' checked disabled><span style='color: orange; padding-left: 10px;'>Galatia</span><br />
-      <input type=checkbox class='SilasRegion' id='SilasMediterranean'><span style='color: blue; padding-left: 10px;'>Mediterranean Islands</span>
-    </p>
-  </div>
-  <div style='background-color: lightblue; padding: 10px;'>
-    <h4>Which Regions Did Titus Visit? (<span id='TitusRegions'>4</span> points)</h4>
-    <p>
-      <input type=checkbox class='TitusRegion' id='TitusMacedonia'><span style='color: green; padding-left: 10px;'>Macedonia & Achaia</span><br />
-      <input type=checkbox class='TitusRegion' id='TitusAsia'><span style='color: purple; padding-left: 10px;'>Asia Minor</span><br />
-      <input type=checkbox class='TitusRegion' id='TitusGalatia'><span style='color: orange; padding-left: 10px;'>Galatia</span><br />
-      <input type=checkbox class='TitusRegion' id='TitusMediterranean' checked disabled><span style='color: blue; padding-left: 10px;'>Mediterranean Islands</span>
-    </p>
-  </div>
-  <div style='background-color: lavender; padding: 10px;'>
-    <h4>Preaching/Pastoring (<span id='PreachingPastoring'>0</span> points)</h4>
-    <p><input type='number' value=0 style='width: 50px' id='Preached'> # of Times Preached <br />
-      <input type='number' value=0 style='width: 50px' id='Called'> # Called as Pastors
-    </p>
-  </div>
-  <div style='background-color: white; padding: 10px;'>
-    <h4>Cities Visited (<span id='Cities'>-30</span> points)</h4>
-  </div>
-  <div style='background-color: lightgreen; padding: 10px;'>
-    <p>
-      <input type=checkbox class='city' id='Neapolis'><span style='color: green; padding-left: 10px;'>Neapolis</span><br />
-      <input type=checkbox class='city' id='Philippi' checked disabled><span style='color: green; padding-left: 10px;'>Philippi</span><br />
-      <input type=checkbox class='city' id='Thessalonica'><span style='color: green; padding-left: 10px;'>Thessalonica</span><br />
-      <input type=checkbox class='city' id='Berea'><span style='color: green; padding-left: 10px;'>Berea</span><br />
-      <input type=checkbox class='city' id='MtOlympus'><span style='color: green; padding-left: 10px;'>Mt. Olympus</span><br />
-      <input type=checkbox class='city' id='Ambracia'><span style='color: green; padding-left: 10px;'>Ambracia</span><br />
-      <input type=checkbox class='city' id='Delphi'><span style='color: green; padding-left: 10px;'>Delphi</span><br />
-      <input type=checkbox class='city' id='Athens'><span style='color: green; padding-left: 10px;'>Athens</span><br />
-      <input type=checkbox class='city' id='Corinth'><span style='color: green; padding-left: 10px;'>Corinth</span><br />
-      <input type=checkbox class='city' id='Sparta'><span style='color: green; padding-left: 10px;'>Sparta</span>
-    </p>
-  </div>
-  <div style='background-color: lightblue; padding: 10px;'>
-    <p>
-      <input type=checkbox class='city' id='Crete' checked disabled><span style='color: blue; padding-left: 10px;'>Crete</span><br />
-      <input type=checkbox class='city' id='Patmos'><span style='color: blue; padding-left: 10px;'>Patmos</span><br />
-      <input type=checkbox class='city' id='Rhodes'><span style='color: blue; padding-left: 10px;'>Rhodes</span><br />
-      <input type=checkbox class='city' id='Cyprus'><span style='color: blue; padding-left: 10px;'>Cyprus</span>
-    </p>
-  </div>
-  <div style='background-color: moccasin; padding: 10px;'>
-    <p>
-      <input type=checkbox class='city' id='Perga'><span style='color: orange; padding-left: 10px;'>Perga</span><br />
-      <input type=checkbox class='city' id='Derbe'><span style='color: orange; padding-left: 10px;'>Derbe</span><br />
-      <input type=checkbox class='city' id='Lystra'><span style='color: orange; padding-left: 10px;'>Lystra</span><br />
-      <input type=checkbox class='city' id='Iconium'><span style='color: orange; padding-left: 10px;'>Iconium</span><br />
-      <input type=checkbox class='city' id='Colossae'><span style='color: orange; padding-left: 10px;'>Colossae</span><br />
-      <input type=checkbox class='city' id='Apamea'><span style='color: orange; padding-left: 10px;'>Apamea</span><br />
-      <input type=checkbox class='city' id='Antioch' checked disabled><span style='color: orange; padding-left: 10px;'>Antioch</span><br />
-      <input type=checkbox class='city' id='Pessinus'><span style='color: orange; padding-left: 10px;'>Pessinus</span><br />
-      <input type=checkbox class='city' id='Chalcedon'><span style='color: orange; padding-left: 10px;'>Chalcedon</span>
-    </p>
-  </div>
-  <div style='background-color: lavender; padding: 10px;'>
-    <p>
-      <input type=checkbox class='city' id='Troas'><span style='color: purple; padding-left: 10px;'>Troas</span><br />
-      <input type=checkbox class='city' id='Pergamum'><span style='color: purple; padding-left: 10px;'>Pergamum</span><br />
-      <input type=checkbox class='city' id='Thyatira'><span style='color: purple; padding-left: 10px;'>Thyatira</span><br />
-      <input type=checkbox class='city' id='Smyrna'><span style='color: purple; padding-left: 10px;'>Smyrna</span><br />
-      <input type=checkbox class='city' id='Ephesus'><span style='color: purple; padding-left: 10px;'>Ephesus</span><br />
-      <input type=checkbox class='city' id='Sardis'><span style='color: purple; padding-left: 10px;'>Sardis</span><br />
-      <input type=checkbox class='city' id='Philadelphia'><span style='color: purple; padding-left: 10px;'>Philadelphia</span><br />
-      <input type=checkbox class='city' id='Laodicea'><span style='color: purple; padding-left: 10px;'>Laodicea</span><br />
-      <input type=checkbox class='city' id='Miletus'><span style='color: purple; padding-left: 10px;'>Miletus</span><br />
-      <input type=checkbox class='city' id='Cridus'><span style='color: purple; padding-left: 10px;'>Cridus</span>
-    </p>
-  </div>
-</div>
+<body class="sb-nav-fixed">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
 
+<main class="sp container-fluid px-3 pb-5">
+  <div class="d-flex flex-wrap align-items-center gap-3 py-3">
+    <a href="index.html"><img class="sp-logo" src="../assets/JfP Logo Long Red.png" alt="Journeys for Paul" /></a>
+    <span class="badge text-bg-secondary">Scorepad</span>
+    <a class="ms-auto small" href="index.html">About the game</a>
+  </div>
+
+  <div class="sp-total" role="status" aria-live="polite">
+    <div class="label">Total score<small>Updates as you tick</small></div>
+    <div class="num" id="total">0</div>
+  </div>
+
+  <h1 class="h3 mb-1">Score your game</h1>
+  <p class="sp-hint">Playing the board game? Tick what your evangelists reached, and the scorepad adds it up. Starting regions and cities are already counted (locked). Your entries are saved on this device.</p>
+
+  <section aria-labelledby="regions-h">
+    <h2 class="h5 mt-3" id="regions-h">1. Regions visited <small class="text-muted fw-normal">(4 points each, per evangelist)</small></h2>
+    <div id="evs"></div>
+  </section>
+
+  <section aria-labelledby="preach-h">
+    <h2 class="h5 mt-3" id="preach-h">2. Preaching and pastors</h2>
+    <div class="sp-card">
+      <div class="stepper"><div class="name">Times preached<small>3 points each. Don&rsquo;t count the preach that got an evangelist called.</small></div>
+        <button type="button" data-step="preached" data-d="-1" aria-label="One fewer preach">&minus;</button><output id="preached" aria-live="polite">0</output><button type="button" data-step="preached" data-d="1" aria-label="One more preach">+</button></div>
+      <div class="stepper"><div class="name">Evangelists called as pastors<small>5 points each, up to 3.</small></div>
+        <button type="button" data-step="called" data-d="-1" aria-label="One fewer called">&minus;</button><output id="called" aria-live="polite">0</output><button type="button" data-step="called" data-d="1" aria-label="One more called">+</button></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="cities-h">
+    <h2 class="h5 mt-3" id="cities-h">3. Cities visited by any evangelist</h2>
+    <p class="sp-hint">Every city nobody visited costs 2 points. <span id="city-count"></span></p>
+    <div class="sp-card" id="cities"></div>
+  </section>
+
+  <div class="sp-card" aria-labelledby="sum-h">
+    <h2 id="sum-h">The sum</h2>
+    <table class="sp-breakdown"><tbody id="breakdown"></tbody></table>
+  </div>
+
+  <div class="sp-actions">
+    <button type="button" class="btn btn-outline-danger" id="reset">Start a new scoresheet</button>
+    <a class="btn btn-success" href="play/">Play free online</a>
+  </div>
+</main>
+
+<footer class="py-5 bg-dark">
+<div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class="current-year">2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="../js/scripts.js"></script>
+<script type="module" src="scorepad.js?v=20261018"></script>
 </body>
 </html>
