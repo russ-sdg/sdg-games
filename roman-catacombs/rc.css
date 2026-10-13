@@ -28,3 +28,6 @@ figcaption.rc-cap { margin-top: .5rem; color: var(--pp-muted); font-size: .92rem
   .rc-two, .rc-sheets { grid-template-columns: 1fr; }
   .rc-hero-art { margin: 0 auto; }
 }
+.rc-fold { margin-top: 1.4rem; }
+.rc-fold [data-gallery-title] { display: none; }   /* the summary already says it */
+.rc-fold .pp-gallery { margin-top: .2rem; }
