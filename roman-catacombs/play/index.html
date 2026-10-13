@@ -8,7 +8,7 @@
     <title>Roman Catacombs Scorecard &amp; Play Online - SDG Games</title>
     <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
     <link href="../../css/styles.css" rel="stylesheet" />
-    <link href="play.css?v=20261023" rel="stylesheet" />
+    <link href="play.css?v=20261024" rel="stylesheet" />
 </head>
 <body class="sb-nav-fixed">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
@@ -39,12 +39,19 @@
                                         <span><b>Scorecard</b><small>Playing with the real cards? Fill in your library and it keeps your score. Any number of players: everyone uses their own phone.</small></span></label>
                                     <label class="choice"><input type="radio" name="mode" value="solo" />
                                         <span><b>Solo &mdash; 21 rounds</b><small>Play on your own. Each round the game flips three cards; you add one book to your library, or pass. Empty slots count against you.</small></span></label>
-                                    <label class="choice is-soon"><input type="radio" name="mode" value="bots" disabled />
-                                        <span><b>Solo vs computer opponents</b><small>Coming soon.</small></span></label>
+                                    <label class="choice"><input type="radio" name="mode" value="bots" />
+                                        <span><b>Solo vs computer opponents</b><small>Race 1 to 5 computer librarians. Everyone sees the same three cards each round; the game ends when someone fills all 21 slots. Most points wins.</small></span></label>
                                     <label class="choice is-soon"><input type="radio" name="mode" value="table" disabled />
                                         <span><b>Same room, own phones</b><small>Coming soon.</small></span></label>
                                 </div>
                             </fieldset>
+                            <div id="bots-fields" class="row g-3 mb-3" hidden>
+                                <div class="col-sm-6"><label class="form-label" for="bot-count">Computer opponents</label>
+                                    <select class="form-select" id="bot-count"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+                                <div class="col-sm-6"><label class="form-label" for="bot-skill">Their skill</label>
+                                    <select class="form-select" id="bot-skill"><option value="casual">Casual &ndash; relaxed</option><option value="steady" selected>Steady &ndash; sensible</option><option value="sharp">Sharp &ndash; plans ahead</option></select></div>
+                                <p class="small text-muted mb-0">They play by the same rules as you, from the same three cards, on their own libraries. Nothing is sent anywhere: the computer players run in your browser.</p>
+                            </div>
                             <button type="button" class="btn btn-primary btn-lg" id="start-btn">Start</button>
                         </div>
                     </div>
@@ -85,6 +92,7 @@
 
             <div id="panel-library" role="tabpanel" aria-labelledby="tab-library">
                 <div id="tray"></div>
+                <div id="rivals"></div>
                 <div id="shelves"></div>
             </div>
             <div id="panel-books" role="tabpanel" aria-labelledby="tab-books" hidden></div>
@@ -99,6 +107,8 @@
                     <p>The game ends when a player fills all 21 circles. Add up the circled points and subtract <b>1 point for each empty circle</b>. The most points wins.</p>
                     <h3 class="h6">Solo</h3>
                     <p>The rules are the same, except the game ends after 21 rounds. Circles still empty then count against you.</p>
+                    <h3 class="h6">Against computer opponents</h3>
+                    <p>Everyone sees the same three cards each round and chooses at the same time. The game ends when someone fills all 21 circles (or if nobody can place another book). If two players complete a category in the same round and nobody had before, both score the larger number. Most points wins.</p>
                     <h3 class="h6">Using this page</h3>
                     <p class="mb-0">In <b>Scorecard</b> mode, tap a slot (or a book in the Books tab) to place it; the page only offers books that keep canon order. When you complete a category it asks whether you were first. Tap the points chip on a category to switch between first and later.</p>
                 </div></div>
@@ -139,6 +149,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="../../js/scripts.js"></script>
-    <script type="module" src="js/app.js?v=20261023"></script>
+    <script type="module" src="js/app.js?v=20261024"></script>
 </body>
 </html>

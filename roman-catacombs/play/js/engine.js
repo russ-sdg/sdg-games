@@ -4,9 +4,12 @@
 // (strictly increasing). A category scores `first` points if you complete it first, `second` after that;
 // every empty slot is -1 at the end.
 import { CATS, BOOKS, SLOTS, DECK, cardBook } from './books.js';
+export { cardBook as trayBook };                     // the book on a card id
+export const bookName = (b) => BOOKS[b].name;
 
 export const ROUNDS = 21;                       // solo game length
-export const MODES = { scorecard: 'scorecard', solo: 'solo' };
+export const MODES = { scorecard: 'scorecard', solo: 'solo', bots: 'bots' };
+export const isRound = (state) => state.mode === MODES.solo || state.mode === MODES.bots;   // modes where the game deals the cards
 
 const clone = (s) => structuredClone(s);
 export const catOf = (slot) => Math.floor(slot / 3);
@@ -32,7 +35,7 @@ export function shuffled(list, seed) {
 }
 
 // ---- state -------------------------------------------------------------------------------------------------------
-export function newState({ mode = MODES.scorecard, seed = 1 } = {}) {
+export function newState({ mode = MODES.scorecard, seed = 1, rivals = [] } = {}) {
   return {
     mode,
     library: Array(SLOTS).fill(null),            // book index in each slot, or null
@@ -44,6 +47,11 @@ export function newState({ mode = MODES.scorecard, seed = 1 } = {}) {
     tray: [],                                     // solo: the three cards face up this round
     placedThisRound: null,                        // solo: tray index of the card placed this round
     over: false,
+    // computer opponents (mode 'bots'): each has its own library, claims and `taken`, like the human's
+    rivals: rivals.map((r) => ({ name: r.name, skill: r.skill, library: Array(SLOTS).fill(null), claims: {}, taken: {} })),
+    completed: {},                                // category id -> true once anyone has completed it in an earlier round
+    log: [],
+    endReason: null,                              // 'complete' | 'stuck' | 'long'
   };
 }
 
@@ -160,7 +168,7 @@ export function flip(state) {
 
 // Put one of this round's three books into a slot (at most one a round).
 export function placeFromTray(state, trayIndex, slot) {
-  if (state.mode !== MODES.solo) throw new Error('only in solo play');
+  if (!isRound(state)) throw new Error('only when the game deals the cards');
   if (state.placedThisRound !== null) throw new Error('already placed a book this round');
   if (!(trayIndex >= 0 && trayIndex < state.tray.length)) throw new Error('no such card');
   const s = place(state, slot, cardBook(state.tray[trayIndex]));
@@ -170,7 +178,7 @@ export function placeFromTray(state, trayIndex, slot) {
 
 // Which slots can the card at this tray position go in right now?
 export function trayOptions(state, trayIndex) {
-  if (state.mode !== MODES.solo || state.over || state.placedThisRound !== null || !state.tray[trayIndex]) return [];
+  if (!isRound(state) || state.over || state.placedThisRound !== null || !state.tray[trayIndex]) return [];
   return legalSlotsFor(state, cardBook(state.tray[trayIndex]));
 }
 

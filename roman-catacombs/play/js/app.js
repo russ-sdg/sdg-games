@@ -1,6 +1,8 @@
 // Roman Catacombs: scorecard and solo play (UI). Rules live in engine.js.
 import { CATS, BOOKS, cardBook } from './books.js';
 import * as E from './engine.js';
+import * as T from './table.js';
+import { SKILLS } from './bot.js';
 import { drawShareImage, canvasToBlob, nativeShareData, shareMessage } from './share.js';
 
 const $ = (s) => document.querySelector(s);
@@ -31,13 +33,14 @@ function commit(next, { fresh = false } = {}) {
     const done = CATS.findIndex((c, ci) => E.isComplete(state, ci) && !E.isComplete(before, ci));
     if (done >= 0 && !before.claims[CATS[done].id]) askFirst(done);
   }
-  if (state.mode === E.MODES.solo && state.over && !(before && before.over)) showSheet(true);
+  if (E.isRound(state) && state.over && !(before && before.over)) showSheet(true);
 }
 
-function startGame(mode) {
+function startGame(mode, opts = ui.last || {}) {
   const seed = crypto.getRandomValues(new Uint32Array(1))[0];
   ui.tab = 'library';
-  commit(E.newState({ mode, seed }), { fresh: true });
+  ui.last = opts;
+  commit(mode === E.MODES.bots ? T.newTable({ bots: opts.bots || 2, skill: opts.skill || 'steady', seed }) : E.newState({ mode, seed }), { fresh: true });
   $('#setup').hidden = true; $('#game').hidden = false;
   window.scrollTo({ top: 0 });
 }
@@ -46,7 +49,8 @@ function showSetup() {
   $('#game').hidden = true; $('#setup').hidden = false;
   const saved = loadSaved();
   $('#resume').hidden = !saved;
-  if (saved) $('#resume-text').textContent = saved.mode === E.MODES.solo ? `Solo game in progress (round ${saved.round} of ${E.ROUNDS}).` : 'A scorecard in progress.';
+  if (saved) $('#resume-text').textContent = saved.mode === E.MODES.solo ? `Solo game in progress (round ${saved.round} of ${E.ROUNDS}).`
+    : saved.mode === E.MODES.bots ? `Game against ${saved.rivals.length} computer${saved.rivals.length > 1 ? 's' : ''} in progress (round ${saved.round}).` : 'A scorecard in progress.';
 }
 
 // ---- dialogs -----------------------------------------------------------------------------------------------------
@@ -98,18 +102,24 @@ function openBookSlotPicker(book, slots) {
 
 function showSheet(final) {
   const r = E.score(state);
-  $('#final-title').textContent = final ? 'Game over' : 'Score sheet';
-  $('#final-body').innerHTML = `<table class="final-table"><tbody>
+  const bots = state.mode === E.MODES.bots;
+  const st = bots ? T.standings(state) : null;
+  const place = bots ? st.findIndex((x) => x.you) + 1 : null;
+  $('#final-title').textContent = final ? (bots ? (place === 1 ? 'You won!' : `You placed ${ordinal(place)} of ${st.length}`) : 'Game over') : 'Score sheet';
+  const why = { complete: 'Someone filled all 21 slots.', stuck: 'No one could place another book.', long: 'The game reached its round limit.' }[state.endReason];
+  const standingsHtml = bots ? `${final && why ? `<p class="small text-muted mb-1">${esc(why)} (${state.round} rounds)</p>` : ''}<table class="final-table"><tbody>
+    ${st.map((x, i) => `<tr${x.you ? ' style="font-weight:700"' : ''}><td>${i + 1}. ${esc(x.name)}${x.you ? '' : ` <small class="text-muted">${esc(T.skillName(x.skill))}</small>`} <small class="text-muted">${x.filledSlots} of 21 slots</small></td><td>${x.total}</td></tr>`).join('')}</tbody></table><h3 class="h6">Your score sheet</h3>` : '';
+  $('#final-body').innerHTML = standingsHtml + `<table class="final-table"><tbody>
     ${r.categories.map((c) => `<tr><td>${esc(c.label)} <small class="text-muted">${c.complete ? (c.how === 'later' ? 'completed after others' : 'completed first') : `${c.filled} of 3`}</small></td><td>${c.complete ? '+' + c.points : '0'}</td></tr>`).join('')}
     <tr><td>Empty slots (${r.empty})</td><td>${r.empty ? '−' + r.empty : '0'}</td></tr>
     <tr class="final-total"><td>Total</td><td>${r.total}</td></tr></tbody></table>`;
   $('#final-again').textContent = final ? 'Play again' : 'New game';
-  mountShare($('#final-body'), r.total);
+  mountShare($('#final-body'), r.total, place);
   $('#final').showModal();
 }
 
 // Share your library as a picture: native share sheet where the browser offers it, plus a download.
-async function mountShare(root, total) {
+async function mountShare(root, total, place) {
   const box = document.createElement('div');
   box.className = 'share-box';
   box.innerHTML = `<div class="share-actions"><button type="button" class="btn btn-primary btn-sm" id="share-dl" disabled>Download image</button>
@@ -121,8 +131,8 @@ async function mountShare(root, total) {
   const img = box.querySelector('.share-preview'), msg = box.querySelector('#share-msg');
   const dl = box.querySelector('#share-dl'), nat = box.querySelector('#share-native'), copy = box.querySelector('#share-copy');
   copy.onclick = async () => {
-    try { await navigator.clipboard.writeText(shareMessage(total)); msg.textContent = 'Copied. Paste it anywhere.'; }
-    catch { msg.textContent = shareMessage(total); }
+    try { await navigator.clipboard.writeText(shareMessage(total, place)); msg.textContent = 'Copied. Paste it anywhere.'; }
+    catch { msg.textContent = shareMessage(total, place); }
   };
   try {
     const canvas = drawShareImage(document.createElement('canvas'), state);
@@ -132,7 +142,7 @@ async function mountShare(root, total) {
     const file = new File([blob], 'roman-catacombs.png', { type: 'image/png' });
     nat.hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
     dl.onclick = () => { const a = document.createElement('a'); a.href = url; a.download = 'roman-catacombs.png'; document.body.appendChild(a); a.click(); a.remove(); };
-    nat.onclick = async () => { try { await navigator.share(nativeShareData(file, total)); } catch { /* cancelled */ } };
+    nat.onclick = async () => { try { await navigator.share(nativeShareData(file, total, place)); } catch { /* cancelled */ } };
   } catch {
     msg.textContent = 'Sorry, the result card could not be drawn in this browser. You can still copy the text.';
   }
@@ -141,11 +151,13 @@ async function mountShare(root, total) {
 // ---- rendering -----------------------------------------------------------------------------------------------------
 function render() {
   if (!state) return;
-  const solo = state.mode === E.MODES.solo;
+  const solo = E.isRound(state);                    // the game deals the cards (solo or against computers)
   const sc = E.score(state);
   $('#score').textContent = sc.total;
   const filled = 21 - sc.empty;
-  $('#bar-sub').textContent = solo ? `${state.over ? 'Game over' : state.round ? `Round ${state.round} of ${E.ROUNDS}` : 'Ready to flip'} · ${filled} of 21 slots filled` : `Scorecard · ${filled} of 21 slots filled`;
+  const bots = state.mode === E.MODES.bots;
+  const roundText = state.over ? 'Game over' : state.round ? (bots ? `Round ${state.round}` : `Round ${state.round} of ${E.ROUNDS}`) : 'Ready to flip';
+  $('#bar-sub').textContent = solo ? `${roundText} · ${filled} of 21 slots filled${bots ? ` · vs ${state.rivals.length}` : ''}` : `Scorecard · ${filled} of 21 slots filled`;
   $('#undo-btn').disabled = !ui.history.length;
   document.querySelectorAll('.rc-tabs [role=tab]').forEach((t) => {
     const on = t.id === `tab-${ui.tab}`;
@@ -153,6 +165,7 @@ function render() {
     $(`#panel-${t.id.slice(4)}`).hidden = !on;
   });
   renderTray(solo);
+  renderRivals(bots);
   renderShelves(solo);
   renderBooks(solo);
 }
@@ -162,17 +175,18 @@ function renderTray(solo) {
   if (!solo) { el.innerHTML = ''; return; }
   if (state.over) { el.innerHTML = `<div class="tray"><h2>Game over</h2><p class="hint mb-2">Your final score is ${E.score(state).total}.</p><button type="button" class="btn btn-primary" id="again-btn">Play again</button> <button type="button" class="btn btn-outline-secondary" id="sheet-btn">Score sheet</button></div>`; return; }
   if (state.round === 0) {
-    el.innerHTML = `<div class="tray"><h2>Your deck is shuffled</h2><p class="hint">Each round you flip three cards and may add one of the books to your library.</p>
+    el.innerHTML = `<div class="tray"><h2>Your deck is shuffled</h2><p class="hint">Each round three cards are flipped and you may add one of the books to your library${state.mode === E.MODES.bots ? ` &mdash; while ${state.rivals.length === 1 ? 'a computer librarian races you' : `${state.rivals.length} computer librarians race you`} for the first-to-finish points` : ''}.</p>
       <div class="deck-back mb-2"><img src="${IMG}back-600.webp" alt="The face-down deck" width="600" height="818"></div>
       <button type="button" class="btn btn-primary btn-lg" id="flip-btn">Flip the first three cards</button></div>`;
     return;
   }
   const placed = state.placedThisRound;
-  const last = state.round >= E.ROUNDS;
+  const bots = state.mode === E.MODES.bots;
+  const last = bots ? state.library.every((b) => b !== null) : state.round >= E.ROUNDS;
   const tip = placed !== null ? 'Placed. Flip the next three when you are ready.'
     : E.mustPass(state) ? 'None of these can go anywhere right now, so you pass.'
       : ui.selected === null ? 'Tap a card, then tap a glowing slot to place it. Or pass.' : `Tap a glowing slot for ${BOOKS[cardBook(state.tray[ui.selected])].name}.`;
-  el.innerHTML = `<div class="tray"><h2>Round ${state.round} of ${E.ROUNDS}</h2><p class="hint">${esc(tip)}</p>
+  el.innerHTML = `<div class="tray"><h2>Round ${state.round}${bots ? '' : ` of ${E.ROUNDS}`}</h2><p class="hint">${esc(tip)}</p>
     <div class="tray-cards">${state.tray.map((id, i) => {
       const opts = E.trayOptions(state, i).length;
       const cls = `tcard${ui.selected === i ? ' sel' : ''}${placed !== null && placed !== i ? ' dim' : ''}${placed === null && !opts ? ' dim' : ''}`;
@@ -180,6 +194,20 @@ function renderTray(solo) {
         <img src="${IMG}${id}-250.webp" alt="" width="250" height="341">${placed === i ? '<span class="tag">Placed ✔</span>' : ''}</button>`;
     }).join('')}</div>
     <div class="tray-actions"><button type="button" class="btn btn-primary" id="flip-btn">${last ? 'Finish the game' : placed !== null ? 'Flip the next three' : 'Pass – flip the next three'}</button></div></div>`;
+}
+
+const ordinal = (n) => `${n}${['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : Math.min(n % 10, 4) % 4] || 'th'}`;
+
+// Standings and the latest moves of the computer librarians.
+function renderRivals(bots) {
+  const el = $('#rivals');
+  if (!bots) { el.innerHTML = ''; return; }
+  const rows = T.standings(state);
+  const recent = state.log.filter((l) => l.round >= state.round - 1).slice(-8).reverse();
+  el.innerHTML = `<div class="tray rivals"><h2>Standings</h2>
+    <ul class="rank">${rows.map((x, i) => `<li${x.you ? ' class="you"' : ''}><span class="pos">${i + 1}</span><span class="nm">${esc(x.name)}${x.you ? '' : ` <small>${esc(T.skillName(x.skill))}</small>`}</span><span class="sl">${x.filledSlots}/21</span><b>${x.total}</b></li>`).join('')}</ul>
+    ${state.rivals.map((r) => `<details class="rival"><summary>${esc(r.name)}'s library</summary>${CATS.map((c, ci) => `<div class="rl" style="--c:${c.color}"><span class="rc">${esc(c.label)}</span> ${[0, 1, 2].map((k) => { const b = r.library[ci * 3 + k]; return `<span class="rb${b === null ? ' empty' : ''}">${b === null ? '&ndash;' : esc(BOOKS[b].name)}</span>`; }).join('')}</div>`).join('')}</details>`).join('')}
+    ${recent.length ? `<h3>Last round</h3><ul class="log">${recent.map((l) => `<li>${esc(l.text)}</li>`).join('')}</ul>` : ''}</div>`;
 }
 
 function renderShelves(solo) {
@@ -216,7 +244,7 @@ function renderBooks(solo) {
 // ---- events ----------------------------------------------------------------------------------------------------------
 document.addEventListener('click', (e) => {
   if (!state) return;
-  const solo = state.mode === E.MODES.solo;
+  const solo = E.isRound(state);
   const t = e.target;
   const tray = t.closest('[data-tray]');
   if (tray) { const i = Number(tray.dataset.tray); ui.selected = ui.selected === i ? null : i; render(); return; }
@@ -236,8 +264,8 @@ document.addEventListener('click', (e) => {
     else { const legal = E.legalSlotsFor(state, b); if (legal.length === 1) commit(E.place(state, legal[0], b)); else if (legal.length) openBookSlotPicker(b, legal); }
     return;
   }
-  if (t.closest('#flip-btn')) { commit(E.flip(state), { fresh: true }); return; }
-  if (t.closest('#again-btn')) { startGame(E.MODES.solo); return; }
+  if (t.closest('#flip-btn')) { commit(state.mode === E.MODES.bots ? T.flipRound(state) : E.flip(state), { fresh: true }); return; }
+  if (t.closest('#again-btn')) { startGame(state.mode); return; }
   if (t.closest('#sheet-btn') || t.closest('#sum-btn')) { showSheet(solo && state.over); return; }
 });
 document.addEventListener('change', (e) => {
@@ -250,9 +278,10 @@ $('#menu-btn').addEventListener('click', () => {
   if (state && !state.over && state.library.some((b) => b !== null) && !confirm('Leave this game? Your current library will be lost.')) return;
   state = null; ui.history = []; save(); showSetup();
 });
-$('#start-btn').addEventListener('click', () => startGame(document.querySelector('input[name=mode]:checked').value));
+$('#start-btn').addEventListener('click', () => startGame(document.querySelector('input[name=mode]:checked').value, { bots: Number($('#bot-count').value), skill: $('#bot-skill').value }));
+document.querySelectorAll('input[name=mode]').forEach((r) => r.addEventListener('change', () => { $('#bots-fields').hidden = document.querySelector('input[name=mode]:checked').value !== 'bots'; }));
 $('#resume-btn').addEventListener('click', () => { state = loadSaved(); ui.history = []; $('#setup').hidden = true; $('#game').hidden = false; render(); });
 $('#discard-btn').addEventListener('click', () => { try { localStorage.removeItem(KEY); } catch { /* ignore */ } $('#resume').hidden = true; });
-$('#final').addEventListener('close', () => { if ($('#final').returnValue === 'again') { const m = state && state.mode; state = null; ui.history = []; save(); m === E.MODES.solo ? startGame(E.MODES.solo) : showSetup(); } $('#final').returnValue = ''; });
+$('#final').addEventListener('close', () => { if ($('#final').returnValue === 'again') { const m = state && state.mode; state = null; ui.history = []; save(); m === E.MODES.scorecard ? showSetup() : startGame(m); } $('#final').returnValue = ''; });
 
 showSetup();

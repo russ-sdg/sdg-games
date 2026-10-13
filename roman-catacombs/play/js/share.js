@@ -1,18 +1,27 @@
 // Shareable result image: a PNG of your finished library, drawn on a canvas.
 import { CATS, BOOKS } from './books.js';
 import { score, MODES, ROUNDS } from './engine.js';
+import { standings } from './table.js';
 
 export const SHARE_URL = 'https://sdggames.fun/roman-catacombs/play/';
-export const shareMessage = (total) => `I scored ${total} points in Roman Catacombs! ${SHARE_URL}`;
+export const shareMessage = (total, place) => `I scored ${total} points in Roman Catacombs${place ? ` and finished ${ORD(place)}` : ''}! ${SHARE_URL}`;
+const ORD = (n) => `${n}${['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : Math.min(n % 10, 4) % 4] || 'th'}`;
 // The link lives in the text only. Passing it again as `url` makes many messaging apps paste it twice.
-export const nativeShareData = (file, total) => ({ files: [file], text: shareMessage(total) });
+export const nativeShareData = (file, total, place) => ({ files: [file], text: shareMessage(total, place) });
 
 export const SHARE_W = 1200;
 export const SHARE_H = 1050;
 const SANS = '"Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif';
 const SERIF = 'Georgia, "Times New Roman", serif';
 
-export const describe = (state) => (state.mode === MODES.solo ? `Solo · ${state.round} of ${ROUNDS} rounds` : 'Scorecard');
+export const describe = (state) => {
+  if (state.mode === MODES.solo) return `Solo \u00b7 ${state.round} of ${ROUNDS} rounds`;
+  if (state.mode === MODES.bots) {
+    const st = standings(state), place = st.findIndex((x) => x.you) + 1;
+    return `vs ${state.rivals.length} computer${state.rivals.length > 1 ? 's' : ''} \u00b7 ${ORD(place)} of ${st.length} \u00b7 ${state.round} rounds`;
+  }
+  return 'Scorecard';
+};
 
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
