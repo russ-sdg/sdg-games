@@ -7,7 +7,9 @@ export function playGame(seed, nSeats, skill = 'steady', maxRounds = 120, tskill
   for (let i = 0; i < nSeats; i++) for (const m of A.aiPlacePawns(s, i)) s = E.placePawn(s, m.pawn, m.pos);
   s = E.startTyndale(s, A.aiTyndaleStart(s, tskill));
   while (!s.over && s.round <= maxRounds) {
-    s = E.tyndaleMove(s, A.aiTyndalePath(s, tskill));
+    const path = A.aiTyndalePath(s, tskill);
+    if (!path) { s = E.trapped(s); break; }
+    s = E.tyndaleMove(s, path);
     if (s.over) break;
     if (s.accusation && s.accusation.open) {          // a computer Agent may accuse
       const voters = s.seats.filter((x) => !x.out).map((x) => x.id);
@@ -19,7 +21,7 @@ export function playGame(seed, nSeats, skill = 'steady', maxRounds = 120, tskill
       if (seat.out) continue;
       for (const p of s.pawns.filter((x) => x.seat === seat.id && !x.out)) {
         const roll = E.rollDie(s);
-        const pos = A.aiAgentChoose(s, p.id, roll, skill);
+        const pos = A.aiAgentChoose(s, p.id, roll, skill, A.PEEK[skill] || 0);
         s = E.agentMove(s, p.id, roll, pos, { share: A.supporterShares });
         if (s.over) break;
       }
