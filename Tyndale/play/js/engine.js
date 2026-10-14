@@ -61,6 +61,8 @@ export function newGame({ seats, seed = 1, supporter = null }) {
   return s;
 }
 export const hasSupporter = (nSeats) => nSeats >= 4;          // Tyndale + 4 or more Agent players = 5+ players
+// verb agreement for the human player, whose seat is named "You"
+const vb = (nm, single, plural) => (nm === 'You' ? plural : single);
 const note = (s, text, pub = true) => { s.log.push({ round: s.round, text, pub }); if (s.log.length > 200) s.log.shift(); };
 
 export const pawnAt = (s, id) => s.pawns.find((p) => p.pos === id && !p.out);
@@ -212,7 +214,7 @@ export function agentMove(state, pawnId, roll, pos, opts = {}) {
   const ans = answerAt(s, pos, sup);
   const rec = { loc: ans.loc, bible: ans.bible, round: s.round, by: pawn.seat };
   const result = { pawnId, pos, ...ans, captured: false };
-  if (!sup && ans.loc === 'here') { note(s, `${s.seats[pawn.seat].name} has captured "that notorious heretic Tyndale"!`); return Object.assign(finish(s, 'agents', 'captured'), { result }); }
+  if (!sup && ans.loc === 'here') { note(s, `${s.seats[pawn.seat].name} ${vb(s.seats[pawn.seat].name, 'has', 'have')} captured "that notorious heretic Tyndale"!`); return Object.assign(finish(s, 'agents', 'captured'), { result }); }
   // what is shared: everyone's findings go into the pool, except the Secret Supporter's, which are private unless they choose to share
   const share = sup ? (opts.share ? !!opts.share(ans) : false) : true;
   if (share && sup) rec.loc = 'not';                         // the Supporter only ever says "Nothing to Report": near/far stays private
@@ -253,12 +255,12 @@ export function accuse(state, accuser, accused, votes) {
   s.accusation = { ...s.accusation, open: false };
   const charged = yes * 2 > seats.length;
   const res = { charged, yes, of: seats.length, supporter: false, out: null };
-  note(s, `${s.seats[accuser].name} accuses ${s.seats[accused].name} of being the Secret Supporter. ${charged ? 'The Agents vote to charge them.' : 'The vote fails.'}`);
+  note(s, `${s.seats[accuser].name} ${vb(s.seats[accuser].name, 'accuses', 'accuse')} ${s.seats[accused].name} of being the Secret Supporter. ${charged ? 'The Agents vote to charge them.' : 'The vote fails.'}`);
   if (charged) {
     const out = s.supporter === accused ? accused : accuser;
     res.supporter = s.supporter === accused; res.out = out;
     s.seats[out].out = true; s.pawns.filter((p) => p.seat === out).forEach((p) => { p.out = true; delete s.carry[p.id]; });
-    note(s, res.supporter ? `${s.seats[out].name} was the Secret Supporter and is out of the game!` : `${s.seats[out].name} was not the Secret Supporter and is out of the game.`);
+    note(s, res.supporter ? `${s.seats[out].name} ${vb(s.seats[out].name, 'was', 'were')} the Secret Supporter and ${vb(s.seats[out].name, 'is', 'are')} out of the game!` : `${s.seats[out].name} ${vb(s.seats[out].name, 'was', 'were')} not the Secret Supporter and ${vb(s.seats[out].name, 'is', 'are')} out of the game.`);
     if (!s.seats.some((x) => !x.out && x.id !== s.supporter)) return Object.assign(finish(s, 'tyndale', 'no-hunters'), { accusationResult: res });
   }
   return Object.assign(s, { accusationResult: res });

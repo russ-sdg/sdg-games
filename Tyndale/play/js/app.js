@@ -158,7 +158,7 @@ async function accusations(my) {
     if (s.id === accuser) votes[s.id] = true;
     else if (s.id === 0) {
       const r = await ask({
-        title: `${name(accuser)} accuses ${name(accused)}`,
+        title: `${name(accuser)} ${accuser === 0 ? 'accuse' : 'accuses'} ${name(accused)}`,
         text: `${esc(name(accuser))} says ${esc(name(accused))} is the Secret Supporter. Do you vote to charge them?`,
         choices: [{ label: 'Yes, charge them', value: true, cls: 'btn-danger' }, { label: 'No', value: false, cls: 'btn-primary', esc: true }],
       });
@@ -169,8 +169,8 @@ async function accusations(my) {
   S = E.accuse(S, accuser, accused, votes);
   const res = S.accusationResult;
   const msg = !res.charged ? `The vote on ${name(accused)} fails (${res.yes} of ${res.of}).`
-    : res.supporter ? `${name(accused)} was the Secret Supporter and is out of the game!`
-      : `${name(accuser)} accused the wrong Agent and is out of the game.`;
+    : res.supporter ? `${name(accused)} ${accused === 0 ? 'were' : 'was'} the Secret Supporter and ${accused === 0 ? 'are' : 'is'} out of the game!`
+      : `${name(accuser)} accused the wrong Agent and ${accuser === 0 ? 'are' : 'is'} out of the game.`;
   ui.banner = msg;
   save(); render();
   await ask({ title: 'The vote', text: esc(msg), choices: [{ label: 'Continue', value: 1, cls: 'btn-primary', esc: true }] });
