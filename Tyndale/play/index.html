@@ -81,12 +81,37 @@
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <h2 class="h5">How it works</h2>
-                            <ul class="small mb-0">
-                                <li>Tyndale is translating the Bible into English. He must <b>print</b> each part at a new Printing Centre and <b>ship</b> it from a Coastal City to London.</li>
-                                <li>Each turn you <b>roll</b> (1 to 3), move a pawn, and the game tells you whether Tyndale is there and whether he left a translation, or rumors of one, in that city.</li>
-                                <li>Land on Tyndale and you win. If the <b>Old Testament</b> reaches London first, he does.</li>
-                                <li>The clues he leaves form a trail: follow it to the end.</li>
-                            </ul>
+                            <div id="how-hunt">
+                                <p class="small mb-2"><b>You are a Bishop's Agent, hunting William Tyndale.</b></p>
+                                <ul class="small">
+                                    <li>Tyndale is translating the Bible into English. He must <b>print</b> each part at a new Printing Centre and <b>ship</b> it from a Coastal City to London. If the <b>Old Testament</b> reaches London, he wins.</li>
+                                    <li>Each turn you <b>roll</b> (1 to 3) and move a pawn exactly that many steps. You may pass other pawns but not finish on one. The game then shows you two cards: whether Tyndale is there, and whether he left a translation (N, P, H or O), <b>rumors</b> of one next door, or nothing.</li>
+                                    <li>Land on Tyndale and you win. What the Agents find is marked on the map, and the clues form his trail: follow it to the end.</li>
+                                    <li>Other Agents tell you what they found, or &ldquo;nothing to report&rdquo;. You see only what they report.</li>
+                                </ul>
+                                <p class="small mb-1"><b>The Secret Supporter</b></p>
+                                <ul class="small mb-0">
+                                    <li>With 4 or more Agents, one of the character cards is Tyndale's Secret Supporter. It may be dealt to one of the Agents, and that may be you.</li>
+                                    <li>The Supporter looks like any other Agent, but may say &ldquo;nothing to report&rdquo; when they have found something, and carries a printed Bible to the coast for Tyndale.</li>
+                                    <li>Each time a Bible part reaches London you may accuse an Agent. If most Agents vote with you and you are right, the Supporter is out. If you are wrong, <b>you</b> are out.</li>
+                                    <li>If you are dealt the Supporter, you are told. You then choose what to report when you are shown Rumors or a translation, and try not to be exposed.</li>
+                                </ul>
+                            </div>
+                            <div id="how-tyndale" hidden>
+                                <p class="small mb-2"><b>You are William Tyndale, on the run.</b></p>
+                                <ul class="small">
+                                    <li>The Agents place their pawns, then you choose where you begin. Each turn you tap your way along the map, one step at a time. A <b>blue</b> spot lets you take a second step. You may pass an Agent but not finish on one.</li>
+                                    <li>To <b>publish</b> a translation, finish on a Printing Centre you have not used. Each publication earns a <b>bonus move</b> for later. To <b>ship</b> it, finish on a Coastal City: the number by the city is how many turns the shipment takes to reach London, and it is crossed off each turn.</li>
+                                    <li>Shipping completes your next translation. When the <b>Old Testament</b> reaches London, you win. If an Agent lands on you, they win.</li>
+                                    <li>Every spot you cross while a publication is printed is marked with its letter: those are the clues the Agents follow. Your scorecard shows the rest.</li>
+                                </ul>
+                                <p class="small mb-1"><b>The Secret Supporter</b></p>
+                                <ul class="small mb-0">
+                                    <li>With 4 or more Agents, one of the character cards is your Secret Supporter. It may be dealt to one of the Agents, and if so the game tells you who.</li>
+                                    <li>They look like any other Agent, but may hide what they find from the others, and carry a printed Bible to the coast and ship it for you.</li>
+                                    <li>Each time a Bible part reaches London the Agents may accuse someone. If they expose your Supporter, that Agent is out.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
