@@ -638,6 +638,8 @@ function init() {
     sel.innerHTML = opts.map((t, i) => `<option value="${i + 1}">${t}</option>`).join('');
     sel.value = keep;
     $('agents-label').textContent = mode === 'tyndale' ? 'Computer Agents hunting you' : 'Bishop\'s Agent players (you and computers)';
+    $('start-btn').textContent = mode === 'tyndale' ? 'Start the journey' : 'Start the hunt';
+    $('how-hunt').hidden = mode === 'tyndale'; $('how-tyndale').hidden = mode !== 'tyndale';
     $('skill-wrap').hidden = mode === 'tyndale'; $('hint-wrap').hidden = mode === 'tyndale'; $('aiskill-wrap').hidden = mode !== 'tyndale';
     const sup = E.hasSupporter(Number(sel.value));
     $('supp-note').hidden = !sup;
