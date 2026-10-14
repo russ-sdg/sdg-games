@@ -156,7 +156,7 @@ export function tyndaleMove(state, path) {
     if (sh.left <= 0) {
       sh.arrived = true; s.delivered.push({ pub: sh.pub, round: s.round, from: sh.from });
       note(s, `${PUB_NAMES[sh.pub]} has arrived in London!`);
-      s.accusation = { after: sh.pub, open: s.supporter !== null };
+      s.accusation = { after: sh.pub, open: hasSupporter(s.seats.length) };
       if (sh.pub === 'O') return finish(s, 'tyndale', 'delivered');
     }
   }

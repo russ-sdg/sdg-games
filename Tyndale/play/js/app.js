@@ -12,7 +12,7 @@ const LOC_CARD = { here: 'here', not: 'not-here', near: 'near', far: 'far' };
 const BIB_CARD = { N: 'new-testament', P: 'pentateuch', H: 'historical', O: 'old-testament', rumors: 'rumors', nothing: 'nothing' };
 const LOC_TEXT = { here: 'Tyndale is here!', not: 'Tyndale is not here', near: 'Tyndale is near', far: 'Tyndale is far away' };
 const SEAT_COLOURS = ['#0d6efd', '#e76f00', '#2a9d8f', '#8e44ad', '#6c757d'];
-const AGENT_NAMES = ['Vaughn', 'Holt', 'Dobneck', 'Stokesley', 'More', 'Phillips'];
+const AGENT_NAMES = ['Ashby', 'Brand', 'Carew', 'Dacre', 'Elyot', 'Fane'];   // not the names on the character cards, which stay hidden
 const x = (id) => PX[E.colOf(id)], y = (id) => PX[E.rowOf(id)];
 
 let S = null;                      // the game
@@ -59,7 +59,10 @@ function startGame() {
   for (let i = names.length - 1; i > 0; i--) { const j = Math.floor(E.hash01(cfg.seed, 900 + i) * (i + 1)); [names[i], names[j]] = [names[j], names[i]]; }
   const seats = [{ name: 'You', human: true }];
   for (let i = 1; i < nAgents; i++) seats.push({ name: names[i - 1], human: false });
-  const supporter = E.hasSupporter(nAgents) ? 1 + Math.floor(E.hash01(cfg.seed, 950) * (nAgents - 1)) : null;
+  // Six character cards are shuffled and dealt, one to each Agent; one of them is the Secret Supporter, so with 4 or more Agents
+  // someone may hold it, but nobody knows unless they are exposed. You never draw it.
+  const drawn = Math.floor(E.hash01(cfg.seed, 950) * 6);
+  const supporter = E.hasSupporter(nAgents) && drawn > 0 && drawn < nAgents ? drawn : null;
   S = E.newGame({ seats, seed: cfg.seed, supporter });
   ui = { sel: null, heat: cfg.hint, route: false, mine: null, banner: '', status: '' };
   save();
@@ -239,6 +242,13 @@ function drawBoard() {
   svg.innerHTML = '';
   svg.appendChild(mk('image', { href: '../../assets/tyndale/board.webp', x: 0, y: 0, width: 800, height: 800 }));
   const placing = S.phase === 'place';
+  // Coastal Cities: how many moves a shipment from here takes to reach London
+  for (const c of E.coastal) {
+    const d = E.pt[c].coast, g = mk('g', { 'pointer-events': 'none' });
+    g.appendChild(mk('title', {}, `${c}: Coastal City, ${d >= 11 ? 'more than 10' : d} move${d === 1 ? '' : 's'} to London`));
+    g.appendChild(mk('text', { x: x(c) + 17, y: y(c) - 17, 'font-size': 15, 'font-weight': 800, fill: '#0a7a2f', stroke: '#fff', 'stroke-width': 3, 'paint-order': 'stroke' }, d >= 11 ? '>10' : d));
+    svg.appendChild(g);
+  }
   // possible-spot heat map
   if (ui.heat && !placing && !S.over) {
     const P = A.belief(S, 0), max = Math.max(...Object.values(P));
@@ -332,7 +342,7 @@ function sideHtml() {
     out.push(`<div class="ty-card"><h2>Report from ${esc(ui.mine.pos)}</h2><div class="report">${card(LOC_CARD[ui.mine.loc], LOC_TEXT[ui.mine.loc])}${card(BIB_CARD[ui.mine.bible], ui.mine.bible === 'rumors' ? 'Rumors' : ui.mine.bible === 'nothing' ? 'Nothing to report' : E.PUB_NAMES[ui.mine.bible])}</div></div>`);
   }
   if (cfg.hint && S.phase !== 'place' && !S.over) out.push(`<button type="button" class="btn btn-sm btn-outline-secondary mb-3" data-do="heat">${ui.heat ? 'Hide' : 'Show'} where he might be</button>`);
-  out.push(`<div class="ty-card"><h2>The Agents</h2><ul class="seat-list">${S.seats.map((s) => `<li class="${s.out ? 'out' : ''}"><span class="seat-dot" style="background:${SEAT_COLOURS[s.id]}"></span>${esc(s.name)}${s.out ? ' (out)' : ''}</li>`).join('')}</ul>${S.supporter !== null ? '<p class="small text-muted mb-0 mt-2">One of the computer Agents is Tyndale\'s Secret Supporter.</p>' : ''}</div>`);
+  out.push(`<div class="ty-card"><h2>The Agents</h2><ul class="seat-list">${S.seats.map((s) => `<li class="${s.out ? 'out' : ''}"><span class="seat-dot" style="background:${SEAT_COLOURS[s.id]}"></span>${esc(s.name)}${s.out ? ' (out)' : ''}</li>`).join('')}</ul>${S.seats.length >= 4 ? '<p class="small text-muted mb-0 mt-2">One of the Agents may be Tyndale\'s Secret Supporter.</p>' : ''}</div>`);
   const entries = S.log.filter((l) => l.pub).slice(-12).reverse();
   out.push(`<div class="ty-card"><h2>What has happened</h2><ul class="ty-log">${entries.map((l) => `<li><span class="rd">R${l.round}</span>${esc(l.text)}</li>`).join('') || '<li>Nothing yet.</li>'}</ul></div>`);
   return out.join('');
@@ -342,7 +352,7 @@ function render() {
   if (!S) return;
   $('bar-main').textContent = S.phase === 'place' ? 'Place your pawns' : S.over ? `Game over after ${S.round} turns` : `Round ${S.round}`;
   $('bar-pubs').innerHTML = pubChips();
-  $('legend').innerHTML = '<b>On the map:</b> a letter (N, P, H, O) = a translation was found there; R = rumors of one; × = nothing; rNN = the round it was found. Your pawns have a Y.';
+  $('legend').innerHTML = '<b>On the map:</b> a letter (N, P, H, O) = a translation was found there; R = rumors of one; × = nothing; rNN = the round it was found. Your pawns have a Y. <b style="color:#0a7a2f">Green numbers</b> mark Coastal Cities: the moves a shipment from there takes to reach London.';
   drawBoard();
   $('side').innerHTML = sideHtml();
 }
@@ -365,7 +375,7 @@ function showFinal() {
     <h3 class="h6">Scripture delivered to London</h3>
     ${sm.delivered.length ? '' : '<p class="mb-1">None: Tyndale was stopped before any part reached London.</p>'}
     <ul class="scripture-list">${items}</ul>
-    ${S.supporter !== null ? `<p class="small mt-3 mb-0">The Secret Supporter was <b>${esc(name(S.supporter))}</b>${S.seats[S.supporter].out ? ' (already out)' : ''}.</p>` : ''}
+    ${S.supporter !== null ? `<p class="small mt-3 mb-0">The Secret Supporter was <b>${esc(name(S.supporter))}</b>${S.seats[S.supporter].out ? ' (already out)' : ''}.</p>` : S.seats.length >= 4 ? '<p class="small mt-3 mb-0">There was no Secret Supporter in this game.</p>' : ''}
     <p class="small mt-1 mb-0">Tyndale ended at <b>${S.t.pos}</b>.</p>`;
   $('final-route').textContent = ui.route ? 'Hide his route' : 'Show his route';
   $('final').showModal();
