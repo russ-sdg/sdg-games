@@ -12,4 +12,8 @@ Rule interpretations to confirm: London is a destination only (not a Printing Ce
 Supporter's card means within 3 steps; a second step is allowed only after a first step onto a blue spot (plus earned bonus moves);
 the Secret Supporter exists with 4+ Agent players.
 
-Planned: play as Tyndale against computer Agents; pass-and-play on one device.
+Modes: **Hunt** (you are an Agent, a computer is Tyndale) and **Be Tyndale** (you plan the route; computer Agents hunt you).
+In Be Tyndale the Agents' skill sets how much they are tipped off about his real position (`PEEK` in `js/ai.js`): casual none,
+steady a little, sharp a lot. `?fast` on the page URL skips the pauses (for testing). `js/share.js` draws the result picture.
+
+Planned: pass-and-play on one device.

@@ -69,3 +69,7 @@
 .scripture-list li.pending { background: #fff4d6; }
 .scripture-list li.no { background: #f1f3f5; color: #6c757d; }
 .scripture-list small { color: #495057; display: block; }
+
+.share-box { margin: .4rem 0 .8rem; padding-top: .7rem; border-top: 1px solid #e9ecef; }
+.share-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
+.share-preview { width: 100%; height: auto; display: block; border-radius: .5rem; border: 1px solid #dee2e6; margin-bottom: .4rem; }
