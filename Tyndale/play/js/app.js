@@ -39,6 +39,7 @@ const humanIn = () => !TY() && !S.seats[0].out;           // a person is still h
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function say(text) { S = E.logPublic(S, text); }
 const describe = (r) => (r.bible === 'rumors' ? 'rumors of a translation nearby' : r.bible === 'nothing' ? 'nothing to report' : 'found ' + E.PUB_NAMES[r.bible]);
+const meSupporter = () => !TY() && S.supporter === 0;          // you were dealt the Secret Supporter card
 
 function ask({ title, text = '', list = null, choices }) {
   return new Promise((resolve) => {
@@ -62,15 +63,16 @@ function ask({ title, text = '', list = null, choices }) {
 function startGame() {
   const mode = document.querySelector('input[name=mode]:checked').value;
   const nAgents = Number($('agents').value);
-  cfg = { mode, nAgents, skill: $('skill').value, aiSkill: $('aiskill').value, hint: mode === 'hunt' && $('hint').checked, pace: $('pace').value, seed: Math.floor(Math.random() * 1e9) + 1 };
+  cfg = { mode, nAgents, skill: $('skill').value, aiSkill: $('aiskill').value, hint: mode === 'hunt' && $('hint').checked, pace: $('pace').value, seed: Number(new URLSearchParams(location.search).get('seed')) || Math.floor(Math.random() * 1e9) + 1 };   // ?seed=N replays a deal (for testing)
   const names = AGENT_NAMES.slice();
   for (let i = names.length - 1; i > 0; i--) { const j = Math.floor(E.hash01(cfg.seed, 900 + i) * (i + 1)); [names[i], names[j]] = [names[j], names[i]]; }
   const seats = mode === 'tyndale' ? Array.from({ length: nAgents }, (_, i) => ({ name: names[i], human: false })) : [{ name: 'You', human: true }];
   if (mode === 'hunt') for (let i = 1; i < nAgents; i++) seats.push({ name: names[i - 1], human: false });
   // Six character cards are shuffled and dealt, one to each Agent; one of them is the Secret Supporter, so with 4 or more Agents
-  // someone may hold it. When you hunt, nobody knows unless they are exposed (and you never draw it). When you are Tyndale, you know.
+  // someone may hold it. When you hunt, nobody knows unless they are exposed (you may draw it yourself, and then you know). When you
+  // are Tyndale, you know who it is.
   const drawn = Math.floor(E.hash01(cfg.seed, 950) * 6);
-  const supporter = E.hasSupporter(nAgents) && (mode === 'tyndale' ? drawn < nAgents : drawn > 0 && drawn < nAgents) ? drawn : null;
+  const supporter = E.hasSupporter(nAgents) && drawn < nAgents ? drawn : null;
   S = E.newGame({ seats, seed: cfg.seed, supporter });
   if (mode === 'tyndale') for (const seat of S.seats) for (const o of A.aiPlacePawns(S, seat.id)) S = E.placePawn(S, o.pawn, o.pos);
   ui = { sel: null, heat: cfg.hint, route: false, mine: null, banner: '', status: '', path: [], reveal: null };
@@ -146,12 +148,12 @@ async function computerMove(actor, my) {
   const { roll } = S.pending;
   const to = TY() ? A.aiAgentChoose(S, actor.pawnId, roll, cfg.aiSkill, A.PEEK[cfg.aiSkill] || 0) : A.aiAgentChoose(S, actor.pawnId, roll, 'steady');
   const sup = E.isSupporterPawn(S, actor.pawnId);
-  S = E.agentMove(S, actor.pawnId, roll, to, { share: sup ? A.supporterShares : undefined });
+  S = E.agentMove(S, actor.pawnId, roll, to, { report: sup ? (ans, pos, st) => A.supporterReport(st, ans, pos) : undefined });
+  if (S.over) { save(); render(); return; }                  // the engine has logged the capture
   const r = S.lastResult;
-  say(`${nm} (rolled ${roll}) → ${to}: ${sup ? 'nothing to report' : describe(r)}.`);
-  // what the other Agents are shown: the Secret Supporter only ever says "nothing to report" (Tyndale, though, sees the truth)
-  const shown = sup && !TY() ? { loc: 'not', bible: 'nothing' } : { loc: r.loc, bible: r.bible };
-  ui.reveal = { name: nm, seat: actor.seat, roll, from, to, ...shown, supporter: sup && TY() };
+  say(`${nm} (rolled ${roll}) → ${to}: ${describe({ bible: r.reported })}.`);
+  // When you are Tyndale you see the cards each Agent was shown, and what they reported. When you hunt, you see only the report.
+  ui.reveal = { name: nm, seat: actor.seat, roll, from, to, loc: r.loc, bible: r.bible, reported: r.reported, supporter: sup };
   save(); render();
   if (S.over) return;
   if (!fastPace()) { await waitNext(); ui.reveal = null; render(); if (my !== token) return; }
@@ -182,6 +184,7 @@ async function accusations(my) {
   const votes = {};
   for (const s of active) {
     if (s.id === accuser) votes[s.id] = true;
+    else if (me && s.id === 0 && accused === 0) votes[0] = false;
     else if (me && s.id === 0) {
       const r = await ask({
         title: `${name(accuser)} ${name(accuser) === 'You' ? 'accuse' : 'accuses'} ${name(accused)}`,
@@ -217,16 +220,39 @@ function onRoll() {
   ui.mine = null; ui.banner = '';
   save(); render();
 }
-function onTarget(pos) {
+async function onTarget(pos) {
   if (busy || !S.pending) return;
+  busy = true;
+  const my = token;
   const { pawnId, roll } = S.pending;
-  S = E.agentMove(S, pawnId, roll, pos);
+  const sup = E.isSupporterPawn(S, pawnId);
+  let choice = null;
+  if (sup) {                                                   // you are the Secret Supporter: you decide what to report
+    const ans = E.answerAt(S, pos, true);
+    if (ans.loc !== 'here' && (ans.bible === 'rumors' || E.PUBS.includes(ans.bible))) {
+      render();
+      const r = await ask({
+        title: 'What do you report?',
+        text: `You were shown: <b>${esc(LOC_TEXT[ans.loc])}</b>; <b>${esc(ans.bible === 'rumors' ? 'Rumors of a Translation' : E.PUB_NAMES[ans.bible])}</b>. Tell the other Agents the truth, or say &ldquo;Nothing to report&rdquo;?`,
+        choices: [{ label: 'Report what I was shown', value: 'truth', cls: 'btn-primary' }, { label: 'Nothing to report', value: 'nothing', cls: 'btn-outline-secondary', esc: true }],
+      });
+      if (my !== token) return;
+      choice = r.value;
+    }
+  }
+  S = E.agentMove(S, pawnId, roll, pos, { report: sup ? (ans) => (choice === 'truth' ? ans.bible : null) : undefined });
   const r = S.lastResult;
-  ui.mine = { pos, loc: r.loc, bible: r.bible };
-  say(`You (rolled ${roll}) → ${pos}: ${describe(r)}.`);
-  ui.sel = null;
+  ui.mine = { pos, loc: r.loc, bible: r.bible, reported: sup ? r.reported : null };
+  if (!S.over) say(`You (rolled ${roll}) → ${pos}: ${describe({ bible: r.reported })}.`);
+  ui.sel = null; ui.reveal = null;
   save();
-  if (S.over) { render(); showFinal(); return; }
+  if (S.over) { busy = false; render(); showFinal(); return; }
+  if (!fastPace()) {                                           // stop so you can read your own report before the others move
+    ui.ackMine = true; render();
+    await waitNext();
+    ui.ackMine = false;
+    if (my !== token) return;
+  }
   run();
 }
 
@@ -441,21 +467,37 @@ function tyndaleSide(out) {
   return out.join('');
 }
 
+function repText(b) { return b === 'rumors' ? 'Rumors of a translation nearby' : b === 'nothing' ? 'Nothing to report' : `Found ${E.PUB_NAMES[b]}`; }
 function revealHtml() {
   const r = ui.reveal;
   if (!r) return '';
   const cap = (id) => (id === 'rumors' ? 'Rumors' : id === 'nothing' ? 'Nothing to report' : E.PUB_NAMES[id]);
+  const btns = nextResolve ? '<div class="d-flex gap-2 mt-3"><button type="button" class="btn btn-primary" data-do="next">Next</button><button type="button" class="btn btn-outline-secondary btn-sm" data-do="faster">Speed up</button></div>' : '';
+  const move = r.from === r.to ? `Stayed at <b>${esc(r.to)}</b>` : `Moved <b>${esc(r.from)}</b> → <b>${esc(r.to)}</b>`;
+  if (TY()) {                                                  // you are Tyndale: you show the cards, so you see them
+    return `<div class="ty-card ty-reveal"><h2>${esc(r.name)} rolled ${r.roll}</h2>
+      <p class="mb-2">${move}. ${r.supporter ? 'Your Secret Supporter was shown:' : 'Shown the cards:'}</p>
+      <div class="report">${card(LOC_CARD[r.loc], LOC_TEXT[r.loc])}${card(BIB_CARD[r.bible], cap(r.bible))}</div>
+      <p class="mt-2 mb-0"><b>Reports:</b> ${esc(repText(r.reported))}</p>${btns}</div>`;
+  }
   return `<div class="ty-card ty-reveal"><h2>${esc(r.name)} rolled ${r.roll}</h2>
-    <p class="mb-2">${r.from === r.to ? `Stayed at <b>${esc(r.to)}</b>` : `Moved <b>${esc(r.from)}</b> → <b>${esc(r.to)}</b>`}. ${r.supporter ? 'Your Secret Supporter was shown:' : 'The cards shown:'}</p>
-    <div class="report">${card(LOC_CARD[r.loc], LOC_TEXT[r.loc])}${card(BIB_CARD[r.bible], cap(r.bible))}</div>
-    ${nextResolve ? '<div class="d-flex gap-2 mt-3"><button type="button" class="btn btn-primary" data-do="next">Next</button><button type="button" class="btn btn-outline-secondary btn-sm" data-do="faster">Speed up</button></div>' : ''}</div>`;
+    <p class="mb-1">${move}.</p><p class="mb-0"><b>Reports:</b> ${esc(repText(r.reported))}</p>${btns}</div>`;
+}
+
+function mineHtml() {
+  const m = ui.mine;
+  const cap = m.bible === 'rumors' ? 'Rumors' : m.bible === 'nothing' ? 'Nothing to report' : E.PUB_NAMES[m.bible];
+  const btn = ui.ackMine && nextResolve ? '<div class="d-flex gap-2 mt-3"><button type="button" class="btn btn-primary" data-do="next">Next</button><button type="button" class="btn btn-outline-secondary btn-sm" data-do="faster">Speed up</button></div>' : '';
+  return `<div class="ty-card ty-reveal ty-mine"><h2>Your report from ${esc(m.pos)}</h2><div class="report">${card(LOC_CARD[m.loc], LOC_TEXT[m.loc])}${card(BIB_CARD[m.bible], cap)}</div>${m.reported ? `<p class="mt-2 mb-0"><b>You reported:</b> ${esc(repText(m.reported))}</p>` : ''}${btn}</div>`;
 }
 
 function sideHtml() {
   const out = [];
   if (ui.banner) out.push(`<div class="ty-banner" role="status">${esc(ui.banner)}</div>`);
+  if (ui.ackMine && ui.mine) out.push(mineHtml());
   out.push(revealHtml());
   if (TY()) return tyndaleSide(out);
+  if (meSupporter() && S.phase !== 'place' && !S.over) out.push(`<div class="ty-card"><h2>You are the Secret Supporter</h2><p class="mb-0">You are on Tyndale's side. When you are shown Rumors or a translation you choose whether to report it or say &ldquo;nothing to report&rdquo;. A printed Bible you find, you carry to the coast and ship for him. If the others accuse you and you are exposed, you are out.</p></div>`);
   if (S.phase === 'place') {
     const left = S.pawns.filter((p) => p.seat === 0 && p.pos === null).length, total = myPawns().length;
     out.push(`<div class="ty-card"><h2>Place your pawns</h2><p class="mb-2">Tap a spot on the map to place pawn ${total - left + 1} of ${total}. Spread out: Tyndale is somewhere in Europe and you are a long way from knowing where.</p>
@@ -466,7 +508,7 @@ function sideHtml() {
   } else if (!humanIn()) {
     out.push(`<div class="ty-card"><h2>You are out of the game</h2><p class="mb-0">${esc(ui.status || 'The other Agents play on…')}</p></div>`);
   } else if (busy) {
-    if (!(ui.reveal && nextResolve)) out.push(`<div class="ty-card"><h2>Round ${S.round}</h2><p class="mb-0" aria-live="polite">${esc(ui.status || 'Waiting…')}</p></div>`);
+    if (!(ui.reveal && nextResolve) && !ui.ackMine) out.push(`<div class="ty-card"><h2>Round ${S.round}</h2><p class="mb-0" aria-live="polite">${esc(ui.status || 'Waiting…')}</p></div>`);
   } else {
     const free = myPawns().filter((p) => !S.moved.includes(p.id)), sel = selectedPawn();
     const pick = myPawns().length > 1 ? `<div class="pawn-pick" role="group" aria-label="Choose a pawn">${myPawns().map((p, i) => `<button type="button" data-do="sel" data-id="${p.id}" aria-pressed="${p.id === sel}" ${S.moved.includes(p.id) || S.pending ? 'disabled' : ''}>Pawn ${i + 1} · ${p.pos}${S.moved.includes(p.id) ? ' ✓' : ''}</button>`).join('')}</div>` : '';
@@ -478,13 +520,11 @@ function sideHtml() {
       out.push(`<div class="ty-card"><h2>Round ${S.round}: your turn</h2>${pick}<button type="button" class="btn btn-primary btn-lg" data-do="roll">Roll the die</button></div>`);
     }
   }
-  if (ui.mine) {
-    out.push(`<div class="ty-card"><h2>Report from ${esc(ui.mine.pos)}</h2><div class="report">${card(LOC_CARD[ui.mine.loc], LOC_TEXT[ui.mine.loc])}${card(BIB_CARD[ui.mine.bible], ui.mine.bible === 'rumors' ? 'Rumors' : ui.mine.bible === 'nothing' ? 'Nothing to report' : E.PUB_NAMES[ui.mine.bible])}</div></div>`);
-  }
+  if (ui.mine && !ui.ackMine) out.push(mineHtml());
   if (cfg.hint && S.phase !== 'place' && !S.over) out.push(`<button type="button" class="btn btn-sm btn-outline-secondary mb-3" data-do="heat">${ui.heat ? 'Hide' : 'Show'} where he might be</button>`);
-  out.push(`<div class="ty-card"><h2>The Agents</h2><ul class="seat-list">${S.seats.map((s) => `<li class="${s.out ? 'out' : ''}"><span class="seat-dot" style="background:${SEAT_COLOURS[s.id]}"></span>${esc(s.name)}${s.out ? ' (out)' : ''}</li>`).join('')}</ul>${S.seats.length >= 4 ? '<p class="small text-muted mb-0 mt-2">One of the Agents may be Tyndale\'s Secret Supporter.</p>' : ''}</div>`);
-  const entries = S.log.filter((l) => l.pub).slice(-12).reverse();
-  out.push(`<div class="ty-card"><h2>What has happened</h2><ul class="ty-log">${entries.map((l) => `<li><span class="rd">R${l.round}</span>${esc(l.text)}</li>`).join('') || '<li>Nothing yet.</li>'}</ul></div>`);
+  out.push(`<div class="ty-card"><h2>The Agents</h2><ul class="seat-list">${S.seats.map((s) => `<li class="${s.out ? 'out' : ''}"><span class="seat-dot" style="background:${SEAT_COLOURS[s.id]}"></span>${esc(s.name)}${s.out ? ' (out)' : ''}</li>`).join('')}</ul>${S.seats.length >= 4 && !meSupporter() ? '<p class="small text-muted mb-0 mt-2">One of the Agents may be Tyndale\'s Secret Supporter.</p>' : ''}</div>`);
+  const entries = S.log.filter((l) => l.pub || meSupporter()).slice(-12).reverse();
+  out.push(`<div class="ty-card"><h2>What has happened</h2><ul class="ty-log">${entries.map((l) => `<li><span class="rd">R${l.round}</span>${l.pub ? '' : '<b>Secret: </b>'}${esc(l.text)}</li>`).join('') || '<li>Nothing yet.</li>'}</ul></div>`);
   return out.join('');
 }
 
@@ -496,6 +536,7 @@ function render() {
   drawBoard();
   $('side').innerHTML = sideHtml();
   updatePaceBtn();
+  if (nextResolve) { const el = document.querySelector('.ty-reveal'); if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' }); }
 }
 
 // ---- the end -----------------------------------------------------------------------------------------------------------------
@@ -629,3 +670,4 @@ function init() {
   }
 }
 init();
+if (location.search.includes('debug')) window.__ty = { get S() { return S; }, render };   // test hook

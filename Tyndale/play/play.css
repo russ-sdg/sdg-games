@@ -76,3 +76,6 @@
 
 .ty-reveal { border-color: var(--ty-gold); box-shadow: 0 0 0 3px rgba(240,195,106,.35); }
 .ty-bar-actions { display: flex; gap: .4rem; }
+
+.report figure { max-width: 130px; }
+.report { justify-content: flex-start; }

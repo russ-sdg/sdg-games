@@ -22,7 +22,7 @@ export function playGame(seed, nSeats, skill = 'steady', maxRounds = 120, tskill
       for (const p of s.pawns.filter((x) => x.seat === seat.id && !x.out)) {
         const roll = E.rollDie(s);
         const pos = A.aiAgentChoose(s, p.id, roll, skill, A.PEEK[skill] || 0);
-        s = E.agentMove(s, p.id, roll, pos, { share: A.supporterShares });
+        s = E.agentMove(s, p.id, roll, pos, { report: (ans, pos, st) => A.supporterReport(st, ans, pos) });
         if (s.over) break;
       }
       if (s.over) break;
