@@ -14,6 +14,6 @@ the Secret Supporter exists with 4+ Agent players.
 
 Modes: **Hunt** (you are an Agent, a computer is Tyndale) and **Be Tyndale** (you plan the route; computer Agents hunt you).
 In Be Tyndale the Agents' skill sets how much they are tipped off about his real position (`PEEK` in `js/ai.js`): casual none,
-steady a little, sharp a lot. `?fast` on the page URL skips the pauses (for testing). `js/share.js` draws the result picture.
+steady a little, sharp a lot. `?fast` on the page URL skips the pauses (for testing). Pace: normal play stops after each computer move (cards shown, move drawn on the map); accelerated play does not. `js/share.js` draws the result picture.
 
 Planned: pass-and-play on one device.

@@ -73,3 +73,6 @@
 .share-box { margin: .4rem 0 .8rem; padding-top: .7rem; border-top: 1px solid #e9ecef; }
 .share-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
 .share-preview { width: 100%; height: auto; display: block; border-radius: .5rem; border: 1px solid #dee2e6; margin-bottom: .4rem; }
+
+.ty-reveal { border-color: var(--ty-gold); box-shadow: 0 0 0 3px rgba(240,195,106,.35); }
+.ty-bar-actions { display: flex; gap: .4rem; }

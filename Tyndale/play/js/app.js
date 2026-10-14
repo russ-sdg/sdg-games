@@ -19,8 +19,13 @@ const x = (id) => PX[E.colOf(id)], y = (id) => PX[E.rowOf(id)];
 
 let S = null;                      // the game
 let cfg = null;                    // {nAgents, skill, hint, seed}
-let ui = { sel: null, heat: false, route: false, mine: null, banner: '', status: '', path: [] };
+let ui = { sel: null, heat: false, route: false, mine: null, banner: '', status: '', path: [], reveal: null };
 let token = 0, busy = false;
+const fastPace = () => FAST || (cfg && cfg.pace === 'fast');   // accelerated play: no stopping to look at each move
+// Normal play stops after each computer move so you can see where it went and the cards it was shown.
+let nextResolve = null;
+function releaseNext() { const r = nextResolve; nextResolve = null; if (r) r(); }
+function waitNext() { if (FAST) return Promise.resolve(); return new Promise((resolve) => { nextResolve = resolve; render(); }); }
 
 // ---- saving ---------------------------------------------------------------------------------------------------------------
 function save() { try { localStorage.setItem(KEY, JSON.stringify({ S, cfg, ui: { heat: ui.heat, mine: ui.mine, banner: ui.banner, path: ui.path } })); } catch (e) { /* private mode */ } }
@@ -57,7 +62,7 @@ function ask({ title, text = '', list = null, choices }) {
 function startGame() {
   const mode = document.querySelector('input[name=mode]:checked').value;
   const nAgents = Number($('agents').value);
-  cfg = { mode, nAgents, skill: $('skill').value, aiSkill: $('aiskill').value, hint: mode === 'hunt' && $('hint').checked, seed: Math.floor(Math.random() * 1e9) + 1 };
+  cfg = { mode, nAgents, skill: $('skill').value, aiSkill: $('aiskill').value, hint: mode === 'hunt' && $('hint').checked, pace: $('pace').value, seed: Math.floor(Math.random() * 1e9) + 1 };
   const names = AGENT_NAMES.slice();
   for (let i = names.length - 1; i > 0; i--) { const j = Math.floor(E.hash01(cfg.seed, 900 + i) * (i + 1)); [names[i], names[j]] = [names[j], names[i]]; }
   const seats = mode === 'tyndale' ? Array.from({ length: nAgents }, (_, i) => ({ name: names[i], human: false })) : [{ name: 'You', human: true }];
@@ -68,7 +73,7 @@ function startGame() {
   const supporter = E.hasSupporter(nAgents) && (mode === 'tyndale' ? drawn < nAgents : drawn > 0 && drawn < nAgents) ? drawn : null;
   S = E.newGame({ seats, seed: cfg.seed, supporter });
   if (mode === 'tyndale') for (const seat of S.seats) for (const o of A.aiPlacePawns(S, seat.id)) S = E.placePawn(S, o.pawn, o.pos);
-  ui = { sel: null, heat: cfg.hint, route: false, mine: null, banner: '', status: '', path: [] };
+  ui = { sel: null, heat: cfg.hint, route: false, mine: null, banner: '', status: '', path: [], reveal: null };
   save();
   show('game');
   render();
@@ -100,8 +105,9 @@ async function run() {
       }
       if (S.phase === 'tyndale') {
         ui.status = 'Tyndale is on the move…';
+        ui.reveal = null;
         render();
-        await sleep(600);
+        await sleep(fastPace() ? 600 : 1200);
         if (my !== token) return;
         const before = S.delivered.length;
         const path = A.aiTyndalePath(S, cfg.skill);
@@ -131,9 +137,11 @@ async function run() {
 async function computerMove(actor, my) {
   const nm = name(actor.seat);
   ui.status = `${nm} is hunting…`;
+  ui.reveal = null;
   render();
-  await sleep(550);
+  await sleep(fastPace() ? 550 : 450);
   if (my !== token) return;
+  const from = S.pawns[actor.pawnId].pos;
   if (!S.pending) S = E.rollFor(S, actor.pawnId);
   const { roll } = S.pending;
   const to = TY() ? A.aiAgentChoose(S, actor.pawnId, roll, cfg.aiSkill, A.PEEK[cfg.aiSkill] || 0) : A.aiAgentChoose(S, actor.pawnId, roll, 'steady');
@@ -141,9 +149,13 @@ async function computerMove(actor, my) {
   S = E.agentMove(S, actor.pawnId, roll, to, { share: sup ? A.supporterShares : undefined });
   const r = S.lastResult;
   say(`${nm} (rolled ${roll}) → ${to}: ${sup ? 'nothing to report' : describe(r)}.`);
+  // what the other Agents are shown: the Secret Supporter only ever says "nothing to report" (Tyndale, though, sees the truth)
+  const shown = sup && !TY() ? { loc: 'not', bible: 'nothing' } : { loc: r.loc, bible: r.bible };
+  ui.reveal = { name: nm, seat: actor.seat, roll, from, to, ...shown, supporter: sup && TY() };
   save(); render();
   if (S.over) return;
-  await sleep(250);
+  if (!fastPace()) { await waitNext(); ui.reveal = null; render(); if (my !== token) return; }
+  else await sleep(250);
 }
 
 // ---- accusing the Secret Supporter ---------------------------------------------------------------------------------------
@@ -339,6 +351,12 @@ function drawBoard() {
     g.appendChild(mk('title', {}, `${name(p.seat)}'s pawn at ${p.pos}`));
     svg.appendChild(g);
   }
+  // the move just shown
+  if (ui.reveal && ui.reveal.from !== ui.reveal.to) {
+    const rv = ui.reveal;
+    svg.appendChild(mk('line', { x1: x(rv.from), y1: y(rv.from), x2: x(rv.to), y2: y(rv.to), stroke: SEAT_COLOURS[rv.seat], 'stroke-width': 6, 'stroke-dasharray': '2 9', 'stroke-linecap': 'round', 'pointer-events': 'none' }));
+    svg.appendChild(mk('circle', { cx: x(rv.to), cy: y(rv.to), r: 25, fill: 'none', stroke: SEAT_COLOURS[rv.seat], 'stroke-width': 4, 'pointer-events': 'none' }));
+  }
   // Tyndale himself, and the path being planned
   if (TY() && S.t.pos !== null) {
     if (ui.path.length && !S.over) {
@@ -392,7 +410,7 @@ function tyndaleSide(out) {
   } else if (S.over) {
     out.push(`<div class="ty-card"><h2>Game over</h2><button type="button" class="btn btn-primary" data-do="results">See the results</button></div>`);
   } else if (busy) {
-    out.push(`<div class="ty-card"><h2>Round ${S.round}</h2><p class="mb-0" aria-live="polite">${esc(ui.status || 'The Agents are hunting…')}</p></div>`);
+    if (!(ui.reveal && nextResolve)) out.push(`<div class="ty-card"><h2>Round ${S.round}</h2><p class="mb-0" aria-live="polite">${esc(ui.status || 'The Agents are hunting…')}</p></div>`);
   } else {
     const n = ui.path.length, base = n ? (E.pt[ui.path[0]].kind === 'blue' ? 2 : 1) : 1, total = base + t.bonus.length;
     const chk = n ? E.checkTyndalePath(S, ui.path) : { ok: false, reason: 'move at least one step' };
@@ -423,9 +441,20 @@ function tyndaleSide(out) {
   return out.join('');
 }
 
+function revealHtml() {
+  const r = ui.reveal;
+  if (!r) return '';
+  const cap = (id) => (id === 'rumors' ? 'Rumors' : id === 'nothing' ? 'Nothing to report' : E.PUB_NAMES[id]);
+  return `<div class="ty-card ty-reveal"><h2>${esc(r.name)} rolled ${r.roll}</h2>
+    <p class="mb-2">${r.from === r.to ? `Stayed at <b>${esc(r.to)}</b>` : `Moved <b>${esc(r.from)}</b> → <b>${esc(r.to)}</b>`}. ${r.supporter ? 'Your Secret Supporter was shown:' : 'The cards shown:'}</p>
+    <div class="report">${card(LOC_CARD[r.loc], LOC_TEXT[r.loc])}${card(BIB_CARD[r.bible], cap(r.bible))}</div>
+    ${nextResolve ? '<div class="d-flex gap-2 mt-3"><button type="button" class="btn btn-primary" data-do="next">Next</button><button type="button" class="btn btn-outline-secondary btn-sm" data-do="faster">Speed up</button></div>' : ''}</div>`;
+}
+
 function sideHtml() {
   const out = [];
   if (ui.banner) out.push(`<div class="ty-banner" role="status">${esc(ui.banner)}</div>`);
+  out.push(revealHtml());
   if (TY()) return tyndaleSide(out);
   if (S.phase === 'place') {
     const left = S.pawns.filter((p) => p.seat === 0 && p.pos === null).length, total = myPawns().length;
@@ -437,7 +466,7 @@ function sideHtml() {
   } else if (!humanIn()) {
     out.push(`<div class="ty-card"><h2>You are out of the game</h2><p class="mb-0">${esc(ui.status || 'The other Agents play on…')}</p></div>`);
   } else if (busy) {
-    out.push(`<div class="ty-card"><h2>Round ${S.round}</h2><p class="mb-0" aria-live="polite">${esc(ui.status || 'Waiting…')}</p></div>`);
+    if (!(ui.reveal && nextResolve)) out.push(`<div class="ty-card"><h2>Round ${S.round}</h2><p class="mb-0" aria-live="polite">${esc(ui.status || 'Waiting…')}</p></div>`);
   } else {
     const free = myPawns().filter((p) => !S.moved.includes(p.id)), sel = selectedPawn();
     const pick = myPawns().length > 1 ? `<div class="pawn-pick" role="group" aria-label="Choose a pawn">${myPawns().map((p, i) => `<button type="button" data-do="sel" data-id="${p.id}" aria-pressed="${p.id === sel}" ${S.moved.includes(p.id) || S.pending ? 'disabled' : ''}>Pawn ${i + 1} · ${p.pos}${S.moved.includes(p.id) ? ' ✓' : ''}</button>`).join('')}</div>` : '';
@@ -466,6 +495,7 @@ function render() {
   $('legend').innerHTML = TY() ? '<b>On the map:</b> <b>T</b> = Tyndale (you); dotted red line = your route; gold letters = pages you have left; round markers (N, P, H, O, R, ×) = what the Agents have found. <b style="color:#0a7a2f">Green numbers</b> mark Coastal Cities: the moves a shipment from there takes to reach London.' : '<b>On the map:</b> a letter (N, P, H, O) = a translation was found there; R = rumors of one; × = nothing; rNN = the round it was found. Your pawns have a Y. <b style="color:#0a7a2f">Green numbers</b> mark Coastal Cities: the moves a shipment from there takes to reach London.';
   drawBoard();
   $('side').innerHTML = sideHtml();
+  updatePaceBtn();
 }
 
 // ---- the end -----------------------------------------------------------------------------------------------------------------
@@ -550,10 +580,15 @@ function onSideClick(e) {
   else if (d === 'heat') { ui.heat = !ui.heat; save(); render(); }
   else if (d === 'results') showFinal();
   else if (d === 'finish') onFinishMove();
+  else if (d === 'next') releaseNext();
+  else if (d === 'faster') { cfg.pace = 'fast'; save(); updatePaceBtn(); releaseNext(); }
   else if (d === 'undostep') { ui.path = ui.path.slice(0, -1); render(); }
 }
 
+function updatePaceBtn() { const b = $('pace-btn'); if (b && cfg) b.textContent = `Pace: ${cfg.pace === 'fast' ? 'accelerated' : 'normal'}`; }
+
 function init() {
+  $('pace-btn').addEventListener('click', () => { cfg.pace = cfg.pace === 'fast' ? 'normal' : 'fast'; save(); updatePaceBtn(); if (cfg.pace === 'fast') releaseNext(); });
   const setup = () => {
     const mode = document.querySelector('input[name=mode]:checked').value, sel = $('agents'), keep = sel.value || '4';
     const opts = mode === 'tyndale'
@@ -577,16 +612,16 @@ function init() {
   $('side').addEventListener('click', onSideClick);
   $('menu-btn').addEventListener('click', () => {
     if (S && !S.over && !confirm('Leave this game? It will be lost.')) return;
-    token++; clearSave(); S = null; show('setup'); $('resume').hidden = true;
+    token++; releaseNext(); clearSave(); S = null; show('setup'); $('resume').hidden = true;
   });
   $('final-route').addEventListener('click', () => { ui.route = !ui.route; $('final').close(); render(); });
-  $('final-again').addEventListener('click', () => { token++; clearSave(); S = null; show('setup'); $('resume').hidden = true; });
+  $('final-again').addEventListener('click', () => { token++; releaseNext(); clearSave(); S = null; show('setup'); $('resume').hidden = true; });
   const saved = load();
   if (saved && !saved.S.over) {
     $('resume').hidden = false;
     $('resume-text').textContent = `You have a game in progress (round ${saved.S.round || 'setup'}).`;
     $('resume-btn').addEventListener('click', () => {
-      S = saved.S; cfg = { mode: 'hunt', aiSkill: 'steady', ...saved.cfg }; ui = { sel: null, route: false, status: '', path: [], ...saved.ui };
+      S = saved.S; cfg = { mode: 'hunt', aiSkill: 'steady', pace: 'normal', ...saved.cfg }; ui = { sel: null, route: false, status: '', path: [], reveal: null, ...saved.ui };
       show('game'); render();
       if (S.phase !== 'place') run();
     });
