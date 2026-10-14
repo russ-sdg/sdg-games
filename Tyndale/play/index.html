@@ -65,6 +65,11 @@
                                         <option value="sharp">Sharp &ndash; informers keep them close</option>
                                     </select></div>
                             </div>
+                            <div class="mb-3"><label class="form-label" for="pace">Pace</label>
+                                <select class="form-select" id="pace">
+                                    <option value="normal" selected>Normal &ndash; stop after each computer move to see where it went and the cards it was shown</option>
+                                    <option value="fast">Accelerated &ndash; the computers play quickly; follow along in the log</option>
+                                </select></div>
                             <div class="form-check mb-3" id="hint-wrap">
                                 <input class="form-check-input" type="checkbox" id="hint" />
                                 <label class="form-check-label" for="hint">Show a heat map of where Tyndale might be (easier)</label>
@@ -95,7 +100,7 @@
             <div class="ty-bar" role="status" aria-live="polite">
                 <div class="ty-bar-main" id="bar-main"></div>
                 <div class="ty-bar-pubs" id="bar-pubs" aria-label="Scripture delivered to London"></div>
-                <div class="ty-bar-actions"><button type="button" class="btn btn-sm btn-outline-light" id="menu-btn">New game</button></div>
+                <div class="ty-bar-actions"><button type="button" class="btn btn-sm btn-outline-light" id="pace-btn">Pace: normal</button><button type="button" class="btn btn-sm btn-outline-light" id="menu-btn">New game</button></div>
             </div>
             <div class="row g-3">
                 <div class="col-lg-8">
