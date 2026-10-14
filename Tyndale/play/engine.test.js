@@ -71,3 +71,14 @@ test('scored game plays to the end and reports turns and deliveries', () => {
     if (sm.reason === 'delivered') assert.equal(sm.delivered.at(-1).pub, 'O');
   }
 });
+
+test('a surrounded Tyndale has no legal move and the net closes', () => {
+  let s = E.newGame({ seats: [{ name: 'a' }], seed: 3, supporter: null });
+  const ring = ['E5', 'E7', 'D6', 'F6'];                       // all four neighbours of E6 (no bonus moves there)
+  s.pawns.forEach((p, i) => { s = E.placePawn(s, p.id, ring[i]); });
+  s = E.startTyndale(s, 'E6');
+  assert.equal(E.canMove(s), false);
+  s = E.trapped(s);
+  assert.equal(s.over, true);
+  assert.equal(E.summary(s).reason, 'trapped');
+});

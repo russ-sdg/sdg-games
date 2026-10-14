@@ -61,7 +61,7 @@ export function aiTyndalePath(s, skill = 'steady') {
     v += E.draw(s) * k.noise;
     if (!best || v > best.v) best = { ...c, v };
   }
-  return best.path;
+  return best ? best.path : null;                               // null: no legal move at all (see E.canMove / E.trapped)
 }
 
 // ---- Bishop's Agents ---------------------------------------------------------------------------------------------------------
@@ -127,8 +127,21 @@ export function belief(s, seat) {
   return P;
 }
 
-export function aiAgentChoose(s, pawnId, roll, skill = 'steady') {
-  const pawn = s.pawns[pawnId], seat = pawn.seat, P = belief(s, seat);
+// When a person plays Tyndale, the computer Agents get a little extra help so the hunt is not hopeless: a share of their
+// attention goes to the spots near where he really is ("tips from informers"). Casual Agents get none.
+export const PEEK = { casual: 0, steady: 0.03, sharp: 0.07 };
+function withPeek(s, P, peek) {
+  if (!peek) return P;
+  const w = {};
+  let tot = 0;
+  for (const id of ALL) { const d = E.dist(id, s.t.pos); if (d <= 2) { w[id] = d === 0 ? 1 : d === 1 ? 0.5 : 0.25; tot += w[id]; } }
+  const Q = {};
+  for (const id of ALL) Q[id] = P[id] * (1 - peek) + (w[id] ? (peek * w[id]) / tot : 0);
+  return Q;
+}
+
+export function aiAgentChoose(s, pawnId, roll, skill = 'steady', peek = 0) {
+  const pawn = s.pawns[pawnId], seat = pawn.seat, P = withPeek(s, belief(s, seat), peek);
   const noise = { casual: 0.03, steady: 0.008, sharp: 0.001 }[skill] ?? 0.008;
   const carry = s.carry[pawnId];
   let best = null;

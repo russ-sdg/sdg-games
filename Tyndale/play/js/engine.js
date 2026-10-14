@@ -268,6 +268,16 @@ export function accuse(state, accuser, accused, votes) {
 export function logPublic(state, text) { const s = clone(state); note(s, text, true); return s; }
 export const closeAccusation = (state) => { const s = clone(state); if (s.accusation) s.accusation.open = false; return s; };
 
+// Tyndale has no legal move (every way out is blocked by Agents): the net has closed.
+export const trapped = (state) => { const s = clone(state); note(s, 'Tyndale is surrounded with no way out. The Agents have him!'); return finish(s, 'agents', 'trapped'); };
+export function canMove(s) {
+  const walk = (path) => {
+    if (path.length && checkTyndalePath(s, path).ok) return true;
+    return tyndaleNext(s, path).steps.some((q) => walk([...path, q]));
+  };
+  return walk([]);
+}
+
 function finish(s, winner, reason) {
   s.over = true; s.phase = 'over'; s.winner = winner; s.endReason = reason;
   return s;

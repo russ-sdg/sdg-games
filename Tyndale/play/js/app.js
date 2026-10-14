@@ -2,11 +2,13 @@
 import * as E from './engine.js';
 import * as A from './ai.js';
 import { PX } from './board-data.js';
+import { drawShareImage, canvasToBlob, nativeShareData, shareMessage } from './share.js';
 
 const KEY = 'sdg-ty-play-1';
 const $ = (id) => document.getElementById(id);
 const SVGNS = 'http://www.w3.org/2000/svg';
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const FAST = location.search.includes('fast');               // ?fast skips the pauses (for testing)
+const sleep = (ms) => new Promise((r) => setTimeout(r, FAST ? 1 : ms));
 const CARD = (id) => `../../assets/tyndale/cards/${id}-480.webp`;
 const LOC_CARD = { here: 'here', not: 'not-here', near: 'near', far: 'far' };
 const BIB_CARD = { N: 'new-testament', P: 'pentateuch', H: 'historical', O: 'old-testament', rumors: 'rumors', nothing: 'nothing' };
@@ -17,18 +19,18 @@ const x = (id) => PX[E.colOf(id)], y = (id) => PX[E.rowOf(id)];
 
 let S = null;                      // the game
 let cfg = null;                    // {nAgents, skill, hint, seed}
-let ui = { sel: null, heat: false, route: false, mine: null, banner: '', status: '' };
+let ui = { sel: null, heat: false, route: false, mine: null, banner: '', status: '', path: [] };
 let token = 0, busy = false;
 
 // ---- saving ---------------------------------------------------------------------------------------------------------------
-function save() { try { localStorage.setItem(KEY, JSON.stringify({ S, cfg, ui: { heat: ui.heat, mine: ui.mine, banner: ui.banner } })); } catch (e) { /* private mode */ } }
+function save() { try { localStorage.setItem(KEY, JSON.stringify({ S, cfg, ui: { heat: ui.heat, mine: ui.mine, banner: ui.banner, path: ui.path } })); } catch (e) { /* private mode */ } }
 function load() { try { const v = JSON.parse(localStorage.getItem(KEY)); return v && v.S && v.cfg ? v : null; } catch (e) { return null; } }
 function clearSave() { try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ } }
 
 // ---- small helpers ----------------------------------------------------------------------------------------------------------
 const name = (seat) => S.seats[seat].name;
-const you = () => S.seats[0];
-const humanIn = () => !you().out;
+const TY = () => cfg.mode === 'tyndale';                      // you play Tyndale; every Agent is a computer
+const humanIn = () => !TY() && !S.seats[0].out;           // a person is still hunting as seat 0
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function say(text) { S = E.logPublic(S, text); }
 const describe = (r) => (r.bible === 'rumors' ? 'rumors of a translation nearby' : r.bible === 'nothing' ? 'nothing to report' : 'found ' + E.PUB_NAMES[r.bible]);
@@ -53,18 +55,20 @@ function ask({ title, text = '', list = null, choices }) {
 
 // ---- new game ------------------------------------------------------------------------------------------------------------------
 function startGame() {
+  const mode = document.querySelector('input[name=mode]:checked').value;
   const nAgents = Number($('agents').value);
-  cfg = { nAgents, skill: $('skill').value, hint: $('hint').checked, seed: Math.floor(Math.random() * 1e9) + 1 };
+  cfg = { mode, nAgents, skill: $('skill').value, aiSkill: $('aiskill').value, hint: mode === 'hunt' && $('hint').checked, seed: Math.floor(Math.random() * 1e9) + 1 };
   const names = AGENT_NAMES.slice();
   for (let i = names.length - 1; i > 0; i--) { const j = Math.floor(E.hash01(cfg.seed, 900 + i) * (i + 1)); [names[i], names[j]] = [names[j], names[i]]; }
-  const seats = [{ name: 'You', human: true }];
-  for (let i = 1; i < nAgents; i++) seats.push({ name: names[i - 1], human: false });
+  const seats = mode === 'tyndale' ? Array.from({ length: nAgents }, (_, i) => ({ name: names[i], human: false })) : [{ name: 'You', human: true }];
+  if (mode === 'hunt') for (let i = 1; i < nAgents; i++) seats.push({ name: names[i - 1], human: false });
   // Six character cards are shuffled and dealt, one to each Agent; one of them is the Secret Supporter, so with 4 or more Agents
-  // someone may hold it, but nobody knows unless they are exposed. You never draw it.
+  // someone may hold it. When you hunt, nobody knows unless they are exposed (and you never draw it). When you are Tyndale, you know.
   const drawn = Math.floor(E.hash01(cfg.seed, 950) * 6);
-  const supporter = E.hasSupporter(nAgents) && drawn > 0 && drawn < nAgents ? drawn : null;
+  const supporter = E.hasSupporter(nAgents) && (mode === 'tyndale' ? drawn < nAgents : drawn > 0 && drawn < nAgents) ? drawn : null;
   S = E.newGame({ seats, seed: cfg.seed, supporter });
-  ui = { sel: null, heat: cfg.hint, route: false, mine: null, banner: '', status: '' };
+  if (mode === 'tyndale') for (const seat of S.seats) for (const o of A.aiPlacePawns(S, seat.id)) S = E.placePawn(S, o.pawn, o.pos);
+  ui = { sel: null, heat: cfg.hint, route: false, mine: null, banner: '', status: '', path: [] };
   save();
   show('game');
   render();
@@ -84,20 +88,30 @@ async function run() {
   try {
     while (!S.over) {
       if (my !== token) return;
+      if (S.phase === 'agents' && S.accusation && S.accusation.open) {          // a shipment has just arrived
+        await accusations(my);
+        if (my !== token) return;
+        continue;
+      }
+      if (S.phase === 'tyndale' && TY()) {                                       // waiting for you to move Tyndale
+        if (!E.canMove(S)) { S = E.trapped(S); save(); continue; }
+        busy = false; ui.status = ''; render();
+        return;
+      }
       if (S.phase === 'tyndale') {
         ui.status = 'Tyndale is on the move…';
         render();
         await sleep(600);
         if (my !== token) return;
         const before = S.delivered.length;
-        S = E.tyndaleMove(S, A.aiTyndalePath(S, cfg.skill));
+        const path = A.aiTyndalePath(S, cfg.skill);
+        if (!path) { S = E.trapped(S); save(); continue; }
+        S = E.tyndaleMove(S, path);
         if (S.delivered.length > before) {
           const d = S.delivered[S.delivered.length - 1];
           ui.banner = `${E.PUB_NAMES[d.pub]} has reached London!`;
         }
         save(); render();
-        if (S.over) break;
-        if (S.accusation && S.accusation.open) { await accusations(my); if (my !== token) return; if (S.over) break; }
         continue;
       }
       if (S.phase === 'agents') {
@@ -122,7 +136,7 @@ async function computerMove(actor, my) {
   if (my !== token) return;
   if (!S.pending) S = E.rollFor(S, actor.pawnId);
   const { roll } = S.pending;
-  const to = A.aiAgentChoose(S, actor.pawnId, roll, 'steady');
+  const to = TY() ? A.aiAgentChoose(S, actor.pawnId, roll, cfg.aiSkill, A.PEEK[cfg.aiSkill] || 0) : A.aiAgentChoose(S, actor.pawnId, roll, 'steady');
   const sup = E.isSupporterPawn(S, actor.pawnId);
   S = E.agentMove(S, actor.pawnId, roll, to, { share: sup ? A.supporterShares : undefined });
   const r = S.lastResult;
@@ -156,9 +170,9 @@ async function accusations(my) {
   const votes = {};
   for (const s of active) {
     if (s.id === accuser) votes[s.id] = true;
-    else if (s.id === 0) {
+    else if (me && s.id === 0) {
       const r = await ask({
-        title: `${name(accuser)} ${accuser === 0 ? 'accuse' : 'accuses'} ${name(accused)}`,
+        title: `${name(accuser)} ${name(accuser) === 'You' ? 'accuse' : 'accuses'} ${name(accused)}`,
         text: `${esc(name(accuser))} says ${esc(name(accused))} is the Secret Supporter. Do you vote to charge them?`,
         choices: [{ label: 'Yes, charge them', value: true, cls: 'btn-danger' }, { label: 'No', value: false, cls: 'btn-primary', esc: true }],
       });
@@ -169,8 +183,8 @@ async function accusations(my) {
   S = E.accuse(S, accuser, accused, votes);
   const res = S.accusationResult;
   const msg = !res.charged ? `The vote on ${name(accused)} fails (${res.yes} of ${res.of}).`
-    : res.supporter ? `${name(accused)} ${accused === 0 ? 'were' : 'was'} the Secret Supporter and ${accused === 0 ? 'are' : 'is'} out of the game!`
-      : `${name(accuser)} accused the wrong Agent and ${accuser === 0 ? 'are' : 'is'} out of the game.`;
+    : res.supporter ? `${name(accused)} ${name(accused) === 'You' ? 'were' : 'was'} the Secret Supporter and ${name(accused) === 'You' ? 'are' : 'is'} out of the game!`
+      : `${name(accuser)} accused the wrong Agent and ${name(accuser) === 'You' ? 'are' : 'is'} out of the game.`;
   ui.banner = msg;
   save(); render();
   await ask({ title: 'The vote', text: esc(msg), choices: [{ label: 'Continue', value: 1, cls: 'btn-primary', esc: true }] });
@@ -199,6 +213,30 @@ function onTarget(pos) {
   ui.mine = { pos, loc: r.loc, bible: r.bible };
   say(`You (rolled ${roll}) → ${pos}: ${describe(r)}.`);
   ui.sel = null;
+  save();
+  if (S.over) { render(); showFinal(); return; }
+  run();
+}
+
+// ---- playing Tyndale ---------------------------------------------------------------------------------------------------------
+function onStart(pos) {
+  if (!TY() || S.phase !== 'place' || E.pawnAt(S, pos)) return;
+  S = E.startTyndale(S, pos);
+  say('Tyndale has set out. The Bishop\'s Agents are searching for him.');
+  save(); render(); run();
+}
+function onStep(pos) {
+  if (busy || !TY() || S.phase !== 'tyndale') return;
+  if (!E.tyndaleNext(S, ui.path).steps.includes(pos)) return;
+  ui.path = [...ui.path, pos];
+  render();
+}
+function onFinishMove() {
+  if (busy || !TY() || S.phase !== 'tyndale' || !E.checkTyndalePath(S, ui.path).ok) return;
+  const before = S.delivered.length;
+  S = E.tyndaleMove(S, ui.path);
+  ui.path = []; ui.banner = '';
+  if (S.delivered.length > before) ui.banner = `${E.PUB_NAMES[S.delivered[S.delivered.length - 1].pub]} has reached London!`;
   save();
   if (S.over) { render(); showFinal(); return; }
   run();
@@ -268,6 +306,19 @@ function drawBoard() {
     svg.appendChild(mk('circle', { cx: x(e), cy: y(e), r: 14, fill: '#a3262e', stroke: '#fff', 'stroke-width': 3 }));
     svg.appendChild(mk('text', { x: x(e), y: y(e) - 26, 'font-size': 16, 'font-weight': 700, fill: '#7a1f26', stroke: '#fff', 'stroke-width': 3, 'paint-order': 'stroke' }, 'Tyndale'));
   }
+  // playing Tyndale: your route so far, the marks you have left behind, and the move you are planning
+  if (TY() && S.t.pos !== null) {
+    const tr = S.t.trail;
+    svg.appendChild(mk('polyline', { points: tr.map((p) => `${x(p)},${y(p)}`).join(' '), fill: 'none', stroke: '#a3262e', 'stroke-width': 3, 'stroke-dasharray': '3 7', 'stroke-linecap': 'round', opacity: 0.8, 'pointer-events': 'none' }));
+    for (const pos in S.t.marks) {
+      if (S.found[pos]) continue;
+      const g = mk('g', { 'pointer-events': 'none', opacity: 0.85 });
+      g.appendChild(mk('title', {}, `${pos}: you left a page of ${E.PUB_NAMES[S.t.marks[pos]]} here`));
+      g.appendChild(mk('circle', { cx: x(pos), cy: y(pos), r: 12, fill: 'rgba(240,195,106,.55)', stroke: '#8a5a00', 'stroke-width': 2, 'stroke-dasharray': '3 2' }));
+      g.appendChild(mk('text', { x: x(pos), y: y(pos) + 1, 'font-size': 14, 'font-weight': 800, fill: '#5a3b00' }, S.t.marks[pos]));
+      svg.appendChild(g);
+    }
+  }
   // what the Agents have found
   for (const pos in S.found) {
     const f = S.found[pos], g = mk('g', {});
@@ -282,14 +333,34 @@ function drawBoard() {
   for (const p of S.pawns) {
     if (p.out || p.pos === null) continue;
     const g = mk('g', { 'pointer-events': 'none' });
-    const me = p.seat === 0;
+    const me = p.seat === 0 && S.seats[0].human;
     g.appendChild(mk('circle', { cx: x(p.pos), cy: y(p.pos), r: me ? 17 : 14, fill: SEAT_COLOURS[p.seat], stroke: '#fff', 'stroke-width': 3.5 }));
     g.appendChild(mk('text', { x: x(p.pos), y: y(p.pos) + 1, 'font-size': 15, 'font-weight': 800, fill: '#fff' }, me ? 'Y' : name(p.seat)[0]));
     g.appendChild(mk('title', {}, `${name(p.seat)}'s pawn at ${p.pos}`));
     svg.appendChild(g);
   }
+  // Tyndale himself, and the path being planned
+  if (TY() && S.t.pos !== null) {
+    if (ui.path.length && !S.over) {
+      const pts = [S.t.pos, ...ui.path];
+      svg.appendChild(mk('polyline', { points: pts.map((p) => `${x(p)},${y(p)}`).join(' '), fill: 'none', stroke: '#f0c36a', 'stroke-width': 7, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'pointer-events': 'none' }));
+      ui.path.forEach((p, i) => { svg.appendChild(mk('circle', { cx: x(p), cy: y(p), r: 11, fill: '#232a5c', stroke: '#f0c36a', 'stroke-width': 3, 'pointer-events': 'none' })); svg.appendChild(mk('text', { x: x(p), y: y(p) + 1, 'font-size': 13, 'font-weight': 800, fill: '#fff', 'pointer-events': 'none' }, String(i + 1))); });
+    }
+    const g = mk('g', { 'pointer-events': 'none' });
+    g.appendChild(mk('circle', { cx: x(S.t.pos), cy: y(S.t.pos), r: 19, fill: '#a3262e', stroke: '#f0c36a', 'stroke-width': 4 }));
+    g.appendChild(mk('text', { x: x(S.t.pos), y: y(S.t.pos) + 1, 'font-size': 18, 'font-weight': 800, fill: '#fff' }, 'T'));
+    g.appendChild(mk('title', {}, `Tyndale at ${S.t.pos}`));
+    svg.appendChild(g);
+  }
   // clickable spots
-  if (placing) {
+  if (TY() && placing) {
+    for (const pt of Array.from({ length: 121 }, (_, i) => E.idAt(Math.floor(i / 11), i % 11))) {
+      if (E.pawnAt(S, pt)) continue;
+      svg.appendChild(mk('circle', { cx: x(pt), cy: y(pt), r: 24, class: 'hit', 'data-act': 'start', 'data-pos': pt, role: 'button', tabindex: 0, 'aria-label': `Start Tyndale at ${pt}` }));
+    }
+  } else if (TY() && S.phase === 'tyndale' && !busy && !S.over) {
+    for (const t of E.tyndaleNext(S, ui.path).steps) svg.appendChild(mk('circle', { cx: x(t), cy: y(t), r: 24, class: 'tgt pulse', 'data-act': 'step', 'data-pos': t, role: 'button', tabindex: 0, 'aria-label': `Step to ${t}${E.pawnAt(S, t) ? ' (an Agent is there)' : ''}` }));
+  } else if (placing) {
     for (const pt of Array.from({ length: 121 }, (_, i) => E.idAt(Math.floor(i / 11), i % 11))) {
       if (E.pawnAt(S, pt)) continue;
       const c = mk('circle', { cx: x(pt), cy: y(pt), r: 24, class: 'hit', 'data-act': 'place', 'data-pos': pt, role: 'button', tabindex: 0, 'aria-label': `Place pawn at ${pt}` });
@@ -313,9 +384,49 @@ function pubChips() {
 
 function card(id, cap) { return `<figure><img src="${CARD(id)}" alt="${esc(cap)}" /><figcaption>${esc(cap)}</figcaption></figure>`; }
 
+function tyndaleSide(out) {
+  const t = S.t;
+  if (S.phase === 'place') {
+    out.push(`<div class="ty-card"><h2>Where does Tyndale begin?</h2><p class="mb-2">The Agents have placed their pawns. Tap the spot where Tyndale starts. A Printing Centre on the coast lets you publish and ship straight away.</p>
+      <p class="small text-muted mb-0">You cannot start on an Agent's spot.</p></div>`);
+  } else if (S.over) {
+    out.push(`<div class="ty-card"><h2>Game over</h2><button type="button" class="btn btn-primary" data-do="results">See the results</button></div>`);
+  } else if (busy) {
+    out.push(`<div class="ty-card"><h2>Round ${S.round}</h2><p class="mb-0" aria-live="polite">${esc(ui.status || 'The Agents are hunting…')}</p></div>`);
+  } else {
+    const n = ui.path.length, base = n ? (E.pt[ui.path[0]].kind === 'blue' ? 2 : 1) : 1, total = base + t.bonus.length;
+    const chk = n ? E.checkTyndalePath(S, ui.path) : { ok: false, reason: 'move at least one step' };
+    const msg = chk.ok ? (chk.needBonus ? `Uses ${chk.needBonus} bonus move${chk.needBonus > 1 ? 's' : ''}.` : 'Ready to go.') : chk.reason.charAt(0).toUpperCase() + chk.reason.slice(1) + '.';
+    out.push(`<div class="ty-card"><h2>Round ${S.round}: move Tyndale</h2>
+      <p class="mb-2">Tap the highlighted spots to step along. ${base === 2 ? `Your first spot is blue, so you get a second step free${t.bonus.length ? `, plus up to ${t.bonus.length} more from bonus moves` : ''}: up to <b>${total}</b> steps.` : `You may move <b>1</b> step${t.bonus.length ? `, plus up to ${t.bonus.length} more using bonus moves` : ''}. A blue first spot gives a free second step.`}</p>
+      <p class="small mb-2" aria-live="polite">${esc(msg)} ${n ? `Steps planned: ${n}.` : ''}</p>
+      <div class="d-flex flex-wrap gap-2"><button type="button" class="btn btn-primary" data-do="finish" ${chk.ok ? '' : 'disabled'}>Finish move</button>
+      <button type="button" class="btn btn-outline-secondary" data-do="undostep" ${n ? '' : 'disabled'}>Undo step</button></div></div>`);
+  }
+  if (S.phase !== 'place') {
+    const next = t.published < t.translated ? `${E.PUB_NAMES[E.PUBS[t.translated]]} is translated. Reach a Printing Centre you have not used to publish it.`
+      : t.published > t.shipped ? `${E.PUB_NAMES[E.PUBS[t.published]]} is printed. Reach a Coastal City to ship it.`
+        : 'Everything is shipped. Keep out of sight until the last shipment reaches London.';
+    const sea = S.shipments.filter((q) => !q.arrived);
+    out.push(`<div class="ty-card"><h2>Your scorecard</h2>
+      <p class="mb-2">${esc(next)}</p>
+      <ul class="small mb-2">
+        <li>Bonus moves: <b>${t.bonus.length ? t.bonus.join(' ') : 'none'}</b></li>
+        <li>Printing Centres used: <b>${t.visited.length}</b> of 17${t.visited.length ? `<br><span class="text-muted">${esc(t.visited.map((id) => E.pt[id].centre).join(', '))}</span>` : ''}</li>
+        <li>Shipments at sea: ${sea.length ? '<ul>' + sea.map((q) => `<li>${esc(E.PUB_NAMES[q.pub])}: <b>${q.left}</b> to go${q.fresh ? ' (sails after this turn)' : ''}</li>`).join('') + '</ul>' : '<b>none</b>'}</li>
+      </ul><p class="small text-muted mb-0">A shipment is crossed off one number each turn after it sails. At zero it reaches London. Your gold letters on the map are the pages you have left behind.</p></div>`);
+  }
+  if (cfg.nAgents >= 4 && S.supporter !== null) out.push(`<div class="ty-card"><h2>Your Secret Supporter</h2><p class="mb-0"><b>${esc(S.seats[S.supporter].name)}</b>${S.seats[S.supporter].out ? ' (out of the game)' : ''} is on your side. They report only &ldquo;nothing to report&rdquo; to the other Agents, and may carry a printed Bible to the coast for you.</p></div>`);
+  out.push(`<div class="ty-card"><h2>The Agents</h2><ul class="seat-list">${S.seats.map((q) => `<li class="${q.out ? 'out' : ''}"><span class="seat-dot" style="background:${SEAT_COLOURS[q.id]}"></span>${esc(q.name)}${q.out ? ' (out)' : ''}${q.id === S.supporter ? ' ★' : ''}</li>`).join('')}</ul></div>`);
+  const entries = S.log.slice(-14).reverse();
+  out.push(`<div class="ty-card"><h2>What has happened</h2><ul class="ty-log">${entries.map((l) => `<li><span class="rd">R${l.round}</span>${l.pub ? '' : '<b>You: </b>'}${esc(l.text.replace(/^Tyndale /, l.pub ? 'Tyndale ' : ''))}</li>`).join('') || '<li>Nothing yet.</li>'}</ul></div>`);
+  return out.join('');
+}
+
 function sideHtml() {
   const out = [];
   if (ui.banner) out.push(`<div class="ty-banner" role="status">${esc(ui.banner)}</div>`);
+  if (TY()) return tyndaleSide(out);
   if (S.phase === 'place') {
     const left = S.pawns.filter((p) => p.seat === 0 && p.pos === null).length, total = myPawns().length;
     out.push(`<div class="ty-card"><h2>Place your pawns</h2><p class="mb-2">Tap a spot on the map to place pawn ${total - left + 1} of ${total}. Spread out: Tyndale is somewhere in Europe and you are a long way from knowing where.</p>
@@ -350,9 +461,9 @@ function sideHtml() {
 
 function render() {
   if (!S) return;
-  $('bar-main').textContent = S.phase === 'place' ? 'Place your pawns' : S.over ? `Game over after ${S.round} turns` : `Round ${S.round}`;
+  $('bar-main').textContent = S.phase === 'place' ? (TY() ? 'Choose where Tyndale begins' : 'Place your pawns') : S.over ? `Game over after ${S.round} turns` : `Round ${S.round}`;
   $('bar-pubs').innerHTML = pubChips();
-  $('legend').innerHTML = '<b>On the map:</b> a letter (N, P, H, O) = a translation was found there; R = rumors of one; × = nothing; rNN = the round it was found. Your pawns have a Y. <b style="color:#0a7a2f">Green numbers</b> mark Coastal Cities: the moves a shipment from there takes to reach London.';
+  $('legend').innerHTML = TY() ? '<b>On the map:</b> <b>T</b> = Tyndale (you); dotted red line = your route; gold letters = pages you have left; round markers (N, P, H, O, R, ×) = what the Agents have found. <b style="color:#0a7a2f">Green numbers</b> mark Coastal Cities: the moves a shipment from there takes to reach London.' : '<b>On the map:</b> a letter (N, P, H, O) = a translation was found there; R = rumors of one; × = nothing; rNN = the round it was found. Your pawns have a Y. <b style="color:#0a7a2f">Green numbers</b> mark Coastal Cities: the moves a shipment from there takes to reach London.';
   drawBoard();
   $('side').innerHTML = sideHtml();
 }
@@ -362,23 +473,62 @@ function showFinal() {
   const sm = E.summary(S);
   const caught = sm.reason === 'captured';
   const captor = caught ? S.pawns[S.lastResult.pawnId].seat : null;
-  let title;
-  if (caught) title = captor === 0 ? 'You caught Tyndale!' : `${name(captor)} caught Tyndale!`;
-  else if (sm.reason === 'delivered') title = 'Tyndale wins: the Old Testament reached London';
-  else title = 'Tyndale wins: the Agents have been undone';
-  const turnsLabel = caught ? 'turns to catch Tyndale' : sm.reason === 'delivered' ? 'turns to complete all the deliveries' : 'turns played';
+  const n = sm.turns;
+  let title, headline;
+  if (TY()) {
+    if (sm.reason === 'delivered') { title = 'You got the Bible to London!'; headline = `I got the whole Bible to London as Tyndale in ${n} turns!`; }
+    else if (sm.reason === 'no-hunters') { title = 'Every Agent is out: you win!'; headline = 'I outwitted every Bishop\'s Agent as Tyndale!'; }
+    else if (sm.reason === 'trapped') { title = 'You were surrounded!'; headline = `The Bishop's Agents trapped me as Tyndale on turn ${n}.`; }
+    else { title = `${name(captor)} caught you!`; headline = `The Bishop's Agents caught me as Tyndale on turn ${n}.`; }
+  } else if (caught) { title = name(captor) === 'You' ? 'You caught Tyndale!' : `${name(captor)} caught Tyndale!`; headline = name(captor) === 'You' ? `I caught Tyndale in ${n} turns!` : `We caught Tyndale in ${n} turns!`; }
+  else if (sm.reason === 'delivered') { title = 'Tyndale wins: the Old Testament reached London'; headline = `Tyndale got the whole Bible to London in ${n} turns before we could stop him.`; }
+  else { title = 'Tyndale wins: the Agents have been undone'; headline = 'Tyndale outwitted the Bishop\'s Agents.'; }
+  const turnsLabel = TY() ? (sm.reason === 'delivered' ? 'turns to complete all the deliveries' : 'turns until you were caught')
+    : caught ? 'turns to catch Tyndale' : sm.reason === 'delivered' ? 'turns to complete all the deliveries' : 'turns played';
   const items = sm.delivered.map((d) => `<li><b>${esc(d.name)}</b><small>delivered to London on turn ${d.round}</small></li>`).join('')
     + sm.shippedNotArrived.map((d) => `<li class="pending"><b>${esc(d.name)}</b><small>shipped, ${d.left} move${d.left === 1 ? '' : 's'} from London when the game ended</small></li>`).join('')
-    + sm.undelivered.filter((n) => !sm.shippedNotArrived.some((q) => q.name === n)).map((n) => `<li class="no"><b>${esc(n)}</b><small>not delivered</small></li>`).join('');
+    + sm.undelivered.filter((q) => !sm.shippedNotArrived.some((z) => z.name === q)).map((q) => `<li class="no"><b>${esc(q)}</b><small>not delivered</small></li>`).join('');
   $('final-title').textContent = title;
   $('final-body').innerHTML = `<p class="mb-3"><span class="big-stat">${sm.turns}</span> <span class="text-muted">${turnsLabel}</span></p>
     <h3 class="h6">Scripture delivered to London</h3>
-    ${sm.delivered.length ? '' : '<p class="mb-1">None: Tyndale was stopped before any part reached London.</p>'}
+    ${sm.delivered.length ? '' : `<p class="mb-1">None: ${TY() ? 'you were stopped' : 'Tyndale was stopped'} before any part reached London.</p>`}
     <ul class="scripture-list">${items}</ul>
     ${S.supporter !== null ? `<p class="small mt-3 mb-0">The Secret Supporter was <b>${esc(name(S.supporter))}</b>${S.seats[S.supporter].out ? ' (already out)' : ''}.</p>` : S.seats.length >= 4 ? '<p class="small mt-3 mb-0">There was no Secret Supporter in this game.</p>' : ''}
     <p class="small mt-1 mb-0">Tyndale ended at <b>${S.t.pos}</b>.</p>`;
   $('final-route').textContent = ui.route ? 'Hide his route' : 'Show his route';
+  const detail = TY() ? `You played Tyndale\n${cfg.nAgents} computer Agent${cfg.nAgents > 1 ? 's' : ''}, ${cfg.aiSkill}` : `${cfg.nAgents} Agent${cfg.nAgents > 1 ? 's' : ''} hunting\nTyndale: ${cfg.skill}`;
+  mountShare($('final-body'), headline, { title, turnsLabel, detail, boardSrc: '../../assets/tyndale/board.webp' });
   $('final').showModal();
+}
+
+// Share the result as a picture: native share sheet where the browser offers it, plus a download.
+async function mountShare(root, headline, info) {
+  const box = document.createElement('div');
+  box.className = 'share-box';
+  box.innerHTML = `<div class="share-actions"><button type="button" class="btn btn-primary btn-sm" id="share-dl" disabled>Download image</button>
+    <button type="button" class="btn btn-outline-primary btn-sm" id="share-native" hidden>Share\u2026</button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="share-copy">Copy text</button></div>
+    <img class="share-preview" alt="The finished game: the board with Tyndale's route" width="1200" height="1040" hidden>
+    <p class="small text-muted mb-0" id="share-msg" aria-live="polite">Drawing your result card\u2026</p>`;
+  root.appendChild(box);
+  const img = box.querySelector('.share-preview'), msg = box.querySelector('#share-msg');
+  const dl = box.querySelector('#share-dl'), nat = box.querySelector('#share-native'), copy = box.querySelector('#share-copy');
+  copy.onclick = async () => {
+    try { await navigator.clipboard.writeText(shareMessage(headline)); msg.textContent = 'Copied. Paste it anywhere.'; }
+    catch { msg.textContent = shareMessage(headline); }
+  };
+  try {
+    const canvas = await drawShareImage(document.createElement('canvas'), S, info);
+    const blob = await canvasToBlob(canvas);
+    const url = URL.createObjectURL(blob);
+    img.src = url; img.hidden = false; dl.disabled = false; msg.textContent = '';
+    const file = new File([blob], 'tyndale.png', { type: 'image/png' });
+    nat.hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+    dl.onclick = () => { const a = document.createElement('a'); a.href = url; a.download = 'tyndale.png'; document.body.appendChild(a); a.click(); a.remove(); };
+    nat.onclick = async () => { try { await navigator.share(nativeShareData(file, headline)); } catch { /* cancelled */ } };
+  } catch {
+    msg.textContent = 'Sorry, the result card could not be drawn in this browser. You can still copy the text.';
+  }
 }
 
 // ---- wiring --------------------------------------------------------------------------------------------------------------------
@@ -386,7 +536,8 @@ function onBoardClick(e) {
   const t = e.target.closest && e.target.closest('[data-act]');
   if (!t) return;
   const pos = t.getAttribute('data-pos');
-  if (t.getAttribute('data-act') === 'place') onPlace(pos); else if (t.getAttribute('data-act') === 'target') onTarget(pos);
+  const act = t.getAttribute('data-act');
+  if (act === 'place') onPlace(pos); else if (act === 'target') onTarget(pos); else if (act === 'start') onStart(pos); else if (act === 'step') onStep(pos);
 }
 function onSideClick(e) {
   const b = e.target.closest && e.target.closest('[data-do]');
@@ -398,11 +549,28 @@ function onSideClick(e) {
   else if (d === 'undo') onUndoPlace();
   else if (d === 'heat') { ui.heat = !ui.heat; save(); render(); }
   else if (d === 'results') showFinal();
+  else if (d === 'finish') onFinishMove();
+  else if (d === 'undostep') { ui.path = ui.path.slice(0, -1); render(); }
 }
 
 function init() {
-  $('agents').addEventListener('change', () => { const n = Number($('agents').value); $('supp-note').hidden = !E.hasSupporter(n); });
-  $('supp-note').hidden = !E.hasSupporter(Number($('agents').value));
+  const setup = () => {
+    const mode = document.querySelector('input[name=mode]:checked').value, sel = $('agents'), keep = sel.value || '4';
+    const opts = mode === 'tyndale'
+      ? ['1 Agent, with 4 pawns', '2 Agents, 2 pawns each', '3 Agents', '4 Agents (one may be your Secret Supporter)', '5 Agents (one may be your Secret Supporter)']
+      : ['1 \u2013 you, with 4 pawns', '2 \u2013 you and a computer, 2 pawns each', '3 \u2013 you and 2 computers', '4 \u2013 you and 3 computers', '5 \u2013 you and 4 computers'];
+    sel.innerHTML = opts.map((t, i) => `<option value="${i + 1}">${t}</option>`).join('');
+    sel.value = keep;
+    $('agents-label').textContent = mode === 'tyndale' ? 'Computer Agents hunting you' : 'Bishop\'s Agent players (you and computers)';
+    $('skill-wrap').hidden = mode === 'tyndale'; $('hint-wrap').hidden = mode === 'tyndale'; $('aiskill-wrap').hidden = mode !== 'tyndale';
+    const sup = E.hasSupporter(Number(sel.value));
+    $('supp-note').hidden = !sup;
+    $('supp-note').textContent = mode === 'tyndale' ? 'With 4 or more Agents, one of the character cards is a Secret Supporter, who may be dealt to one of them. If so, the game tells you who.'
+      : 'With 4 or more Agents, one of the character cards is Tyndale\'s Secret Supporter. Someone may be holding it, but you won\'t know unless they are exposed.';
+  };
+  document.querySelectorAll('input[name=mode]').forEach((r) => r.addEventListener('change', setup));
+  $('agents').addEventListener('change', setup);
+  setup();
   $('start-btn').addEventListener('click', () => { clearSave(); startGame(); });
   $('board').addEventListener('click', onBoardClick);
   $('board').addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onBoardClick(e); } });
@@ -418,7 +586,7 @@ function init() {
     $('resume').hidden = false;
     $('resume-text').textContent = `You have a game in progress (round ${saved.S.round || 'setup'}).`;
     $('resume-btn').addEventListener('click', () => {
-      S = saved.S; cfg = saved.cfg; ui = { sel: null, route: false, status: '', ...saved.ui };
+      S = saved.S; cfg = { mode: 'hunt', aiSkill: 'steady', ...saved.cfg }; ui = { sel: null, route: false, status: '', path: [], ...saved.ui };
       show('game'); render();
       if (S.phase !== 'place') run();
     });
