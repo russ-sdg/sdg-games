@@ -156,8 +156,18 @@ export function aiAgentChoose(s, pawnId, roll, skill = 'steady', peek = 0) {
   }
   return best.x;
 }
-// The Secret Supporter shares only harmless results ("Nothing to Report"), as the rules suggest.
-export const supporterShares = (ans) => ans.bible === 'nothing' && ans.loc !== 'here';
+// The Secret Supporter is crafty. They never invent a find, and they report what keeps them looking like an honest Agent:
+// a translation that another Agent has already reported at that spot, or "Rumors" next to a translation that has been reported.
+// Anything else that would help the Agents is "Nothing to Report" (null). Returns the card to report, or null.
+export function supporterReport(s, ans, pos) {
+  if (ans.loc === 'here') return null;
+  const b = ans.bible;
+  if (b === 'nothing') return 'nothing';
+  const reportedMark = (id) => s.found[id] && E.PUBS.includes(s.found[id].bible);
+  if (E.PUBS.includes(b)) return reportedMark(pos) ? s.found[pos].bible : null;      // repeat what is already known, never more
+  if (b === 'rumors') return E.neighbors(pos).some(reportedMark) ? 'rumors' : null;
+  return null;
+}
 
 // ---- accusing -------------------------------------------------------------------------------------------------------------------
 // How likely is this seat the Secret Supporter, judging only by what the others have heard from them?
@@ -176,7 +186,7 @@ export function suspicion(s) {
 export function aiAccusation(s, voters) {
   const sus = suspicion(s);
   let best = null;
-  for (const x of s.seats.filter((x) => !x.out && !x.human)) if (!best || sus[x.id] > best.p) best = { seat: x.id, p: sus[x.id] };
+  for (const x of s.seats.filter((x) => !x.out && (!x.human || x.id === s.supporter))) if (!best || sus[x.id] > best.p) best = { seat: x.id, p: sus[x.id] };
   if (!best || best.p < 0.55) return null;
   const accusers = voters.filter((v) => v !== best.seat);
   return accusers.length ? { accuser: accusers[0], accused: best.seat } : null;

@@ -212,15 +212,24 @@ export function agentMove(state, pawnId, roll, pos, opts = {}) {
   pawn.pos = pos; s.pending = null; s.moved.push(pawnId);
   const sup = isSupporterPawn(s, pawnId);
   const ans = answerAt(s, pos, sup);
-  const rec = { loc: ans.loc, bible: ans.bible, round: s.round, by: pawn.seat };
-  const result = { pawnId, pos, ...ans, captured: false };
-  if (!sup && ans.loc === 'here') { note(s, `${s.seats[pawn.seat].name} ${vb(s.seats[pawn.seat].name, 'has', 'have')} captured "that notorious heretic Tyndale"!`); return Object.assign(finish(s, 'agents', 'captured'), { result }); }
-  // what is shared: everyone's findings go into the pool, except the Secret Supporter's, which are private unless they choose to share
-  const share = sup ? (opts.share ? !!opts.share(ans) : false) : true;
-  if (share && sup) rec.loc = 'not';                         // the Supporter only ever says "Nothing to Report": near/far stays private
-  if (share) { s.found[pos] = rec; s.obs.push({ round: s.round, pos, loc: rec.loc, bible: ans.bible }); } else { s.private[pos] = rec; s.pobs.push({ round: s.round, pos, loc: ans.loc, bible: ans.bible }); }
+  if (!sup && ans.loc === 'here') {
+    const result = { pawnId, pos, ...ans, reported: ans.bible, captured: true };
+    note(s, `${s.seats[pawn.seat].name} ${vb(s.seats[pawn.seat].name, 'has', 'have')} captured "that notorious heretic Tyndale"!`);
+    return Object.assign(finish(s, 'agents', 'captured'), { result, lastResult: result });
+  }
+  // What is reported to the other Agents. Everyone but the Secret Supporter reports exactly what the cards showed. The
+  // Supporter chooses (opts.report(ans, pos, state) returns the card to report, or null for "Nothing to Report"), and may never
+  // report where Tyndale is, so near/far stays private.
+  let reported = ans.bible;
+  if (sup) { const r = opts.report ? opts.report(ans, pos, s) : null; reported = r === undefined || r === null ? null : r; if (ans.loc === 'here') reported = null; }
+  const share = !sup || reported !== null;
+  const pub = { loc: sup ? 'not' : ans.loc, bible: sup ? reported : ans.bible, round: s.round, by: pawn.seat };
+  const priv = { loc: ans.loc, bible: ans.bible, round: s.round, by: pawn.seat };
+  const result = { pawnId, pos, ...ans, reported: reported === null ? 'nothing' : reported, captured: false };
+  if (share) { s.found[pos] = pub; s.obs.push({ round: s.round, pos, loc: pub.loc, bible: pub.bible }); }
+  if (sup) { s.private[pos] = priv; s.pobs.push({ round: s.round, pos, loc: ans.loc, bible: ans.bible }); }
   const rp = s.reports[pawn.seat] || (s.reports[pawn.seat] = { n: 0, nothing: 0 });
-  rp.n += 1; if (!share || ans.bible === 'nothing') rp.nothing += 1;   // withholding is reported as "Nothing to Report" 
+  rp.n += 1; if (reported === null || reported === 'nothing') rp.nothing += 1;
   // the Secret Supporter picks up a publication that has not reached London, and ships it from the next Coastal City
   if (sup) {
     const letter = ans.bible && PUBS.includes(ans.bible) ? ans.bible : null;

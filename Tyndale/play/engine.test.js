@@ -62,7 +62,7 @@ test('scored game plays to the end and reports turns and deliveries', () => {
       if (!a) { s = E.endAgentTurns(s); continue; }
       s = E.rollFor(s, a.pawnId);
       const to = A.aiAgentChoose(s, a.pawnId, s.pending.roll);
-      s = E.agentMove(s, a.pawnId, s.pending.roll, to, { share: E.isSupporterPawn(s, a.pawnId) ? A.supporterShares : undefined });
+      s = E.agentMove(s, a.pawnId, s.pending.roll, to, { report: (ans, pos, st) => A.supporterReport(st, ans, pos) });
     }
     assert.ok(s.over, 'game ended');
     const sm = E.summary(s);
@@ -81,4 +81,32 @@ test('a surrounded Tyndale has no legal move and the net closes', () => {
   s = E.trapped(s);
   assert.equal(s.over, true);
   assert.equal(E.summary(s).reason, 'trapped');
+});
+
+test('the capturing pawn is the one recorded in lastResult', () => {
+  let s = E.newGame({ seats: [{ name: 'a' }, { name: 'b' }], seed: 5, supporter: null });
+  const spots = ['A1', 'K1', 'A11', 'K11'];
+  s.pawns.forEach((p, i) => { s = E.placePawn(s, p.id, spots[i]); });
+  s = E.startTyndale(s, 'B1');                                // one step from A1 (a's pawn 0)
+  s = E.tyndaleMove(s, ['C1']);
+  s = E.rollFor(s, 0);
+  s = E.agentMove(s, 0, 1, 'A2', {});                         // a quiet move first
+  s.t.pos = 'K2';
+  const r = E.agentMove(s, 1, 1, 'K2', {});                   // pawn 1 (seat 0) steps onto Tyndale
+  assert.equal(r.over, true);
+  assert.equal(r.lastResult.pawnId, 1);
+  assert.equal(r.lastResult.loc, 'here');
+});
+
+test('the Secret Supporter is crafty but never lies about what is there', () => {
+  let s = E.startTyndale((() => { let g = E.newGame({ seats: Array.from({ length: 4 }, (_, i) => ({ name: 'S' + i })), seed: 9, supporter: 1 }); const sp = ['A1', 'K1', 'A11', 'K11']; g.pawns.forEach((p, i) => { g = E.placePawn(g, p.id, sp[i]); }); return g; })(), 'E5');
+  const ans = (bible) => ({ loc: 'far', bible });
+  assert.equal(A.supporterReport(s, ans('nothing'), 'C5'), 'nothing');
+  assert.equal(A.supporterReport(s, ans('N'), 'E5'), null);   // nobody has reported it yet: say nothing
+  s.found['E5'] = { loc: 'not', bible: 'N', round: 1, by: 0 };
+  assert.equal(A.supporterReport(s, ans('N'), 'E5'), 'N');    // someone already reported it: report it too
+  assert.equal(A.supporterReport(s, ans('P'), 'E5'), 'N');    // only ever repeat what is known
+  assert.equal(A.supporterReport(s, ans('rumors'), 'F5'), 'rumors');   // next to a reported translation
+  assert.equal(A.supporterReport(s, ans('rumors'), 'A5'), null);
+  assert.equal(A.supporterReport(s, { loc: 'here', bible: 'N' }, 'E5'), null);
 });
