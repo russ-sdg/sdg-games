@@ -12,7 +12,7 @@ const minPawnDist = (s, pos) => Math.min(...E.livePawns(s).map((p) => E.dist(pos
 function goals(s) {
   const t = s.t;
   if (t.published < t.translated) return E.centres.filter((c) => !t.visited.includes(c));     // the next translation needs a new Printing Centre
-  return E.coastal.filter((c) => c !== 'B5');                                              // a publication needs a Coastal City
+  return [...E.coastal, 'B5'];                                              // a publication needs a Coastal City (or London itself)
 }
 function goalDist(s, pos) {
   const t = s.t, gs = goals(s);

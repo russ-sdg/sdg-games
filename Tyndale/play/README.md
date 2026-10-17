@@ -8,7 +8,7 @@ Free online version of the Tyndale board game. Static files only (no server).
   **`check.html` draws this data over the board image so it can be verified by eye.**
 - `engine.test.js`: `node --test` in this folder. `tools/sim.mjs`: computer-vs-computer simulation for balance checks.
 
-Rule interpretations to confirm: London is a destination only (not a Printing Centre for publishing); "near" for the Secret
+Rule interpretations to confirm: London is a Printing Centre and a 0-move port (publish, ship and arrive in one visit); "near" for the Secret
 Supporter's card means within 3 steps; a second step is allowed only after a first step onto a blue spot (plus earned bonus moves);
 the Secret Supporter exists with 4+ Agent players.
 

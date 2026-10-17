@@ -73,11 +73,11 @@ function startGame() {
   for (let i = chars.length - 1; i > 0; i--) { const j = Math.floor(E.hash01(cfg.seed, 930 + i) * (i + 1)); [chars[i], chars[j]] = [chars[j], chars[i]]; }
   const seats = mode === 'tyndale' ? Array.from({ length: nAgents }, (_, i) => ({ name: names[i], human: false, char: chars[i] })) : [{ name: 'You', human: true, char: chars[0] }];
   if (mode === 'hunt') for (let i = 1; i < nAgents; i++) seats.push({ name: names[i - 1], human: false, char: chars[i] });
-  // Six character cards are shuffled and dealt, one to each Agent; one of them is the Secret Supporter, so with 4 or more Agents
+  // Six character cards are shuffled and dealt, one to each Agent; Stephen Vaughn is the Secret Supporter, so with 4 or more Agents
   // someone may hold it. When you hunt, nobody knows unless they are exposed (you may draw it yourself, and then you know). When you
   // are Tyndale, you know who it is.
-  const drawn = Math.floor(E.hash01(cfg.seed, 950) * 6);
-  const supporter = E.hasSupporter(nAgents) && drawn < nAgents ? drawn : null;
+  const held = chars.indexOf('vaughn');                      // whoever is dealt Stephen Vaughn is the Secret Supporter
+  const supporter = E.hasSupporter(nAgents) && held < nAgents ? held : null;
   S = E.newGame({ seats, seed: cfg.seed, supporter });
   if (mode === 'tyndale') for (const seat of S.seats) for (const o of A.aiPlacePawns(S, seat.id)) S = E.placePawn(S, o.pawn, o.pos);
   ui = { sel: null, heat: cfg.hint, route: false, mine: null, banner: '', status: '', path: [], reveal: null };
@@ -488,8 +488,9 @@ function tyndaleSide(out) {
     out.push(`<div class="ty-card"><h2>Your scorecard</h2>
       <p class="mb-2">${esc(next)}</p>
       <ul class="small mb-2">
+        ${t.last && t.last.length ? `<li>Last turn: <ul>${t.last.map((e) => `<li>${esc(e.charAt(0).toUpperCase() + e.slice(1))}</li>`).join('')}</ul></li>` : ''}
         <li>Bonus moves: <b>${t.bonus.length ? t.bonus.join(' ') : 'none'}</b></li>
-        <li>Printing Centres used: <b>${t.visited.length}</b> of 17${t.visited.length ? `<br><span class="text-muted">${esc(t.visited.map((id) => E.pt[id].centre).join(', '))}</span>` : ''}</li>
+        <li>Printing Centres used: <b>${t.visited.length}</b> of ${E.centres.length}${t.visited.length ? `<br><span class="text-muted">${esc(t.visited.map((id) => E.pt[id].centre).join(', '))}</span>` : ''}</li>
         <li>Shipments at sea: ${sea.length ? '<ul>' + sea.map((q) => `<li>${esc(E.PUB_NAMES[q.pub])}: <b>${q.left}</b> to go${q.fresh ? ' (sails after this turn)' : ''}<div class="ship-bar" title="${q.dist - q.left} of ${q.dist} moves" aria-hidden="true"><i style="width:${Math.round(100 * (q.dist - q.left) / q.dist)}%"></i></div></li>`).join('') + '</ul>' : '<b>none</b>'}</li>
       </ul>${lastTurns !== null ? `<p class="small mb-2"><b>Stay free for ${lastTurns} more turn${lastTurns === 1 ? '' : 's'}</b>: that is when the Old Testament reaches London and you win.</p>` : ''}<p class="small text-muted mb-0">A shipment is crossed off one number each turn after it sails. At zero it reaches London. Your gold letters on the map are the pages you have left behind; the pale blue ghosts show each shipment sailing towards London.</p></div>`);
   }
