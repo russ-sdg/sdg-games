@@ -13,9 +13,11 @@ export const rowOf = (id) => Number(id.slice(1)) - 1;
 export const idAt = (c, r) => (c >= 0 && c < SIZE && r >= 0 && r < SIZE ? COLS[c] + (r + 1) : null);
 export const dist = (a, b) => Math.abs(colOf(a) - colOf(b)) + Math.abs(rowOf(a) - rowOf(b));
 export const neighbors = (id) => [idAt(colOf(id) + 1, rowOf(id)), idAt(colOf(id) - 1, rowOf(id)), idAt(colOf(id), rowOf(id) + 1), idAt(colOf(id), rowOf(id) - 1)].filter(Boolean);
-export const isPrintingCentre = (id) => !!pt[id].centre && id !== LONDON;
-export const isCoastal = (id) => pt[id].coast !== null;
-export const centres = POINTS.filter((p) => p.centre && p.id !== LONDON).map((p) => p.id);
+// London is a Printing Centre too, and a shipment "sent" from it arrives at once (0 moves), so visiting London can publish, ship and deliver in one turn.
+export const isPrintingCentre = (id) => !!pt[id].centre;
+export const isCoastal = (id) => id === LONDON || pt[id].coast !== null;
+export const shipDist = (id) => (id === LONDON ? 0 : pt[id].coast);
+export const centres = POINTS.filter((p) => p.centre).map((p) => p.id);
 export const coastal = POINTS.filter((p) => p.coast !== null).map((p) => p.id);
 
 // ---- seeded randomness stored in the state (so a saved game continues the same way) -------------------------------
@@ -39,12 +41,12 @@ export function newGame({ seats, seed = 1, supporter = null }) {
   seats.forEach((_, i) => { for (let k = 0; k < per[i]; k++) pawns.push({ id: pawns.length, seat: i, pos: null, out: false }); });
   const s = {
     seed, rc: 0, round: 0, phase: 'place',                   // place -> (tyndale start) -> agents/tyndale turns -> over
-    seats: seats.map((x, i) => ({ id: i, name: x.name, human: !!x.human, out: false })),
+    seats: seats.map((x, i) => ({ id: i, name: x.name, human: !!x.human, out: false, char: x.char || null })),   // char: the character card dealt to this Agent
     pawns,
     supporter,                                               // seat id of the Secret Supporter, or null (only with 5+ players in all)
     t: {                                                     // Tyndale's secret state
       pos: null, translated: 0, published: -1, shipped: -1,  // indexes into PUBS
-      bonus: [], visited: [], marks: {}, trail: [],
+      bonus: [], visited: [], marks: {}, trail: [], last: [],   // last: what happened on his latest turn
     },
     shipments: [],                                           // {pub, from, dist, left, fresh}
     delivered: [],                                           // {pub, round, from}
@@ -83,6 +85,14 @@ export function placePawn(state, pawnId, pos) {
 export const allPlaced = (s) => s.pawns.every((p) => p.out || p.pos !== null);
 
 // ---- Tyndale ----------------------------------------------------------------------------------------------------------------
+// A shipment reaches London: record it and open the chance to accuse. Returns the event text.
+function arrive(s, sh) {
+  sh.arrived = true; sh.fresh = false; sh.left = 0;
+  s.delivered.push({ pub: sh.pub, round: s.round, from: sh.from });
+  note(s, `${PUB_NAMES[sh.pub]} has arrived in London!`);
+  s.accusation = { after: sh.pub, open: hasSupporter(s.seats.length) };
+  return `${PUB_NAMES[sh.pub]} reached London`;
+}
 function publishAndShip(s, pos, startOfGame) {
   const t = s.t, name = pt[pos].centre;
   const events = [];
@@ -97,9 +107,10 @@ function publishAndShip(s, pos, startOfGame) {
   }
   if (isCoastal(pos) && t.published > t.shipped) {            // a publication waits to be shipped
     t.shipped = t.published;
-    const d = pt[pos].coast;
-    s.shipments.push({ pub: PUBS[t.shipped], from: pos, dist: d, left: d, fresh: true });
-    events.push(`shipped ${PUB_NAMES[PUBS[t.shipped]]} from ${pos} (${d >= 11 ? '11+' : d} moves)`);
+    const d = shipDist(pos), sh = { pub: PUBS[t.shipped], from: pos, dist: d, left: d, fresh: true };
+    s.shipments.push(sh);
+    events.push(d === 0 ? `shipped ${PUB_NAMES[sh.pub]} from London` : `shipped ${PUB_NAMES[sh.pub]} from ${pos} (${d >= 11 ? '11+' : d} moves)`);
+    if (d === 0) events.push(arrive(s, sh));
     if (t.translated < 3) { t.translated = t.shipped + 1; events.push(`translated ${PUB_NAMES[PUBS[t.translated]]}`); }
   }
   return events;
@@ -114,6 +125,7 @@ export function startTyndale(state, pos) {
   const ev = publishAndShip(s, pos, true);
   if (t.published >= 0) t.marks[pos] = pubLetter(s);
   ev.forEach((e) => note(s, `Tyndale ${e}.`, false));
+  t.last = ev;
   s.shipments.forEach((x) => { x.fresh = false; });            // the starting shipment is crossed off from his first turn
   s.phase = 'tyndale'; s.round = 1; s.moved = [];            // round 1 begins with Tyndale's first move
   return s;
@@ -150,15 +162,15 @@ export function tyndaleMove(state, path) {
   const ev = publishAndShip(s, t.pos, false);
   if (t.published >= 0) path.forEach((p) => { t.marks[p] = pubLetter(s); });
   ev.forEach((e) => note(s, `Tyndale ${e}.`, false));
+  t.last = ev;
+  if (s.delivered.some((d) => d.pub === 'O')) return finish(s, 'tyndale', 'delivered');   // delivered from London itself
   // cross off the next number of every shipment sent on an earlier turn
   for (const sh of s.shipments) {
     if (sh.arrived) continue;
     if (sh.fresh) { sh.fresh = false; continue; }
     sh.left -= 1;
     if (sh.left <= 0) {
-      sh.arrived = true; s.delivered.push({ pub: sh.pub, round: s.round, from: sh.from });
-      note(s, `${PUB_NAMES[sh.pub]} has arrived in London!`);
-      s.accusation = { after: sh.pub, open: hasSupporter(s.seats.length) };
+      t.last.push(arrive(s, sh));
       if (sh.pub === 'O') return finish(s, 'tyndale', 'delivered');
     }
   }
@@ -237,9 +249,10 @@ export function agentMove(state, pawnId, roll, pos, opts = {}) {
     const c = s.carry[pawnId];
     if (c && isCoastal(pos) && PUBS.indexOf(c) > s.t.shipped) {
       s.t.shipped = PUBS.indexOf(c);
-      const d = pt[pos].coast;
-      s.shipments.push({ pub: c, from: pos, dist: d, left: d, fresh: false, by: pawn.seat });
+      const d = shipDist(pos), sh = { pub: c, from: pos, dist: d, left: d, fresh: false, by: pawn.seat };
+      s.shipments.push(sh);
       note(s, `Tyndale's shipment of ${PUB_NAMES[c]} is on its way (carried to ${pos}).`, false);
+      if (d === 0) { arrive(s, sh); if (c === 'O') return Object.assign(finish(s, 'tyndale', 'delivered'), { lastResult: result }); }
       if (s.t.translated < 3) s.t.translated = s.t.shipped + 1;
       delete s.carry[pawnId];
     }

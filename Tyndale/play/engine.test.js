@@ -10,8 +10,8 @@ const setup = (n = 1, supporter = null) => {
   return s;
 };
 
-test('board data: 17 printing centres and the coastal distances', () => {
-  assert.equal(E.centres.length, 17);
+test('board data: 18 printing centres (London included) and the coastal distances', () => {
+  assert.equal(E.centres.length, 18);
   assert.equal(E.pt['E5'].coast, 3);
   assert.equal(E.pt['A5'].coast, 1);
   assert.ok(E.isCoastal('F4') && !E.isCoastal('H6'));
@@ -109,4 +109,12 @@ test('the Secret Supporter is crafty but never lies about what is there', () => 
   assert.equal(A.supporterReport(s, ans('rumors'), 'F5'), 'rumors');   // next to a reported translation
   assert.equal(A.supporterReport(s, ans('rumors'), 'A5'), null);
   assert.equal(A.supporterReport(s, { loc: 'here', bible: 'N' }, 'E5'), null);
+});
+
+test('London is a Printing Centre: publish, ship, arrive and translate in one turn', () => {
+  let s = E.startTyndale(setup(), 'B6');
+  s = E.tyndaleMove(Object.assign(structuredClone(s), { phase: 'tyndale' }), ['B5']);
+  assert.deepEqual(s.delivered.map((d) => d.pub), ['N']);
+  assert.equal(s.t.last.length, 4);   // published, shipped, reached London, translated
+  assert.ok(s.t.last.some((e) => /reached London/.test(e)));
 });

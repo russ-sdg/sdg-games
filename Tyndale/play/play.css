@@ -79,3 +79,13 @@
 
 .report figure { max-width: 130px; }
 .report { justify-content: flex-start; }
+
+.ship-bar { height: 5px; border-radius: 3px; background: #dee2e6; margin-top: 2px; overflow: hidden; }
+.ship-bar i { display: block; height: 100%; background: #2a6f97; }
+.id-card { display: flex; gap: .75rem; align-items: center; }
+.id-card img { width: 64px; border-radius: 4px; flex: none; }
+.agent-reveal { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; }
+.agent-reveal li { display: flex; gap: .5rem; align-items: center; }
+.agent-reveal li.out { opacity: .6; }
+.agent-reveal img { width: 44px; border-radius: 3px; flex: none; }
+.agent-reveal small { display: block; color: #6c757d; }
