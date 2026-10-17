@@ -39,7 +39,7 @@ export function newGame({ seats, seed = 1, supporter = null }) {
   seats.forEach((_, i) => { for (let k = 0; k < per[i]; k++) pawns.push({ id: pawns.length, seat: i, pos: null, out: false }); });
   const s = {
     seed, rc: 0, round: 0, phase: 'place',                   // place -> (tyndale start) -> agents/tyndale turns -> over
-    seats: seats.map((x, i) => ({ id: i, name: x.name, human: !!x.human, out: false })),
+    seats: seats.map((x, i) => ({ id: i, name: x.name, human: !!x.human, out: false, char: x.char || null })),   // char: the character card dealt to this Agent
     pawns,
     supporter,                                               // seat id of the Secret Supporter, or null (only with 5+ players in all)
     t: {                                                     // Tyndale's secret state

@@ -1,7 +1,7 @@
 // Tyndale: play online. Hunt mode: you are a Bishop's Agent; a computer plays Tyndale and the app answers with the cards.
 import * as E from './engine.js';
 import * as A from './ai.js';
-import { PX } from './board-data.js';
+import { PX, LONDON } from './board-data.js';
 import { drawShareImage, canvasToBlob, nativeShareData, shareMessage } from './share.js';
 
 const KEY = 'sdg-ty-play-1';
@@ -15,6 +15,9 @@ const BIB_CARD = { N: 'new-testament', P: 'pentateuch', H: 'historical', O: 'old
 const LOC_TEXT = { here: 'Tyndale is here!', not: 'Tyndale is not here', near: 'Tyndale is near', far: 'Tyndale is far away' };
 const SEAT_COLOURS = ['#0d6efd', '#e76f00', '#2a9d8f', '#8e44ad', '#6c757d'];
 const AGENT_NAMES = ['Ashby', 'Brand', 'Carew', 'Dacre', 'Elyot', 'Fane'];   // not the names on the character cards, which stay hidden
+// The six character cards dealt to the Agents (portraits are in assets/tyndale/cards). Players only see them at the end of the game, except their own.
+const CHARACTERS = [{ id: 'vaughn', name: 'Stephen Vaughn' }, { id: 'holt', name: 'William Holt' }, { id: 'dobneck', name: 'John Dobneck' }, { id: 'stokesley', name: 'John Stokesley' }, { id: 'more', name: 'Thomas More' }, { id: 'phillips', name: 'Henry Phillips' }];
+const charName = (id) => (CHARACTERS.find((c) => c.id === id) || {}).name;
 const x = (id) => PX[E.colOf(id)], y = (id) => PX[E.rowOf(id)];
 
 let S = null;                      // the game
@@ -66,8 +69,10 @@ function startGame() {
   cfg = { mode, nAgents, skill: $('skill').value, aiSkill: $('aiskill').value, hint: mode === 'hunt' && $('hint').checked, pace: $('pace').value, seed: Number(new URLSearchParams(location.search).get('seed')) || Math.floor(Math.random() * 1e9) + 1 };   // ?seed=N replays a deal (for testing)
   const names = AGENT_NAMES.slice();
   for (let i = names.length - 1; i > 0; i--) { const j = Math.floor(E.hash01(cfg.seed, 900 + i) * (i + 1)); [names[i], names[j]] = [names[j], names[i]]; }
-  const seats = mode === 'tyndale' ? Array.from({ length: nAgents }, (_, i) => ({ name: names[i], human: false })) : [{ name: 'You', human: true }];
-  if (mode === 'hunt') for (let i = 1; i < nAgents; i++) seats.push({ name: names[i - 1], human: false });
+  const chars = CHARACTERS.map((c) => c.id);
+  for (let i = chars.length - 1; i > 0; i--) { const j = Math.floor(E.hash01(cfg.seed, 930 + i) * (i + 1)); [chars[i], chars[j]] = [chars[j], chars[i]]; }
+  const seats = mode === 'tyndale' ? Array.from({ length: nAgents }, (_, i) => ({ name: names[i], human: false, char: chars[i] })) : [{ name: 'You', human: true, char: chars[0] }];
+  if (mode === 'hunt') for (let i = 1; i < nAgents; i++) seats.push({ name: names[i - 1], human: false, char: chars[i] });
   // Six character cards are shuffled and dealt, one to each Agent; one of them is the Secret Supporter, so with 4 or more Agents
   // someone may hold it. When you hunt, nobody knows unless they are exposed (you may draw it yourself, and then you know). When you
   // are Tyndale, you know who it is.
@@ -357,15 +362,42 @@ function drawBoard() {
       svg.appendChild(g);
     }
   }
-  // what the Agents have found
-  for (const pos in S.found) {
-    const f = S.found[pos], g = mk('g', {});
-    g.appendChild(mk('title', {}, `${pos}: ${f.bible === 'nothing' ? 'nothing found' : f.bible === 'rumors' ? 'rumors only' : E.PUB_NAMES[f.bible]} (round ${f.round})`));
-    if (E.PUBS.includes(f.bible)) { g.appendChild(mk('circle', { cx: x(pos), cy: y(pos), r: 17, class: 'mk-pub' })); g.appendChild(mk('text', { x: x(pos), y: y(pos) + 1, 'font-size': 20, 'font-weight': 800, fill: '#1b1b2e' }, f.bible)); }
-    else if (f.bible === 'rumors') { g.appendChild(mk('circle', { cx: x(pos), cy: y(pos), r: 15, class: 'mk-rumor' })); g.appendChild(mk('text', { x: x(pos), y: y(pos) + 1, 'font-size': 17, 'font-weight': 800, fill: '#a3262e' }, 'R')); }
-    else { g.appendChild(mk('circle', { cx: x(pos), cy: y(pos), r: 11, class: 'mk-none' })); g.appendChild(mk('text', { x: x(pos), y: y(pos) + 1, 'font-size': 16, fill: '#495057' }, '×')); }
-    g.appendChild(mk('text', { x: x(pos) + 15, y: y(pos) - 15, 'font-size': 11, 'font-weight': 700, fill: '#1b1b2e', stroke: '#fff', 'stroke-width': 3, 'paint-order': 'stroke' }, `r${f.round}`));
+  // what the Agents have found, ringed in the colour of the Agent who found it
+  const mark = (pos, f, opts = {}) => {
+    const col = SEAT_COLOURS[f.by] || '#6c757d', g = mk('g', {});
+    const who = f.by === 0 && S.seats[0].human ? 'You' : name(f.by);
+    const what = f.bible === 'nothing' ? 'nothing found' : f.bible === 'rumors' ? 'rumors only' : E.PUB_NAMES[f.bible];
+    g.appendChild(mk('title', {}, `${pos}: ${what} (round ${f.round}, ${who})${opts.tip || ''}`));
+    const ring = (r, cls) => g.appendChild(mk('circle', { cx: x(pos), cy: y(pos), r, class: cls, style: `stroke:${col};stroke-width:3.5` }));
+    if (E.PUBS.includes(f.bible)) { ring(17, 'mk-pub'); g.appendChild(mk('text', { x: x(pos), y: y(pos) + 1, 'font-size': 20, 'font-weight': 800, fill: '#1b1b2e' }, f.bible)); }
+    else if (f.bible === 'rumors') { ring(15, 'mk-rumor'); g.appendChild(mk('text', { x: x(pos), y: y(pos) + 1, 'font-size': 17, 'font-weight': 800, fill: '#a3262e' }, 'R')); }
+    else { ring(11, 'mk-none'); g.appendChild(mk('text', { x: x(pos), y: y(pos) + 1, 'font-size': 16, 'font-weight': 700, fill: col }, '×')); }
+    g.appendChild(mk('text', { x: x(pos) + 15, y: y(pos) - 15, 'font-size': 11, 'font-weight': 700, fill: '#1b1b2e', stroke: '#fff', 'stroke-width': 3, 'paint-order': 'stroke' }, `r${f.round}${opts.tag || ''}`));
     svg.appendChild(g);
+  };
+  for (const pos in S.found) if (!(meSupporter() && S.private[pos] && S.found[pos].by === 0)) mark(pos, S.found[pos]);
+  // the Secret Supporter (you) sees what the cards really showed, including what was held back
+  if (meSupporter()) {
+    for (const pos in S.private) {
+      const f = S.private[pos], told = S.found[pos] && S.found[pos].by === 0 ? S.found[pos].bible : 'nothing';
+      if (S.found[pos] && S.found[pos].by !== 0) continue;
+      mark(pos, f, { tag: f.loc === 'near' ? ' near' : f.loc === 'far' ? ' far' : '', tip: `; Tyndale was ${f.loc === 'here' ? 'here' : f.loc === 'near' ? 'near' : 'far away'}${told !== f.bible ? '; you reported ' + (told === 'nothing' ? 'nothing' : E.PUB_NAMES[told] || told) : ''}` });
+    }
+  }
+  // playing Tyndale: ghosts of the shipments on their way to London
+  if (TY()) {
+    const lx = x(LONDON), ly = y(LONDON);
+    for (const q of S.shipments) {
+      if (q.arrived) continue;
+      const f = q.dist > 0 ? (q.dist - q.left) / q.dist : 1, gx = x(q.from) + (lx - x(q.from)) * f, gy = y(q.from) + (ly - y(q.from)) * f;
+      const g = mk('g', { 'pointer-events': 'none', opacity: 0.6 });
+      g.appendChild(mk('title', {}, `${E.PUB_NAMES[q.pub]}: shipped from ${q.from}, ${q.left} to go${q.fresh ? ' (sails after this turn)' : ''}`));
+      g.appendChild(mk('line', { x1: x(q.from), y1: y(q.from), x2: lx, y2: ly, stroke: '#2a6f97', 'stroke-width': 3, 'stroke-dasharray': '2 8', 'stroke-linecap': 'round' }));
+      g.appendChild(mk('circle', { cx: gx, cy: gy, r: 15, fill: 'rgba(200,225,245,.75)', stroke: '#2a6f97', 'stroke-width': 3, 'stroke-dasharray': '4 3' }));
+      g.appendChild(mk('text', { x: gx, y: gy + 1, 'font-size': 17, 'font-weight': 800, fill: '#1d4e6e' }, q.pub));
+      g.appendChild(mk('text', { x: gx + 17, y: gy + 20, 'font-size': 12, 'font-weight': 800, fill: '#1d4e6e', stroke: '#fff', 'stroke-width': 3, 'paint-order': 'stroke' }, String(q.left)));
+      svg.appendChild(g);
+    }
   }
   // pawns
   for (const p of S.pawns) {
@@ -452,13 +484,14 @@ function tyndaleSide(out) {
       : t.published > t.shipped ? `${E.PUB_NAMES[E.PUBS[t.published]]} is printed. Reach a Coastal City to ship it.`
         : 'Everything is shipped. Keep out of sight until the last shipment reaches London.';
     const sea = S.shipments.filter((q) => !q.arrived);
+    const lastO = sea.find((q) => q.pub === 'O'), lastTurns = lastO ? lastO.left + (lastO.fresh ? 1 : 0) : null;
     out.push(`<div class="ty-card"><h2>Your scorecard</h2>
       <p class="mb-2">${esc(next)}</p>
       <ul class="small mb-2">
         <li>Bonus moves: <b>${t.bonus.length ? t.bonus.join(' ') : 'none'}</b></li>
         <li>Printing Centres used: <b>${t.visited.length}</b> of 17${t.visited.length ? `<br><span class="text-muted">${esc(t.visited.map((id) => E.pt[id].centre).join(', '))}</span>` : ''}</li>
-        <li>Shipments at sea: ${sea.length ? '<ul>' + sea.map((q) => `<li>${esc(E.PUB_NAMES[q.pub])}: <b>${q.left}</b> to go${q.fresh ? ' (sails after this turn)' : ''}</li>`).join('') + '</ul>' : '<b>none</b>'}</li>
-      </ul><p class="small text-muted mb-0">A shipment is crossed off one number each turn after it sails. At zero it reaches London. Your gold letters on the map are the pages you have left behind.</p></div>`);
+        <li>Shipments at sea: ${sea.length ? '<ul>' + sea.map((q) => `<li>${esc(E.PUB_NAMES[q.pub])}: <b>${q.left}</b> to go${q.fresh ? ' (sails after this turn)' : ''}<div class="ship-bar" title="${q.dist - q.left} of ${q.dist} moves" aria-hidden="true"><i style="width:${Math.round(100 * (q.dist - q.left) / q.dist)}%"></i></div></li>`).join('') + '</ul>' : '<b>none</b>'}</li>
+      </ul>${lastTurns !== null ? `<p class="small mb-2"><b>Stay free for ${lastTurns} more turn${lastTurns === 1 ? '' : 's'}</b>: that is when the Old Testament reaches London and you win.</p>` : ''}<p class="small text-muted mb-0">A shipment is crossed off one number each turn after it sails. At zero it reaches London. Your gold letters on the map are the pages you have left behind; the pale blue ghosts show each shipment sailing towards London.</p></div>`);
   }
   if (cfg.nAgents >= 4 && S.supporter !== null) out.push(`<div class="ty-card"><h2>Your Secret Supporter</h2><p class="mb-0"><b>${esc(S.seats[S.supporter].name)}</b>${S.seats[S.supporter].out ? ' (out of the game)' : ''} is on your side. They report only &ldquo;nothing to report&rdquo; to the other Agents, and may carry a printed Bible to the coast for you.</p></div>`);
   out.push(`<div class="ty-card"><h2>The Agents</h2><ul class="seat-list">${S.seats.map((q) => `<li class="${q.out ? 'out' : ''}"><span class="seat-dot" style="background:${SEAT_COLOURS[q.id]}"></span>${esc(q.name)}${q.out ? ' (out)' : ''}${q.id === S.supporter ? ' ★' : ''}</li>`).join('')}</ul></div>`);
@@ -497,6 +530,7 @@ function sideHtml() {
   if (ui.ackMine && ui.mine) out.push(mineHtml());
   out.push(revealHtml());
   if (TY()) return tyndaleSide(out);
+  if (S.seats[0].char && !S.over) out.push(`<div class="ty-card id-card"><img src="${CARD(S.seats[0].char)}" alt="${esc(charName(S.seats[0].char))}" /><div><h2>Your identity</h2><p class="mb-0">You are <b>${esc(charName(S.seats[0].char))}</b>, a Bishop's Agent.</p></div></div>`);
   if (meSupporter() && S.phase !== 'place' && !S.over) out.push(`<div class="ty-card"><h2>You are the Secret Supporter</h2><p class="mb-0">You are on Tyndale's side. When you are shown Rumors or a translation you choose whether to report it or say &ldquo;nothing to report&rdquo;. A printed Bible you find, you carry to the coast and ship for him. If the others accuse you and you are exposed, you are out.</p></div>`);
   if (S.phase === 'place') {
     const left = S.pawns.filter((p) => p.seat === 0 && p.pos === null).length, total = myPawns().length;
@@ -532,7 +566,7 @@ function render() {
   if (!S) return;
   $('bar-main').textContent = S.phase === 'place' ? (TY() ? 'Choose where Tyndale begins' : 'Place your pawns') : S.over ? `Game over after ${S.round} turns` : `Round ${S.round}`;
   $('bar-pubs').innerHTML = pubChips();
-  $('legend').innerHTML = TY() ? '<b>On the map:</b> <b>T</b> = Tyndale (you); dotted red line = your route; gold letters = pages you have left; round markers (N, P, H, O, R, ×) = what the Agents have found. <b style="color:#0a7a2f">Green numbers</b> mark Coastal Cities: the moves a shipment from there takes to reach London.' : '<b>On the map:</b> a letter (N, P, H, O) = a translation was found there; R = rumors of one; × = nothing; rNN = the round it was found. Your pawns have a Y. <b style="color:#0a7a2f">Green numbers</b> mark Coastal Cities: the moves a shipment from there takes to reach London.';
+  $('legend').innerHTML = TY() ? '<b>On the map:</b> <b>T</b> = Tyndale (you); dotted red line = your route; gold letters = pages you have left; round markers (N, P, H, O, R, ×) = what the Agents have found, ringed in the colour of the Agent who found it; pale blue dashed ghosts = your shipments sailing to London. <b style="color:#0a7a2f">Green numbers</b> mark Coastal Cities: the moves a shipment from there takes to reach London.' : '<b>On the map:</b> a letter (N, P, H, O) = a translation was found there; R = rumors of one; × = nothing; rNN = the round it was found. Each marker is ringed in the colour of the Agent who found it (your own are shown as you saw them' + (meSupporter() ? ', including what you held back' : '') + '). Your pawns have a Y. <b style="color:#0a7a2f">Green numbers</b> mark Coastal Cities: the moves a shipment from there takes to reach London.';
   drawBoard();
   $('side').innerHTML = sideHtml();
   updatePaceBtn();
@@ -565,6 +599,7 @@ function showFinal() {
     ${sm.delivered.length ? '' : `<p class="mb-1">None: ${TY() ? 'you were stopped' : 'Tyndale was stopped'} before any part reached London.</p>`}
     <ul class="scripture-list">${items}</ul>
     ${S.supporter !== null ? `<p class="small mt-3 mb-0">The Secret Supporter was <b>${esc(name(S.supporter))}</b>${S.seats[S.supporter].out ? ' (already out)' : ''}.</p>` : S.seats.length >= 4 ? '<p class="small mt-3 mb-0">There was no Secret Supporter in this game.</p>' : ''}
+    ${S.seats.some((q) => q.char) ? `<h3 class="h6 mt-3">The Bishop's Agents</h3><ul class="agent-reveal">${S.seats.map((q) => `<li class="${q.out ? 'out' : ''}">${q.char ? `<img src="${CARD(q.char)}" alt="" />` : ''}<span><span class="seat-dot" style="background:${SEAT_COLOURS[q.id]}"></span><b>${esc(q.char ? charName(q.char) : q.name)}</b><small>${q.human ? 'You' : esc(q.name)}${q.id === S.supporter ? ' · Secret Supporter' : ''}${q.out ? ' · out' : ''}</small></span></li>`).join('')}</ul>` : ''}
     <p class="small mt-1 mb-0">Tyndale ended at <b>${S.t.pos}</b>.</p>`;
   $('final-route').textContent = ui.route ? 'Hide his route' : 'Show his route';
   const detail = TY() ? `You played Tyndale\n${cfg.nAgents} computer Agent${cfg.nAgents > 1 ? 's' : ''}, ${cfg.aiSkill}` : `${cfg.nAgents} Agent${cfg.nAgents > 1 ? 's' : ''} hunting\nTyndale: ${cfg.skill}`;
