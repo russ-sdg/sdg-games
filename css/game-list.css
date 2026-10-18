@@ -21,10 +21,14 @@
 .gm-blurb { margin: 0 0 .8rem; color: var(--pp-muted); }
 .gm-chips { list-style: none; padding: 0; margin: 0 0 .9rem; display: flex; flex-wrap: wrap; gap: .35rem; }
 .gm-chips li { border: 1px solid var(--pp-line); border-radius: 999px; padding: .15rem .65rem; font-size: .85rem; background: var(--pp-bg); }
-.gm-go { margin: auto 0 0; display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; }
+.gm-go { margin: auto 0 0; display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; font-weight: 600; }
 .gm-price strong { font-size: 1.3rem; }
 .gm-price s { color: var(--pp-muted); margin-right: .25rem; }
-.gm-more { color: var(--pp-accent); }
+.gm-more { color: var(--pp-accent); white-space: nowrap; }
 .gm-online { margin: .6rem 0 0; position: relative; z-index: 1; font-weight: 600; }   /* above the card-wide link */
 .gm-online a { color: var(--pp-primary); text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) { .gm-card { transition: none; } .gm-card:hover { transform: none; } }
+
+.gm-price.is-soon { font-size: .95rem; font-weight: 700; color: var(--pp-primary); }
+.gm-card.is-shirt .gm-art { background: #fff; padding: .6rem; }
+.gm-card.is-shirt .gm-art img { object-fit: contain; }

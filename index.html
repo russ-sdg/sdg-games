@@ -1,185 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>SDG Games - Educational Games for the Glory of God</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" rel="stylesheet" />
-    </head>
-    <body>
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='main-nav'></nav>
-        <!-- Page Content-->
-        <div class="container px-4 px-lg-5">
-            <!-- Heading Row-->
-            <div class="row gx-4 gx-lg-5 align-items-center my-5">
-                <div class="col-lg-7"><img class="img-fluid rounded mb-4 mb-lg-0" src="assets/900_400_family.png" alt="A family enjoying game night" /></div>
-                <div class="col-lg-5">
-                    <h1 class="font-weight-light company-name">SDG Games</h1>
-                    <h2>Helping families have fun while learning Biblical truths.</h2>
-                    <a class="btn btn-outline-primary btn-sm" style="margin-top: 20px" href="https://blog.sdggames.fun/">Subscribe to Updates</a>
-                </div>
-            </div>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>SDG Games - Educational Games for the Glory of God</title>
+<meta name="description" content="Bible games, books and clothing that help families have fun while learning Biblical truths. Try several of our games free online." />
+<meta name="author" content="SDG Strategy, LLC" />
+<link rel="canonical" href="https://sdggames.fun/" />
 
-            <!-- Games Section-->
-            <div class="container-fluid mb-5">
-                <div class="row gx-4 gx-lg-5">
-                    <h2 class="font-weight-light company-name">Featured Games</h2>
-                </div>
-                <!-- Content Row-->
-                <div class="row gx-4 gx-lg-5">
-                    <div class="col-md-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h2 class="card-title">Journeys Through Jerusalem</h2>
-                                <!-- Product image-->
-                                <a href="JtJ/index.html"><img class="card-img-top" src="assets/JtJ400-300.png" alt="Fruity Game" /></a>
-                                <p class="card-text"><em>Journeys Through Jerusalem</em> is a set-collection race game where you complete the journeys of key figures in the Passion Week.</p>
-                            </div>
-                            <div class="card-footer"><a class="btn btn-primary btn-sm" href="JtJ/index.html">Explore Journeys Through Jerusalem!</a></div>
-                        </div>
-                    </div>
-        
-                    <div class="col-md-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h2 class="card-title">Tyndale</h2>
-                                <!-- Product image-->
-                                <a href="Tyndale/index.html"><img class="card-img-top" src="assets/Tyndale_glimpse.png" alt="Tyndale Game" /></a>
-                                <p class="card-text"><em>Tyndale</em> is a hidden movement game. One player is on the run, trying to complete translation, printing, and shipping of the Bible while the other players try to track him down based on clues Tyndale leaves behind.</p>
-                            </div>
-                            <div class="card-footer"><a class="btn btn-primary btn-sm" href="Tyndale/index.html">Explore Tyndale!</a></div>
-                        </div>
-                    </div>
-        
-                    <div class="col-md-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h2 class="card-title">Three-by-Three</h2>
-                                <!-- Product image-->
-                                <a href="3x3/index.html"><img class="card-img-top" src="assets/3x3400-300.png" alt="Three-by-Three" /></a>
-                                <p class="card-text"><em>Three-by-Three</em> is a set collection game where you are trying to find matching sets of cards, based on the tribes of Israel.</p>
-                            </div>
-                            <div class="card-footer"><a class="btn btn-primary btn-sm" href="3x3/index.html">Explore Three-by-Three!</a></div>
-                        </div>
-                    </div>
-                </div>
+<!-- Open Graph / social share -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="SDG Games" />
+<meta property="og:title" content="SDG Games - Educational Games for the Glory of God" />
+<meta property="og:description" content="Helping families have fun while learning Biblical truths." />
+<meta property="og:url" content="https://sdggames.fun/" />
+<meta property="og:image" content="https://sdggames.fun/assets/home/family.webp" />
+<meta name="twitter:card" content="summary_large_image" />
 
-                <div class="row gx-4 gx-lg-5 mb-5"><div class="card h-100 text-center"><a class="btn btn-primary btn-md" href="games.html">See More Games</a></div></div>
-            </div>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap) -->
+<link href="css/styles.css" rel="stylesheet" />
+<link href="css/product-page.css?v=20261026" rel="stylesheet" />
+<link href="css/game-list.css?v=20261104" rel="stylesheet" />
+<link href="css/book-page.css?v=20261104" rel="stylesheet" />
+<link href="css/home.css?v=20261104" rel="stylesheet" />
+<link rel="preload" as="image" href="assets/home/family.webp" fetchpriority="high" />
 
-            <!-- Books Section -->
-            <div class="container-fluid mb-5">
+<style>
+/* palette taken from the SDG Games logo blue (#1133ff), deepened for a calmer background */
+.pp { --pp-primary: #1a2da6; --pp-accent: #1d3bd9; --pp-hero: linear-gradient(135deg, #0a1240 0%, #14249b 62%, #1d3bd9 100%); }
+</style>
+</head>
+<body class="pp">
+<a class="pp-skip" href="#games">Skip to content</a>
+<!-- Responsive navbar (loaded from nav-div.html by js/scripts.js) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
 
-                <div class="row gx-4 gx-lg-5">
-                    <h2 class="font-weight-light company-name">Featured Books</h2>
-                </div>
-                <!-- Content Row-->
-                <div class="row gx-4 gx-lg-5">
-                    <div class="col-md-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h2 class="card-title">Tyndale: A Man After God's Own Word</h2>
-                                <!-- Product image-->
-                                <a href="tyndale_book/index.html"><img class="card-img-top" src="assets/Tyndale_cover.png" alt="Tyndale Book" /></a>
-                                <p class="card-text">Filled with historical adventure, epic drama, and tales of relentless determination, this historical fiction chapter book brings William Tyndale's world vividly to life.</p>
-                                </div>
-                            <div class="card-footer"><a class="btn btn-primary btn-sm" href="https://sdggames.fun/tyndale_book/index.html">Explore <em>Tyndale</em>!</a></div>
-                        </div>
-                    </div>
-    
-                    <div class="col-md-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h2 class="card-title">From Persecution to Freedom</h2>
-                                <!-- Product image-->
-                                <a href="FPtF/index.html"><img class="card-img-top" src="assets/1689cover.jpg" alt="From Persecution to Freedom" /></a>
-                                <p class="card-text">Perfect for young readers who love adventure and history, <em>From Persecution to Freedom</em> brings to life the courage, faith, and perseverance that helped shape the Particular Baptist movement for generations to come.</p>
-                            </div>
-                            <div class="card-footer"><a class="btn btn-primary btn-sm" href="FPtF/index.html">Explore <em>From Persecution to Freedom</em>!</a></div>
-                        </div>
-                    </div>
-    
-                    <div class="col-md-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                            <h2 class="card-title">What is a Confessional Reformed Baptist Church?</h2>
-                            <!-- Product image-->
-                            <a href="WICRBC/index.html"><img class="card-img-top" src="assets/WICRBC_cover.png" alt="What is a Confessional Reformed Baptist Church?" /></a>
-                            <p class="card-text">When some believers hear that our church is a confessional reformed baptist church, it's not unusual for them to ask "what does that mean?" This book is intended to answer that question.</p>
-                            </div>
-                            <div class="card-footer"><a class="btn btn-primary btn-sm" href="WICRBC/index.html">Explore <em>What is a Confessional Reformed Baptist Church?</em></a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row gx-4 gx-lg-5 mb-5"><div class="card h-100 text-center"><a class="btn btn-primary btn-md" href="books.html">See More Books</a></div></div>
-            </div>
+<main>
+<!-- ============ HERO ============ -->
+<header class="pp-hero hm-hero">
+  <div class="pp-wrap">
+    <div>
+      <h1>SDG Games</h1>
+      <p class="hm-tag">Helping families have fun while learning Biblical truths.</p>
+      <div class="hm-actions">
+        <a class="pp-btn pp-btn-gold" href="#free">Play a free game</a>
+        <a class="pp-btn pp-btn-ghost" href="games.html">Browse all games</a>
+      </div>
+    </div>
+    <figure class="hm-photo">
+      <img src="assets/home/family.webp" width="900" height="401" fetchpriority="high" alt="A family laughing together around a table during a card game" />
+    </figure>
+  </div>
+</header>
 
-            <!-- Clothing Section -->
-            <div class="container-fluid mb-5">
+<!-- ============ FEATURED GAMES ============ -->
+<section class="pp-band hm-band" id="games" aria-labelledby="games-h">
+  <div class="pp-wrap">
+    <div class="hm-head"><h2 id="games-h">Featured games</h2><a href="games.html">See all games &rarr;</a></div>
+    <!-- The cards are built from js/games-data.js (featured games). This list is for visitors without JavaScript. -->
+    <ul class="gm-grid hm-grid" id="featured-games">
+      <li><a href="6days/index.html">Six Days</a></li>
+      <li><a href="JtJ/index.html">Journeys through Jerusalem</a></li>
+      <li><a href="Tyndale/index.html">Tyndale</a></li>
+    </ul>
+  </div>
+</section>
 
-                <div class="row gx-4 gx-lg-5">
-                    <h2 class="font-weight-light company-name">Featured Clothing</h2>
-                </div>
-                <!-- Content Row-->
-                <div class="row gx-4 gx-lg-5">
-                    <div class="col-md-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                            <h2 class="card-title">Be Kind (Ephesians 4:32)</h2>
-                            <!-- Product image-->
-                            <a href="https://sdg-soft-wear.printify.me/product/13560869/be-kind-ephesians-432-heavy-cotton-tee"><img class="card-img-top" src="assets/Ephesians 4-32 T-Shirt.png" alt="Be Kind T-Shirt" /></a>
-                            <p class="card-text"><em>Be Kind</em> to one another, tender hearted forgiving each other, just as God also in Christ forgave you.</p>
-                            </div>
-                            <div class="card-footer"><a class="btn btn-primary btn-sm" href="https://sdg-soft-wear.printify.me/product/13560869/be-kind-ephesians-432-heavy-cotton-tee">Explore Be Kind!</a></div>
-                        </div>
-                    </div>
-    
-                    <div class="col-md-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                            <h2 class="card-title">Gracious Words (Proverbs 16:24)</h2>
-                            <!-- Product image-->
-                            <a href="https://sdg-soft-wear.printify.me/product/7578539/proverbs-1624-heavy-cotton-tee"><img class="card-img-top" src="assets/Proverbs 16-24 T-Shirt.png" alt="Gracious Words" /></a>
-                            <p class="card-text"><em>Gracious words</em> are like a honey comb, sweet to the soul, health to the bones.</p>
-                            </div>
-                            <div class="card-footer"><a class="btn btn-primary btn-sm" href="https://sdg-soft-wear.printify.me/product/7578539/proverbs-1624-heavy-cotton-tee">Explore Gracious Words!</a></div>
-                        </div>
-                    </div>
-    
-                    <div class="col-md-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                            <h2 class="card-title">Five Solas</h2>
-                            <!-- Product image-->
-                            <a href="https://sdg-soft-wear.printify.me/product/7566867/sola-softstyle-t-shirt"><img class="card-img-top" src="assets/Five Solas T-Shirt.png" alt="Five Solas T-Shirt" /></a>
-                            <p class="card-text"><em>All Glory to God!</em> Salvation by grace, through faith, in Christ, according to scripture alone.</p>
-                            </div>
-                            <div class="card-footer"><a class="btn btn-primary btn-sm" href="https://sdg-soft-wear.printify.me/product/7566867/sola-softstyle-t-shirt">Explore Five Solas!</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row gx-4 gx-lg-5 mb-5"><div class="card h-100 text-center"><a class="btn btn-primary btn-md" href="https://sdg-soft-wear.printify.me/">See More Clothing</a></div></div>
-            </div>
-            
-        </div>
+<!-- ============ FREE ONLINE ============ -->
+<section class="pp-band alt hm-band" id="free" aria-labelledby="free-h">
+  <div class="pp-wrap">
+    <h2 id="free-h">Try one free, online</h2>
+    <ul class="hm-free" id="free-games">
+      <li><a href="JfP/play/">Journeys for Paul</a></li>
+      <li><a href="roman-catacombs/play/">Roman Catacombs</a></li>
+      <li><a href="Tyndale/play/">Tyndale</a></li>
+      <li><a href="https://wordwords.fun">WordWords</a></li>
+    </ul>
+  </div>
+</section>
 
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2024</span> SDG Strategy, LLC | To God be the glory</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- Core theme JS - load standard content -->
-        <script src="js/scripts.js"></script>
+<!-- ============ FEATURED BOOKS ============ -->
+<section class="pp-band hm-band" id="books" aria-labelledby="books-h">
+  <div class="pp-wrap">
+    <div class="hm-head"><h2 id="books-h">Featured books</h2><a href="books.html">See all books &rarr;</a></div>
+    <!-- Built from js/books-data.js (featured books). This list is for visitors without JavaScript. -->
+    <ul class="gm-grid hm-grid" id="featured-books">
+      <li><a href="tyndale_book/index.html">Tyndale: A Man After God&rsquo;s Own Word</a></li>
+      <li><a href="FPtF/index.html">From Persecution to Freedom</a></li>
+      <li><a href="WICRBC/index.html">What is a Confessional Reformed Baptist Church?</a></li>
+    </ul>
+  </div>
+</section>
 
+<!-- ============ FEATURED CLOTHING ============ -->
+<section class="pp-band alt hm-band" id="clothing" aria-labelledby="clothing-h">
+  <div class="pp-wrap">
+    <div class="hm-head"><h2 id="clothing-h">Featured clothing</h2><a href="https://sdg-soft-wear.printify.me/">See all clothing &rarr;</a></div>
+    <!-- Built from js/clothing-data.js (featured items). This list is for visitors without JavaScript. -->
+    <ul class="gm-grid hm-grid" id="featured-clothing">
+      <li><a href="https://sdg-soft-wear.printify.me/product/13560869/be-kind-ephesians-432-heavy-cotton-tee">Be Kind (Ephesians 4:32)</a></li>
+      <li><a href="https://sdg-soft-wear.printify.me/product/7578539/proverbs-1624-heavy-cotton-tee">Gracious Words (Proverbs 16:24)</a></li>
+      <li><a href="https://sdg-soft-wear.printify.me/product/7566867/sola-softstyle-t-shirt">Five Solas</a></li>
+    </ul>
+  </div>
+</section>
 
-    </body>
+<!-- ============ STAY IN TOUCH ============ -->
+<section class="pp-cta" id="news" aria-labelledby="news-h">
+  <div class="pp-wrap">
+    <h2 id="news-h">Hear about new games first</h2>
+    <p>Six Days is coming soon. Get one email when it&rsquo;s available, and news of what comes next.</p>
+    <form class="pp-signup" novalidate>
+      <label class="pp-sr" for="email-home">Your email address</label>
+      <div class="pp-row">
+        <input type="email" id="email-home" name="EMAIL" placeholder="Your email address" autocomplete="email" required />
+        <button type="submit" class="pp-btn pp-btn-gold">Sign me up</button>
+      </div>
+      <input class="pp-honey" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <p class="pp-signup-msg" role="status" aria-live="polite"></p>
+      <p class="pp-fine">Unsubscribe any time. Or follow the <a href="https://blog.sdggames.fun/" style="color:#fff">SDG Games news</a>.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+<div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+</footer>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+
+<script>
+window.SDG_PRODUCT = {
+  // the SDG Games audience on Mailchimp (the same one the Six Days page signs people up to)
+  mailchimpUrl: 'https://fun.us10.list-manage.com/subscribe/post?u=d219b8c03fa7cf86fcb6c66fa&id=2b88c7f29c&f_id=00c54ae4f0',
+  mailchimpTags: [],
+};
+</script>
+<script src="js/product-core.js?v=20261026"></script>
+<script src="js/cards.js?v=20261104"></script>
+<script src="js/games-data.js?v=20261104"></script>
+<script src="js/books-data.js?v=20261104"></script>
+<script src="js/clothing-data.js?v=20261104"></script>
+<script src="js/home-page.js?v=20261104"></script>
+<script src="js/product-page.js?v=20261104"></script>
+</body>
 </html>
