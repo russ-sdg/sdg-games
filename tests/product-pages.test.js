@@ -5,7 +5,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..');
-const PAGES = ['6days/index.html', 'JfP/index.html', 'roman-catacombs/index.html', 'Tyndale/index.html'];
+const BOOKS = ['tyndale_book/index.html', 'FPtF/index.html', 'WICRBC/index.html'];   // several formats, so several prices
+const PAGES = ['6days/index.html', 'JfP/index.html', 'roman-catacombs/index.html', 'Tyndale/index.html', ...BOOKS];
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 const stripComments = (h) => h.replace(/<!--[\s\S]*?-->/g, '');
@@ -54,7 +55,7 @@ for (const page of PAGES) {
       assert.ok(fs.existsSync(p), `${u} -> ${path.relative(ROOT, p)} is missing`);
       checked++;
     }
-    assert.ok(checked > 15, `only ${checked} local files checked`);
+    assert.ok(checked > (BOOKS.includes(page) ? 8 : 15), `only ${checked} local files checked`);
   });
 
   test(`${page}: structured data is valid JSON for a Product`, () => {
@@ -90,11 +91,19 @@ for (const page of PAGES) {
     assert.ok(q.has(`b_${q.get('u')}_${q.get('id')}`), 'honeypot field name');
   });
 
-  test(`${page}: one price everywhere, a real launch date, and cache-busted shared assets`, () => {
-    const prices = new Set([...html.matchAll(/\$\d+\.\d\d/g)].map((m) => m[0]));
-    const jsonPrice = /"price"\s*:\s*"?(\d+\.\d\d)/.exec(html);
-    assert.ok(prices.size <= 1, `different prices on the page: ${[...prices]}`);
-    if (jsonPrice) assert.equal('$' + jsonPrice[1], [...prices][0]);
+  test(`${page}: ${BOOKS.includes(page) ? 'every format\'s price matches the structured data' : 'one price everywhere'}, a real launch date, and cache-busted shared assets`, () => {
+    const shown = new Set([...html.replace(/<s>[\s\S]*?<\/s>/g, '').matchAll(/\$\d+\.\d\d/g)].map((m) => m[0]));   // struck-through list prices don't count
+    if (BOOKS.includes(page)) {
+      const offers = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)[1]).offers;
+      assert.deepEqual([...shown].sort(), [...new Set(offers.map((o) => '$' + o.price))].sort());
+      const spots = [...html.matchAll(/class="pp-shopify"[^>]*data-product-id="(\d+)"/g)];
+      assert.equal(spots.length, offers.length, 'one buy button per format');
+      assert.equal(new Set(spots.map((m) => m[1])).size, spots.length, 'each button has its own product id');
+    } else {
+      const jsonPrice = /"price"\s*:\s*"?(\d+\.\d\d)/.exec(html);
+      assert.ok(shown.size <= 1, `different prices on the page: ${[...shown]}`);
+      if (jsonPrice) assert.equal('$' + jsonPrice[1], [...shown][0]);
+    }
     const lm = /launch:\s*'(\d{4}-\d{2}-\d{2})'/.exec(html);      // pages already on sale have no launch date
     assert.match(html, /<link href="\.\.\/css\/product-page\.css\?v=\w+"/);
     assert.match(html, /<script src="\.\.\/js\/product-page\.js\?v=\w+"/);

@@ -5,6 +5,7 @@
 //   mailchimpTags optional Mailchimp tag ids to put on new subscribers (e.g. one per game)
 //   productId     Shopify product id; setting it switches the page from "notify me" to "buy now"
 //   buttonText    text of the Shopify buy button
+// A ".pp-shopify" spot may carry its own data-product-id and data-button-text (the book pages sell several formats).
 (function () {
   var core = window.SDGCore;
   var cfg = window.SDG_PRODUCT || {};
@@ -126,7 +127,8 @@
   });
 
   // ---- launch day: swap "notify me" for the Shopify buy button -----------------------------------
-  if (cfg.productId) {
+  var spots = [].slice.call(document.querySelectorAll('.pp-shopify'));
+  if (cfg.productId || spots.some(function (n) { return n.getAttribute('data-product-id'); })) {
     root.classList.add('pp-live');
     document.querySelectorAll('[data-state=soon]').forEach(function (el) { el.hidden = true; });
     document.querySelectorAll('[data-state=live]').forEach(function (el) { el.hidden = false; });
@@ -141,15 +143,17 @@
     var init = function () {
       var client = window.ShopifyBuy.buildClient({ domain: 'bd30ce-2.myshopify.com', storefrontAccessToken: '7bf5f03bf3c7ba399d3ef67f8250c103' });
       window.ShopifyBuy.UI.onReady(client).then(function (ui) {
-        document.querySelectorAll('.pp-shopify').forEach(function (node) {
+        spots.forEach(function (node) {
+          var id = node.getAttribute('data-product-id') || cfg.productId;
+          if (!id) return;
           ui.createComponent('product', {
-            id: cfg.productId, node: node, moneyFormat: '%24%7B%7Bamount%7D%7D',
+            id: id, node: node, moneyFormat: '%24%7B%7Bamount%7D%7D',
             options: { product: {
               styles: { product: { '@media (min-width: 601px)': { 'max-width': '100%', 'margin-left': '0', 'margin-bottom': '0' } },
                 button: { 'font-family': 'Avant Garde, sans-serif', 'font-size': '16px', 'padding': '15px 28px', 'background-color': '#323ef9', 'border-radius': '6px',
                   ':hover': { 'background-color': '#2d38e0' }, ':focus': { 'background-color': '#2d38e0' } } },
               contents: { img: false, title: false, price: false },
-              text: { button: cfg.buttonText || 'Buy now' } } },
+              text: { button: node.getAttribute('data-button-text') || cfg.buttonText || 'Buy now' } } },
           });
         });
       });
