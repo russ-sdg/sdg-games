@@ -9,7 +9,7 @@
 .gm-card { position: relative; display: flex; flex-direction: column; background: var(--pp-surface); border: 1px solid var(--pp-line); border-radius: var(--pp-radius); overflow: hidden; transition: transform .15s, box-shadow .15s; }
 .gm-card:hover, .gm-card:focus-within { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(42,34,51,.18); }
 .gm-card:focus-within { outline: 3px solid #86b7fe; outline-offset: 2px; }
-.gm-art { position: relative; background: #1b1626; }
+.gm-art { position: relative; background: #0f1736; }
 .gm-art img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
 .gm-badge { position: absolute; top: .6rem; right: .6rem; background: var(--pp-gold); color: var(--pp-gold-ink); font-weight: 800; font-size: .78rem; border-radius: 999px; padding: .2rem .7rem; box-shadow: 0 2px 6px rgba(0,0,0,.3); }
 .gm-body { padding: .9rem 1.1rem 1.2rem; display: flex; flex-direction: column; flex: 1; }
