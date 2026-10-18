@@ -10,11 +10,16 @@ from PIL import Image
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 A = os.path.join(ROOT, 'assets')
 ART = {                       # output name -> original file in assets/
-    'family': '900_400_family.png',
     'shirt-be-kind': 'Ephesians 4-32 T-Shirt.png',
     'shirt-gracious-words': 'Proverbs 16-24 T-Shirt.png',
     'shirt-five-solas': 'Five Solas T-Shirt.png',
 }
+# the hero photo: two sizes, so phones get the small one
+hero = Image.open(os.path.join(A, 'family-game-night.webp')).convert('RGB')
+for w in (800, 1200):
+    h = round(hero.height * w / hero.width)
+    hero.resize((w, h), Image.LANCZOS).save(os.path.join(A, 'home', f'family-{w}.webp'), 'WEBP', quality=82, method=6)
+    print('family', w, h)
 for name, src in ART.items():
     im = Image.open(os.path.join(A, src))
     im = im.convert('RGBA') if im.mode in ('RGBA', 'LA', 'P') else im.convert('RGB')
