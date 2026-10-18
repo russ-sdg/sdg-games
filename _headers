@@ -7,6 +7,8 @@
 # (price, buy button) reaches visitors straight away.
 /css/product-page.css
   Cache-Control: no-cache
+/css/book-page.css
+  Cache-Control: no-cache
 /js/product-core.js
   Cache-Control: no-cache
 /js/product-gallery.js
