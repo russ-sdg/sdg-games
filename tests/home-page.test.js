@@ -43,7 +43,7 @@ test('index.html: one h1, a description, the hero photo, and scripts in dependen
   assert.equal((html.match(/<h1[\s>]/g) || []).length, 1);
   const desc = /<meta name="description" content="([^"]+)"/.exec(html)[1];
   assert.ok(desc.length >= 70 && desc.length <= 165, `description is ${desc.length} chars`);
-  assert.ok(fs.existsSync(path.join(ROOT, 'assets/home/family.webp')));
+  for (const w of [800, 1200]) assert.ok(fs.existsSync(path.join(ROOT, `assets/home/family-${w}.webp`)), `family-${w}.webp is missing`);
   const order = ['product-core', 'cards', 'games-data', 'books-data', 'clothing-data', 'home-page'].map((s) => html.indexOf(`js/${s}.js`));
   assert.ok(order.every((x, i) => x > 0 && (i === 0 || x > order[i - 1])), `scripts out of order: ${order}`);
   assert.match(html, /<script src="js\/product-page\.js\?v=\w+"/);
