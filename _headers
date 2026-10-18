@@ -9,6 +9,12 @@
   Cache-Control: no-cache
 /css/book-page.css
   Cache-Control: no-cache
+/css/game-list.css
+  Cache-Control: no-cache
+/js/games-data.js
+  Cache-Control: no-cache
+/js/games-page.js
+  Cache-Control: no-cache
 /js/books-data.js
   Cache-Control: no-cache
 /js/books-page.js
