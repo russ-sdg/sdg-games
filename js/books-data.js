@@ -6,25 +6,26 @@
 //   tags      what kind of book it is; becomes the filter buttons once there are more than FILTER_AFTER books
 //   formats   name and price (as on the product page); `was` is the struck-through list price, if any
 //   audio     true if an audiobook is sold
+//   featured  true to show the book on the home page (the home page shows the featured games, books and clothing in equal numbers)
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.SDGBooks = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
   const BOOKS = [
     {
-      slug: 'tyndale_book', title: 'Tyndale', subtitle: 'A Man After God’s Own Word', tags: ['Historical fiction'], audio: true,
+      slug: 'tyndale_book', title: 'Tyndale', subtitle: 'A Man After God’s Own Word', tags: ['Historical fiction'], audio: true, featured: true,
       cover: 'assets/books/tyndale/cover', coverSize: [480, 807], coverAlt: 'Cover of Tyndale: A Man After God’s Own Word',
       blurb: 'Pursued by spies, betrayed by a friend and hunted by Church and Crown, William Tyndale risks everything to put the Bible in English.',
       formats: [{ name: 'Paperback', price: '7.50', was: '9.99' }, { name: 'E-Book', price: '5.00', was: '7.00' }, { name: 'Audiobook', price: '5.00' }],
     },
     {
-      slug: 'FPtF', title: 'From Persecution to Freedom', subtitle: 'Particular Baptists Steadfast in Conviction, Sustained by God', tags: ['Historical fiction'], audio: true,
+      slug: 'FPtF', title: 'From Persecution to Freedom', subtitle: 'Particular Baptists Steadfast in Conviction, Sustained by God', tags: ['Historical fiction'], audio: true, featured: true,
       cover: 'assets/books/fptf/cover', coverSize: [480, 768], coverAlt: 'Cover of From Persecution to Freedom',
       blurb: 'Benjamin Coxe and his son Nehemiah stand firm through persecution, all the way to the Confession of 1689.',
       formats: [{ name: 'Paperback', price: '7.50', was: '9.99' }, { name: 'E-Book', price: '5.00', was: '7.00' }, { name: 'Audiobook', price: '5.00' }],
     },
     {
-      slug: 'WICRBC', title: 'What is a Confessional Reformed Baptist Church?', subtitle: '', tags: ['Nonfiction'], audio: false,
+      slug: 'WICRBC', title: 'What is a Confessional Reformed Baptist Church?', subtitle: '', tags: ['Nonfiction'], audio: false, featured: true,
       cover: 'assets/books/wicrbc/cover', coverSize: [480, 724], coverAlt: 'Cover of What is a Confessional Reformed Baptist Church?',
       blurb: 'A layman’s plain-language answer to “what does that mean?”, built from the base out.',
       formats: [{ name: 'Paperback', price: '7.00', was: '9.99' }, { name: 'E-Book', price: '2.99' }],

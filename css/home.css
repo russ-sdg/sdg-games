@@ -1,0 +1,30 @@
+/* SDG Games: the home page (index.html). Builds on css/product-page.css, css/game-list.css and css/book-page.css. */
+.hm-hero .pp-wrap { position: relative; display: grid; grid-template-columns: 1fr 1.1fr; gap: 2.4rem; align-items: center; padding-top: 3.2rem; padding-bottom: 3.2rem; }
+.hm-hero h1 { font-size: clamp(2.6rem, 7vw, 4.4rem); font-weight: 800; line-height: 1; margin: 0 0 .7rem; }
+.hm-hero .hm-tag { font-size: clamp(1.2rem, 2.8vw, 1.7rem); line-height: 1.35; margin: 0 0 1.5rem; max-width: 24ch; }
+.hm-actions { display: flex; flex-wrap: wrap; gap: .8rem; }
+.hm-actions .pp-btn-ghost { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.65); }
+.hm-photo { margin: 0; }
+.hm-photo img { display: block; width: 100%; height: auto; border-radius: var(--pp-radius); box-shadow: 0 18px 44px rgba(0,0,0,.45); }
+
+.hm-band h2 { font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 800; margin: 0 0 1.2rem; color: var(--pp-primary); }
+.hm-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem 1.5rem; margin: 0 0 1.2rem; }
+.hm-head h2 { margin: 0; }
+.hm-head a { font-weight: 700; color: var(--pp-accent); text-decoration: none; }
+.hm-head a:hover { text-decoration: underline; }
+.hm-grid { grid-template-columns: repeat(3, 1fr); }
+.hm-grid .bk-card-cover { aspect-ratio: 4 / 3; }
+
+.hm-free { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; list-style: none; padding: 0; margin: 0; }
+.hm-free a { display: flex; align-items: center; gap: .8rem; background: var(--pp-bg); border: 1px solid var(--pp-line); border-radius: 12px; padding: .6rem; color: var(--pp-primary); font-weight: 700; text-decoration: none; transition: box-shadow .15s; }
+.hm-free a:hover, .hm-free a:focus-visible { box-shadow: 0 8px 20px rgba(42,34,51,.16); }
+.hm-free img { width: 84px; height: 56px; object-fit: cover; border-radius: 6px; flex: none; }
+.hm-free small { display: block; color: var(--pp-accent); font-weight: 700; }
+
+@media (max-width: 860px) {
+  .hm-hero .pp-wrap { grid-template-columns: 1fr; text-align: center; padding-top: 2.2rem; padding-bottom: 2.2rem; }
+  .hm-hero .hm-tag { margin-left: auto; margin-right: auto; }
+  .hm-actions { justify-content: center; }
+  .hm-grid { grid-template-columns: 1fr; max-width: 26rem; margin: 0 auto; }
+}
+@media (min-width: 861px) and (max-width: 1000px) { .hm-grid { grid-template-columns: repeat(2, 1fr); } }

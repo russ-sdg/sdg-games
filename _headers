@@ -15,6 +15,14 @@
   Cache-Control: no-cache
 /js/games-page.js
   Cache-Control: no-cache
+/css/home.css
+  Cache-Control: no-cache
+/js/cards.js
+  Cache-Control: no-cache
+/js/clothing-data.js
+  Cache-Control: no-cache
+/js/home-page.js
+  Cache-Control: no-cache
 /js/books-data.js
   Cache-Control: no-cache
 /js/books-page.js
