@@ -118,3 +118,58 @@ test('London is a Printing Centre: publish, ship, arrive and translate in one tu
   assert.equal(s.t.last.length, 4);   // published, shipped, reached London, translated
   assert.ok(s.t.last.some((e) => /reached London/.test(e)));
 });
+
+test('shipping completes the next translation, and it is printed and shipped at once from a Printing Centre not visited before', () => {
+  let s = E.startTyndale(setup(), 'F5');                       // Cologne: not coastal, publishes the New Testament and waits to ship it
+  assert.equal(E.pubLetter(s), 'N');
+  assert.equal(s.shipments.length, 0);
+  s = E.tyndaleMove(s, ['E5']);                                // Antwerp: new Printing Centre on the coast
+  assert.deepEqual(s.shipments.map((x) => [x.pub, x.from]), [['N', 'E5'], ['P', 'E5']], 'N and P both ship from Antwerp');
+  assert.equal(E.pubLetter(s), 'P');
+  assert.equal(s.t.shipped, 1);
+  assert.equal(s.t.translated, 2, 'the Historical Books are translated next');
+  assert.deepEqual(s.t.last.map((e) => e.split(' ')[0]), ['shipped', 'translated', 'published', 'shipped', 'translated']);
+  assert.ok(s.t.visited.includes('E5') && s.t.visited.includes('F5'));
+  // the Historical Books now need a centre he has not used
+  s = E.endAgentTurns(s);
+  s = E.tyndaleMove(s, ['E6']);
+  assert.equal(E.pubLetter(s), 'P', 'nothing to print on a plain spot');
+});
+
+test('a centre prints only once: starting on the coast does not print the second translation in the same place', () => {
+  const s = E.startTyndale(setup(), 'E5');                     // Antwerp: prints and ships the New Testament, translates the Pentateuch
+  assert.deepEqual(s.shipments.map((x) => x.pub), ['N']);
+  assert.equal(E.pubLetter(s), 'N');
+  assert.equal(s.t.translated, 1);
+});
+
+test('London, visited for the first time with a publication waiting: ship, arrive, translate, print and ship the next one there too', () => {
+  let s = E.startTyndale(setup(), 'F5');                       // the New Testament is published in Cologne, waiting to ship
+  s = structuredClone(s); s.t.pos = 'B6';                      // (a few moves later, beside London)
+  s = E.tyndaleMove(s, ['B5']);
+  assert.deepEqual(s.delivered.map((d) => d.pub), ['N', 'P'], 'both reach London in the same turn');
+  assert.equal(s.t.translated, 2);
+  assert.equal(s.accusation.after, 'P');
+});
+
+test('London prints a translation that is waiting, and ships it, in one visit', () => {
+  let s = E.startTyndale(setup(), 'B6');                       // no translation published yet
+  s = E.tyndaleMove(s, ['B5']);
+  assert.deepEqual(s.delivered.map((d) => d.pub), ['N']);
+  assert.equal(s.t.translated, 1, 'the Pentateuch is translated, but London has already printed once this visit');
+});
+
+test('every pawn keeps its route, for the results map', () => {
+  let s = E.startTyndale(setup(), 'F5');
+  assert.deepEqual(s.pawns.map((p) => p.trail), s.pawns.map((p) => [p.pos]), 'routes start where the pawns were placed');
+  s = E.tyndaleMove(s, ['E5']);
+  const start = s.pawns[0].pos;
+  s = E.rollFor(s, 0);
+  const to = E.pawnTargets(s, 0, s.pending.roll)[0];
+  s = E.agentMove(s, 0, s.pending.roll, to);
+  assert.deepEqual(s.pawns[0].trail, to === start ? [start] : [start, to], 'a move extends the route; staying put does not');
+  const old = structuredClone(s); delete old.pawns[1].trail;      // a game saved before routes were kept
+  old.moved = []; old.pending = null;
+  const moved = E.agentMove(E.rollFor(old, 1), 1, 1, E.pawnTargets(E.rollFor(old, 1), 1, 1)[0] ?? old.pawns[1].pos);
+  assert.ok(Array.isArray(moved.pawns[1].trail) && moved.pawns[1].trail[0] === old.pawns[1].pos);
+});

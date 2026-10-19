@@ -38,7 +38,7 @@ export function pawnsPerSeat(nSeats) {
 export function newGame({ seats, seed = 1, supporter = null }) {
   const per = pawnsPerSeat(seats.length);
   const pawns = [];
-  seats.forEach((_, i) => { for (let k = 0; k < per[i]; k++) pawns.push({ id: pawns.length, seat: i, pos: null, out: false }); });
+  seats.forEach((_, i) => { for (let k = 0; k < per[i]; k++) pawns.push({ id: pawns.length, seat: i, pos: null, out: false, trail: [] }); });
   const s = {
     seed, rc: 0, round: 0, phase: 'place',                   // place -> (tyndale start) -> agents/tyndale turns -> over
     seats: seats.map((x, i) => ({ id: i, name: x.name, human: !!x.human, out: false, char: x.char || null })),   // char: the character card dealt to this Agent
@@ -93,26 +93,27 @@ function arrive(s, sh) {
   s.accusation = { after: sh.pub, open: hasSupporter(s.seats.length) };
   return `${PUB_NAMES[sh.pub]} reached London`;
 }
-function publishAndShip(s, pos, startOfGame) {
+function publishAndShip(s, pos) {
   const t = s.t, name = pt[pos].centre;
   const events = [];
-  if (isPrintingCentre(pos)) {
-    if (!t.visited.includes(pos)) {
-      if (t.published < t.translated) {                      // a translation is waiting to be printed
-        t.published = t.translated; t.bonus.push(PUBS[t.published]);
-        events.push(`published ${PUB_NAMES[PUBS[t.published]]} in ${name}`);
-      }
-      t.visited.push(pos);
-    }
-  }
-  if (isCoastal(pos) && t.published > t.shipped) {            // a publication waits to be shipped
+  // A Printing Centre he has not been to before prints one translation. Shipping completes the next translation at once, so on a
+  // first visit to a centre on the coast (or London) he may print that new translation here too, and ship it from here as well.
+  let canPrint = isPrintingCentre(pos) && !t.visited.includes(pos);
+  const publish = () => {
+    t.published = t.translated; t.bonus.push(PUBS[t.published]); canPrint = false;
+    events.push(`published ${PUB_NAMES[PUBS[t.published]]} in ${name}`);
+  };
+  if (canPrint && t.published < t.translated) publish();     // a translation is waiting to be printed
+  while (isCoastal(pos) && t.published > t.shipped) {         // a publication waits to be shipped
     t.shipped = t.published;
     const d = shipDist(pos), sh = { pub: PUBS[t.shipped], from: pos, dist: d, left: d, fresh: true };
     s.shipments.push(sh);
     events.push(d === 0 ? `shipped ${PUB_NAMES[sh.pub]} from London` : `shipped ${PUB_NAMES[sh.pub]} from ${pos} (${d >= 11 ? '11+' : d} moves)`);
     if (d === 0) events.push(arrive(s, sh));
     if (t.translated < 3) { t.translated = t.shipped + 1; events.push(`translated ${PUB_NAMES[PUBS[t.translated]]}`); }
+    if (canPrint && t.published < t.translated) publish();   // ...and the loop ships it
   }
+  if (isPrintingCentre(pos) && !t.visited.includes(pos)) t.visited.push(pos);
   return events;
 }
 
@@ -122,7 +123,8 @@ export function startTyndale(state, pos) {
   if (!pt[pos]) throw new Error('no such location');
   const s = clone(state), t = s.t;
   t.pos = pos; t.trail.push(pos);
-  const ev = publishAndShip(s, pos, true);
+  s.pawns.forEach((p) => { p.trail = [p.pos]; });             // every Agent's route starts where its pawn was placed
+  const ev = publishAndShip(s, pos);
   if (t.published >= 0) t.marks[pos] = pubLetter(s);
   ev.forEach((e) => note(s, `Tyndale ${e}.`, false));
   t.last = ev;
@@ -159,7 +161,7 @@ export function tyndaleMove(state, path) {
   const s = clone(state), t = s.t;
   for (let i = 0; i < chk.needBonus; i++) t.bonus.shift();   // strike through that many bonus-move letters
   t.pos = path[path.length - 1]; t.trail.push(...path);
-  const ev = publishAndShip(s, t.pos, false);
+  const ev = publishAndShip(s, t.pos);
   if (t.published >= 0) path.forEach((p) => { t.marks[p] = pubLetter(s); });
   ev.forEach((e) => note(s, `Tyndale ${e}.`, false));
   t.last = ev;
@@ -221,6 +223,8 @@ export function agentMove(state, pawnId, roll, pos, opts = {}) {
   if (state.phase !== 'agents') throw new Error('not the Agents\' turn');
   if (!pawnTargets(state, pawnId, roll).includes(pos)) throw new Error('illegal move');
   const s = clone(state), pawn = s.pawns[pawnId];
+  if (!pawn.trail) pawn.trail = [pawn.pos];                   // (games saved before routes were kept)
+  if (pawn.pos !== pos) pawn.trail.push(pos);                 // the route of each pawn, for the results map
   pawn.pos = pos; s.pending = null; s.moved.push(pawnId);
   const sup = isSupporterPawn(s, pawnId);
   const ans = answerAt(s, pos, sup);

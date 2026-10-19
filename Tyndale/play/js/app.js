@@ -341,6 +341,11 @@ function drawBoard() {
   }
   // his whole route, once the game is over
   if (ui.route && S.over) {
+    for (const p of S.pawns) {                                 // everyone's route, to see how close the Agents got
+      const rt = p.trail && p.trail.length ? p.trail : p.pos ? [p.pos] : [];
+      if (rt.length < 2) continue;
+      svg.appendChild(mk('polyline', { points: rt.map((q) => `${x(q)},${y(q)}`).join(' '), fill: 'none', stroke: SEAT_COLOURS[p.seat], 'stroke-width': 4, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', opacity: p.out ? 0.5 : 0.85, 'pointer-events': 'none' }));
+    }
     const tr = S.t.trail;
     svg.appendChild(mk('polyline', { points: tr.map((p) => `${x(p)},${y(p)}`).join(' '), fill: 'none', stroke: '#a3262e', 'stroke-width': 4, 'stroke-dasharray': '9 6', 'stroke-linejoin': 'round', 'pointer-events': 'none' }));
     svg.appendChild(mk('circle', { cx: x(tr[0]), cy: y(tr[0]), r: 12, fill: '#198754', stroke: '#fff', 'stroke-width': 3 }));
@@ -602,9 +607,9 @@ function showFinal() {
     ${S.supporter !== null ? `<p class="small mt-3 mb-0">The Secret Supporter was <b>${esc(name(S.supporter))}</b>${S.seats[S.supporter].out ? ' (already out)' : ''}.</p>` : S.seats.length >= 4 ? '<p class="small mt-3 mb-0">There was no Secret Supporter in this game.</p>' : ''}
     ${S.seats.some((q) => q.char) ? `<h3 class="h6 mt-3">The Bishop's Agents</h3><ul class="agent-reveal">${S.seats.map((q) => `<li class="${q.out ? 'out' : ''}">${q.char ? `<img src="${CARD(q.char)}" alt="" />` : ''}<span><span class="seat-dot" style="background:${SEAT_COLOURS[q.id]}"></span><b>${esc(q.char ? charName(q.char) : q.name)}</b><small>${q.human ? 'You' : esc(q.name)}${q.id === S.supporter ? ' · Secret Supporter' : ''}${q.out ? ' · out' : ''}</small></span></li>`).join('')}</ul>` : ''}
     <p class="small mt-1 mb-0">Tyndale ended at <b>${S.t.pos}</b>.</p>`;
-  $('final-route').textContent = ui.route ? 'Hide his route' : 'Show his route';
+  $('final-route').textContent = ui.route ? 'Hide the routes' : 'Show the routes';
   const detail = TY() ? `You played Tyndale\n${cfg.nAgents} computer Agent${cfg.nAgents > 1 ? 's' : ''}, ${cfg.aiSkill}` : `${cfg.nAgents} Agent${cfg.nAgents > 1 ? 's' : ''} hunting\nTyndale: ${cfg.skill}`;
-  mountShare($('final-body'), headline, { title, turnsLabel, detail, boardSrc: '../../assets/tyndale/board.webp' });
+  mountShare($('final-body'), headline, { title, turnsLabel, detail, boardSrc: '../../assets/tyndale/board.webp', colours: SEAT_COLOURS, labels: S.seats.map((q) => `${q.name === 'You' ? 'You' : q.name}${q.char ? ' \u00b7 ' + charName(q.char) : ''}${q.id === S.supporter ? ' \u2605' : ''}${q.out ? ' (out)' : ''}`) });
   $('final').showModal();
 }
 

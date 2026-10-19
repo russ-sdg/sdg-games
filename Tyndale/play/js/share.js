@@ -26,7 +26,7 @@ function fit(ctx, text, maxW, size, weight, family) {
 }
 const loadImage = (src) => new Promise((resolve, reject) => { const i = new Image(); i.onload = () => resolve(i); i.onerror = reject; i.src = src; });
 
-// info: { title, turnsLabel, boardSrc }
+// info: { title, turnsLabel, detail, boardSrc, colours: [one per seat], labels: [one per seat] }
 export async function drawShareImage(canvas, state, info) {
   canvas.width = SHARE_W; canvas.height = SHARE_H;
   const ctx = canvas.getContext('2d');
@@ -58,6 +58,21 @@ export async function drawShareImage(canvas, state, info) {
   roundRect(ctx, 0, 0, bs, bs, 10); ctx.clip();
   ctx.drawImage(board, 0, 0, bs, bs);
   const tr = state.t.trail;
+  // everyone's route, to show how close the Agents got (drawn first, so his route stays on top)
+  const col = (seat) => (info.colours && info.colours[seat]) || '#6c757d';
+  for (const p of state.pawns) {
+    const rt = p.trail && p.trail.length ? p.trail : p.pos ? [p.pos] : [];
+    if (!rt.length) continue;
+    ctx.strokeStyle = col(p.seat); ctx.lineWidth = 4; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.globalAlpha = p.out ? 0.55 : 0.9;
+    ctx.beginPath(); rt.forEach((id, i) => (i ? ctx.lineTo(px(id), py(id)) : ctx.moveTo(px(id), py(id)))); ctx.stroke();
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = col(p.seat); ctx.lineWidth = 3;                         // where it started: an open ring
+    ctx.beginPath(); ctx.arc(px(rt[0]), py(rt[0]), 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    const end = rt[rt.length - 1], nm = (state.seats[p.seat].name || '?')[0];                         // where it ended: a filled marker
+    ctx.fillStyle = col(p.seat); ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(px(end), py(end), 13, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#fff'; ctx.font = `800 15px ${SANS}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(nm, px(end), py(end) + 1);
+    ctx.globalAlpha = 1; ctx.textBaseline = 'alphabetic';
+  }
   ctx.strokeStyle = '#a3262e'; ctx.lineWidth = 5; ctx.setLineDash([12, 8]); ctx.lineJoin = 'round';
   ctx.beginPath(); tr.forEach((p, i) => (i ? ctx.lineTo(px(p), py(p)) : ctx.moveTo(px(p), py(p)))); ctx.stroke(); ctx.setLineDash([]);
   const dot = (p, col, label) => {
@@ -93,6 +108,25 @@ export async function drawShareImage(canvas, state, info) {
   ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.font = `500 20px ${SANS}`;
   const lines = (info.detail || '').split('\n');
   lines.forEach((t, i) => ctx.fillText(t, cx, y + 26 + i * 28));
+
+  // how close the Agents got, and whose route is whose
+  const endSpot = state.t.trail[state.t.trail.length - 1];
+  const live = state.pawns.filter((p) => !p.out && p.pos).map((p) => ({ p, d: E.dist(p.pos, endSpot) })).sort((a, b) => a.d - b.d);
+  let ly = y + 26 + lines.length * 28 + 22;
+  ctx.textAlign = 'left'; ctx.fillStyle = '#fff'; ctx.font = `700 22px ${SANS}`;
+  ctx.fillText('The Agents\u2019 routes', cx, ly);
+  ctx.font = `500 17px ${SANS}`; ctx.fillStyle = 'rgba(255,255,255,.8)';
+  if (live.length && state.endReason !== 'captured') ctx.fillText(`Nearest at the end: ${live[0].d} step${live[0].d === 1 ? '' : 's'} away`, cx, ly + 24);
+  ly += 52;
+  state.seats.forEach((seat, i) => {
+    const label = (info.labels && info.labels[i]) || seat.name;
+    ctx.fillStyle = col(i); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(cx + 11, ly - 7, 10, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = seat.out ? 'rgba(255,255,255,.6)' : '#fff';
+    const f = fit(ctx, label, cw - 40, 19, 600, SANS); ctx.font = `600 ${f}px ${SANS}`;
+    ctx.fillText(label, cx + 30, ly);
+    ly += 28;
+  });
 
   ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,255,255,.9)'; ctx.font = `600 24px ${SANS}`;
   ctx.fillText('Play free at sdggames.fun/Tyndale/play', SHARE_W - 36, SHARE_H - 22);
