@@ -158,3 +158,18 @@ test('London prints a translation that is waiting, and ships it, in one visit', 
   assert.deepEqual(s.delivered.map((d) => d.pub), ['N']);
   assert.equal(s.t.translated, 1, 'the Pentateuch is translated, but London has already printed once this visit');
 });
+
+test('every pawn keeps its route, for the results map', () => {
+  let s = E.startTyndale(setup(), 'F5');
+  assert.deepEqual(s.pawns.map((p) => p.trail), s.pawns.map((p) => [p.pos]), 'routes start where the pawns were placed');
+  s = E.tyndaleMove(s, ['E5']);
+  const start = s.pawns[0].pos;
+  s = E.rollFor(s, 0);
+  const to = E.pawnTargets(s, 0, s.pending.roll)[0];
+  s = E.agentMove(s, 0, s.pending.roll, to);
+  assert.deepEqual(s.pawns[0].trail, to === start ? [start] : [start, to], 'a move extends the route; staying put does not');
+  const old = structuredClone(s); delete old.pawns[1].trail;      // a game saved before routes were kept
+  old.moved = []; old.pending = null;
+  const moved = E.agentMove(E.rollFor(old, 1), 1, 1, E.pawnTargets(E.rollFor(old, 1), 1, 1)[0] ?? old.pawns[1].pos);
+  assert.ok(Array.isArray(moved.pawns[1].trail) && moved.pawns[1].trail[0] === old.pawns[1].pos);
+});

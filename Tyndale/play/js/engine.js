@@ -38,7 +38,7 @@ export function pawnsPerSeat(nSeats) {
 export function newGame({ seats, seed = 1, supporter = null }) {
   const per = pawnsPerSeat(seats.length);
   const pawns = [];
-  seats.forEach((_, i) => { for (let k = 0; k < per[i]; k++) pawns.push({ id: pawns.length, seat: i, pos: null, out: false }); });
+  seats.forEach((_, i) => { for (let k = 0; k < per[i]; k++) pawns.push({ id: pawns.length, seat: i, pos: null, out: false, trail: [] }); });
   const s = {
     seed, rc: 0, round: 0, phase: 'place',                   // place -> (tyndale start) -> agents/tyndale turns -> over
     seats: seats.map((x, i) => ({ id: i, name: x.name, human: !!x.human, out: false, char: x.char || null })),   // char: the character card dealt to this Agent
@@ -123,6 +123,7 @@ export function startTyndale(state, pos) {
   if (!pt[pos]) throw new Error('no such location');
   const s = clone(state), t = s.t;
   t.pos = pos; t.trail.push(pos);
+  s.pawns.forEach((p) => { p.trail = [p.pos]; });             // every Agent's route starts where its pawn was placed
   const ev = publishAndShip(s, pos);
   if (t.published >= 0) t.marks[pos] = pubLetter(s);
   ev.forEach((e) => note(s, `Tyndale ${e}.`, false));
@@ -222,6 +223,8 @@ export function agentMove(state, pawnId, roll, pos, opts = {}) {
   if (state.phase !== 'agents') throw new Error('not the Agents\' turn');
   if (!pawnTargets(state, pawnId, roll).includes(pos)) throw new Error('illegal move');
   const s = clone(state), pawn = s.pawns[pawnId];
+  if (!pawn.trail) pawn.trail = [pawn.pos];                   // (games saved before routes were kept)
+  if (pawn.pos !== pos) pawn.trail.push(pos);                 // the route of each pawn, for the results map
   pawn.pos = pos; s.pending = null; s.moved.push(pawnId);
   const sup = isSupporterPawn(s, pawnId);
   const ans = answerAt(s, pos, sup);
