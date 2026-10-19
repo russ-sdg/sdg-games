@@ -27,6 +27,7 @@
 .ab-tiles h3 { font-size: 1.3rem; color: var(--pp-primary); margin: 0 0 .3rem; }
 .ab-tiles p { margin: 0 0 .6rem; color: var(--pp-muted); }
 .ab-tiles span { color: var(--pp-accent); font-weight: 700; }
+.pp-cta .ab-contact { margin: 1.6rem 0 0; font-size: 1rem; }
 .ab-fine { text-align: center; color: var(--pp-muted); margin: 0; padding: 1.6rem 0 0; }
 
 @media (max-width: 860px) { .ab-two { grid-template-columns: 1fr; gap: 1.6rem; } .ab-tiles { grid-template-columns: 1fr; } }

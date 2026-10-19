@@ -27,3 +27,7 @@ test('about.html: title, description, images and local links are all real', () =
   }
   assert.match(html, /<link href="css\/product-page\.css\?v=\w+"/);
 });
+
+test('about.html: a contact address is given as a mailto link', () => {
+  assert.match(html, /<a href="mailto:russ@sdgstrategy\.com"[^>]*>russ@sdgstrategy\.com<\/a>/);
+});
