@@ -38,6 +38,11 @@ for (const g of GAMES) {
       if (g.price !== 'Free' && /\$\d+\.\d\d/.test(t)) assert.ok(t.includes(`$${g.price}`), `$${g.price} is not on the product page`);
       if (g.was) assert.ok(t.includes(`$${g.was}`), `list price $${g.was} is not on the product page`);
     }
+    if (g.launch && !g.url) {                                  // the card and the product page must agree on the launch day
+      const page = read(`${g.slug}/index.html`), core = require('../js/product-core.js');
+      assert.ok(page.includes(`launch: '${g.launch}'`), `the product page's launch date is not ${g.launch}`);
+      assert.ok(page.includes(core.launchLabel(g.launch)) && !page.replaceAll(core.launchLabel(g.launch), '').match(/November \d+, 2026/), 'a different launch date is written on the page');
+    }
     if (g.online && !/^https?:/.test(g.online)) assert.ok(exists(`${g.online}index.html`), `no online version at ${g.online}`);
   });
 }
