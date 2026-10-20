@@ -86,6 +86,7 @@
 .id-card img { width: 64px; border-radius: 4px; flex: none; }
 .agent-reveal { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; }
 .agent-reveal li { display: flex; gap: .5rem; align-items: center; }
+.agent-reveal .seat-dot { display: inline-block; vertical-align: -.15rem; margin-right: .35rem; }   /* it sits inside a span here, so it needs a box of its own to be a round dot */
 .agent-reveal li.out { opacity: .6; }
 .agent-reveal img { width: 44px; border-radius: 3px; flex: none; }
 .agent-reveal small { display: block; color: #6c757d; }
