@@ -56,6 +56,7 @@ export function flipRound(state) {
       const who = [['You', s], ...s.rivals.map((r) => [r.name, r])].filter(([, p]) => E.isComplete(p, ci));
       if (!who.length) return;
       s.completed[c.id] = true;
+      s.completedBy = { ...s.completedBy, [c.id]: who.map(([n]) => n) };
       note(s, `${who.map(([n]) => n).join(' and ')} ${who.length > 1 ? 'complete' : 'completes'} ${c.label} first!`);
     });
     s.taken = { ...s.completed };

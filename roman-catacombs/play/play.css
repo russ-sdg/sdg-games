@@ -47,6 +47,9 @@
 .shelf h2 { font-size: 1.05rem; margin: 0; color: var(--ci); flex: 1 1 auto; }
 .shelf .pts { border: 2px solid var(--c); background: #fff; color: var(--ci); border-radius: 2rem; padding: .1rem .7rem; font-weight: 800; font-size: .9rem; }
 .shelf .pts.done { background: var(--c); color: #fff; }
+.shelf .pts.is-taken { border-style: dashed; color: #5c636a; border-color: #adb5bd; }
+.shelf .pts.is-taken s { opacity: .65; }
+.shelf .taken-tag { font-size: .8rem; font-weight: 700; color: #842029; background: #f8d7da; border-radius: 2rem; padding: .1rem .6rem; }
 .shelf .taken { font-size: .82rem; color: #5c636a; display: flex; align-items: center; gap: .3rem; }
 .slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
 .slot { min-height: 3.2rem; border: 2px dashed var(--c); border-radius: .6rem; background: #fff; color: #6c757d; font-weight: 600; padding: .2rem .35rem; line-height: 1.15; font-size: .95rem; overflow-wrap: anywhere; }

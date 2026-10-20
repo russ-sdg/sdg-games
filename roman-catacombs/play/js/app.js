@@ -231,7 +231,11 @@ function renderShelves(solo) {
     const how = state.claims[c.id];
     const chip = done
       ? `<button type="button" class="pts done" data-claim="${c.id}" ${E.isManual(state) ? '' : 'disabled'} title="${how === 'later' ? 'Completed after another player' : 'Completed first'}">${pts} pts · ${how === 'later' ? 'after' : 'first'}</button>`
-      : `<span class="pts">${c.first} first / ${c.second} after</span>`;
+      : state.taken[c.id]                                  // someone else got there first: only the lower score is left
+        ? `<span class="pts is-taken" title="${c.first} points was for the first to complete it"><s><span class="visually-hidden">Was </span>${c.first}</s> ${c.second} pts</span>`
+        : `<span class="pts">${c.first} first / ${c.second} after</span>`;
+    const by = E.takenBy(state, c.id);
+    const takenTag = !done && state.taken[c.id] && !E.isManual(state) ? `<span class="taken-tag">Taken${by.length ? ' by ' + esc(by.join(' and ')) : ''}</span>` : '';
     const taken = E.isManual(state) && !done ? `<label class="taken"><input type="checkbox" data-taken="${c.id}" ${state.taken[c.id] ? 'checked' : ''}> Someone has completed this</label>` : '';
     const slots = [0, 1, 2].map((k) => {
       const s = ci * 3 + k, b = state.library[s];
@@ -240,7 +244,7 @@ function renderShelves(solo) {
       const disabled = solo && !target ? 'disabled' : '';
       return `<button type="button" class="slot${b !== null ? ' has' : ''}${target ? ' target' : ''}" data-slot="${s}" ${disabled} aria-label="${esc(label)}">${b === null ? (target ? 'Place here' : 'Empty') : esc(BOOKS[b].name)}</button>`;
     }).join('');
-    return `<section class="shelf" style="${colors(c)}" aria-label="${esc(c.label)}"><div class="shelf-head"><h2>${esc(c.label)}</h2>${chip}${taken}</div><div class="slots">${slots}</div></section>`;
+    return `<section class="shelf" style="${colors(c)}" aria-label="${esc(c.label)}"><div class="shelf-head"><h2>${esc(c.label)}</h2>${chip}${takenTag}${taken}</div><div class="slots">${slots}</div></section>`;
   }).join('');
 }
 

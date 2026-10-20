@@ -93,6 +93,7 @@ test('finishing a category in an earlier round makes yours count as "after"; fin
   assert.equal(t.claims.pentateuch, 'first');
   assert.equal(t.rivals[0].claims.pentateuch, 'first');
   assert.equal(t.completed.pentateuch, true);
+  assert.deepEqual(E.takenBy(t, 'pentateuch'), ['You', 'Ruth'], 'the shelf can say who took it');
   assert.ok(t.log.some((l) => /You and Ruth complete Pentateuch first/.test(l.text)));
 });
 
@@ -198,4 +199,16 @@ test('bots mode still behaves (the table changes did not break it)', () => {
   assert.equal(E.isManual(E.newState()), true);
   assert.equal(E.isManual(T.newTableGame({ seed: 1 })), true);
   assert.equal(E.isRound(E.newState()), false);
+});
+
+test('a category a computer completes alone is recorded as taken by it, and not by anyone else', () => {
+  let s = T.newTable({ bots: 1, seed: 21 });
+  s = T.flipRound(s);
+  s.rivals[0].library[0] = B('Genesis'); s.rivals[0].library[1] = B('Exodus'); s.rivals[0].library[2] = B('Leviticus');
+  assert.deepEqual(E.takenBy(s, 'pentateuch'), [], 'nobody has taken it yet');
+  s = T.flipRound(s);
+  assert.ok(s.taken.pentateuch);
+  assert.deepEqual(E.takenBy(s, 'pentateuch'), ['Ruth']);
+  assert.deepEqual(E.takenBy(s, 'wisdom'), []);
+  assert.deepEqual(E.takenBy({}, 'wisdom'), [], 'older saved games have no record of who');
 });
