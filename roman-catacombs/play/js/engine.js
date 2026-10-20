@@ -51,6 +51,7 @@ export function newState({ mode = MODES.scorecard, seed = 1, rivals = [] } = {})
     // computer opponents (mode 'bots'): each has its own library, claims and `taken`, like the human's
     rivals: rivals.map((r) => ({ name: r.name, skill: r.skill, library: Array(SLOTS).fill(null), claims: {}, taken: {} })),
     completed: {},                                // category id -> true once anyone has completed it in an earlier round
+    completedBy: {},                              // category id -> who completed it first (names), for the shelves
     log: [],
     endReason: null,                              // 'complete' | 'stuck' | 'long'
   };
@@ -133,6 +134,8 @@ export function setClaim(state, catId, how) {            // how: 'first' | 'late
   s.claims[catId] = how;
   return s;
 }
+// Who completed this category first, if the game knows (computer opponents); empty when it was said at the table.
+export const takenBy = (state, catId) => (state.completedBy && state.completedBy[catId]) || [];
 export function setTaken(state, catId, taken) {           // another player has completed this category
   const s = clone(state);
   s.taken[catId] = !!taken;
