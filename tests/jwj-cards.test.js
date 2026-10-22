@@ -26,3 +26,12 @@ test('every card has a group, alt text and both image sizes on disk', () => {
     for (const w of c.widths) assert.ok(fs.existsSync(path.join(ROOT, 'journeys-with-jesus', `${c.src}-${w}.webp`)), `${c.id} is missing its ${w}px image`);
   }
 });
+
+test('the copies add up to the box: 59 Place Cards, 13 Journey Cards, 12 tokens, and the expansion\'s 26 + 10', () => {
+  const sum = {};
+  for (const c of data.cards) sum[c.group] = (sum[c.group] || 0) + (c.copies || 1);
+  assert.equal(sum.places, 59);
+  assert.equal(sum.journeys, 13);
+  assert.equal(sum.tokens, 12);
+  assert.equal(sum.expansion, 36);
+});

@@ -38,17 +38,18 @@
   var counts = {};
   var back = data.back && { src: data.back.src, widths: data.back.widths, w: data.back.w, h: data.back.h, group: 'back', name: 'Card back' };
   if (back) counts.back = 1;
-  data.cards.forEach(function (c) { counts[c.group] = (counts[c.group] || 0) + 1; });
+  data.cards.forEach(function (c) { counts[c.group] = (counts[c.group] || 0) + (c.copies || 1); });   // a picture printed several times counts each copy
   var chips = host.querySelector('.pp-chips'), grid = host.querySelector('.pp-grid');
   var order = [{ id: 'all', label: 'All', n: data.total }].concat(data.groups.filter(function (g) { return counts[g.id]; })
     .map(function (g) { return { id: g.id, label: g.label, n: counts[g.id] }; }))
     .concat(back ? [{ id: 'back', label: 'Card back', n: 1 }] : []);
   chips.innerHTML = order.map(function (o, i) {
-    return '<button type="button" class="pp-chip" data-filter="' + o.id + '" aria-pressed="' + (i === 0) + '">' + esc(o.label) + ' <span>' + o.n + '</span></button>';
+    var n = o.id === 'all' && data.countAll === false ? '' : ' <span>' + o.n + '</span>';
+    return '<button type="button" class="pp-chip" data-filter="' + o.id + '" aria-pressed="' + (i === 0) + '">' + esc(o.label) + n + '</button>';
   }).join('');
   grid.innerHTML = data.cards.concat(back ? [back] : []).map(function (c) {
     return '<li data-group="' + c.group + '"><button type="button" class="pp-zoom" data-zoom="' + full(c) + '" data-caption="' + esc(title(c)) + '">' +
-      img(c, '(max-width: 560px) 46vw, (max-width: 860px) 30vw, 260px', true) + '</button><p>' + esc(title(c)) + '</p></li>';
+      img(c, '(max-width: 560px) 46vw, (max-width: 860px) 30vw, 260px', true) + '</button><p>' + esc(title(c)) + (c.copies > 1 ? ' <span class="pp-copies">&times;' + c.copies + '</span>' : '') + '</p></li>';
   }).join('');
   chips.addEventListener('click', function (e) {
     var b = e.target.closest('[data-filter]');

@@ -33,12 +33,14 @@ EXPANSION_JOURNEYS = {'BethanyBJBethany', 'BethanyBJJerusalem', 'CanaBethanyBJ',
                       'CountrysideJerusalem', 'EphraimBethany', 'GennesaretJerusalem', 'SycharCountryside'}
 # Place Cards that come only in the expansion pack (one file per card), and the pictures printed several times (file -> copies)
 EXPANSION_PLACES = {'BethanyBeyondJordan2', 'BethanyBeyondJordan3', 'BethanyBeyondJordan4', 'Caesarea', 'Countryside1', 'Countryside2', 'Emmaus',
-                    'Jericho3', 'Joppa', 'Nain3', 'Sychar2', 'Sychar3', 'Samaria'}
-SPLIT_COPIES = {'Ephraim': (2, 1), 'Pella': (1, 1), 'Galilee': (4, 6), 'Judea': (2, 5)}   # name -> (copies in the game, extra copies in the expansion)
+                    'Jericho3', 'Joppa', 'Nain3', 'Sychar2', 'Sychar3'}
+SPLIT_COPIES = {'Ephraim': (2, 1), 'Pella': (1, 1), 'Galilee': (4, 6), 'Judea': (2, 5), 'Samaria': (2, 1)}   # name -> (copies in the game, extra copies in the expansion)
+SKIP = {'Samaria'}           # an extra Samaria picture that is not one of the cards (the Samaria cards are the SAMARIAx3 picture)
+TOKEN_COPIES = 4               # 12 tokens: 4 of each of the three verses
 TOKENS = {'scripture-token-front01v2': 'Pr 30:5a', 'scripture-token-front03v2': 'Col 3:16a', 'scripture-token-front05v2': 'Ps 119:11'}
-GROUPS = [('journeys', 'Journey Cards', 'The journeys Jesus took'), ('places', 'Place Cards', 'One for each place'),
-          ('wild', 'Wild Cards', 'Stand in for any place in a region'), ('tokens', 'Scripture Memory Tokens', 'Earned by reciting Scripture'),
-          ('backs', 'Card backs', 'The backs of the cards'), ('expansion', 'Gospel of John Expansion Pack', 'The Journey and Place Cards that appear only in John')]
+GROUPS = [('journeys', 'Journey Cards', 'The journeys Jesus took'), ('places', 'Place Cards', 'Places, plus the Region and National Wild Cards'),
+          ('tokens', 'Scripture Memory Tokens', 'Earned by reciting Scripture'),
+          ('backs', 'Card backs', 'The backs of the cards and tokens'), ('expansion', 'Gospel of John Expansion Pack', 'The Journey and Place Cards that appear only in John')]
 SYNOPTIC_NOTE = ''
 
 def split_places(token):
@@ -83,52 +85,59 @@ def parse(n):
     if not parts: raise SystemExit(f'cannot read the name of {n}')
     return ('journey', parts) if len(parts) == 2 else ('place', parts[0])
 
-def copies(what, n):
-    """' (x3)' for a picture printed several times; the split between the game and the expansion where it is both."""
-    if what in SPLIT_COPIES:
-        a, b = SPLIT_COPIES[what]; return f' ({a} in the game, {b} more in the expansion)'
+def n_copies(n):
+    """How many times the picture is printed (X3 in the file name), 1 if it is not repeated."""
     m = re.search(r'[xX](\d+)', re.sub(r'[Vv]\d+$', '', n))
-    return f' (x{m.group(1)})' if m and int(m.group(1)) > 1 else ''
+    return int(m.group(1)) if m else 1
 
 def entries(src):
+    """Every picture to show: dict(id, group, name, copies, file, kind, alt, [img]). A picture used by both the game and the
+    expansion appears twice (img names the id of the picture file the second one shares)."""
     names = sorted(f[:-4] for f in os.listdir(src) if f.endswith('.png'))
+    bare = lambda n: re.sub(r'[Vv]\d+$', '', n)
+    names = [n for n in names if bare(n) not in SKIP]
     per_place = {}
     for n in names:
         k = parse(n)
         if k and k[0] == 'place':
-            g = 'expansion' if re.sub(r'[Vv]\d+$', '', n) in EXPANSION_PLACES else 'places'
+            g = 'expansion' if bare(n) in EXPANSION_PLACES else 'places'
             per_place[(k[1], g)] = per_place.get((k[1], g), 0) + 1
     out, seen = [], {}
     for n in names:
         path = os.path.join(src, n + '.png')
         if n in TOKENS:
-            out.append(dict(id='token-' + slug(TOKENS[n]), group='tokens', name='Scripture Memory Token: ' + TOKENS[n], file=path, kind='token',
+            out.append(dict(id='token-' + slug(TOKENS[n]), group='tokens', name='Scripture Memory Token: ' + TOKENS[n], copies=TOKEN_COPIES, file=path, kind='token',
                             alt=f'A gold hexagonal Scripture Memory Token with the verse {TOKENS[n]}.')); continue
         if n.startswith('scripture-token-back'):
-            out.append(dict(id='token-back', group='tokens', name='Scripture Memory Token (back)', file=path, kind='token', alt='The back of a gold hexagonal Scripture Memory Token.')); continue
+            out.append(dict(id='token-back', group='backs', name='Scripture Memory Token back', file=path, kind='token', alt='The back of a gold hexagonal Scripture Memory Token.')); continue
         if n.startswith('JourneysBack'):
             out.append(dict(id='back-journey', group='backs', name='Journey Card back', file=path, kind='card', alt='The back of a Journey Card: olive green with the Journeys with Jesus logo.')); continue
         if n.startswith('PlacesBack'):
             out.append(dict(id='back-place', group='backs', name='Place Card back', file=path, kind='card', alt='The back of a Place Card: pale yellow with the Journeys with Jesus logo.')); continue
         kind, what = parse(n)
-        base_name = re.sub(r'[Vv]\d+$', '', n)
-        if kind == 'region':
-            out.append(dict(id='wild-' + slug(what), group='wild', name=f'{what} Wild Card' + copies(what, n), file=path, kind='card', alt=f'The {what} Wild Card, which stands in for any place in that region.'))
-        elif kind == 'journey':
+        if kind == 'journey':
             a, b = what
-            grp = 'expansion' if re.sub(r'[Vv]\d+$', '', n) in EXPANSION_JOURNEYS else 'journeys'
+            grp = 'expansion' if bare(n) in EXPANSION_JOURNEYS else 'journeys'
             out.append(dict(id=slug(f'{a} to {b}'), group=grp, name=f'{a} to {b}', file=path, kind='card',
                             alt=f'The Journey Card from {a} to {b}, with a map of the land and the points in the four corners.'))
+            continue
+        if kind == 'region':
+            pid, label, alt = 'wild-' + slug(what), f'{what} Wild Card', f'The {what} Wild Card, which stands in for any place in that region.'
+            grp, total = 'places', n_copies(n)
         else:
             seen[what] = seen.get(what, 0) + 1
-            grp = 'expansion' if base_name in EXPANSION_PLACES else 'places'
-            idx = seen[what]
-            total = per_place[(what, grp)]
-            if grp == 'expansion': idx = sum(1 for m in names if parse(m) == ('place', what) and re.sub(r'[Vv]\d+$', '', m) in EXPANSION_PLACES and m <= n)
-            if total > 1: label = f'{what} ({idx} of {total})'
-            else: label = what + copies(what, n)
-            out.append(dict(id=slug(what) + (f'-{seen[what]}' if sum(v for (w, g), v in per_place.items() if w == what) > 1 else ''), group=grp, name=label,
-                            file=path, kind='card', alt=f'A Place Card for {what}, with a verse from the World English Bible.'))
+            grp = 'expansion' if bare(n) in EXPANSION_PLACES else 'places'
+            idx = sum(1 for m in names if parse(m) == ('place', what) and (bare(m) in EXPANSION_PLACES) == (grp == 'expansion') and m <= n)
+            many = per_place[(what, grp)] > 1
+            pid = slug(what) + (f'-{seen[what]}' if sum(v for (w, g), v in per_place.items() if w == what) > 1 else '')
+            label = f'{what} ({idx} of {per_place[(what, grp)]})' if many else what
+            alt, total = f'A Place Card for {what}, with a verse from the World English Bible.', n_copies(n)
+        if what in SPLIT_COPIES:
+            a, b = SPLIT_COPIES[what]
+            out.append(dict(id=pid, group='places', name=label, copies=a, file=path, kind='card', alt=alt))
+            out.append(dict(id=pid + '-expansion', img=pid, group='expansion', name=label, copies=b, file=path, kind='card', alt=alt))
+        else:
+            out.append(dict(id=pid, group=grp, name=label, copies=total, file=path, kind='card', alt=alt))
     return out
 
 def main():
@@ -136,6 +145,10 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     cards, wanted = [], set()
     for e in entries(args.src):
+        if e.get('img'):
+            probe = Image.open(os.path.join(OUT, f"{e['img']}-{WIDTHS[-1]}.webp"))
+            cards.append({'id': e['id'], 'group': e['group'], 'name': e['name'], 'alt': e['alt'], 'copies': e['copies'], 'src': f"../assets/jwj/cards/{e['img']}", 'widths': list(WIDTHS), 'w': probe.width, 'h': probe.height})
+            continue
         im = None
         for w in WIDTHS:
             fn = f"{e['id']}-{w}.webp"; wanted.add(fn)
@@ -144,12 +157,12 @@ def main():
             t = im if w >= im.width else im.resize((w, round(w * im.height / im.width)), Image.LANCZOS)
             t.save(os.path.join(OUT, fn), 'WEBP', quality=86, method=6)
         probe = Image.open(os.path.join(OUT, f"{e['id']}-{WIDTHS[-1]}.webp"))
-        cards.append({'id': e['id'], 'group': e['group'], 'name': e['name'], 'alt': e['alt'], 'src': f"../assets/jwj/cards/{e['id']}", 'widths': list(WIDTHS), 'w': probe.width, 'h': probe.height})
+        cards.append({'id': e['id'], 'group': e['group'], 'name': e['name'], 'alt': e['alt'], 'copies': e.get('copies', 1), 'src': f"../assets/jwj/cards/{e['id']}", 'widths': list(WIDTHS), 'w': probe.width, 'h': probe.height})
     for f in os.listdir(OUT):
         if f.endswith('.webp') and f not in wanted: os.remove(os.path.join(OUT, f))
     order = [g[0] for g in GROUPS]
     cards.sort(key=lambda c: (order.index(c['group']), c['name']))
-    data = {'total': len(cards), 'expected': len(cards), 'noun': 'cards', 'groups': [{'id': g, 'label': l, 'title': t} for g, l, t in GROUPS], 'cards': cards}
+    data = {'total': len(cards), 'expected': len(cards), 'noun': 'cards', 'countAll': False, 'groups': [{'id': g, 'label': l, 'title': t} for g, l, t in GROUPS], 'cards': cards}
     with open(DATA, 'w') as fh:
         fh.write('// Generated by journeys-with-jesus/tools/build-cards.py. Do not edit by hand.\n')
         fh.write('window.SDG_CARDS = ' + json.dumps(data, indent=1) + ';\n')
