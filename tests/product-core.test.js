@@ -68,3 +68,13 @@ test('mailchimp messages become one friendly sentence', () => {
   assert.equal(C.friendlyMailchimpMessage('error', ''), 'Sorry, that did not work. Please try again.');
   assert.ok(!/</.test(C.friendlyMailchimpMessage('error', '1 - <b>Bad</b> &amp; wrong')));
 });
+
+test('findProductByVariant finds the product that has a variant from a checkout link', () => {
+  const gid = (n) => Buffer.from(`gid://shopify/ProductVariant/${n}`).toString('base64');
+  const products = [{ id: 'A', variants: [{ id: gid(111) }] }, { id: 'B', variants: [{ id: gid(222) }, { id: gid('44097626865813?key=x') }] }];
+  assert.equal(C.findProductByVariant(products, '44097626865813').id, 'B');
+  assert.equal(C.findProductByVariant(products, 111).id, 'A');
+  assert.equal(C.findProductByVariant(products, '5'), null, 'a number that is only the end of another one does not match');
+  assert.equal(C.findProductByVariant(products, 'abc'), null);
+  assert.equal(C.findProductByVariant(null, '1'), null);
+});
