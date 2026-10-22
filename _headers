@@ -17,6 +17,8 @@
   Cache-Control: no-cache
 /journeys-with-jesus/jwj.css
   Cache-Control: no-cache
+/journeys-with-jesus/cards-data.js
+  Cache-Control: no-cache
 /css/about.css
   Cache-Control: no-cache
 /css/home.css
