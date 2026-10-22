@@ -162,7 +162,8 @@
             client.product.fetchAll(250).then(function (products) {
               var p = core.findProductByVariant(products, variant);
               if (p) make(node, p.id);
-            }).catch(function () { /* keep the plain checkout link */ });
+              else if (window.console) console.warn('SDG: no product in the Buy Button sales channel has variant ' + variant + '; keeping the checkout link.');
+            }).catch(function (err) { if (window.console) console.warn('SDG: product lookup failed; keeping the checkout link.', err); });
             return;
           }
           var id = node.getAttribute('data-product-id') || cfg.productId;
