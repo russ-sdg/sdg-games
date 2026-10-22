@@ -1,0 +1,30 @@
+/* Journeys with Jesus: page-specific styles (the shared design is css/product-page.css) */
+.jj-cta { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .9rem; margin: 1rem 0 .6rem; }
+.jj-cta .pp-shopify, .jj-cta .pp-shopify > *, .jj-cta .shopify-buy__product, .jj-cta .shopify-buy__btn-wrapper { margin: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; max-width: none !important; }
+.jj-cta .shopify-buy__btn { margin: 0 !important; min-height: 3.1rem; }
+.jj-cta .pp-btn { min-height: 3.1rem; display: inline-flex; align-items: center; margin: 0; }
+.jj-hero-art { margin: 0; }
+.jj-hero-art img { display: block; width: 100%; height: auto; border-radius: var(--pp-radius); box-shadow: 0 18px 44px rgba(0,0,0,.45); background: #fff; }
+.jj-two { display: grid; grid-template-columns: 1.3fr 1fr; gap: 2.2rem; align-items: start; }
+.jj-verse { border-left: 4px solid var(--pp-accent); margin: 0 0 1.2rem; padding: .2rem 0 .2rem 1rem; font-size: 1.2rem; font-style: italic; color: var(--pp-primary); }
+.jj-verse cite { display: block; font-size: .95rem; font-style: normal; color: var(--pp-muted); margin-top: .2rem; }
+.jj-places { color: var(--pp-muted); }
+.jj-fig { margin: 0; text-align: center; }
+.jj-fig .pp-zoom { display: block; width: 100%; border-radius: 10px; overflow: hidden; box-shadow: 0 6px 18px rgba(31,42,18,.28); background: #fff; }
+.jj-fig img { display: block; width: 100%; height: auto; }
+.jj-fig.is-small { max-width: 240px; margin-left: auto; margin-right: auto; }
+.jj-cap { margin-top: .5rem; color: var(--pp-muted); font-size: .92rem; text-align: center; }
+.jj-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: start; margin: 1rem 0; }
+.jj-row.is-narrow { grid-template-columns: 1fr 240px; }
+.pp-acc .body h4 { font-size: 1.05rem; margin: 1.1rem 0 .4rem; }
+.pp-acc .body ol, .pp-acc .body ul { padding-left: 1.3rem; }
+.jj-faq h3 { font-size: 1rem; margin: 0; font-weight: 700; }
+.jj-faq summary h3 { flex: 1; }
+.jj-expansion { text-decoration: none; color: inherit; display: flex; gap: 1rem; align-items: center; background: var(--pp-surface); border: 1px solid var(--pp-line); border-radius: var(--pp-radius); padding: .8rem 1rem; margin-top: 1rem; }
+.jj-expansion img { width: 110px; height: auto; flex: none; }
+.jj-buy-note { margin: 0 0 1rem; opacity: .95; }
+.jj-alt { margin-top: 1.2rem; }
+@media (max-width: 860px) {
+  .jj-two, .jj-row, .jj-row.is-narrow { grid-template-columns: 1fr; }
+  .jj-cta { justify-content: center; }
+}
