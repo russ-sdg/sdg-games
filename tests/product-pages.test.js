@@ -92,7 +92,7 @@ for (const page of PAGES) {
   });
 
   test(`${page}: ${BOOKS.includes(page) ? 'every format\'s price matches the structured data' : 'one price everywhere'}, a real launch date, and cache-busted shared assets`, () => {
-    const shown = new Set([...html.replace(/<s>[\s\S]*?<\/s>/g, '').matchAll(/\$\d+\.\d\d/g)].map((m) => m[0]));   // struck-through list prices don't count
+    const shown = new Set([...html.replace(/<s>[\s\S]*?<\/s>/g, '').replace(/<span class="pp-extra-price">[\s\S]*?<\/span>/g, '').matchAll(/\$\d+\.\d\d/g)].map((m) => m[0]));   // struck-through list prices and a separately sold add-on (marked pp-extra-price) don't count
     if (BOOKS.includes(page)) {
       const offers = JSON.parse(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/.exec(html)[1]).offers;
       assert.deepEqual([...shown].sort(), [...new Set(offers.map((o) => '$' + o.price))].sort());
@@ -114,3 +114,7 @@ for (const page of PAGES) {
     assert.ok(html.includes(label), `page text does not mention ${label}`);
   });
 }
+
+test('journeys-with-jesus/index.html: the Gospel of John Expansion Pack links to the SDG shop checkout', () => {
+  assert.match(read('journeys-with-jesus/index.html'), /href="https:\/\/bd30ce-2\.myshopify\.com\/cart\/44097626865813:1\?channel=buy_button"/);
+});
