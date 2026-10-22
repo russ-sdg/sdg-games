@@ -115,6 +115,8 @@ for (const page of PAGES) {
   });
 }
 
-test('journeys-with-jesus/index.html: the Gospel of John Expansion Pack links to the SDG shop checkout', () => {
-  assert.match(read('journeys-with-jesus/index.html'), /href="https:\/\/bd30ce-2\.myshopify\.com\/cart\/44097626865813:1\?channel=buy_button"/);
+test('journeys-with-jesus/index.html: the expansion pack is a Shopify button in the same cart as the game, with a plain checkout link as fallback', () => {
+  const html = read('journeys-with-jesus/index.html');
+  assert.match(html, /class="pp-shopify" data-state="live" data-variant-id="44097626865813"[^>]*><a [^>]*href="https:\/\/bd30ce-2\.myshopify\.com\/cart\/44097626865813:1\?channel=buy_button"/);
+  assert.ok(!/data-product-id/.test(html), 'a spot with only a variant must not also name the game as its product');
 });

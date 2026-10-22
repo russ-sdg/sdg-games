@@ -8,7 +8,7 @@
   data.groups.forEach(function (g) { groups[g.id] = g; });
   var isDay = function (id) { return /^day\d$/.test(id); };
   var title = function (c) { var g = groups[c.group]; return isDay(c.group) ? g.label + ' · ' + c.name : c.name; };
-  var alt = function (c) { var g = groups[c.group]; if (c.group === 'back') return 'The back of the cards: an ancient catacomb painting of Noah in the ark.'; return isDay(c.group) ? g.label + ' card: ' + c.name + '.' : c.name + ' card.'; };
+  var alt = function (c) { if (c.alt) return c.alt; var g = groups[c.group]; if (c.group === 'back') return 'The back of the cards: an ancient catacomb painting of Noah in the ark.'; return isDay(c.group) ? g.label + ' card: ' + c.name + '.' : c.name + ' card.'; };
   var srcset = function (c) { return c.widths.map(function (w) { return c.src + '-' + w + '.webp ' + w + 'w'; }).join(', '); };
   var full = function (c) { return c.src + '-' + c.widths[c.widths.length - 1] + '.webp'; };
   var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); };

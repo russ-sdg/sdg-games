@@ -137,6 +137,20 @@
       </figure>
     </div>
     <p class="jj-also"><b>Also in the box:</b> Region and national Wild Cards, and 12 Scripture Memory Tokens (worth 5 points each if you keep them).</p>
+
+    <!-- Collapsed by default. Filled from cards-data.js (made by journeys-with-jesus/tools/build-cards.py) -->
+    <div class="pp-acc jj-fold">
+      <details id="all-cards">
+        <summary>Browse the cards</summary>
+        <div class="body">
+          <div class="pp-gallery" data-gallery hidden>
+            <h3 data-gallery-title>A closer look at the cards</h3>
+            <div class="pp-chips" role="group" aria-label="Show cards from"></div>
+            <ul class="pp-grid"></ul>
+          </div>
+        </div>
+      </details>
+    </div>
   </div>
 </section>
 
@@ -238,14 +252,18 @@
     <ul>
       <li>We read often in the gospels about Jesus&rsquo; compassion. Similarly show compassion and grace to those in your game. For example, for young players, simply reading the scripture may be enough of an accomplishment to earn a <strong>Scripture Memory Token</strong>.</li>
       <li>When first learning to play, or in settings where everyone is focused on learning and having fun more than winning, players can place all of their <strong>Place Cards</strong> face up in front of them and players can help each other find completed journeys.</li>
-      <li>A <a href="https://www.thegamecrafter.com/games/jwj-gospel-of-john-expansion">Gospel of John Expansion Pack</a> is available from <a href="https://bd30ce-2.myshopify.com/cart/44097626865813:1?channel=buy_button">the SDG Biblical Wisdom shop</a> and from The Game Crafter, and adds 10 additional <strong>Journey Cards</strong> and 26 additional <strong>Place Cards</strong>. These cards are simply added to the cards already in the game. All the other rules still apply.</li>
+      <li>A <a href="https://www.thegamecrafter.com/games/jwj-gospel-of-john-expansion">Gospel of John Expansion Pack</a> is available from <a href="#expansion">the SDG Biblical Wisdom shop</a> and from The Game Crafter, and adds 10 additional <strong>Journey Cards</strong> and 26 additional <strong>Place Cards</strong>. These cards are simply added to the cards already in the game. All the other rules still apply.</li>
     </ul>
-    <div class="jj-expansion">
+    <div class="jj-expansion" id="expansion">
       <img src="../assets/jwj/expansion-box.webp" width="471" height="428" loading="lazy" alt="The Gospel of John Expansion Pack box." />
       <div>
         <strong>Gospel of John Expansion Pack</strong>
         <p>10 more Journey Cards and 26 more Place Cards. <span class="pp-extra-price"><strong>$12.99</strong></span></p>
-        <p class="jj-exp-actions"><a class="pp-btn pp-btn-primary" href="https://bd30ce-2.myshopify.com/cart/44097626865813:1?channel=buy_button">Buy from the SDG shop</a> <a href="https://www.thegamecrafter.com/games/jwj-gospel-of-john-expansion">or order from The Game Crafter</a></p>
+        <div class="jj-exp-actions">
+          <!-- The button below is a Shopify button when it loads, so the game and the expansion pack share one cart; the plain checkout link is the fallback. -->
+          <div class="pp-shopify" data-state="live" data-variant-id="44097626865813" data-button-text="Buy Expansion Pack"><a class="pp-btn pp-btn-primary" href="https://bd30ce-2.myshopify.com/cart/44097626865813:1?channel=buy_button">Buy from the SDG shop</a></div>
+          <a href="https://www.thegamecrafter.com/games/jwj-gospel-of-john-expansion">or order from The Game Crafter</a>
+        </div>
       </div>
     </div>
   </div>
@@ -262,7 +280,7 @@
       </details>
       <details>
         <summary><h3>Are the eliminated cards still available?</h3></summary>
-        <div class="body"><p>All of the eliminated <strong>Journey Cards</strong> and <strong>Place Cards</strong> are available as a <em>Gospel of John Expansion Pack</em> which can be ordered from <a href="https://bd30ce-2.myshopify.com/cart/44097626865813:1?channel=buy_button">the SDG Biblical Wisdom shop</a> or from <a href="https://www.thegamecrafter.com/games/jwj-gospel-of-john-expansion">The Game Crafter</a>.</p></div>
+        <div class="body"><p>All of the eliminated <strong>Journey Cards</strong> and <strong>Place Cards</strong> are available as a <em>Gospel of John Expansion Pack</em> which can be ordered from <a href="#expansion">the SDG Biblical Wisdom shop</a> or from <a href="https://www.thegamecrafter.com/games/jwj-gospel-of-john-expansion">The Game Crafter</a>.</p></div>
       </details>
       <details>
         <summary><h3>From which Bible translation are the scriptures on the cards taken?</h3></summary>
@@ -329,6 +347,8 @@ window.SDG_PRODUCT = {
 };
 </script>
 <script src="../js/product-core.js?v=20261026"></script>
+<script src="cards-data.js?v=20261108"></script>
+<script src="../js/product-gallery.js?v=20261108"></script>
 <script src="../js/product-page.js?v=20261026"></script>
 </body>
 </html>

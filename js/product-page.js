@@ -5,6 +5,7 @@
 //   mailchimpTags optional Mailchimp tag ids to put on new subscribers (e.g. one per game)
 //   productId     Shopify product id; setting it switches the page from "notify me" to "buy now"
 //   buttonText    text of the Shopify buy button
+//   (a spot may also say data-variant-id, the number in a checkout link, when only that is known: the product is looked up from it)
 // A ".pp-shopify" spot may carry its own data-product-id and data-button-text (the book pages sell several formats).
 (function () {
   var core = window.SDGCore;
@@ -128,7 +129,7 @@
 
   // ---- launch day: swap "notify me" for the Shopify buy button -----------------------------------
   var spots = [].slice.call(document.querySelectorAll('.pp-shopify'));
-  if (cfg.productId || spots.some(function (n) { return n.getAttribute('data-product-id'); })) {
+  if (cfg.productId || spots.some(function (n) { return n.getAttribute('data-product-id') || n.getAttribute('data-variant-id'); })) {
     root.classList.add('pp-live');
     document.querySelectorAll('[data-state=soon]').forEach(function (el) { el.hidden = true; });
     document.querySelectorAll('[data-state=live]').forEach(function (el) { el.hidden = false; });
@@ -143,9 +144,8 @@
     var init = function () {
       var client = window.ShopifyBuy.buildClient({ domain: 'bd30ce-2.myshopify.com', storefrontAccessToken: '7bf5f03bf3c7ba399d3ef67f8250c103' });
       window.ShopifyBuy.UI.onReady(client).then(function (ui) {
-        spots.forEach(function (node) {
-          var id = node.getAttribute('data-product-id') || cfg.productId;
-          if (!id) return;
+        // Every button is made by the same ui, so they share one cart: a game and its expansion go through one checkout.
+        var make = function (node, id) {
           ui.createComponent('product', {
             id: id, node: node, moneyFormat: '%24%7B%7Bamount%7D%7D',
             options: { product: {
@@ -155,6 +155,18 @@
               contents: { img: false, title: false, price: false },
               text: { button: node.getAttribute('data-button-text') || cfg.buttonText || 'Buy now' } } },
           });
+        };
+        spots.forEach(function (node) {
+          var variant = node.getAttribute('data-variant-id');
+          if (variant && !node.getAttribute('data-product-id')) {      // only the checkout-link number is known: find its product (what is already in the spot stays if that fails)
+            client.product.fetchAll(250).then(function (products) {
+              var p = core.findProductByVariant(products, variant);
+              if (p) make(node, p.id);
+            }).catch(function () { /* keep the plain checkout link */ });
+            return;
+          }
+          var id = node.getAttribute('data-product-id') || cfg.productId;
+          if (id) make(node, id);
         });
       });
     };

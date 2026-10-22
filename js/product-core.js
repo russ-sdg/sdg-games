@@ -73,5 +73,14 @@
     return plain || 'Sorry, that did not work. Please try again.';
   }
 
-  return { launchLabel, daysUntil, countdownText, isValidEmail, mailchimpJsonpUrl, friendlyMailchimpMessage };
+  // The Shopify Buy Button SDK names products and variants with base64 ids ("gid://shopify/ProductVariant/<number>").
+  // Given the products it lists and the plain number from a checkout link (cart/<variant>:1), find the product that has that variant.
+  const decode = (id) => { try { return typeof atob === 'function' ? atob(id) : Buffer.from(id, 'base64').toString('utf8'); } catch (e) { return ''; } };
+  function findProductByVariant(products, variantNumber) {
+    const want = String(variantNumber).trim();
+    if (!/^\d+$/.test(want)) return null;
+    return (products || []).find((p) => (p.variants || []).some((v) => decode(String(v.id)).split('?')[0].endsWith('/' + want))) || null;
+  }
+
+  return { launchLabel, daysUntil, countdownText, isValidEmail, mailchimpJsonpUrl, friendlyMailchimpMessage, findProductByVariant };
 });
