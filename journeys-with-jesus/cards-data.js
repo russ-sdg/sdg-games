@@ -32,7 +32,7 @@ window.SDG_CARDS = {
   {
    "id": "expansion",
    "label": "Gospel of John Expansion Pack",
-   "title": "Journeys that appear only in John"
+   "title": "The Journey and Place Cards that appear only in John"
   }
  ],
  "cards": [
@@ -247,48 +247,9 @@ window.SDG_CARDS = {
   {
    "id": "bethany-beyond-jordan-1",
    "group": "places",
-   "name": "Bethany Beyond Jordan (1 of 4)",
+   "name": "Bethany Beyond Jordan",
    "alt": "A Place Card for Bethany Beyond Jordan, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/bethany-beyond-jordan-1",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
-   "id": "bethany-beyond-jordan-2",
-   "group": "places",
-   "name": "Bethany Beyond Jordan (2 of 4)",
-   "alt": "A Place Card for Bethany Beyond Jordan, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/bethany-beyond-jordan-2",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
-   "id": "bethany-beyond-jordan-3",
-   "group": "places",
-   "name": "Bethany Beyond Jordan (3 of 4)",
-   "alt": "A Place Card for Bethany Beyond Jordan, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/bethany-beyond-jordan-3",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
-   "id": "bethany-beyond-jordan-4",
-   "group": "places",
-   "name": "Bethany Beyond Jordan (4 of 4)",
-   "alt": "A Place Card for Bethany Beyond Jordan, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/bethany-beyond-jordan-4",
    "widths": [
     480,
     755
@@ -328,19 +289,6 @@ window.SDG_CARDS = {
    "name": "Bethsaida (2 of 2)",
    "alt": "A Place Card for Bethsaida, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/bethsaida-2",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
-   "id": "caesarea",
-   "group": "places",
-   "name": "Caesarea",
-   "alt": "A Place Card for Caesarea, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/caesarea",
    "widths": [
     480,
     755
@@ -466,48 +414,9 @@ window.SDG_CARDS = {
    "h": 1055
   },
   {
-   "id": "countryside-1",
-   "group": "places",
-   "name": "Countryside (1 of 2)",
-   "alt": "A Place Card for Countryside, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/countryside-1",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
-   "id": "countryside-2",
-   "group": "places",
-   "name": "Countryside (2 of 2)",
-   "alt": "A Place Card for Countryside, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/countryside-2",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
-   "id": "emmaus",
-   "group": "places",
-   "name": "Emmaus",
-   "alt": "A Place Card for Emmaus, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/emmaus",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
    "id": "ephraim",
    "group": "places",
-   "name": "Ephraim",
+   "name": "Ephraim (2 in the game, 1 more in the expansion)",
    "alt": "A Place Card for Ephraim, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/ephraim",
    "widths": [
@@ -559,7 +468,7 @@ window.SDG_CARDS = {
   {
    "id": "jericho-1",
    "group": "places",
-   "name": "Jericho (1 of 3)",
+   "name": "Jericho (1 of 2)",
    "alt": "A Place Card for Jericho, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/jericho-1",
    "widths": [
@@ -572,22 +481,9 @@ window.SDG_CARDS = {
   {
    "id": "jericho-2",
    "group": "places",
-   "name": "Jericho (2 of 3)",
+   "name": "Jericho (2 of 2)",
    "alt": "A Place Card for Jericho, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/jericho-2",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
-   "id": "jericho-3",
-   "group": "places",
-   "name": "Jericho (3 of 3)",
-   "alt": "A Place Card for Jericho, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/jericho-3",
    "widths": [
     480,
     755
@@ -648,22 +544,9 @@ window.SDG_CARDS = {
    "h": 1055
   },
   {
-   "id": "joppa",
-   "group": "places",
-   "name": "Joppa",
-   "alt": "A Place Card for Joppa, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/joppa",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
    "id": "magdala",
    "group": "places",
-   "name": "Magdala",
+   "name": "Magdala (x3)",
    "alt": "A Place Card for Magdala, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/magdala",
    "widths": [
@@ -689,7 +572,7 @@ window.SDG_CARDS = {
   {
    "id": "nain-1",
    "group": "places",
-   "name": "Nain (1 of 3)",
+   "name": "Nain (1 of 2)",
    "alt": "A Place Card for Nain, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/nain-1",
    "widths": [
@@ -702,22 +585,9 @@ window.SDG_CARDS = {
   {
    "id": "nain-2",
    "group": "places",
-   "name": "Nain (2 of 3)",
+   "name": "Nain (2 of 2)",
    "alt": "A Place Card for Nain, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/nain-2",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
-   "id": "nain-3",
-   "group": "places",
-   "name": "Nain (3 of 3)",
-   "alt": "A Place Card for Nain, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/nain-3",
    "widths": [
     480,
     755
@@ -767,7 +637,7 @@ window.SDG_CARDS = {
   {
    "id": "pella",
    "group": "places",
-   "name": "Pella",
+   "name": "Pella (1 in the game, 1 more in the expansion)",
    "alt": "A Place Card for Pella, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/pella",
    "widths": [
@@ -791,22 +661,9 @@ window.SDG_CARDS = {
    "h": 1055
   },
   {
-   "id": "samaria",
-   "group": "places",
-   "name": "Samaria",
-   "alt": "A Place Card for Samaria, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/samaria",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
    "id": "sychar-1",
    "group": "places",
-   "name": "Sychar (1 of 3)",
+   "name": "Sychar",
    "alt": "A Place Card for Sychar, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/sychar-1",
    "widths": [
@@ -817,35 +674,9 @@ window.SDG_CARDS = {
    "h": 1055
   },
   {
-   "id": "sychar-2",
-   "group": "places",
-   "name": "Sychar (2 of 3)",
-   "alt": "A Place Card for Sychar, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/sychar-2",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
-   "id": "sychar-3",
-   "group": "places",
-   "name": "Sychar (3 of 3)",
-   "alt": "A Place Card for Sychar, with a verse from the World English Bible.",
-   "src": "../assets/jwj/cards/sychar-3",
-   "widths": [
-    480,
-    755
-   ],
-   "w": 755,
-   "h": 1055
-  },
-  {
    "id": "tyre",
    "group": "places",
-   "name": "Tyre",
+   "name": "Tyre (x2)",
    "alt": "A Place Card for Tyre, with a verse from the World English Bible.",
    "src": "../assets/jwj/cards/tyre",
    "widths": [
@@ -858,7 +689,7 @@ window.SDG_CARDS = {
   {
    "id": "wild-decapolis",
    "group": "wild",
-   "name": "Decapolis Wild Card",
+   "name": "Decapolis Wild Card (x2)",
    "alt": "The Decapolis Wild Card, which stands in for any place in that region.",
    "src": "../assets/jwj/cards/wild-decapolis",
    "widths": [
@@ -871,7 +702,7 @@ window.SDG_CARDS = {
   {
    "id": "wild-galilee",
    "group": "wild",
-   "name": "Galilee Wild Card",
+   "name": "Galilee Wild Card (4 in the game, 6 more in the expansion)",
    "alt": "The Galilee Wild Card, which stands in for any place in that region.",
    "src": "../assets/jwj/cards/wild-galilee",
    "widths": [
@@ -884,7 +715,7 @@ window.SDG_CARDS = {
   {
    "id": "wild-israel-national",
    "group": "wild",
-   "name": "Israel National Wild Card",
+   "name": "Israel National Wild Card (x6)",
    "alt": "The Israel National Wild Card, which stands in for any place in that region.",
    "src": "../assets/jwj/cards/wild-israel-national",
    "widths": [
@@ -897,7 +728,7 @@ window.SDG_CARDS = {
   {
    "id": "wild-judea",
    "group": "wild",
-   "name": "Judea Wild Card",
+   "name": "Judea Wild Card (2 in the game, 5 more in the expansion)",
    "alt": "The Judea Wild Card, which stands in for any place in that region.",
    "src": "../assets/jwj/cards/wild-judea",
    "widths": [
@@ -923,7 +754,7 @@ window.SDG_CARDS = {
   {
    "id": "wild-samaria",
    "group": "wild",
-   "name": "Samaria Wild Card",
+   "name": "Samaria Wild Card (x3)",
    "alt": "The Samaria Wild Card, which stands in for any place in that region.",
    "src": "../assets/jwj/cards/wild-samaria",
    "widths": [
@@ -1025,6 +856,45 @@ window.SDG_CARDS = {
    "h": 1055
   },
   {
+   "id": "bethany-beyond-jordan-2",
+   "group": "expansion",
+   "name": "Bethany Beyond Jordan (1 of 3)",
+   "alt": "A Place Card for Bethany Beyond Jordan, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/bethany-beyond-jordan-2",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "bethany-beyond-jordan-3",
+   "group": "expansion",
+   "name": "Bethany Beyond Jordan (2 of 3)",
+   "alt": "A Place Card for Bethany Beyond Jordan, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/bethany-beyond-jordan-3",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "bethany-beyond-jordan-4",
+   "group": "expansion",
+   "name": "Bethany Beyond Jordan (3 of 3)",
+   "alt": "A Place Card for Bethany Beyond Jordan, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/bethany-beyond-jordan-4",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
    "id": "bethany-beyond-jordan-to-bethany",
    "group": "expansion",
    "name": "Bethany Beyond Jordan to Bethany",
@@ -1043,6 +913,19 @@ window.SDG_CARDS = {
    "name": "Bethany Beyond Jordan to Jerusalem",
    "alt": "The Journey Card from Bethany Beyond Jordan to Jerusalem, with a map of the land and the points in the four corners.",
    "src": "../assets/jwj/cards/bethany-beyond-jordan-to-jerusalem",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "caesarea",
+   "group": "expansion",
+   "name": "Caesarea",
+   "alt": "A Place Card for Caesarea, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/caesarea",
    "widths": [
     480,
     755
@@ -1103,11 +986,50 @@ window.SDG_CARDS = {
    "h": 1055
   },
   {
+   "id": "countryside-1",
+   "group": "expansion",
+   "name": "Countryside (1 of 2)",
+   "alt": "A Place Card for Countryside, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/countryside-1",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "countryside-2",
+   "group": "expansion",
+   "name": "Countryside (2 of 2)",
+   "alt": "A Place Card for Countryside, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/countryside-2",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
    "id": "countryside-to-jerusalem",
    "group": "expansion",
    "name": "Countryside to Jerusalem",
    "alt": "The Journey Card from Countryside to Jerusalem, with a map of the land and the points in the four corners.",
    "src": "../assets/jwj/cards/countryside-to-jerusalem",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "emmaus",
+   "group": "expansion",
+   "name": "Emmaus",
+   "alt": "A Place Card for Emmaus, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/emmaus",
    "widths": [
     480,
     755
@@ -1134,6 +1056,84 @@ window.SDG_CARDS = {
    "name": "Gennesaret to Jerusalem",
    "alt": "The Journey Card from Gennesaret to Jerusalem, with a map of the land and the points in the four corners.",
    "src": "../assets/jwj/cards/gennesaret-to-jerusalem",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "jericho-3",
+   "group": "expansion",
+   "name": "Jericho",
+   "alt": "A Place Card for Jericho, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/jericho-3",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "joppa",
+   "group": "expansion",
+   "name": "Joppa",
+   "alt": "A Place Card for Joppa, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/joppa",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "nain-3",
+   "group": "expansion",
+   "name": "Nain",
+   "alt": "A Place Card for Nain, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/nain-3",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "samaria",
+   "group": "expansion",
+   "name": "Samaria",
+   "alt": "A Place Card for Samaria, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/samaria",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "sychar-2",
+   "group": "expansion",
+   "name": "Sychar (1 of 2)",
+   "alt": "A Place Card for Sychar, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/sychar-2",
+   "widths": [
+    480,
+    755
+   ],
+   "w": 755,
+   "h": 1055
+  },
+  {
+   "id": "sychar-3",
+   "group": "expansion",
+   "name": "Sychar (2 of 2)",
+   "alt": "A Place Card for Sychar, with a verse from the World English Bible.",
+   "src": "../assets/jwj/cards/sychar-3",
    "widths": [
     480,
     755
