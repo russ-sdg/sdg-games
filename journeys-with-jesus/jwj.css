@@ -20,8 +20,11 @@
 .pp-acc .body ol, .pp-acc .body ul { padding-left: 1.3rem; }
 .jj-faq h3 { font-size: 1rem; margin: 0; font-weight: 700; }
 .jj-faq summary h3 { flex: 1; }
-.jj-expansion { text-decoration: none; color: inherit; display: flex; gap: 1rem; align-items: center; background: var(--pp-surface); border: 1px solid var(--pp-line); border-radius: var(--pp-radius); padding: .8rem 1rem; margin-top: 1rem; }
-.jj-expansion img { width: 110px; height: auto; flex: none; }
+.jj-expansion { display: flex; gap: 1rem; align-items: center; background: var(--pp-surface); border: 1px solid var(--pp-line); border-radius: var(--pp-radius); padding: .8rem 1rem; margin-top: 1rem; }
+.jj-expansion img { width: 120px; height: auto; flex: none; filter: drop-shadow(0 6px 10px rgba(31,42,18,.3)); }
+.jj-expansion p { margin: .2rem 0 0; color: var(--pp-muted); }
+.jj-exp-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin-top: .7rem !important; }
+.jj-exp-actions .pp-btn { padding: .6rem 1.1rem; }
 .jj-buy-note { margin: 0 0 1rem; opacity: .95; }
 .jj-alt { margin-top: 1.2rem; }
 @media (max-width: 860px) {

@@ -114,3 +114,7 @@ for (const page of PAGES) {
     assert.ok(html.includes(label), `page text does not mention ${label}`);
   });
 }
+
+test('journeys-with-jesus/index.html: the Gospel of John Expansion Pack links to the SDG shop checkout', () => {
+  assert.match(read('journeys-with-jesus/index.html'), /href="https:\/\/bd30ce-2\.myshopify\.com\/cart\/44097626865813:1\?channel=buy_button"/);
+});
