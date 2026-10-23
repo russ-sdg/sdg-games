@@ -59,7 +59,7 @@ function give(s, ...names) {
   return s;
 }
 const toPlay = (s) => { s = E.skipRecite(s); while (s.phase === 'draw') s = E.take(s, 'down'); return s; };
-const inPlay = (s, ...ids) => { s.inplay = ids; return s; };
+const inPlay = (s, ...ids) => { s.inplay = ids; s.jdeck = s.jdeck.filter((j) => !ids.includes(j)); return s; };
 
 test('setup: 7 cards each, 4 face-up piles, 4 journeys in play, the rest face down', () => {
   const s = new2();
@@ -75,7 +75,9 @@ test('the turn goes recite, draw three, play, then draw back up to 7', () => {
   let s = new2();
   s = E.skipRecite(s);
   assert.equal(s.phase, 'draw');
-  s = E.take(s, 0); s = E.take(s, 'down'); s = E.take(s, 3);
+  s = E.take(s, 0);
+  assert.notEqual(s.up[0], null, 'the face-up pile is refilled between draws');
+  s = E.take(s, 'down'); s = E.take(s, 3);
   assert.equal(s.phase, 'play');
   assert.equal(E.me(s).hand.length, 10);
   assert.ok(s.up.every((u) => u !== null), 'the face-up piles are refilled');
@@ -184,11 +186,26 @@ test('an extension can start in the middle of what was laid, in the same order',
   assert.equal(o.assign.length, 2);
 });
 
-test('an extension must add at least one card: a journey wholly inside what was laid does not complete for free', () => {
+test('a journey wholly inside what you laid scores too, with no more cards (a run of it, in either direction)', () => {
   let s = toPlay(new2());
-  s = give(inPlay(s, 'capernaum-to-nazareth', 'jerusalem-to-bethany'), 'capernaum', 'magdala', 'cana', 'nazareth');
-  s = E.play(s, E.plays(s)[0]);
-  assert.equal(E.plays(s).filter((o) => o.extends).length, 0);
+  s = give(inPlay(s, 'capernaum-to-nazareth', 'capernaum-to-cana', 'tyre-to-gadara'), 'capernaum', 'magdala', 'cana', 'nazareth');
+  s = E.play(s, E.plays(s).find((o) => o.journey === 'capernaum-to-nazareth'));
+  const inside = E.plays(s).filter((o) => o.extends && o.assign.length === 0);
+  assert.deepEqual(inside.map((o) => o.journey), ['capernaum-to-cana'], 'Capernaum, Magdala, Cana is a run of what was laid');
+  const after = E.play(s, inside[0]);
+  assert.equal(E.score(E.me(after)).total, 16 + 9);
+  assert.equal(E.me(after).hand.length, 0, 'no card is used or lost');
+  assert.deepEqual(after.chain, ['capernaum', 'magdala', 'cana', 'nazareth']);
+});
+
+test('a journey laid in the other direction also counts as inside what you laid', () => {
+  let s = toPlay(new2());
+  s = give(inPlay(s, 'nazareth-to-jerusalem', 'capernaum-to-nazareth', 'jerusalem-to-bethany'), 'nazareth', 'nain', 'sychar', 'ephraim', 'jerusalem', 'bethany');
+  s = E.play(s, E.plays(s).find((o) => o.journey === 'nazareth-to-jerusalem'));
+  const ext = E.plays(s).filter((o) => o.extends);
+  assert.ok(ext.some((o) => o.journey === 'jerusalem-to-bethany' && o.assign.length === 1), 'Bethany on top of Jerusalem');
+  const sub = E.plays(s).filter((o) => o.extends && o.assign.length === 0);
+  assert.equal(sub.length, 0, 'nothing else is wholly inside yet');
 });
 
 test('a completed journey is replaced from the deck at once and can be completed the same turn', () => {

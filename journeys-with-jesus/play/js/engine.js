@@ -113,9 +113,9 @@ export function take(s0, from) {
   const s = clone(s0), p = me(s);
   if (from === 'down') { ensureDraw(s); p.hand.push(s.draw.pop()); } else { p.hand.push(s.up[from]); s.up[from] = null; }
   s.drawn += 1; s.turnActed = true;
+  fillGaps(s);                         // a gap in the face-up piles is filled at once, so the next card you take can be the new one
   const want = s.phase === 'draw' ? DRAWS : s.topup;
   if (s.drawn >= want || cardsToDraw(s) === 0) {
-    fillGaps(s);
     say(s, s.phase === 'draw' ? `drew ${s.drawn} card${s.drawn === 1 ? '' : 's'}` : 'drew up to a full hand');
     if (s.phase === 'draw') { s.phase = 'play'; s.drawn = 0; s.chain = null; } else nextTurn(s);
   }
@@ -215,7 +215,19 @@ export function plays(s, { limit = 6 } = {}) {
     if (s.chain) {
       const seq = s.chain, ext = [];
       for (const [x, y] of [[j.a, j.b], [j.b, j.a]]) {
+        // a journey wholly inside what is laid (a run of it, in either direction) is complete with no more cards
+        if (x === j.a) {
+          for (let i = 0; i < seq.length; i++) {
+            for (let k = i + 1; k < seq.length; k++) {
+              const run = seq.slice(i, k + 1), ends = [run[0], run[run.length - 1]];
+              if ((ends[0] === j.a && ends[1] === j.b) || (ends[0] === j.b && ends[1] === j.a)) {
+                ext.push({ journey: j.id, points: j.points, path: run, from: run.length, assign: [], tokensUsed: 0, wildsUsed: 0, extends: true, start: i });
+              }
+            }
+          }
+        }
         if (seq.includes(y)) continue;
+        // or more cards on top of the end, reusing the cards laid from `x` on, in order
         for (let i = 0; i < seq.length; i++) {
           if (seq[i] !== x) continue;
           const tail = seq.slice(i), last = seq[seq.length - 1], tailSet = new Set(tail);

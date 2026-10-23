@@ -126,7 +126,7 @@ function renderPlays() {
   box.innerHTML = '<h3>You can lay down</h3>' + best.map((o, i) => {
     const j = E.journeyById[o.journey], d = describe(o), on = selected && selected.journey === o.journey && selected.path.join() === o.path.join() && selected.extends === o.extends;
     return `<div class="jp-play${on ? ' is-on' : ''}"><button type="button" class="jp-play-pick" data-play="${i}" aria-pressed="${on}">
-      <b>${o.extends ? 'Extend to ' : ''}${esc(jTitle(j))}</b> <span class="pts">${o.points} points</span><br /><small>${esc(placeNames(o.path))}${d ? ` &middot; ${esc(d)}` : ''}${o.extends ? ' &middot; reuses your cards already laid' : ''}</small></button>
+      <b>${o.extends ? 'Extend to ' : ''}${esc(jTitle(j))}</b> <span class="pts">${o.points} points</span><br /><small>${esc(placeNames(o.path))}${d ? ` &middot; ${esc(d)}` : ''}${o.extends ? (o.assign.length ? ' &middot; reuses your cards already laid' : ' &middot; needs only the cards you already laid') : ''}</small></button>
       ${on ? '<button type="button" class="btn btn-success btn-sm" data-lay="1">Lay it down</button>' : ''}</div>`;
   }).join('');
   box._best = best;
