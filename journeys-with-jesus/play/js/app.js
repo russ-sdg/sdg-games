@@ -3,6 +3,7 @@ import { PLACES, REGIONS } from './board-data.js';
 import * as E from './engine.js';
 import * as AI from './ai.js';
 import { drawBoard } from './board.js';
+import { drawShareImage, canvasToBlob, nativeShareData, shareMessage, PLAYER_COLORS } from './share.js';
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
@@ -76,10 +77,11 @@ function describe(o) {
 // ---- drawing the page --------------------------------------------------------------------------------------------
 function render() {
   if (!state) return;
-  renderBar(); renderStatus(); renderInplay(); renderPlays(); renderPiles(); renderHand(); renderActions(); renderPlayers(); renderLog();
+  renderBar(); renderStatus(); renderInplay(); renderPlays(); renderPiles(); renderHand(); renderDrawn(); renderActions(); renderPlayers(); renderLog();
   const ends = [];
   for (const jid of state.inplay) { const j = E.journeyById[jid]; ends.push(j.a, j.b); }
-  drawBoard($('#board'), { ends, path: ui.preview ? ui.preview.path : [] });
+  const routes = state.players.flatMap((p, i) => (p.routes || []).map((r) => ({ path: r.path, color: PLAYER_COLORS[i] })));
+  drawBoard($('#board'), { ends, path: ui.preview ? ui.preview.path : [], routes });
 }
 
 function renderBar() {
@@ -143,6 +145,7 @@ function renderPiles() {
 
 function renderHand() {
   const p = state.players[0], used = new Set(ui.preview ? ui.preview.assign.map((a) => a.uid) : []);
+  const fresh = new Set(state.turn === 0 && !state.over ? (state.picks || []).map((x) => x.uid) : []);
   const d = defs();
   const hand = [...p.hand].sort((a, b) => {
     const A = d[a], B = d[b], ra = A.kind === 'place' ? PLACES[A.place].region : 'z' + (A.region || ''), rb = B.kind === 'place' ? PLACES[B.place].region : 'z' + (B.region || '');
@@ -152,9 +155,18 @@ function renderHand() {
   $('#hand-hint').textContent = recite ? '(tap the card you will recite)' : `(${p.hand.length} cards${p.tokens ? `, ${p.tokens} token${p.tokens > 1 ? 's' : ''}` : ''})`;
   $('#hand').innerHTML = hand.map((uid) => {
     const c = d[uid];
-    return `<button type="button" class="jp-hc${used.has(uid) ? ' is-used' : ''}${recite ? ' is-pick' : ''}" data-hand="${uid}" style="--rc:${regionColor(c)}" aria-label="${esc(E.cardLabel(c))}">
-      <img src="${cardImg(c)}" width="480" height="670" alt="${esc(E.cardLabel(c))}" loading="lazy" /></button>`;
+    return `<button type="button" class="jp-hc${used.has(uid) ? ' is-used' : ''}${recite ? ' is-pick' : ''}${fresh.has(uid) ? ' is-new' : ''}" data-hand="${uid}" style="--rc:${regionColor(c)}" aria-label="${esc(E.cardLabel(c))}${fresh.has(uid) ? ', just drawn' : ''}">
+      <img src="${cardImg(c)}" width="480" height="670" alt="${esc(E.cardLabel(c))}" loading="lazy" />${fresh.has(uid) ? '<span class="new">New</span>' : ''}</button>`;
   }).join('') + (p.tokens ? Array.from({ length: p.tokens }, () => '<span class="jp-token" title="Scripture Memory Token: 5 points, or a wild card">Token</span>').join('') : '');
+}
+
+// The cards you took this turn, so a card from the face-down pile is easy to spot among the others in your hand.
+function renderDrawn() {
+  const box = $('#drawn'), d = defs();
+  const mine = state.turn === 0 && !state.over ? (state.picks || []).filter((x) => state.players[0].hand.includes(x.uid)) : [];
+  box.hidden = !mine.length;
+  box.innerHTML = mine.length ? '<span class="lbl">Just drawn</span>' + mine.map((x) => `<button type="button" class="jp-dc" data-hand="${x.uid}" aria-label="${esc(E.cardLabel(d[x.uid]))}, from ${x.from === 'down' ? 'the face-down pile' : 'a face-up pile'}">
+    <img src="${cardImg(d[x.uid])}" width="480" height="670" alt="" /><span class="how">${x.from === 'down' ? 'face-down' : 'face-up'}</span></button>`).join('') : '';
 }
 
 function renderActions() {
@@ -174,7 +186,7 @@ function renderPlayers() {
     const sc = E.score(p);
     const journeys = p.journeys.map((id) => `<li>${esc(jTitle(E.journeyById[id]))} <b>${E.journeyById[id].points}</b></li>`).join('');
     const skill = p.bot ? ` <span class="badge text-bg-light">${AI.SKILLS[p.skill].name}</span>` : '';
-    return `<div class="jp-player${i === state.turn && !state.over ? ' is-turn' : ''}"><div class="head"><b>${esc(p.name)}</b>${skill} <span class="ms-auto">${sc.total} points</span></div>
+    return `<div class="jp-player${i === state.turn && !state.over ? ' is-turn' : ''}" style="--pc:${PLAYER_COLORS[i]}"><div class="head"><b>${esc(p.name)}</b>${skill} <span class="ms-auto">${sc.total} points</span></div>
       <div class="small text-muted">${p.hand.length} Place Cards${p.tokens ? ` &middot; ${p.tokens} token${p.tokens > 1 ? 's' : ''} (${sc.tokens} points)` : ''}${sc.journeys ? ` &middot; journeys ${sc.journeys}` : ''}</div>
       ${journeys ? `<ul class="small mb-0 jp-won">${journeys}</ul>` : ''}</div>`;
   }).join('');
@@ -213,7 +225,38 @@ function showFinal() {
   $('#final-body').innerHTML = `<p class="small text-muted">${state.endedBy === 'journeys' ? 'The last journey was completed.' : state.endedBy === 'stalled' ? 'Nobody could play any more cards.' : 'The game reached its round limit.'}</p>
     <table class="table table-sm"><thead><tr><th>Player</th><th class="text-end">Journeys</th><th class="text-end">Tokens</th><th class="text-end">Total</th></tr></thead><tbody>${
   st.map((r) => `<tr${win.includes(r.i) ? ' class="table-success"' : ''}><td>${esc(r.name)}</td><td class="text-end">${r.journeys}</td><td class="text-end">${r.tokens}</td><td class="text-end"><b>${r.total}</b></td></tr>`).join('')}</tbody></table>`;
+  mountShare($('#final-body'));
   $('#final').showModal();
+}
+
+// Share the result as a picture: the native share sheet where the browser offers it, plus a download and copyable text.
+async function mountShare(root) {
+  const box = document.createElement('div');
+  box.className = 'share-box';
+  box.innerHTML = `<div class="share-actions"><button type="button" class="btn btn-primary btn-sm" id="share-dl" disabled>Download image</button>
+    <button type="button" class="btn btn-outline-primary btn-sm" id="share-native" hidden>Share\u2026</button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="share-copy">Copy text</button></div>
+    <img class="share-preview" alt="The finished game: the board with everyone's journeys, and the scores" width="1200" height="880" hidden>
+    <p class="small text-muted mb-0" id="share-msg" aria-live="polite">Drawing your result card\u2026</p>`;
+  root.appendChild(box);
+  const img = box.querySelector('.share-preview'), msg = box.querySelector('#share-msg');
+  const dl = box.querySelector('#share-dl'), nat = box.querySelector('#share-native'), copy = box.querySelector('#share-copy');
+  const snapshot = state;
+  copy.onclick = async () => {
+    try { await navigator.clipboard.writeText(shareMessage(snapshot)); msg.textContent = 'Copied. Paste it anywhere.'; } catch { msg.textContent = shareMessage(snapshot); }
+  };
+  try {
+    const canvas = await drawShareImage(document.createElement('canvas'), snapshot);
+    const blob = await canvasToBlob(canvas);
+    const url = URL.createObjectURL(blob);
+    img.src = url; img.hidden = false; dl.disabled = false; msg.textContent = '';
+    const file = new File([blob], 'journeys-with-jesus.png', { type: 'image/png' });
+    nat.hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+    dl.onclick = () => { const a = document.createElement('a'); a.href = url; a.download = 'journeys-with-jesus.png'; document.body.appendChild(a); a.click(); a.remove(); };
+    nat.onclick = async () => { try { await navigator.share(nativeShareData(file, snapshot)); } catch { /* cancelled */ } };
+  } catch {
+    msg.textContent = 'Sorry, the result card could not be drawn in this browser. You can still copy the text.';
+  }
 }
 
 // ---- events ------------------------------------------------------------------------------------------------------

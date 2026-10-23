@@ -9,7 +9,8 @@ export const VIEW = { x: 0, y: 40, w: 450, h: 650 };
 const LABEL = { n: [0, -9, 'middle'], s: [0, 15, 'middle'], e: [9, 4, 'start'], w: [-9, 4, 'end'], ne: [7, -7, 'start'], nw: [-7, -7, 'end'], se: [7, 14, 'start'], sw: [-7, 14, 'end'] };
 
 // ends: place ids that are the endpoints of journeys in play; path: place ids to highlight; lit: place ids to ring.
-export function drawBoard(svg, { ends = [], path = [], mine = [] } = {}) {
+// routes: [{ path, color }] journeys already completed, drawn under the places (the results picture uses this).
+export function drawBoard(svg, { ends = [], path = [], mine = [], routes = [], labels = true } = {}) {
   svg.replaceChildren();
   svg.setAttribute('viewBox', `${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`);
   svg.setAttribute('role', 'img');
@@ -46,6 +47,10 @@ export function drawBoard(svg, { ends = [], path = [], mine = [] } = {}) {
     roads.append(el('line', { x1: A.x, y1: A.y, x2: B.x, y2: B.y, stroke: how === 'boat' ? '#fff' : '#111', 'stroke-width': how === 'boat' ? 5 : 4.5 }));
   }
   svg.append(roads);
+  for (const r of routes) {
+    if (r.path.length < 2) continue;
+    svg.append(el('polyline', { points: r.path.map((id) => `${PLACES[id].x},${PLACES[id].y}`).join(' '), fill: 'none', stroke: r.color, 'stroke-width': 7, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: 0.85 }));
+  }
   if (path.length > 1) {
     const hot = el('g', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', fill: 'none' });
     hot.append(el('polyline', { points: path.map((id) => `${PLACES[id].x},${PLACES[id].y}`).join(' '), stroke: '#ffd23f', 'stroke-width': 8, opacity: 0.95 }));

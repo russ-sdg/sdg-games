@@ -60,8 +60,8 @@ export function newGame({ seed = 1, players, expansion = false } = {}) {
   const draw = shuffled(defs.map((_, i) => i), seed);
   const s = {
     v: 1, seed, expansion, reshuffles: 0, round: 1, turn: 0, phase: 'recite', drawn: 0, topup: 0, recited: null, chain: null,
-    passes: 0, over: false, endedBy: null,
-    players: players.map((p) => ({ name: p.name, bot: !!p.bot, skill: p.skill || null, hand: [], tokens: 0, journeys: [] })),
+    passes: 0, over: false, endedBy: null, picks: [], topupFrom: 0,
+    players: players.map((p) => ({ name: p.name, bot: !!p.bot, skill: p.skill || null, hand: [], tokens: 0, journeys: [], routes: [] })),
     draw, up: [], discard: [],
     jdeck: shuffled(journeyDefs(expansion).map((j) => j.id), seed + 1), inplay: [], log: [],
   };
@@ -113,10 +113,14 @@ export function take(s0, from) {
   const s = clone(s0), p = me(s);
   if (from === 'down') { ensureDraw(s); p.hand.push(s.draw.pop()); } else { p.hand.push(s.up[from]); s.up[from] = null; }
   s.drawn += 1; s.turnActed = true;
+  s.picks = [...(s.picks || []), { uid: p.hand[p.hand.length - 1], from: from === 'down' ? 'down' : 'up' }];
   fillGaps(s);                         // a gap in the face-up piles is filled at once, so the next card you take can be the new one
   const want = s.phase === 'draw' ? DRAWS : s.topup;
   if (s.drawn >= want || cardsToDraw(s) === 0) {
-    say(s, s.phase === 'draw' ? `drew ${s.drawn} card${s.drawn === 1 ? '' : 's'}` : 'drew up to a full hand');
+    const mine = s.picks.slice(s.phase === 'draw' ? 0 : s.topupFrom), defs = deckDefs(s.expansion);
+    const faceUp = mine.filter((x) => x.from === 'up').map((x) => cardLabel(defs[x.uid])), down = mine.length - faceUp.length;
+    const parts = [...faceUp, ...(down ? [`${down} face-down card${down > 1 ? 's' : ''}`] : [])];
+    say(s, `${s.phase === 'draw' ? 'drew' : 'drew up to a full hand:'} ${parts.join(', ') || 'nothing'}`);
     if (s.phase === 'draw') { s.phase = 'play'; s.drawn = 0; s.chain = null; } else nextTurn(s);
   }
   return s;
@@ -128,13 +132,13 @@ export function endPlay(s0) {
   const s = clone(s0);
   s.chain = null;
   const need = Math.max(0, HAND - me(s).hand.length);
-  if (need > 0 && cardsToDraw(s) > 0) { s.phase = 'topup'; s.topup = need; s.drawn = 0; } else nextTurn(s);
+  if (need > 0 && cardsToDraw(s) > 0) { s.phase = 'topup'; s.topup = need; s.drawn = 0; s.topupFrom = (s.picks || []).length; } else nextTurn(s);
   return s;
 }
 
 function nextTurn(s) {
   const acted = s.turnActed;           // set by play()/take(); a turn where nothing could happen counts toward a stall
-  s.chain = null; s.recited = null; s.drawn = 0; s.topup = 0; s.turnActed = false;
+  s.chain = null; s.recited = null; s.drawn = 0; s.topup = 0; s.turnActed = false; s.picks = []; s.topupFrom = 0;
   s.passes = acted ? 0 : s.passes + 1;
   if (s.passes >= s.players.length) return finish(s, 'stalled');
   s.turn = (s.turn + 1) % s.players.length;
@@ -263,6 +267,7 @@ export function play(s0, option) {
   }
   const at = s.inplay.indexOf(jid);
   p.journeys.push(jid);
+  (p.routes ||= []).push({ journey: jid, path: legal.path.slice() });
   if (s.jdeck.length) s.inplay[at] = s.jdeck.pop(); else s.inplay.splice(at, 1);
   s.chain = legal.extends ? s.chain.concat(legal.path.slice(legal.from)) : legal.path.slice();
   s.turnActed = true;
