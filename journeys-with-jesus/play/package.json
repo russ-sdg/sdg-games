@@ -1,0 +1,6 @@
+{
+  "name": "jwj-play",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test" }
+}
