@@ -117,6 +117,6 @@ for (const page of PAGES) {
 
 test('journeys-with-jesus/index.html: the expansion pack is a Shopify button in the same cart as the game, with a plain checkout link as fallback', () => {
   const html = read('journeys-with-jesus/index.html');
-  assert.match(html, /class="pp-shopify" data-state="live" data-variant-id="44097626865813"[^>]*><a [^>]*href="https:\/\/bd30ce-2\.myshopify\.com\/cart\/44097626865813:1\?channel=buy_button"/);
-  assert.ok(!/data-product-id/.test(html), 'a spot with only a variant must not also name the game as its product');
+  assert.match(html, /class="pp-shopify" data-state="live" data-product-id="8148407681173"[^>]*><a [^>]*href="https:\/\/bd30ce-2\.myshopify\.com\/cart\/44097626865813:1\?channel=buy_button"/);
+  assert.equal((html.match(/data-product-id="8148407681173"/g) || []).length, 1, 'the expansion pack has one button, with its own product');
 });

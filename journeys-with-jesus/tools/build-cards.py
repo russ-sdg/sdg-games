@@ -53,6 +53,8 @@ def split_places(token):
             if tail: return [PLACES[key]] + tail
     return None
 
+OVERRIDES = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'overrides')   # pictures here win over the same file name in --src
+
 def slug(s): return re.sub(r'[^a-z0-9]+', '-', s.lower()).strip('-')
 
 def outlined(im):
@@ -105,6 +107,7 @@ def entries(src):
     out, seen = [], {}
     for n in names:
         path = os.path.join(src, n + '.png')
+        if os.path.exists(os.path.join(OVERRIDES, n + '.png')): path = os.path.join(OVERRIDES, n + '.png')   # a picture replaced after the originals were uploaded
         if n in TOKENS:
             out.append(dict(id='token-' + slug(TOKENS[n]), group='tokens', name='Scripture Memory Token: ' + TOKENS[n], copies=TOKEN_COPIES, file=path, kind='token',
                             alt=f'A gold hexagonal Scripture Memory Token with the verse {TOKENS[n]}.')); continue
