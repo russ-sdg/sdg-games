@@ -62,3 +62,6 @@
 
 /Tyndale/ty.css
   Cache-Control: no-cache
+
+/journeys-with-jesus/play/*
+  Cache-Control: no-cache

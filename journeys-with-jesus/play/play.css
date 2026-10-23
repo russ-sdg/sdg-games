@@ -1,0 +1,72 @@
+/* Journeys with Jesus: play online. Matches the look of the other online games on the site. */
+.jp { max-width: 1100px; margin: 0 auto; --olive: #3f4a1d; --gold: #f3c24b; }
+.jp [hidden] { display: none !important; }
+.jp-logo { height: 44px; width: auto; max-width: 100%; }
+
+.jp-card { background: #fff; border-radius: .6rem; padding: .8rem; margin-bottom: .9rem; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+.jp-card h2 { font-size: 1.05rem; margin: 0 0 .5rem; }
+.jp-card h3 { font-size: .95rem; margin: .8rem 0 .4rem; }
+.jp-hint { font-weight: 400; font-size: .85rem; color: #5c636a; }
+
+/* score bar */
+.jp-bar { position: sticky; top: 0; z-index: 30; display: flex; flex-wrap: wrap; align-items: stretch; gap: .5rem; padding: .5rem .7rem; margin: 0 0 .5rem;
+          background: #212529; color: #fff; border-radius: 0 0 .6rem .6rem; box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+.jp-score { display: flex; flex-direction: column; align-items: center; min-width: 4.6rem; padding: .15rem .6rem; border-radius: .5rem; border: 2px solid transparent; }
+.jp-score .n { font-size: .8rem; font-weight: 600; }
+.jp-score .pts { font-size: 1.7rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.jp-score .sub { font-size: .7rem; color: #ced4da; }
+.jp-score.is-turn { border-color: var(--gold); background: rgba(243,194,75,.15); }
+.jp-round { margin-left: auto; text-align: right; font-weight: 600; font-size: .85rem; align-self: center; }
+.jp-round small { color: #ced4da; font-weight: 400; }
+.jp-status { font-weight: 600; margin: .2rem 0 .7rem; min-height: 1.5rem; }
+
+/* the board */
+.jp-board { width: 100%; height: auto; display: block; border-radius: .4rem; max-height: 82vh; }
+@media (max-width: 991px) { .jp-board { max-height: 44vh; } }
+@media (min-width: 992px) { .jp-board-wrap, .col-lg-5 .jp-card { position: sticky; top: 4.8rem; } }
+
+/* journeys in play */
+.jp-journeys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+.jp-journey { position: relative; padding: 0; border: 3px solid transparent; border-radius: 12px; background: none; }
+.jp-journey img { width: 100%; height: auto; display: block; }
+.jp-journey.is-ready { border-color: #198754; box-shadow: 0 0 0 3px rgba(25,135,84,.3); }
+.jp-journey .tag { position: absolute; left: 4px; right: 4px; bottom: 4px; background: rgba(25,135,84,.95); color: #fff; font-size: .68rem; font-weight: 700; padding: .1rem .2rem; border-radius: 6px; }
+.jp-plays .jp-play { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin-bottom: .4rem; }
+.jp-play-pick { flex: 1 1 14rem; text-align: left; padding: .45rem .6rem; border: 2px solid #ced4da; border-radius: .5rem; background: #fff; }
+.jp-play-pick:hover { border-color: #198754; }
+.jp-play.is-on .jp-play-pick { border-color: #198754; background: #f1fbf5; }
+.jp-play .pts { background: var(--olive); color: #fff; border-radius: 1rem; padding: 0 .5rem; font-size: .8rem; font-weight: 700; }
+
+/* piles and hand */
+.jp-piles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; max-width: 560px; }
+.jp-pile { position: relative; padding: 0; border: 3px solid transparent; border-radius: 12px; background: none; }
+.jp-pile img { width: 100%; height: auto; display: block; }
+.jp-pile:not(:disabled):hover { border-color: #0d6efd; }
+.jp-pile:disabled { cursor: default; }
+.jp-pile.is-empty { aspect-ratio: 480 / 670; border: 2px dashed #ced4da; border-radius: 12px; }
+.jp-down .count { position: absolute; right: 6px; top: 6px; background: rgba(33,37,41,.9); color: #fff; font-weight: 700; font-size: .8rem; border-radius: 1rem; padding: 0 .5rem; }
+.jp-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
+.jp-hand { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: .45rem; }
+.jp-hc { position: relative; padding: 0; border: 3px solid var(--rc); border-radius: 12px; background: #fff; }
+.jp-hc img { width: 100%; height: auto; display: block; border-radius: 8px; }
+.jp-hc.is-used { box-shadow: 0 0 0 4px var(--gold); transform: translateY(-4px); }
+.jp-hc.is-pick { animation: jp-pulse 1.4s ease-in-out infinite; }
+@keyframes jp-pulse { 50% { box-shadow: 0 0 0 5px rgba(13,110,253,.35); } }
+@media (prefers-reduced-motion: reduce) { .jp-hc.is-pick { animation: none; outline: 3px solid #0d6efd; } }
+.jp-token { display: inline-flex; align-items: center; justify-content: center; width: 78px; aspect-ratio: 1; clip-path: polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0 50%);
+            background: linear-gradient(135deg, #e5c35c, #a8851d); color: #3a2f08; font-weight: 800; font-size: .8rem; }
+
+/* players and log */
+.jp-player { border-left: 6px solid #ced4da; padding: .35rem .6rem; margin-bottom: .5rem; border-radius: .3rem; background: #f8f9fa; }
+.jp-player.is-turn { border-left-color: var(--gold); background: #fff9e6; }
+.jp-player .head { display: flex; gap: .4rem; align-items: center; }
+.jp-won { padding-left: 1.1rem; }
+.jp-log { padding-left: 1.2rem; margin: 0; font-size: .9rem; max-height: 18rem; overflow: auto; }
+
+/* dialogs */
+.jp-dialog { border: 0; border-radius: .7rem; padding: 1rem 1.2rem; max-width: min(92vw, 460px); box-shadow: 0 10px 40px rgba(0,0,0,.35); }
+.jp-dialog::backdrop { background: rgba(0,0,0,.55); }
+.jp-dialog-actions { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; margin-top: .8rem; }
+.jp-zoom { width: 100%; height: auto; max-height: 70vh; object-fit: contain; display: block; margin: 0 auto; }
+
+@media (max-width: 560px) { .jp-hand { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); } .jp-token { width: 64px; } .jp-score { min-width: 3.9rem; padding: .1rem .35rem; } }
