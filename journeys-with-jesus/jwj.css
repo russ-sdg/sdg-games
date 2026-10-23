@@ -44,3 +44,6 @@
 .jj-fold .pp-grid img { border-radius: 0; box-shadow: none; filter: drop-shadow(0 4px 8px rgba(31,42,18,.3)); }   /* the cards carry their own outline and corners */
 
 .jj-fold .pp-copies { font-weight: 700; color: var(--pp-ink, inherit); white-space: nowrap; }
+
+.jj-buy-row { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem 1rem; margin-bottom: 1.4rem; }
+.pp-cta .jj-buy-row .pp-shopify { display: block; }
