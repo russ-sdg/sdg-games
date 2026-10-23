@@ -115,8 +115,9 @@ for (const page of PAGES) {
   });
 }
 
-test('journeys-with-jesus/index.html: the expansion pack is a Shopify button in the same cart as the game, with a plain checkout link as fallback', () => {
+test('journeys-with-jesus/index.html: the expansion pack is a Shopify button in the same cart as the game, with no separate checkout link', () => {
   const html = read('journeys-with-jesus/index.html');
-  assert.match(html, /class="pp-shopify" data-state="live" data-product-id="8148407681173"[^>]*><a [^>]*href="https:\/\/bd30ce-2\.myshopify\.com\/cart\/44097626865813:1\?channel=buy_button"/);
-  assert.equal((html.match(/data-product-id="8148407681173"/g) || []).length, 1, 'the expansion pack has one button, with its own product');
+  assert.match(html, /class="pp-shopify" data-state="live" data-product-id="8148407681173" data-button-text="Buy Expansion Pack"><\/div>/);
+  assert.ok(!/cart\/44097626865813/.test(html), 'the expansion pack is bought through the shared cart, not a separate checkout link');
+  assert.equal((html.match(/data-product-id="8148407681173"/g) || []).length, 2, 'the expansion pack has a button by its description and one beside the game at the bottom');
 });
