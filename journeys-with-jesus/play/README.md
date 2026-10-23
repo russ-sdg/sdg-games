@@ -5,9 +5,10 @@ Not linked from the rest of the site yet (the page is `noindex`); it is at `/jou
 
 - `index.html`, `play.css`, `js/app.js`: the page and UI (setup, board, journeys in play, piles, hand, results). A game in progress is saved in the browser and can be resumed.
 - `js/engine.js`: the rules, as pure functions on a plain state object (turn phases recite → draw → play → top-up).
+- `js/share.js`: the results picture (board with everyone's journeys in their colours, standings, your journeys) drawn on a canvas for download / native share / copyable text.
 - `js/ai.js`: the computer players (Casual, Steady, Sharp). `js/board.js`: draws the map. `js/board-data.js`: the 24 places, roads and boat rides.
 - `js/deck-data.js`: **generated** by `node tools/build-deck.mjs` from `../cards-data.js` (the gallery's list), so the deck is the printed deck, with the same card pictures. Rerun it after rebuilding the gallery.
-- `engine.test.js`, `ai.test.js`: `cd journeys-with-jesus/play && node --test`. `tools/sim.mjs`: computer-vs-computer games (`node tools/sim.mjs 150 3`) to check the games end and the skill levels are ordered.
+- `engine.test.js`, `ai.test.js`, `share.test.js`: `cd journeys-with-jesus/play && node --test`. `tools/sim.mjs`: computer-vs-computer games (`node tools/sim.mjs 150 3`) to check the games end and the skill levels are ordered.
 
 ## Rule interpretations to confirm
 - **Journey routes:** any route along the roads/boat rides between the two places, with a card for every place (the two ends included), no place twice. Points are the ones printed on the Journey Card.

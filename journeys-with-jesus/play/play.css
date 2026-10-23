@@ -57,16 +57,32 @@
             background: linear-gradient(135deg, #e5c35c, #a8851d); color: #3a2f08; font-weight: 800; font-size: .8rem; }
 
 /* players and log */
-.jp-player { border-left: 6px solid #ced4da; padding: .35rem .6rem; margin-bottom: .5rem; border-radius: .3rem; background: #f8f9fa; }
-.jp-player.is-turn { border-left-color: var(--gold); background: #fff9e6; }
+.jp-player { border-left: 6px solid var(--pc, #ced4da); padding: .35rem .6rem; margin-bottom: .5rem; border-radius: .3rem; background: #f8f9fa; }
+.jp-player.is-turn { background: #fff9e6; box-shadow: 0 0 0 2px var(--gold); }
 .jp-player .head { display: flex; gap: .4rem; align-items: center; }
 .jp-won { padding-left: 1.1rem; }
 .jp-log { padding-left: 1.2rem; margin: 0; font-size: .9rem; max-height: 18rem; overflow: auto; }
 
 /* dialogs */
-.jp-dialog { border: 0; border-radius: .7rem; padding: 1rem 1.2rem; max-width: min(92vw, 460px); box-shadow: 0 10px 40px rgba(0,0,0,.35); }
+.jp-dialog { border: 0; border-radius: .7rem; padding: 1rem 1.2rem; max-width: min(94vw, 560px); box-shadow: 0 10px 40px rgba(0,0,0,.35); }
 .jp-dialog::backdrop { background: rgba(0,0,0,.55); }
 .jp-dialog-actions { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; margin-top: .8rem; }
 .jp-zoom { width: 100%; height: auto; max-height: 70vh; object-fit: contain; display: block; margin: 0 auto; }
 
 @media (max-width: 560px) { .jp-hand { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); } .jp-token { width: 64px; } .jp-score { min-width: 3.9rem; padding: .1rem .35rem; } }
+
+/* the cards you just drew */
+.jp-drawn { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; margin-bottom: .6rem; padding: .4rem .5rem; border-radius: .5rem; background: #fff9e6; border: 2px solid var(--gold); }
+.jp-drawn .lbl { font-weight: 700; font-size: .85rem; margin-right: .2rem; }
+.jp-dc { position: relative; width: 60px; padding: 0; border: 2px solid var(--gold); border-radius: 8px; background: #fff; }
+.jp-dc img { width: 100%; height: auto; display: block; border-radius: 6px; }
+.jp-dc .how { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(33,37,41,.85); color: #fff; font-size: .55rem; font-weight: 700; text-align: center; border-radius: 0 0 5px 5px; }
+.jp-hc.is-new { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold); animation: jp-new 1.6s ease-out 2; }
+.jp-hc .new { position: absolute; top: -2px; left: -2px; background: var(--gold); color: #3a2f08; font-size: .65rem; font-weight: 800; padding: 0 .35rem; border-radius: 8px 0 8px 0; }
+@keyframes jp-new { 0% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .jp-hc.is-new { animation: none; } }
+
+/* results picture */
+.share-box { margin: .4rem 0 .8rem; padding-top: .7rem; border-top: 1px solid #e9ecef; }
+.share-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
+.share-preview { width: 100%; height: auto; display: block; border-radius: .5rem; border: 1px solid #dee2e6; margin-bottom: .4rem; }

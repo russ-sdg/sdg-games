@@ -269,3 +269,24 @@ test('a saved game resumes exactly: the state is plain JSON', () => {
   assert.deepEqual(back, s);
   assert.deepEqual(E.plays(back), E.plays(s));
 });
+
+test('the cards you took this turn are remembered until the turn ends, and the log names the face-up ones', () => {
+  let s = E.skipRecite(new2());
+  const up0 = s.up[0], name = E.cardLabel(E.deckDefs(false)[up0]);
+  s = E.take(s, 0);
+  assert.deepEqual(s.picks.map((p) => p.from), ['up']);
+  s = E.take(s, 'down'); s = E.take(s, 2);
+  assert.equal(s.picks.length, 3);
+  assert.deepEqual(s.picks.map((p) => p.from), ['up', 'down', 'up']);
+  assert.ok(s.picks.every((p) => E.me(s).hand.includes(p.uid)));
+  assert.ok(s.log.at(-1).text.includes(name) && s.log.at(-1).text.includes('1 face-down card'));
+  s = E.endPlay(s);
+  assert.deepEqual(s.picks, [], 'cleared when the next turn begins');
+});
+
+test('each journey you lay is remembered with its route, for the results picture', () => {
+  let s = toPlay(new2());
+  s = give(inPlay(s, 'capernaum-to-nazareth'), 'capernaum', 'magdala', 'cana', 'nazareth');
+  s = E.play(s, E.plays(s)[0]);
+  assert.deepEqual(E.me(s).routes, [{ journey: 'capernaum-to-nazareth', path: ['capernaum', 'magdala', 'cana', 'nazareth'] }]);
+});
