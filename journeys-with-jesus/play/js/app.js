@@ -15,7 +15,7 @@ const FAST = new URLSearchParams(location.search).has('fast');
 const BOT_NAMES = ['Peter', 'Mary', 'Andrew'];
 
 let state = null;
-const ui = { build: null, msg: '', fx: null, reciting: false, timer: null, last: null, toastTimer: null };
+const ui = { build: null, msg: '', fx: null, reciting: false, timer: null, last: null, toastTimer: null, newUp: new Set(), newJ: new Set() };
 
 // ---- saving --------------------------------------------------------------------------------------------------------
 const save = () => { try { state && !state.over ? localStorage.setItem(KEY, JSON.stringify(state)) : localStorage.removeItem(KEY); } catch { /* storage unavailable */ } };
@@ -34,6 +34,14 @@ function commit(next) {
   const was = state;
   // a journey was just completed (by you or a computer): flash it
   const gained = was && next.turnRoutes && (was.turnRoutes || []).length < next.turnRoutes.length ? next.turnRoutes[next.turnRoutes.length - 1] : null;
+  // cards that have just been turned up (in the face-up piles or the journeys in play) are highlighted until you start your next turn
+  if (!was || (was.turn === 0 && was.phase === 'recite' && next.phase !== 'recite')) { ui.newUp.clear(); ui.newJ.clear(); }
+  if (was) {
+    next.up.forEach((uid) => { if (uid !== null && !was.up.includes(uid)) ui.newUp.add(uid); });
+    next.inplay.forEach((jid) => { if (jid !== null && !was.inplay.includes(jid)) ui.newJ.add(jid); });
+  }
+  ui.newUp = new Set([...ui.newUp].filter((u) => next.up.includes(u)));
+  ui.newJ = new Set([...ui.newJ].filter((j) => next.inplay.includes(j)));
   state = next;
   while (state.phase === 'handover' && !E.me(state).bot && !state.over) state = E.pass(state);      // your own turn passes on at once
   ui.build = null; ui.msg = ''; ui.reciting = false;
@@ -56,7 +64,7 @@ function schedule() {
 
 function startGame(opts = ui.last) {
   clearTimeout(ui.timer);
-  ui.last = opts; ui.fx = null;
+  ui.last = opts; ui.fx = null; ui.newUp.clear(); ui.newJ.clear();
   const skills = ['casual', 'steady', 'sharp'];
   const players = [{ name: 'You', bot: false }];
   for (let i = 0; i < opts.bots; i++) players.push({ name: BOT_NAMES[i], bot: true, skill: opts.skill === 'mixed' ? skills[(i + 1) % 3] : opts.skill });
@@ -123,9 +131,9 @@ function renderInplay() {
   const mine = canBuild();
   $('#inplay').innerHTML = state.inplay.map((jid, i) => {
     if (jid !== null) {
-      const j = E.journeyById[jid], sel = ui.build && ui.build.jid === jid;
-      return `<button type="button" class="jp-journey${sel ? ' is-selected' : ''}${mine ? ' can-pick' : ''}" data-jid="${jid}" aria-pressed="${!!sel}" aria-label="${esc(jTitle(j))}, ${j.points} points">
-        <img src="${IMG}${jid}-480.webp" width="480" height="670" alt="Journey Card: ${esc(jTitle(j))}" /></button>`;
+      const j = E.journeyById[jid], sel = ui.build && ui.build.jid === jid, fresh = ui.newJ.has(jid);
+      return `<button type="button" class="jp-journey${sel ? ' is-selected' : ''}${mine ? ' can-pick' : ''}${fresh ? ' is-new' : ''}" data-jid="${jid}" aria-pressed="${!!sel}" aria-label="${esc(jTitle(j))}, ${j.points} points${fresh ? ', newly turned up' : ''}">
+        <img src="${IMG}${jid}-480.webp" width="480" height="670" alt="Journey Card: ${esc(jTitle(j))}" />${fresh ? '<span class="new">New</span>' : ''}</button>`;
     }
     const r = (state.turnRoutes || []).find((x) => x.slot === i);
     if (r) {
@@ -151,7 +159,7 @@ function renderPiles() {
   const drawing = iAmPlaying() && (state.phase === 'draw' || state.phase === 'topup');
   $('#piles-hint').textContent = drawing ? '(tap a card to take it)' : '';
   const up = state.up.map((uid, i) => (uid === null ? `<div class="jp-pile is-empty" aria-hidden="true"></div>`
-    : `<button type="button" class="jp-pile" data-take="${i}" ${drawing ? '' : 'disabled'} aria-label="Take ${esc(E.cardLabel(defs()[uid]))}"><img src="${cardImg(defs()[uid])}" width="480" height="670" alt="${esc(E.cardLabel(defs()[uid]))}" /><span class="jp-cap">${esc(E.cardLabel(defs()[uid]))}</span></button>`)).join('');
+    : `<button type="button" class="jp-pile${ui.newUp.has(uid) ? ' is-new' : ''}" data-take="${i}" ${drawing ? '' : 'disabled'} aria-label="Take ${esc(E.cardLabel(defs()[uid]))}${ui.newUp.has(uid) ? ' (newly turned up)' : ''}"><img src="${cardImg(defs()[uid])}" width="480" height="670" alt="${esc(E.cardLabel(defs()[uid]))}" /><span class="jp-cap">${esc(E.cardLabel(defs()[uid]))}</span>${ui.newUp.has(uid) ? '<span class="new">New</span>' : ''}</button>`)).join('');
   const down = state.draw.length + state.discard.length;
   $('#piles').innerHTML = up + `<button type="button" class="jp-pile jp-down" data-take="down" ${drawing && down ? '' : 'disabled'} aria-label="Take the top face-down card (${down} left)"><img src="${IMG}back-place-480.webp" width="480" height="670" alt="" /><span class="count">${down}</span></button>`;
 }
@@ -165,12 +173,25 @@ function renderHand() {
     return ra < rb ? -1 : ra > rb ? 1 : E.cardLabel(A) < E.cardLabel(B2) ? -1 : 1;
   });
   const recite = ui.reciting && iAmPlaying() && state.phase === 'recite';
-  $('#hand-hint').textContent = recite ? '(tap the card you will recite)' : ui.build ? '(tap the cards for your route)' : `(${p.hand.length} cards${p.tokens ? `, ${p.tokens} token${p.tokens > 1 ? 's' : ''}` : ''})`;
+  $('#hand-hint').textContent = recite ? '(tap the card you will recite; the verses are hidden)' : ui.build ? '(tap the cards for your route)' : `(${p.hand.length} cards${p.tokens ? `, ${p.tokens} token${p.tokens > 1 ? 's' : ''}` : ''})`;
   $('#hand').innerHTML = hand.map((uid) => {
     const c = d[uid], isNew = fresh.has(uid);
-    return `<button type="button" class="jp-hc${inBuild.has(uid) ? ' is-used' : ''}${recite ? ' is-pick' : ''}${isNew ? ' is-new' : ''}${ui.build && !inBuild.has(uid) ? ' can-lay' : ''}" data-hand="${uid}" style="--rc:${regionColor(c)}" aria-label="${esc(E.cardLabel(c))}${isNew ? ', just drawn' : ''}">
-      <img src="${cardImg(c)}" width="480" height="670" alt="${esc(E.cardLabel(c))}" loading="lazy" /><span class="jp-cap" style="color:${regionColor(c)}">${esc(E.cardLabel(c))}</span>${isNew ? '<span class="new">New</span>' : ''}</button>`;
-  }).join('') + (p.tokens ? Array.from({ length: p.tokens }, () => '<span class="jp-token" title="Scripture Memory Token: 5 points, or a wild card">Token</span>').join('') : '');
+    const hidden = recite && c.kind === 'place';                      // face down while you recite, so you cannot read the verse
+    const canPick = recite && c.kind === 'place';
+    const src = hidden ? `${IMG}back-place-480.webp` : cardImg(c);
+    return `<button type="button" class="jp-hc${inBuild.has(uid) ? ' is-used' : ''}${canPick ? ' is-pick' : ''}${recite && !canPick ? ' is-off' : ''}${hidden ? ' is-down' : ''}${isNew ? ' is-new' : ''}${ui.build && !inBuild.has(uid) ? ' can-lay' : ''}" data-hand="${uid}" ${recite && !canPick ? 'disabled' : ''} style="--rc:${regionColor(c)}" aria-label="${hidden ? 'Face-down card: ' : ''}${esc(E.cardLabel(c))}${isNew ? ', just drawn' : ''}">
+      <img src="${src}" width="480" height="670" alt="${hidden ? '' : esc(E.cardLabel(c))}" loading="lazy" /><span class="jp-cap" style="color:${regionColor(c)}">${esc(E.cardLabel(c))}</span>${isNew ? '<span class="new">New</span>' : ''}</button>`;
+  }).join('') + tokenTiles(p);
+}
+
+// Scripture Memory Tokens sit in your hand like cards: tap one to use it as a wild card on your route.
+function tokenTiles(p) {
+  const used = ui.build ? ui.build.seq.filter((c) => c.kind === 'token').length : 0;
+  return Array.from({ length: p.tokens }, (_, i) => {
+    const gone = i >= p.tokens - used;
+    return `<button type="button" class="jp-hc jp-tok${gone ? ' is-used' : ''}${ui.build && !gone ? ' can-lay' : ''}" data-token="${i}" style="--rc:#b8941f" aria-label="Scripture Memory Token: 5 points, or a wild card">
+      <img src="${IMG}token-back-480.webp" width="480" height="480" alt="" loading="lazy" /><span class="jp-cap" style="color:#7a5d00">Token</span></button>`;
+  }).join('');
 }
 
 // The cards you took this turn, so a card from the face-down pile is easy to spot among the others in your hand.
@@ -213,12 +234,10 @@ function renderBuilder() {
   }
   $('#b-route').innerHTML = route;
   $('#b-msg').textContent = ui.msg || (last ? `Next: a place joined to ${name(last)} by a road or boat ride.` : '');
-  const tokens = state.players[0].tokens - b.seq.filter((c) => c.kind === 'token').length;
   $('#b-actions').innerHTML = [
     b.seq.length ? '<button type="button" class="btn btn-outline-secondary btn-sm" data-b="undo">Undo</button>' : '',
     b.mode === 'extend' && !b.seq.length ? '<button type="button" class="btn btn-outline-secondary btn-sm" data-b="fresh">Start a separate line</button>' : '',
     '<button type="button" class="btn btn-outline-secondary btn-sm" data-b="map">Map</button>',
-    tokens > 0 ? `<button type="button" class="btn btn-outline-secondary btn-sm" data-b="token">Use a token</button>` : '',
     `<button type="button" class="btn btn-outline-secondary btn-sm" data-b="look">See the card</button>`,
     '<button type="button" class="btn btn-outline-danger btn-sm" data-b="cancel">Cancel</button>',
   ].join(' ');
@@ -265,8 +284,8 @@ function zoom(src, title) {
 function reciteDialog(uid) {
   const c = defs()[uid];
   $('#card-title').textContent = `Recite the verse on ${E.cardLabel(c)}`;
-  $('#card-body').innerHTML = '<p>Say the Scripture on this card from memory, out loud or in your head. When you are ready, check it against the card.</p>';
-  $('#card-actions').innerHTML = '<button type="button" class="btn btn-primary" id="rc-show">Show the card</button><button value="close" class="btn btn-outline-secondary">Cancel</button>';
+  $('#card-body').innerHTML = `<img class="jp-zoom" src="${IMG}back-place-755.webp" alt="The card, face down" /><p class="mt-2 mb-0">Say the Scripture on this card from memory, out loud or in your head. When you are ready, turn the card over and check.</p>`;
+  $('#card-actions').innerHTML = '<button type="button" class="btn btn-primary" id="rc-show">Turn it over</button><button value="close" class="btn btn-outline-secondary">Cancel</button>';
   $('#rc-show').onclick = () => {
     $('#card-body').innerHTML = `<img class="jp-zoom" src="${cardImg(c, 755)}" alt="${esc(E.cardLabel(c))}" /><p class="mt-2 mb-0">Did you get it right?</p>`;
     $('#card-actions').innerHTML = '<button type="button" class="btn btn-success" id="rc-yes">I got it</button><button type="button" class="btn btn-outline-secondary" id="rc-no">I missed it</button>';
@@ -379,11 +398,17 @@ function builderAction(what) {
   else if (what === 'cancel') { ui.build = null; ui.msg = ''; render(); }
   else if (what === 'map') $('#board').scrollIntoView({ behavior: FAST ? 'auto' : 'smooth', block: 'center' });
   else if (what === 'look') { const j = E.journeyById[b.jid]; zoom(`${IMG}${j.id}-755.webp`, `${jTitle(j)}: ${j.points} points`); }
-  else if (what === 'token') {
-    const options = B.legalPlaces(b);
-    if (!options.length) { ui.msg = 'No place could come next.'; render(); return; }
-    chooseStand('Which place will the token stand for? (You lose its 5 points.)', options, (place) => ({ place, uid: null, kind: 'token' }));
-  }
+}
+
+// Tapping a token in your hand: while you lay a journey it stands for a place of your choice (you lose its 5 points).
+function tokenTapped() {
+  if (!(ui.build && canBuild())) { zoom(`${IMG}token-back-755.webp`, 'Scripture Memory Token: 5 points if you keep it, or use it as a wild card on your route'); return; }
+  const left = state.players[0].tokens - ui.build.seq.filter((c) => c.kind === 'token').length;
+  if (left <= 0) { ui.msg = 'You have no more tokens.'; render(); return; }
+  const options = B.legalPlaces(ui.build);
+  if (!options.length) { ui.msg = 'No place could come next.'; render(); return; }
+  if (options.length === 1) { apply({ place: options[0], uid: null, kind: 'token' }); return; }
+  chooseStand('Which place will the token stand for? (You lose its 5 points.)', options, (place) => ({ place, uid: null, kind: 'token' }));
 }
 
 // ---- events ------------------------------------------------------------------------------------------------------
@@ -396,6 +421,7 @@ document.addEventListener('click', (e) => {
   if (t.dataset.zoomJ) { const j = E.journeyById[t.dataset.zoomJ]; zoom(`${IMG}${j.id}-755.webp`, `${jTitle(j)}: ${j.points} points`); return; }
   if (t.dataset.ack) { if (state.phase === 'handover') commit(E.pass(state)); return; }
   if (t.dataset.b) { builderAction(t.dataset.b); return; }
+  if (t.dataset.token !== undefined) { tokenTapped(); return; }
   if (t.dataset.jid) {
     if (canBuild()) selectJourney(t.dataset.jid);
     else { const j = E.journeyById[t.dataset.jid]; zoom(`${IMG}${j.id}-755.webp`, `${jTitle(j)}: ${j.points} points`); }
