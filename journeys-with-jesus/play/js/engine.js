@@ -6,7 +6,7 @@
 //   draw    take three cards from the four face-up piles and the face-down pile, in any mix
 //   play    lay down any completed journeys (and extend them to complete more); replaced journeys come in at once
 //   topup   if you hold fewer than 7 Place Cards, draw until you do
-import { PLACES, simplePaths } from './board-data.js';
+import { PLACES, NEIGHBORS, simplePaths } from './board-data.js';
 import { PLACE_CARDS, WILD_CARDS, JOURNEY_CARDS } from './deck-data.js';
 
 export const HAND = 7, DRAWS = 3, UP_PILES = 4, IN_PLAY = 4, TOKEN_POINTS = 5, MAX_ROUNDS = 80;
@@ -60,7 +60,7 @@ export function newGame({ seed = 1, players, expansion = false } = {}) {
   const draw = shuffled(defs.map((_, i) => i), seed);
   const s = {
     v: 1, seed, expansion, reshuffles: 0, round: 1, turn: 0, phase: 'recite', drawn: 0, topup: 0, recited: null, chain: null,
-    passes: 0, over: false, endedBy: null, picks: [], topupFrom: 0,
+    passes: 0, over: false, endedBy: null, picks: [], topupFrom: 0, chains: [], turnRoutes: [], recent: [],
     players: players.map((p) => ({ name: p.name, bot: !!p.bot, skill: p.skill || null, hand: [], tokens: 0, journeys: [], routes: [] })),
     draw, up: [], discard: [],
     jdeck: shuffled(journeyDefs(expansion).map((j) => j.id), seed + 1), inplay: [], log: [],
@@ -121,7 +121,7 @@ export function take(s0, from) {
     const faceUp = mine.filter((x) => x.from === 'up').map((x) => cardLabel(defs[x.uid])), down = mine.length - faceUp.length;
     const parts = [...faceUp, ...(down ? [`${down} face-down card${down > 1 ? 's' : ''}`] : [])];
     say(s, `${s.phase === 'draw' ? 'drew' : 'drew up to a full hand:'} ${parts.join(', ') || 'nothing'}`);
-    if (s.phase === 'draw') { s.phase = 'play'; s.drawn = 0; s.chain = null; } else nextTurn(s);
+    if (s.phase === 'draw') { s.phase = 'play'; s.drawn = 0; s.chains = []; } else nextTurn(s);
   }
   return s;
 }
@@ -130,7 +130,6 @@ export function take(s0, from) {
 export function endPlay(s0) {
   if (s0.phase !== 'play') throw new Error('illegal: not the play phase');
   const s = clone(s0);
-  s.chain = null;
   const need = Math.max(0, HAND - me(s).hand.length);
   if (need > 0 && cardsToDraw(s) > 0) { s.phase = 'topup'; s.topup = need; s.drawn = 0; s.topupFrom = (s.picks || []).length; } else nextTurn(s);
   return s;
@@ -138,7 +137,9 @@ export function endPlay(s0) {
 
 function nextTurn(s) {
   const acted = s.turnActed;           // set by play()/take(); a turn where nothing could happen counts toward a stall
-  s.chain = null; s.recited = null; s.drawn = 0; s.topup = 0; s.turnActed = false; s.picks = []; s.topupFrom = 0;
+  s.recent = (s.turnRoutes || []).map((r) => ({ ...r }));       // what this player completed, shown to the next player
+  s.chains = []; s.turnRoutes = []; s.recited = null; s.drawn = 0; s.topup = 0; s.turnActed = false; s.picks = []; s.topupFrom = 0;
+  refillJourneys(s);
   s.passes = acted ? 0 : s.passes + 1;
   if (s.passes >= s.players.length) return finish(s, 'stalled');
   s.turn = (s.turn + 1) % s.players.length;
@@ -146,6 +147,12 @@ function nextTurn(s) {
   if (s.round > MAX_ROUNDS) return finish(s, 'rounds');
   s.phase = 'recite';
 }
+// Journeys completed during a turn leave their places empty until that turn is over; then the new ones are turned up.
+function refillJourneys(s) {
+  for (let i = 0; i < s.inplay.length; i++) if (s.inplay[i] === null && s.jdeck.length) s.inplay[i] = s.jdeck.pop();
+  s.inplay = s.inplay.filter((j) => j !== null);
+}
+export const journeysLeft = (s) => s.inplay.filter((j) => j !== null).length + s.jdeck.length;
 function finish(s, why) { s.over = true; s.phase = 'over'; s.endedBy = why; }
 
 // ---- journeys --------------------------------------------------------------------------------------------------------
@@ -190,7 +197,7 @@ function cover(nodes, inv) {
     if (israel < inv.israel.length) { plan.push({ place, uid: inv.israel[israel], kind: 'israel' }); israel += 1; }
     else if (tokens < inv.tokens) { plan.push({ place, uid: null, kind: 'token' }); tokens += 1; } else return null;
   }
-  return plan;
+  return nodes.map((n) => plan.find((a) => a.place === n));           // in the order of the route
 }
 
 const rank = (p) => p.tokensUsed * 100 + p.wildsUsed * 10 + p.path.length;
@@ -211,25 +218,18 @@ export function plays(s, { limit = 6 } = {}) {
   if (s.phase !== 'play') return [];
   const p = me(s), inv = inventory(s, p), out = [];
   for (const jid of s.inplay) {
+    if (jid === null) continue;
     const j = journeyById[jid];
     const fresh = [];
     for (const path of simplePaths(j.a, j.b)) { const pl = planFor(inv, j, path, 0); if (pl) fresh.push({ ...pl, extends: false }); }
     fresh.sort((a, b) => rank(a) - rank(b));
     out.push(...fresh.slice(0, limit));
-    if (s.chain) {
-      const seq = s.chain, ext = [];
+    const chains = s.chains || [];
+    if (chains.length) {
+      const seq = chains[chains.length - 1], ext = [];
       for (const [x, y] of [[j.a, j.b], [j.b, j.a]]) {
         // a journey wholly inside what is laid (a run of it, in either direction) is complete with no more cards
-        if (x === j.a) {
-          for (let i = 0; i < seq.length; i++) {
-            for (let k = i + 1; k < seq.length; k++) {
-              const run = seq.slice(i, k + 1), ends = [run[0], run[run.length - 1]];
-              if ((ends[0] === j.a && ends[1] === j.b) || (ends[0] === j.b && ends[1] === j.a)) {
-                ext.push({ journey: j.id, points: j.points, path: run, from: run.length, assign: [], tokensUsed: 0, wildsUsed: 0, extends: true, start: i });
-              }
-            }
-          }
-        }
+        if (x === j.a) { const run = insideRun(chains, j); if (run) ext.push({ journey: j.id, points: j.points, path: run, from: run.length, assign: [], tokensUsed: 0, wildsUsed: 0, extends: true, start: 0 }); }
         if (seq.includes(y)) continue;
         // or more cards on top of the end, reusing the cards laid from `x` on, in order
         for (let i = 0; i < seq.length; i++) {
@@ -250,30 +250,72 @@ export function plays(s, { limit = 6 } = {}) {
   return out;
 }
 
-// Lay down one of the plays from plays().
-export function play(s0, option) {
+// A journey that sits wholly inside something already laid this turn (a run of one of the chains, either way round).
+export function insideRun(chains, j) {
+  for (const seq of chains) {
+    for (let i = 0; i < seq.length; i++) {
+      for (let k = i + 1; k < seq.length; k++) {
+        const x = seq[i], y = seq[k];
+        if ((x === j.a && y === j.b) || (x === j.b && y === j.a)) return seq.slice(i, k + 1);
+      }
+    }
+  }
+  return null;
+}
+
+// Lay down a journey you built: `built` = { journey, extends, path, from, assign }.
+//   fresh   (extends false): `path` runs from one end of the journey to the other, `assign` has a card for every place.
+//   extend  (extends true, from < path.length): `path` starts with the places already laid (the last `from` places of
+//           the last chain you laid), then the new places; `assign` has a card for each new place only.
+//   inside  (extends true, from = path.length): the journey is wholly inside what you laid this turn; no cards.
+// A card in `assign` is { place, uid, kind } with kind exact | region | israel | token (uid null for a token).
+export function play(s0, built) {
   if (s0.phase !== 'play') throw new Error('illegal: not the play phase');
   const s = clone(s0), p = me(s);
-  const jid = option.journey;
-  if (!s.inplay.includes(jid)) throw new Error('illegal: that journey is not in play');
-  const legal = plays(s0, { limit: 1000 }).find((o) => o.journey === jid && o.extends === !!option.extends && o.path.join() === option.path.join()
-    && o.assign.map((a) => a.kind).join() === option.assign.map((a) => a.kind).join());
-  if (!legal) throw new Error('illegal: that journey cannot be completed that way');
-  const use = legal.assign;
-  for (const a of use) {
+  const jid = built.journey, j = journeyById[jid];
+  if (!j || !s.inplay.includes(jid)) throw new Error('illegal: that journey is not in play');
+  const path = built.path, from = built.from || 0, assign = built.assign || [], chains = s.chains || [];
+  if (!Array.isArray(path) || path.length < 2 || new Set(path).size !== path.length) throw new Error('illegal: not a route');
+  for (let i = 0; i + 1 < path.length; i++) if (!PLACES[path[i]] || !(NEIGHBORS[path[i]] || []).includes(path[i + 1])) throw new Error('illegal: no road or boat between those places');
+  const ends = [path[0], path[path.length - 1]];
+  if (!((ends[0] === j.a && ends[1] === j.b) || (ends[0] === j.b && ends[1] === j.a))) throw new Error('illegal: the route does not join the two places on the card');
+  const inside = !!built.extends && from === path.length;
+  if (!built.extends && from !== 0) throw new Error('illegal: a new journey has no cards laid yet');
+  if (inside) {
+    const reversed = [...path].reverse().join(), ok = chains.some((c) => { const t = c.join(','); return `,${t},`.includes(`,${path.join(',')},`) || `,${t},`.includes(`,${reversed},`); });
+    if (!ok || assign.length) throw new Error('illegal: that journey is not inside what you laid');
+  } else if (built.extends) {
+    const chain = chains[chains.length - 1];
+    if (!chain || from < 1 || from >= path.length || chain.slice(chain.length - from).join() !== path.slice(0, from).join()) throw new Error('illegal: an extension continues from the end of what you laid');
+  }
+  const need = path.slice(inside ? path.length : from);
+  if (assign.length !== need.length || assign.some((a, i) => a.place !== need[i])) throw new Error('illegal: a card is needed for every new place');
+  const defs = deckDefs(s.expansion), seen = new Set(); let tokens = 0;
+  for (const a of assign) {
+    if (a.kind === 'token') { tokens += 1; continue; }
+    const d = defs[a.uid];
+    if (seen.has(a.uid) || !p.hand.includes(a.uid) || !d) throw new Error('illegal: that card is not in your hand');
+    seen.add(a.uid);
+    const okCard = (a.kind === 'exact' && d.kind === 'place' && d.place === a.place) || (a.kind === 'region' && d.kind === 'wild' && d.region !== 'israel' && d.region === PLACES[a.place].region)
+      || (a.kind === 'israel' && d.kind === 'wild' && d.region === 'israel');
+    if (!okCard) throw new Error('illegal: that card cannot stand for ' + PLACES[a.place].name);
+  }
+  if (tokens > p.tokens) throw new Error('illegal: you have no token to use');
+  for (const a of assign) {
     if (a.kind === 'token') { p.tokens -= 1; continue; }
     p.hand.splice(p.hand.indexOf(a.uid), 1);
     s.discard.push(a.uid);
   }
   const at = s.inplay.indexOf(jid);
   p.journeys.push(jid);
-  (p.routes ||= []).push({ journey: jid, path: legal.path.slice() });
-  if (s.jdeck.length) s.inplay[at] = s.jdeck.pop(); else s.inplay.splice(at, 1);
-  s.chain = legal.extends ? s.chain.concat(legal.path.slice(legal.from)) : legal.path.slice();
+  (p.routes ||= []).push({ journey: jid, path: path.slice() });
+  s.inplay[at] = null;                         // the new journey is turned up when this turn is over
+  if (!built.extends) s.chains = [...chains, path.slice()];
+  else if (!inside) s.chains = [...chains.slice(0, -1), chains[chains.length - 1].concat(path.slice(from))];
+  (s.turnRoutes ||= []).push({ who: s.turn, journey: jid, path: path.slice(), slot: at, how: !built.extends ? 'fresh' : inside ? 'inside' : 'extend' });
   s.turnActed = true;
-  const j = journeyById[jid];
-  say(s, `${legal.extends ? 'extended to complete' : 'completed'} ${PLACES[j.a].name} to ${PLACES[j.b].name} (${j.points} points)`);
-  if (s.inplay.length === 0 && s.jdeck.length === 0) finish(s, 'journeys');
+  say(s, `${built.extends ? (inside ? 'also completed' : 'extended to complete') : 'completed'} ${PLACES[j.a].name} to ${PLACES[j.b].name} (${j.points} points)`);
+  if (s.inplay.every((x) => x === null) && s.jdeck.length === 0) finish(s, 'journeys');
   return s;
 }
 

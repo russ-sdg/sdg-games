@@ -40,7 +40,7 @@ test('journey cards are not lost: in play + deck + won always add up', () => {
   const r = mulberry(8);
   while (!s.over) {
     s = AI.step(s, r);
-    assert.equal(s.inplay.length + s.jdeck.length + s.players.reduce((a, p) => a + p.journeys.length, 0), 13);
+    assert.equal(s.inplay.filter(Boolean).length + s.jdeck.length + s.players.reduce((a, p) => a + p.journeys.length, 0), 13);
   }
 });
 

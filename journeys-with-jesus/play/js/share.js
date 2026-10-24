@@ -38,7 +38,7 @@ function fit(ctx, text, maxW, size, weight, family) {
 async function boardImage(state, w, h) {
   const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
   const routes = state.players.flatMap((p, i) => (p.routes || []).map((r) => ({ path: r.path, color: PLAYER_COLORS[i] })));
-  drawBoard(svg, { routes });
+  drawBoard(svg, { routes: routes.map((r) => ({ ...r, now: false })) });
   svg.setAttribute('xmlns', NS); svg.setAttribute('width', w); svg.setAttribute('height', h);
   const img = new Image();
   img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(svg));

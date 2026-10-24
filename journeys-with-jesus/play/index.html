@@ -63,15 +63,15 @@
 
             <div class="row g-3">
                 <div class="col-lg-5 order-lg-2">
-                    <div class="jp-card">
+                    <div class="jp-card jp-boardcard">
                         <svg id="board" class="jp-board" aria-hidden="false"></svg>
+                        <div class="jp-toast" id="toast" hidden aria-live="polite"></div>
                     </div>
                 </div>
                 <div class="col-lg-7 order-lg-1">
                     <div class="jp-card" id="journeys-box">
                         <h2>Journeys in play</h2>
                         <div class="jp-journeys" id="inplay"></div>
-                        <div id="plays" class="jp-plays"></div>
                     </div>
                     <div class="jp-card" id="piles-box">
                         <h2>Draw piles <span class="jp-hint" id="piles-hint"></span></h2>
@@ -93,6 +93,19 @@
             <div class="mt-3 d-flex gap-2 flex-wrap"><button type="button" class="btn btn-outline-secondary btn-sm" id="new-btn">New game</button></div>
         </section>
     </main>
+
+    <!-- the journey you are laying: a bar at the foot of the screen with a small map, so you can scroll to your cards -->
+    <div class="jp-builder" id="builder" hidden>
+        <div class="jp-builder-main">
+            <div class="jp-builder-info">
+                <div class="jp-builder-title" id="b-title"></div>
+                <div class="jp-builder-route" id="b-route"></div>
+                <div class="jp-builder-msg" id="b-msg" role="status" aria-live="polite"></div>
+                <div class="jp-builder-actions" id="b-actions"></div>
+            </div>
+            <svg id="mini" class="jp-mini" aria-hidden="false"></svg>
+        </div>
+    </div>
 
     <dialog id="card-dialog" class="jp-dialog" aria-labelledby="card-title">
         <form method="dialog">
