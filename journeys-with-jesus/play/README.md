@@ -1,7 +1,7 @@
 # Journeys with Jesus: play online
 
 Free online version of the Journeys with Jesus board game, one person against 1 to 3 computer players. Static files only (no server).
-Not linked from the rest of the site yet (the page is `noindex`); it is at `/journeys-with-jesus/play/`.
+Linked from the Journeys with Jesus page and the games list; it is at `/journeys-with-jesus/play/`.
 
 - `index.html`, `play.css`, `js/app.js`: the page and UI (setup, board, journeys in play, piles, hand, results). A game in progress is saved in the browser and can be resumed.
 - `js/engine.js`: the rules, as pure functions on a plain state object (turn phases recite → draw → play → top-up).
