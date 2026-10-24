@@ -1,5 +1,6 @@
 /* Journeys with Jesus: play online. Matches the look of the other online games on the site. */
-.jp { max-width: 1100px; margin: 0 auto; --olive: #3f4a1d; --gold: #f3c24b; }
+.jp, .jp-builder { --olive: #3f4a1d; --gold: #f3c24b; }
+.jp { max-width: 1100px; margin: 0 auto; }
 .jp [hidden] { display: none !important; }
 .jp-logo { height: 44px; width: auto; max-width: 100%; }
 
@@ -21,26 +22,40 @@
 .jp-status { font-weight: 600; margin: .2rem 0 .7rem; min-height: 1.5rem; }
 
 /* the board */
-.jp-board { width: 100%; height: auto; display: block; border-radius: .4rem; max-height: 82vh; }
-@media (max-width: 991px) { .jp-board { max-height: 44vh; } }
-@media (min-width: 992px) { .jp-board-wrap, .col-lg-5 .jp-card { position: sticky; top: 4.8rem; } }
+.jp-board { width: 100%; height: auto; display: block; border-radius: .4rem; margin: 0 auto; }
+@media (max-width: 991px) { .jp-board { max-width: 560px; } }
+
+/* the page: one column on a phone (journeys, map, piles, hand), two on a wide screen */
+.jp-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: .8rem; }
+.jp-layout > .jp-card { margin-bottom: 0; }
+@media (min-width: 992px) {
+  .jp-layout { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); grid-template-areas: "journeys board" "piles board" "hand board"; align-items: start; }
+  .jp-journeys-box { grid-area: journeys; } .jp-piles-box { grid-area: piles; } .jp-hand-box { grid-area: hand; }
+  .jp-boardcard { grid-area: board; position: sticky; top: 4.8rem; }
+  .jp-board { max-height: calc(100vh - 7rem); }
+}
+.jp-cap { display: block; font-size: .78rem; font-weight: 700; line-height: 1.15; padding: .1rem .15rem .2rem; text-align: center; color: #212529; }
 
 /* journeys in play */
-.jp-journeys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
+.jp-journeys { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; max-width: 420px; }
+@media (min-width: 640px) { .jp-journeys { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: none; } }
 .jp-journey { position: relative; padding: 0; border: 3px solid transparent; border-radius: 12px; background: none; }
 .jp-journey img { width: 100%; height: auto; display: block; }
 
 /* piles and hand */
-.jp-piles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; max-width: 560px; }
+.jp-piles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; max-width: 420px; }
+@media (min-width: 640px) { .jp-piles { grid-template-columns: repeat(5, minmax(0, 1fr)); max-width: 560px; } }
 .jp-pile { position: relative; padding: 0; border: 3px solid transparent; border-radius: 12px; background: none; }
+.jp-pile .jp-cap { position: absolute; left: 3px; right: 3px; bottom: 3px; background: rgba(255,255,255,.92); border-radius: 0 0 8px 8px; }
 .jp-pile img { width: 100%; height: auto; display: block; }
 .jp-pile:not(:disabled):hover { border-color: #0d6efd; }
 .jp-pile:disabled { cursor: default; }
 .jp-pile.is-empty { aspect-ratio: 480 / 670; border: 2px dashed #ced4da; border-radius: 12px; }
 .jp-down .count { position: absolute; right: 6px; top: 6px; background: rgba(33,37,41,.9); color: #fff; font-weight: 700; font-size: .8rem; border-radius: 1rem; padding: 0 .5rem; }
 .jp-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .6rem; }
-.jp-hand { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: .45rem; }
-.jp-hc { position: relative; padding: 0; border: 3px solid var(--rc); border-radius: 12px; background: #fff; }
+.jp-hand { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+@media (min-width: 640px) { .jp-hand { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); } }
+.jp-hc { position: relative; padding: 0; border: 3px solid var(--rc); border-radius: 12px; background: #fff; overflow: hidden; }
 .jp-hc img { width: 100%; height: auto; display: block; border-radius: 8px; }
 .jp-hc.is-used { box-shadow: 0 0 0 4px var(--gold); transform: translateY(-4px); }
 .jp-hc.is-pick { animation: jp-pulse 1.4s ease-in-out infinite; }
@@ -62,7 +77,7 @@
 .jp-dialog-actions { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; margin-top: .8rem; }
 .jp-zoom { width: 100%; height: auto; max-height: 70vh; object-fit: contain; display: block; margin: 0 auto; }
 
-@media (max-width: 560px) { .jp-hand { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); } .jp-token { width: 64px; } .jp-score { min-width: 3.9rem; padding: .1rem .35rem; } }
+@media (max-width: 560px) { .jp-token { width: 64px; } .jp-score { min-width: 3.9rem; padding: .1rem .35rem; } }
 
 /* the cards you just drew */
 .jp-drawn { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; margin-bottom: .6rem; padding: .4rem .5rem; border-radius: .5rem; background: #fff9e6; border: 2px solid var(--gold); }
@@ -126,8 +141,21 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .jp-builder-route .muted { color: #5c636a; }
 .jp-builder-msg { font-size: .85rem; min-height: 1.2rem; color: #7a3b00; }
 .jp-builder-actions { display: flex; flex-wrap: wrap; gap: .3rem; }
-.jp-mini { flex: 0 0 auto; height: 24vh; max-height: 190px; width: auto; aspect-ratio: 450 / 650; border-radius: .4rem; background: #8d6f42; }
-body.has-builder { padding-bottom: 34vh; }
-@media (min-width: 992px) { .jp-mini { display: none; } body.has-builder { padding-bottom: 12rem; } }
+body.has-builder { padding-bottom: 11rem; }
 .jp-choose { display: flex; flex-wrap: wrap; gap: .4rem; }
-.jp-tip { display: none; }
+
+/* after a computer player's turn */
+.jp-ack { border-top-color: #0d6efd; }
+.jp-ack .jp-builder-main { align-items: center; }
+.jp-ack-list { margin: .2rem 0 0; padding-left: 1.1rem; font-size: .82rem; max-height: 6.5rem; overflow: auto; }
+.jp-ack-btn { align-self: center; flex: 0 0 auto; min-width: 7.5rem; white-space: nowrap; font-weight: 700; padding: .55rem 1rem; }
+body.has-ack { padding-bottom: 10rem; }
+
+/* a phone on its side: keep the bars slim so the cards and map stay in view */
+@media (max-height: 520px) {
+  .jp-builder { padding: .25rem .6rem; }
+  .jp-builder-info { display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .8rem; }
+  .jp-builder-msg { min-height: 0; }
+  .jp-ack-list { max-height: 3.2rem; }
+  body.has-builder, body.has-ack { padding-bottom: 6rem; }
+}

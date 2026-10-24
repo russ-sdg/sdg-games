@@ -98,13 +98,49 @@ test('after a journey is laid, another can be built on top of its end, reusing t
   for (const place of ['capernaum', 'magdala', 'cana', 'nazareth']) { const r = tap(s, build, place); build = r.build; if (r.done) s = E.play(s, B.toPlay(build)); }
   const ext = B.begin(s, 'capernaum-to-nain');
   assert.equal(ext.build.mode, 'extend');
-  assert.deepEqual(ext.build.reuse, ['capernaum', 'magdala', 'cana', 'nazareth']);
-  assert.equal(B.canPlace(ext.build, 'cana').ok, false, 'already on the route');
+  assert.equal(ext.build.side, null, 'which end you continue from is settled by your first card');
+  assert.deepEqual(B.lineEnds(ext.build), ['capernaum', 'nazareth']);
+  assert.equal(B.canPlace(ext.build, 'cana').ok, false, 'already on your line');
+  assert.equal(B.canPlace(ext.build, 'tyre').ok, false, 'not next to either end');
   const r = tap(s, ext.build, 'nain');
   assert.equal(r.done, true);
+  assert.equal(r.build.side, 'end');
+  assert.deepEqual(r.build.reuse, ['capernaum', 'magdala', 'cana', 'nazareth']);
   s = E.play(s, B.toPlay(r.build));
   assert.equal(E.score(s.players[0]).total, 16 + 25);
   assert.equal(s.players[0].hand.length, 0);
+  assert.deepEqual(s.chains, [['capernaum', 'magdala', 'cana', 'nazareth', 'nain']]);
+});
+
+test('a journey can also be extended from the other end of the line you laid', () => {
+  // laid from Nazareth to Capernaum, so the line starts at Nazareth: Cana to Sychar continues from that start (Nain, Sychar)
+  let s = game(['nazareth', 'cana', 'magdala', 'capernaum', 'nain', 'sychar'], ['capernaum-to-nazareth', 'cana-to-sychar']);
+  let { build } = B.begin(s, 'capernaum-to-nazareth');
+  for (const place of ['nazareth', 'cana', 'magdala', 'capernaum']) { const r = tap(s, build, place); build = r.build; if (r.done) s = E.play(s, B.toPlay(build)); }
+  assert.deepEqual(s.chains[0], ['nazareth', 'cana', 'magdala', 'capernaum']);
+  const ext = B.begin(s, 'cana-to-sychar');
+  assert.equal(ext.build.mode, 'extend');
+  // Nain is joined to Nazareth, the start of the line, not to Capernaum, the end
+  assert.equal(B.canPlace(ext.build, 'nain').ok, true);
+  let r = tap(s, ext.build, 'nain');
+  assert.equal(r.build.side, 'start');
+  assert.deepEqual(r.build.reuse, ['cana', 'nazareth'], 'from Cana back out to the start of the line');
+  r = tap(s, r.build, 'sychar');
+  assert.equal(r.done, true);
+  s = E.play(s, B.toPlay(r.build));
+  assert.equal(E.score(s.players[0]).total, 16 + 16);
+  assert.deepEqual(s.chains, [['sychar', 'nain', 'nazareth', 'cana', 'magdala', 'capernaum']]);
+});
+
+test('undoing the first card of an extension lets you choose the end again', () => {
+  let s = game(['nazareth', 'cana', 'magdala', 'capernaum', 'nain'], ['capernaum-to-nazareth', 'cana-to-sychar']);
+  s.chains = [['nazareth', 'cana', 'magdala', 'capernaum']];
+  let { build } = B.begin(s, 'cana-to-sychar');
+  build = tap(s, build, 'nain').build;
+  assert.equal(build.side, 'start');
+  build = B.undo(build);
+  assert.equal(build.side, null);
+  assert.deepEqual(build.reuse, []);
 });
 
 test('you may decline to extend and start a separate line instead', () => {

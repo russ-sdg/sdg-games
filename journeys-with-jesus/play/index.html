@@ -61,28 +61,24 @@
             <div class="jp-bar" id="bar"></div>
             <p class="jp-status" id="status" role="status" aria-live="polite"></p>
 
-            <div class="row g-3">
-                <div class="col-lg-5 order-lg-2">
-                    <div class="jp-card jp-boardcard">
-                        <svg id="board" class="jp-board" aria-hidden="false"></svg>
-                        <div class="jp-toast" id="toast" hidden aria-live="polite"></div>
-                    </div>
+            <div class="jp-layout">
+                <div class="jp-card jp-journeys-box" id="journeys-box">
+                    <h2>Journeys in play</h2>
+                    <div class="jp-journeys" id="inplay"></div>
                 </div>
-                <div class="col-lg-7 order-lg-1">
-                    <div class="jp-card" id="journeys-box">
-                        <h2>Journeys in play</h2>
-                        <div class="jp-journeys" id="inplay"></div>
-                    </div>
-                    <div class="jp-card" id="piles-box">
-                        <h2>Draw piles <span class="jp-hint" id="piles-hint"></span></h2>
-                        <div class="jp-piles" id="piles"></div>
-                    </div>
-                    <div class="jp-card" id="hand-box">
-                        <h2>Your hand <span class="jp-hint" id="hand-hint"></span></h2>
-                        <div class="jp-drawn" id="drawn" hidden></div>
-                        <div class="jp-actions" id="actions"></div>
-                        <div class="jp-hand" id="hand"></div>
-                    </div>
+                <div class="jp-card jp-boardcard">
+                    <svg id="board" class="jp-board" aria-hidden="false"></svg>
+                    <div class="jp-toast" id="toast" hidden aria-live="polite"></div>
+                </div>
+                <div class="jp-card jp-piles-box" id="piles-box">
+                    <h2>Draw piles <span class="jp-hint" id="piles-hint"></span></h2>
+                    <div class="jp-piles" id="piles"></div>
+                </div>
+                <div class="jp-card jp-hand-box" id="hand-box">
+                    <h2>Your hand <span class="jp-hint" id="hand-hint"></span></h2>
+                    <div class="jp-drawn" id="drawn" hidden></div>
+                    <div class="jp-actions" id="actions"></div>
+                    <div class="jp-hand" id="hand"></div>
                 </div>
             </div>
 
@@ -103,7 +99,17 @@
                 <div class="jp-builder-msg" id="b-msg" role="status" aria-live="polite"></div>
                 <div class="jp-builder-actions" id="b-actions"></div>
             </div>
-            <svg id="mini" class="jp-mini" aria-hidden="false"></svg>
+        </div>
+    </div>
+
+    <!-- after a computer player's turn: look at what it did, then continue -->
+    <div class="jp-builder jp-ack" id="ack" hidden>
+        <div class="jp-builder-main">
+            <div class="jp-builder-info">
+                <div class="jp-builder-title" id="ack-title"></div>
+                <ul class="jp-ack-list" id="ack-list"></ul>
+            </div>
+            <button type="button" class="btn btn-primary jp-ack-btn" id="ack-btn" data-ack="1">Continue</button>
         </div>
     </div>
 
