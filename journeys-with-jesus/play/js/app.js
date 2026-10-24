@@ -35,6 +35,7 @@ function commit(next) {
   // a journey was just completed (by you or a computer): flash it
   const gained = was && next.turnRoutes && (was.turnRoutes || []).length < next.turnRoutes.length ? next.turnRoutes[next.turnRoutes.length - 1] : null;
   state = next;
+  while (state.phase === 'handover' && !E.me(state).bot && !state.over) state = E.pass(state);      // your own turn passes on at once
   ui.build = null; ui.msg = ''; ui.reciting = false;
   if (gained) {
     const j = E.journeyById[gained.journey];
@@ -49,7 +50,7 @@ function commit(next) {
 
 function schedule() {
   clearTimeout(ui.timer);
-  if (!state || state.over || !E.me(state).bot) return;
+  if (!state || state.over || !E.me(state).bot || state.phase === 'handover') return;          // after its turn you press Continue
   ui.timer = setTimeout(() => commit(AI.step(state)), FAST ? 0 : state.phase === 'play' ? 1100 : 650);
 }
 
@@ -66,7 +67,7 @@ function startGame(opts = ui.last) {
 
 function showSetup() {
   clearTimeout(ui.timer);
-  $('#game').hidden = true; $('#setup').hidden = false; $('#builder').hidden = true; document.body.classList.remove('has-builder');
+  $('#game').hidden = true; $('#setup').hidden = false; $('#builder').hidden = true; $('#ack').hidden = true; document.body.classList.remove('has-builder', 'has-ack');
   const saved = loadSaved();
   $('#resume').hidden = !saved;
   if (saved) $('#resume-text').textContent = `Game in progress (round ${saved.round}, ${saved.players.length - 1} computer player${saved.players.length > 2 ? 's' : ''}).`;
@@ -92,7 +93,7 @@ function showToast(title, big) {
 // ---- drawing the page --------------------------------------------------------------------------------------------
 function render() {
   if (!state) return;
-  renderBar(); renderStatus(); renderInplay(); renderBoard(); renderPiles(); renderHand(); renderDrawn(); renderActions(); renderBuilder(); renderPlayers(); renderLog();
+  renderBar(); renderStatus(); renderInplay(); renderBoard(); renderPiles(); renderHand(); renderDrawn(); renderActions(); renderBuilder(); renderAck(); renderPlayers(); renderLog();
 }
 
 function renderBar() {
@@ -107,6 +108,7 @@ function renderStatus() {
   const p = E.me(state), b = ui.build;
   let t;
   if (state.over) t = 'The game is over.';
+  else if (p.bot && state.phase === 'handover') t = `${p.name}'s turn is over. Look at the board, then press Continue.`;
   else if (p.bot) t = `${p.name}'s turn…`;
   else if (state.phase === 'recite') t = 'Your turn. You may recite a Scripture from memory for a token, or skip.';
   else if (state.phase === 'draw') t = `Draw ${E.DRAWS - state.drawn} more card${E.DRAWS - state.drawn === 1 ? '' : 's'} from any of the piles.`;
@@ -136,14 +138,12 @@ function renderInplay() {
 
 function renderBoard() {
   const j = ui.build && E.journeyById[ui.build.jid];
-  const recent = new Set([...(state.turnRoutes || []), ...(state.recent || [])].map((r) => r.journey));
-  const routes = [];
-  state.players.forEach((p, i) => (p.routes || []).forEach((r) => routes.push({ path: r.path, color: PLAYER_COLORS[i], now: recent.has(r.journey), fresh: !!ui.fx && !ui.fx.drawn && ui.fx.journey === r.journey })));
+  // only what was completed this turn is drawn; once the turn is passed on the board is plain roads and boat rides again
+  const routes = (state.turnRoutes || []).map((r) => ({ path: r.path, color: PLAYER_COLORS[r.who], now: true, fresh: !!ui.fx && !ui.fx.drawn && ui.fx.journey === r.journey }));
   const held = canBuild() ? Object.keys(E.inventoryOf(defs(), state.players[0].hand, 0).exact) : [];
   const fx = ui.fx && !ui.fx.drawn ? ui.fx : null;
-  const o = { ends: j ? [j.a, j.b] : [], build: ui.build ? B.routeSoFar(ui.build) : [], routes, held, bursts: fx ? [fx.path[0], fx.path[fx.path.length - 1]] : [] };
-  drawBoard($('#board'), o);
-  drawBoard($('#mini'), { ...o, compact: true, bursts: [] });
+  const ends = j ? [j.a, j.b, ...B.lineEnds(ui.build)] : [];
+  drawBoard($('#board'), { ends, build: ui.build ? B.routeSoFar(ui.build) : [], routes, held, bursts: fx ? [fx.path[0], fx.path[fx.path.length - 1]] : [] });
   if (ui.fx) ui.fx.drawn = true;
 }
 
@@ -151,7 +151,7 @@ function renderPiles() {
   const drawing = iAmPlaying() && (state.phase === 'draw' || state.phase === 'topup');
   $('#piles-hint').textContent = drawing ? '(tap a card to take it)' : '';
   const up = state.up.map((uid, i) => (uid === null ? `<div class="jp-pile is-empty" aria-hidden="true"></div>`
-    : `<button type="button" class="jp-pile" data-take="${i}" ${drawing ? '' : 'disabled'} aria-label="Take ${esc(E.cardLabel(defs()[uid]))}"><img src="${cardImg(defs()[uid])}" width="480" height="670" alt="${esc(E.cardLabel(defs()[uid]))}" /></button>`)).join('');
+    : `<button type="button" class="jp-pile" data-take="${i}" ${drawing ? '' : 'disabled'} aria-label="Take ${esc(E.cardLabel(defs()[uid]))}"><img src="${cardImg(defs()[uid])}" width="480" height="670" alt="${esc(E.cardLabel(defs()[uid]))}" /><span class="jp-cap">${esc(E.cardLabel(defs()[uid]))}</span></button>`)).join('');
   const down = state.draw.length + state.discard.length;
   $('#piles').innerHTML = up + `<button type="button" class="jp-pile jp-down" data-take="down" ${drawing && down ? '' : 'disabled'} aria-label="Take the top face-down card (${down} left)"><img src="${IMG}back-place-480.webp" width="480" height="670" alt="" /><span class="count">${down}</span></button>`;
 }
@@ -169,7 +169,7 @@ function renderHand() {
   $('#hand').innerHTML = hand.map((uid) => {
     const c = d[uid], isNew = fresh.has(uid);
     return `<button type="button" class="jp-hc${inBuild.has(uid) ? ' is-used' : ''}${recite ? ' is-pick' : ''}${isNew ? ' is-new' : ''}${ui.build && !inBuild.has(uid) ? ' can-lay' : ''}" data-hand="${uid}" style="--rc:${regionColor(c)}" aria-label="${esc(E.cardLabel(c))}${isNew ? ', just drawn' : ''}">
-      <img src="${cardImg(c)}" width="480" height="670" alt="${esc(E.cardLabel(c))}" loading="lazy" />${isNew ? '<span class="new">New</span>' : ''}</button>`;
+      <img src="${cardImg(c)}" width="480" height="670" alt="${esc(E.cardLabel(c))}" loading="lazy" /><span class="jp-cap" style="color:${regionColor(c)}">${esc(E.cardLabel(c))}</span>${isNew ? '<span class="new">New</span>' : ''}</button>`;
   }).join('') + (p.tokens ? Array.from({ length: p.tokens }, () => '<span class="jp-token" title="Scripture Memory Token: 5 points, or a wild card">Token</span>').join('') : '');
 }
 
@@ -204,19 +204,39 @@ function renderBuilder() {
   $('#b-title').innerHTML = `${esc(jTitle(j))} <span class="pts">${j.points} points</span>`;
   const reuse = b.reuse.map((id) => `<span class="chip reuse">${esc(name(id))}</span>`).join('<i>&rarr;</i>');
   const seq = b.seq.map((c) => `<span class="chip${c.kind === 'exact' ? '' : ' wild'}" title="${c.kind === 'exact' ? '' : c.kind === 'token' ? 'a Scripture token' : 'a Wild Card'}">${esc(name(c.place))}</span>`).join('<i>&rarr;</i>');
-  let route = [reuse, seq].filter(Boolean).join('<i>&rarr;</i>');
-  if (!route) route = `<span class="muted">Start at <b>${esc(name(j.a))}</b> or <b>${esc(name(j.b))}</b>.</span>`;
-  else if (b.target) route += `<i>&rarr;</i><span class="chip goal">${esc(name(b.target))}</span>`;
+  let route;
+  if (b.mode === 'extend' && !b.side) route = `<span class="muted">Continue from either end of your line, <b>${esc(name(b.chain[0]))}</b> or <b>${esc(name(b.chain[b.chain.length - 1]))}</b>, on to <b>${esc(name(b.target))}</b>.</span>`;
+  else {
+    route = [reuse, seq].filter(Boolean).join('<i>&rarr;</i>');
+    if (!route) route = `<span class="muted">Start at <b>${esc(name(j.a))}</b> or <b>${esc(name(j.b))}</b>.</span>`;
+    else if (b.target) route += `<i>&rarr;</i><span class="chip goal">${esc(name(b.target))}</span>`;
+  }
   $('#b-route').innerHTML = route;
-  $('#b-msg').textContent = ui.msg || (last ? `Next: a place joined to ${name(last)} by a road or boat ride.` : b.mode === 'extend' ? `Continue from ${name(b.reuse[b.reuse.length - 1])} to ${name(b.target)}, or start a separate line.` : '');
+  $('#b-msg').textContent = ui.msg || (last ? `Next: a place joined to ${name(last)} by a road or boat ride.` : '');
   const tokens = state.players[0].tokens - b.seq.filter((c) => c.kind === 'token').length;
   $('#b-actions').innerHTML = [
     b.seq.length ? '<button type="button" class="btn btn-outline-secondary btn-sm" data-b="undo">Undo</button>' : '',
     b.mode === 'extend' && !b.seq.length ? '<button type="button" class="btn btn-outline-secondary btn-sm" data-b="fresh">Start a separate line</button>' : '',
+    '<button type="button" class="btn btn-outline-secondary btn-sm" data-b="map">Map</button>',
     tokens > 0 ? `<button type="button" class="btn btn-outline-secondary btn-sm" data-b="token">Use a token</button>` : '',
     `<button type="button" class="btn btn-outline-secondary btn-sm" data-b="look">See the card</button>`,
     '<button type="button" class="btn btn-outline-danger btn-sm" data-b="cancel">Cancel</button>',
   ].join(' ');
+}
+
+// After a computer player's turn: what it did, and a Continue button, so you can look at the board before the next player starts.
+function renderAck() {
+  const bar = $('#ack'), on = !!state && !state.over && state.phase === 'handover' && E.me(state).bot;
+  bar.hidden = !on; document.body.classList.toggle('has-ack', on);
+  if (!on) return;
+  const who = state.players[state.turn];
+  $('#ack-title').textContent = `${who.name}'s turn is over`;
+  const mine = state.log.filter((l) => l.round === state.round && l.who === state.turn);
+  const key = (l) => (/completed|extended|also/.test(l.text) ? 0 : 1);        // what it completed first
+  $('#ack-list').innerHTML = [...mine].sort((a, b) => key(a) - key(b)).map((l) => `<li>${esc(l.text)}</li>`).join('') || '<li>Nothing to report.</li>';
+  const stamp = `${state.round}:${state.turn}`;
+  if (ui.ackFor !== stamp) { ui.ackFor = stamp; if (state.turnRoutes && state.turnRoutes.length) $('#board').scrollIntoView({ behavior: FAST ? 'auto' : 'smooth', block: 'center' }); }   // bring the journeys it drew into view
+  $('#ack-btn').focus({ preventScroll: true });
 }
 
 function renderPlayers() {
@@ -357,6 +377,7 @@ function builderAction(what) {
   if (what === 'undo') { ui.build = B.undo(b); ui.msg = ''; render(); }
   else if (what === 'fresh') { ui.build = B.startFresh(b); ui.msg = ''; render(); }
   else if (what === 'cancel') { ui.build = null; ui.msg = ''; render(); }
+  else if (what === 'map') $('#board').scrollIntoView({ behavior: FAST ? 'auto' : 'smooth', block: 'center' });
   else if (what === 'look') { const j = E.journeyById[b.jid]; zoom(`${IMG}${j.id}-755.webp`, `${jTitle(j)}: ${j.points} points`); }
   else if (what === 'token') {
     const options = B.legalPlaces(b);
@@ -369,10 +390,11 @@ function builderAction(what) {
 document.addEventListener('click', (e) => {
   if (!state) return;
   const hit = e.target.closest('[data-place]');
-  if (hit && (hit.closest('#board') || hit.closest('#mini'))) { placeTapped(hit.dataset.place); return; }
+  if (hit && hit.closest('#board')) { placeTapped(hit.dataset.place); return; }
   const t = e.target.closest('button');
   if (!t) return;
   if (t.dataset.zoomJ) { const j = E.journeyById[t.dataset.zoomJ]; zoom(`${IMG}${j.id}-755.webp`, `${jTitle(j)}: ${j.points} points`); return; }
+  if (t.dataset.ack) { if (state.phase === 'handover') commit(E.pass(state)); return; }
   if (t.dataset.b) { builderAction(t.dataset.b); return; }
   if (t.dataset.jid) {
     if (canBuild()) selectJourney(t.dataset.jid);

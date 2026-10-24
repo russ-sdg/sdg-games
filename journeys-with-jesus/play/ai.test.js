@@ -54,7 +54,7 @@ test('a computer lays down a journey it can complete, and keeps tokens it does n
   s.players[0].hand = [cap, bet]; s.players[1].hand = s.players[1].hand.filter((u) => u !== cap && u !== bet);
   s.draw = s.draw.filter((u) => u !== cap && u !== bet); s.up = s.up.map((u) => (u === cap || u === bet ? s.draw.pop() : u));
   s.players[0].tokens = 1;
-  const o = AI.choosePlay(s);
+  const o = AI.choosePlay(s, () => 0.99);   // a high roll: it does not overlook the journey
   assert.equal(o.journey, 'capernaum-to-bethsaida');
   assert.equal(o.tokensUsed, 0);
 });

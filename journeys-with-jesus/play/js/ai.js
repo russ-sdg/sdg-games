@@ -67,6 +67,7 @@ export function step(s, rand = Math.random) {
     const uid = p.hand[Math.floor(rand() * p.hand.length)];
     return E.recite(s, rand() < sk.recite, uid);
   }
+  if (s.phase === 'handover') return E.pass(s);
   if (s.phase === 'draw' || s.phase === 'topup') return E.take(s, chooseTake(s, rand));
   if (s.phase === 'play') {
     const o = choosePlay(s, rand);

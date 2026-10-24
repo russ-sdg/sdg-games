@@ -1,11 +1,12 @@
 // Journeys with Jesus: the rules, as pure functions on a plain (JSON-safe) state object. No DOM, no randomness during play
 // except the reshuffle (which uses the game's seed), so a saved game resumes exactly.
 //
-// A turn has phases:  recite -> draw -> play -> topup -> (next player's recite)
+// A turn has phases:  recite -> draw -> play -> topup -> handover -> (next player's recite)
 //   recite  optionally say a verse from a Place Card in your hand from memory; get a Scripture Memory Token if you do
 //   draw    take three cards from the four face-up piles and the face-down pile, in any mix
 //   play    lay down any completed journeys (and extend them to complete more); replaced journeys come in at once
-//   topup   if you hold fewer than 7 Place Cards, draw until you do
+//   topup   if you hold fewer than 7 Place Cards, draw until you do (the journeys you completed were replaced when you finished playing)
+//   handover the turn is over; `pass` moves on. The page makes you press Continue after a computer player's turn so you can see what it did
 import { PLACES, NEIGHBORS, simplePaths } from './board-data.js';
 import { PLACE_CARDS, WILD_CARDS, JOURNEY_CARDS } from './deck-data.js';
 
@@ -121,7 +122,7 @@ export function take(s0, from) {
     const faceUp = mine.filter((x) => x.from === 'up').map((x) => cardLabel(defs[x.uid])), down = mine.length - faceUp.length;
     const parts = [...faceUp, ...(down ? [`${down} face-down card${down > 1 ? 's' : ''}`] : [])];
     say(s, `${s.phase === 'draw' ? 'drew' : 'drew up to a full hand:'} ${parts.join(', ') || 'nothing'}`);
-    if (s.phase === 'draw') { s.phase = 'play'; s.drawn = 0; s.chains = []; } else nextTurn(s);
+    if (s.phase === 'draw') { s.phase = 'play'; s.drawn = 0; s.chains = []; } else handover(s);
   }
   return s;
 }
@@ -130,16 +131,24 @@ export function take(s0, from) {
 export function endPlay(s0) {
   if (s0.phase !== 'play') throw new Error('illegal: not the play phase');
   const s = clone(s0);
+  refillJourneys(s);                  // the journeys completed this turn are replaced now, before you draw back up, so you can see what to look for
   const need = Math.max(0, HAND - me(s).hand.length);
-  if (need > 0 && cardsToDraw(s) > 0) { s.phase = 'topup'; s.topup = need; s.drawn = 0; s.topupFrom = (s.picks || []).length; } else nextTurn(s);
+  if (need > 0 && cardsToDraw(s) > 0) { s.phase = 'topup'; s.topup = need; s.drawn = 0; s.topupFrom = (s.picks || []).length; } else handover(s);
+  return s;
+}
+
+// The turn is over; the next player starts when someone calls pass().
+function handover(s) { s.phase = 'handover'; s.drawn = 0; }
+export function pass(s0) {
+  if (s0.phase !== 'handover') throw new Error('illegal: the turn is not over');
+  const s = clone(s0);
+  nextTurn(s);
   return s;
 }
 
 function nextTurn(s) {
   const acted = s.turnActed;           // set by play()/take(); a turn where nothing could happen counts toward a stall
-  s.recent = (s.turnRoutes || []).map((r) => ({ ...r }));       // what this player completed, shown to the next player
-  s.chains = []; s.turnRoutes = []; s.recited = null; s.drawn = 0; s.topup = 0; s.turnActed = false; s.picks = []; s.topupFrom = 0;
-  refillJourneys(s);
+  s.chains = []; s.turnRoutes = []; s.recent = []; s.recited = null; s.drawn = 0; s.topup = 0; s.turnActed = false; s.picks = []; s.topupFrom = 0;
   s.passes = acted ? 0 : s.passes + 1;
   if (s.passes >= s.players.length) return finish(s, 'stalled');
   s.turn = (s.turn + 1) % s.players.length;
@@ -147,7 +156,7 @@ function nextTurn(s) {
   if (s.round > MAX_ROUNDS) return finish(s, 'rounds');
   s.phase = 'recite';
 }
-// Journeys completed during a turn leave their places empty until that turn is over; then the new ones are turned up.
+// Journeys completed during a turn leave their places empty until the player finishes playing; then the new ones are turned up.
 function refillJourneys(s) {
   for (let i = 0; i < s.inplay.length; i++) if (s.inplay[i] === null && s.jdeck.length) s.inplay[i] = s.jdeck.pop();
   s.inplay = s.inplay.filter((j) => j !== null);
@@ -280,13 +289,18 @@ export function play(s0, built) {
   const ends = [path[0], path[path.length - 1]];
   if (!((ends[0] === j.a && ends[1] === j.b) || (ends[0] === j.b && ends[1] === j.a))) throw new Error('illegal: the route does not join the two places on the card');
   const inside = !!built.extends && from === path.length;
+  let side = null;
   if (!built.extends && from !== 0) throw new Error('illegal: a new journey has no cards laid yet');
   if (inside) {
     const reversed = [...path].reverse().join(), ok = chains.some((c) => { const t = c.join(','); return `,${t},`.includes(`,${path.join(',')},`) || `,${t},`.includes(`,${reversed},`); });
     if (!ok || assign.length) throw new Error('illegal: that journey is not inside what you laid');
   } else if (built.extends) {
     const chain = chains[chains.length - 1];
-    if (!chain || from < 1 || from >= path.length || chain.slice(chain.length - from).join() !== path.slice(0, from).join()) throw new Error('illegal: an extension continues from the end of what you laid');
+    if (!chain || from < 1 || from >= path.length) throw new Error('illegal: an extension continues from an end of what you laid');
+    const reuse = path.slice(0, from).join();
+    if (reuse === chain.slice(chain.length - from).join()) side = 'end';
+    else if (reuse === chain.slice(0, from).reverse().join()) side = 'start';
+    else throw new Error('illegal: an extension continues from an end of what you laid');
   }
   const need = path.slice(inside ? path.length : from);
   if (assign.length !== need.length || assign.some((a, i) => a.place !== need[i])) throw new Error('illegal: a card is needed for every new place');
@@ -311,7 +325,10 @@ export function play(s0, built) {
   (p.routes ||= []).push({ journey: jid, path: path.slice() });
   s.inplay[at] = null;                         // the new journey is turned up when this turn is over
   if (!built.extends) s.chains = [...chains, path.slice()];
-  else if (!inside) s.chains = [...chains.slice(0, -1), chains[chains.length - 1].concat(path.slice(from))];
+  else if (!inside) {
+    const chain = chains[chains.length - 1], added = path.slice(from);
+    s.chains = [...chains.slice(0, -1), side === 'end' ? chain.concat(added) : [...added].reverse().concat(chain)];
+  }
   (s.turnRoutes ||= []).push({ who: s.turn, journey: jid, path: path.slice(), slot: at, how: !built.extends ? 'fresh' : inside ? 'inside' : 'extend' });
   s.turnActed = true;
   say(s, `${built.extends ? (inside ? 'also completed' : 'extended to complete') : 'completed'} ${PLACES[j.a].name} to ${PLACES[j.b].name} (${j.points} points)`);

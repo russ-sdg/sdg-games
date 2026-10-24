@@ -95,6 +95,9 @@ test('after laying cards down you draw back up to 7 from any piles, then the nex
   assert.equal(s.phase, 'topup');
   s = E.take(s, 'down');
   assert.equal(s.players[0].hand.length, 7);
+  assert.equal(s.phase, 'handover', 'the turn is over; the next player starts when it is passed on');
+  assert.equal(s.turn, 0);
+  s = E.pass(s);
   assert.equal(s.turn, 1);
   assert.equal(s.phase, 'recite');
   assert.ok(s.up.every((u) => u !== null));
@@ -104,6 +107,9 @@ test('with 7 or more cards in hand there is no top-up: the next player starts at
   let s = toPlay(new2());
   assert.equal(E.me(s).hand.length, 10);
   s = E.endPlay(s);
+  assert.equal(s.phase, 'handover');
+  assert.throws(() => E.take(s, 0), /illegal/);
+  s = E.pass(s);
   assert.equal(s.turn, 1);
   assert.equal(s.phase, 'recite');
 });
@@ -213,14 +219,16 @@ test('a completed journey is replaced only when the turn is over', () => {
   s = give(inPlay(s, 'capernaum-to-bethsaida'), 'capernaum', 'bethsaida', 'jerusalem', 'bethlehem');
   s.jdeck = s.jdeck.filter((j) => j !== 'jerusalem-to-bethlehem'); s.jdeck.push('jerusalem-to-bethlehem');   // on top
   s = E.play(s, E.plays(s)[0]);
-  assert.deepEqual(s.inplay, [null], 'the place stays empty for the rest of the turn');
+  assert.deepEqual(s.inplay, [null], 'the place stays empty while you are playing');
   assert.equal(E.plays(s).length, 0, 'so the new journey cannot be completed this turn');
   s = E.endPlay(s);
   assert.equal(s.phase, 'topup');
-  assert.deepEqual(s.inplay, [null], 'still empty while you draw back up');
+  assert.deepEqual(s.inplay, ['jerusalem-to-bethlehem'], 'replaced as soon as you finish playing, before you draw back up');
+  assert.deepEqual(s.turnRoutes.map((r) => r.journey), ['capernaum-to-bethsaida'], 'what you completed stays shown until the turn is over');
   while (s.phase === 'topup') s = E.take(s, 'down');
-  assert.deepEqual(s.inplay, ['jerusalem-to-bethlehem']);
-  assert.deepEqual(s.recent.map((r) => r.journey), ['capernaum-to-bethsaida'], 'the next player can see what was just completed');
+  assert.equal(s.phase, 'handover');
+  assert.deepEqual(s.turnRoutes.map((r) => r.journey), ['capernaum-to-bethsaida'], 'and until the next player starts');
+  s = E.pass(s);
   assert.deepEqual(s.turnRoutes, []);
 });
 
@@ -259,7 +267,7 @@ test('when the face-down pile runs out, the played cards are shuffled into a new
 test('a game where nobody can do anything ends instead of hanging', () => {
   let s = new2();
   s.draw = []; s.discard = []; s.up = [null, null, null, null];
-  for (let i = 0; i < 6 && !s.over; i++) { s = E.skipRecite(s); if (s.phase === 'play') s = E.endPlay(s); }
+  for (let i = 0; i < 6 && !s.over; i++) { s = E.skipRecite(s); if (s.phase === 'play') s = E.endPlay(s); if (s.phase === 'handover') s = E.pass(s); }
   assert.equal(s.over, true);
   assert.equal(s.endedBy, 'stalled');
 });
@@ -288,6 +296,8 @@ test('the cards you took this turn are remembered until the turn ends, and the l
   assert.ok(s.picks.every((p) => E.me(s).hand.includes(p.uid)));
   assert.ok(s.log.at(-1).text.includes(name) && s.log.at(-1).text.includes('1 face-down card'));
   s = E.endPlay(s);
+  assert.deepEqual(s.picks.length, 3, 'still shown until the turn is passed on');
+  s = E.pass(s);
   assert.deepEqual(s.picks, [], 'cleared when the next turn begins');
 });
 
