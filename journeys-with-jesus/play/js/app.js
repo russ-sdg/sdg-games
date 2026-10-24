@@ -1,7 +1,9 @@
-// Journeys with Jesus: play online against the computer (UI). The rules live in engine.js, the computer in ai.js.
-import { PLACES, REGIONS } from './board-data.js';
+// Journeys with Jesus: play online against the computer (UI). The rules live in engine.js, the computer in ai.js and the
+// laying of a journey, card by card, in build.js.
+import { PLACES } from './board-data.js';
 import * as E from './engine.js';
 import * as AI from './ai.js';
+import * as B from './build.js';
 import { drawBoard } from './board.js';
 import { drawShareImage, canvasToBlob, nativeShareData, shareMessage, PLAYER_COLORS } from './share.js';
 
@@ -13,34 +15,47 @@ const FAST = new URLSearchParams(location.search).has('fast');
 const BOT_NAMES = ['Peter', 'Mary', 'Andrew'];
 
 let state = null;
-const ui = { preview: null, reciting: false, timer: null, last: null };
+const ui = { build: null, msg: '', fx: null, reciting: false, timer: null, last: null, toastTimer: null };
 
 // ---- saving --------------------------------------------------------------------------------------------------------
 const save = () => { try { state && !state.over ? localStorage.setItem(KEY, JSON.stringify(state)) : localStorage.removeItem(KEY); } catch { /* storage unavailable */ } };
 function loadSaved() {
-  try { const s = JSON.parse(localStorage.getItem(KEY)); return s && s.v === 1 && Array.isArray(s.players) && !s.over ? s : null; } catch { return null; }
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY));
+    if (!s || s.v !== 1 || !Array.isArray(s.players) || s.over) return null;
+    s.chains = s.chains || []; s.turnRoutes = s.turnRoutes || []; s.recent = s.recent || [];
+    s.players.forEach((p) => { p.routes = p.routes || []; });
+    return s;
+  } catch { return null; }
 }
 
 // ---- moving through the game ---------------------------------------------------------------------------------------
 function commit(next) {
   const was = state;
+  // a journey was just completed (by you or a computer): flash it
+  const gained = was && next.turnRoutes && (was.turnRoutes || []).length < next.turnRoutes.length ? next.turnRoutes[next.turnRoutes.length - 1] : null;
   state = next;
-  ui.preview = null; ui.reciting = false;
+  ui.build = null; ui.msg = ''; ui.reciting = false;
+  if (gained) {
+    const j = E.journeyById[gained.journey];
+    ui.fx = { journey: gained.journey, path: gained.path, who: gained.who, points: j.points, drawn: false };
+    showToast(`${state.players[gained.who].name}: ${jTitle(j)}`, `+${j.points}`);
+  }
   save();
   render();
-  if (state.over && !(was && was.over)) { setTimeout(showFinal, FAST ? 0 : 500); return; }
+  if (state.over && !(was && was.over)) { setTimeout(showFinal, FAST ? 0 : 2200); return; }
   schedule();
 }
 
 function schedule() {
   clearTimeout(ui.timer);
   if (!state || state.over || !E.me(state).bot) return;
-  ui.timer = setTimeout(() => commit(AI.step(state)), FAST ? 0 : state.phase === 'play' ? 900 : 650);
+  ui.timer = setTimeout(() => commit(AI.step(state)), FAST ? 0 : state.phase === 'play' ? 1100 : 650);
 }
 
 function startGame(opts = ui.last) {
   clearTimeout(ui.timer);
-  ui.last = opts;
+  ui.last = opts; ui.fx = null;
   const skills = ['casual', 'steady', 'sharp'];
   const players = [{ name: 'You', bot: false }];
   for (let i = 0; i < opts.bots; i++) players.push({ name: BOT_NAMES[i], bot: true, skill: opts.skill === 'mixed' ? skills[(i + 1) % 3] : opts.skill });
@@ -51,7 +66,7 @@ function startGame(opts = ui.last) {
 
 function showSetup() {
   clearTimeout(ui.timer);
-  $('#game').hidden = true; $('#setup').hidden = false;
+  $('#game').hidden = true; $('#setup').hidden = false; $('#builder').hidden = true; document.body.classList.remove('has-builder');
   const saved = loadSaved();
   $('#resume').hidden = !saved;
   if (saved) $('#resume-text').textContent = `Game in progress (round ${saved.round}, ${saved.players.length - 1} computer player${saved.players.length > 2 ? 's' : ''}).`;
@@ -60,78 +75,76 @@ function showSetup() {
 // ---- pieces ------------------------------------------------------------------------------------------------------
 const defs = () => E.deckDefs(state.expansion);
 const cardImg = (d, w = 480) => `${IMG}${d.img}-${w}.webp`;
-const placeNames = (path) => path.map((id) => PLACES[id].name).join(' → ');
 const jTitle = (j) => `${PLACES[j.a].name} to ${PLACES[j.b].name}`;
-const regionColor = (d) => (d.kind === 'place' ? REGIONS[PLACES[d.place].region].color : d.region === 'israel' ? '#555' : REGIONS[d.region].color);
 const iAmPlaying = () => state && !state.over && !E.me(state).bot;
+const canBuild = () => iAmPlaying() && state.phase === 'play';
+const regionColor = (d) => (d.kind === 'place' ? REGION_COLOR[PLACES[d.place].region] : d.region === 'israel' ? '#555' : REGION_COLOR[d.region]);
+const REGION_COLOR = { syria: '#e11d1d', galilee: '#4f9a3c', decapolis: '#5b2a17', samaria: '#e0559f', judea: '#1f3fe0', perea: '#f08a00' };
 
-function describe(o) {
-  const bits = [];
-  const kinds = o.assign.reduce((m, a) => ((m[a.kind] = (m[a.kind] || 0) + 1), m), {});
-  if (kinds.region) bits.push(`${kinds.region} Region Wild`);
-  if (kinds.israel) bits.push('Israel Wild');
-  if (kinds.token) bits.push(`${kinds.token} Scripture token${kinds.token > 1 ? 's' : ''}`);
-  return bits.length ? 'uses ' + bits.join(', ') : '';
+function showToast(title, big) {
+  const t = $('#toast');
+  t.innerHTML = `<b>${esc(big)}</b><span>${esc(title)}</span>`;
+  t.hidden = false; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show');
+  clearTimeout(ui.toastTimer);
+  ui.toastTimer = setTimeout(() => { t.hidden = true; }, FAST ? 700 : 2600);
 }
 
 // ---- drawing the page --------------------------------------------------------------------------------------------
 function render() {
   if (!state) return;
-  renderBar(); renderStatus(); renderInplay(); renderPlays(); renderPiles(); renderHand(); renderDrawn(); renderActions(); renderPlayers(); renderLog();
-  const ends = [];
-  for (const jid of state.inplay) { const j = E.journeyById[jid]; ends.push(j.a, j.b); }
-  const routes = state.players.flatMap((p, i) => (p.routes || []).map((r) => ({ path: r.path, color: PLAYER_COLORS[i] })));
-  drawBoard($('#board'), { ends, path: ui.preview ? ui.preview.path : [], routes });
+  renderBar(); renderStatus(); renderInplay(); renderBoard(); renderPiles(); renderHand(); renderDrawn(); renderActions(); renderBuilder(); renderPlayers(); renderLog();
 }
 
 function renderBar() {
+  const left = E.journeysLeft(state);
   $('#bar').innerHTML = state.players.map((p, i) => {
     const sc = E.score(p);
     return `<div class="jp-score${i === state.turn && !state.over ? ' is-turn' : ''}"><span class="n">${esc(p.name)}</span><span class="pts">${sc.total}</span><span class="sub">${p.tokens ? `${p.tokens} token${p.tokens > 1 ? 's' : ''}` : '&nbsp;'}</span></div>`;
-  }).join('') + `<div class="jp-round">Round ${state.round}<br /><small>${state.inplay.length + state.jdeck.length} journey${state.inplay.length + state.jdeck.length === 1 ? '' : 's'} left</small></div>`;
+  }).join('') + `<div class="jp-round">Round ${state.round}<br /><small>${left} journey${left === 1 ? '' : 's'} left</small></div>`;
 }
 
 function renderStatus() {
-  const p = E.me(state);
+  const p = E.me(state), b = ui.build;
   let t;
   if (state.over) t = 'The game is over.';
   else if (p.bot) t = `${p.name}'s turn…`;
   else if (state.phase === 'recite') t = 'Your turn. You may recite a Scripture from memory for a token, or skip.';
   else if (state.phase === 'draw') t = `Draw ${E.DRAWS - state.drawn} more card${E.DRAWS - state.drawn === 1 ? '' : 's'} from any of the piles.`;
-  else if (state.phase === 'play') t = E.plays(state).length ? 'Lay down a journey you can complete, or finish your turn.' : 'No journey to complete right now. Finish your turn when you are ready.';
-  else t = `Draw ${state.topup - state.drawn} more card${state.topup - state.drawn === 1 ? '' : 's'} to get back to ${E.HAND}.`;
+  else if (state.phase === 'play') {
+    if (b) { const j = E.journeyById[b.jid]; t = `Lay the cards of ${jTitle(j)} along the roads, one by one.`; }
+    else t = 'Tap a journey card you want to complete, then lay your cards along its route. Or finish your turn.';
+  } else t = `Draw ${state.topup - state.drawn} more card${state.topup - state.drawn === 1 ? '' : 's'} to get back to ${E.HAND}.`;
   $('#status').textContent = t;
 }
 
 function renderInplay() {
-  const mine = iAmPlaying() && state.phase === 'play';
-  const ready = new Set(mine ? E.plays(state).map((o) => o.journey) : []);
-  $('#inplay').innerHTML = state.inplay.map((jid) => {
-    const j = E.journeyById[jid];
-    return `<button type="button" class="jp-journey${ready.has(jid) ? ' is-ready' : ''}" data-zoom-j="${jid}" aria-label="${esc(jTitle(j))}, ${j.points} points${ready.has(jid) ? ', you can complete this' : ''}">
-      <img src="${IMG}${jid}-480.webp" width="480" height="670" alt="Journey Card: ${esc(jTitle(j))}" />${ready.has(jid) ? '<span class="tag">You can complete this</span>' : ''}</button>`;
+  const mine = canBuild();
+  $('#inplay').innerHTML = state.inplay.map((jid, i) => {
+    if (jid !== null) {
+      const j = E.journeyById[jid], sel = ui.build && ui.build.jid === jid;
+      return `<button type="button" class="jp-journey${sel ? ' is-selected' : ''}${mine ? ' can-pick' : ''}" data-jid="${jid}" aria-pressed="${!!sel}" aria-label="${esc(jTitle(j))}, ${j.points} points">
+        <img src="${IMG}${jid}-480.webp" width="480" height="670" alt="Journey Card: ${esc(jTitle(j))}" /></button>`;
+    }
+    const r = (state.turnRoutes || []).find((x) => x.slot === i);
+    if (r) {
+      const j = E.journeyById[r.journey];
+      return `<button type="button" class="jp-journey is-won" data-zoom-j="${j.id}" aria-label="${esc(jTitle(j))}, completed for ${j.points} points"><img src="${IMG}${j.id}-480.webp" width="480" height="670" alt="" /><span class="won">&#10003; +${j.points}${r.who === 0 ? '' : `<small>${esc(state.players[r.who].name)}</small>`}</span></button>`;
+    }
+    return '<div class="jp-journey is-empty"><span>A new journey is turned up after this turn</span></div>';
   }).join('') || '<p class="text-muted mb-0">No journeys left.</p>';
 }
 
-function renderPlays() {
-  const box = $('#plays');
-  if (!iAmPlaying() || state.phase !== 'play') { box.innerHTML = ''; return; }
-  // the best way to lay each journey, plus other routes that cost the same
-  const all = E.plays(state), best = [];
-  const cost = (o) => `${o.tokensUsed}/${o.wildsUsed}/${o.path.length}`;
-  for (const o of all) {
-    const top = all.find((x) => x.journey === o.journey && x.extends === o.extends);
-    if (cost(o) === cost(top) && best.filter((b) => b.journey === o.journey && b.extends === o.extends).length < 3) best.push(o);
-  }
-  if (!best.length) { box.innerHTML = ''; return; }
-  const selected = ui.preview;
-  box.innerHTML = '<h3>You can lay down</h3>' + best.map((o, i) => {
-    const j = E.journeyById[o.journey], d = describe(o), on = selected && selected.journey === o.journey && selected.path.join() === o.path.join() && selected.extends === o.extends;
-    return `<div class="jp-play${on ? ' is-on' : ''}"><button type="button" class="jp-play-pick" data-play="${i}" aria-pressed="${on}">
-      <b>${o.extends ? 'Extend to ' : ''}${esc(jTitle(j))}</b> <span class="pts">${o.points} points</span><br /><small>${esc(placeNames(o.path))}${d ? ` &middot; ${esc(d)}` : ''}${o.extends ? (o.assign.length ? ' &middot; reuses your cards already laid' : ' &middot; needs only the cards you already laid') : ''}</small></button>
-      ${on ? '<button type="button" class="btn btn-success btn-sm" data-lay="1">Lay it down</button>' : ''}</div>`;
-  }).join('');
-  box._best = best;
+function renderBoard() {
+  const j = ui.build && E.journeyById[ui.build.jid];
+  const recent = new Set([...(state.turnRoutes || []), ...(state.recent || [])].map((r) => r.journey));
+  const routes = [];
+  state.players.forEach((p, i) => (p.routes || []).forEach((r) => routes.push({ path: r.path, color: PLAYER_COLORS[i], now: recent.has(r.journey), fresh: !!ui.fx && !ui.fx.drawn && ui.fx.journey === r.journey })));
+  const held = canBuild() ? Object.keys(E.inventoryOf(defs(), state.players[0].hand, 0).exact) : [];
+  const fx = ui.fx && !ui.fx.drawn ? ui.fx : null;
+  const o = { ends: j ? [j.a, j.b] : [], build: ui.build ? B.routeSoFar(ui.build) : [], routes, held, bursts: fx ? [fx.path[0], fx.path[fx.path.length - 1]] : [] };
+  drawBoard($('#board'), o);
+  drawBoard($('#mini'), { ...o, compact: true, bursts: [] });
+  if (ui.fx) ui.fx.drawn = true;
 }
 
 function renderPiles() {
@@ -144,19 +157,19 @@ function renderPiles() {
 }
 
 function renderHand() {
-  const p = state.players[0], used = new Set(ui.preview ? ui.preview.assign.map((a) => a.uid) : []);
+  const p = state.players[0], inBuild = new Set(ui.build ? ui.build.seq.map((c) => c.uid) : []);
   const fresh = new Set(state.turn === 0 && !state.over ? (state.picks || []).map((x) => x.uid) : []);
   const d = defs();
   const hand = [...p.hand].sort((a, b) => {
-    const A = d[a], B = d[b], ra = A.kind === 'place' ? PLACES[A.place].region : 'z' + (A.region || ''), rb = B.kind === 'place' ? PLACES[B.place].region : 'z' + (B.region || '');
-    return ra < rb ? -1 : ra > rb ? 1 : E.cardLabel(A) < E.cardLabel(B) ? -1 : 1;
+    const A = d[a], B2 = d[b], ra = A.kind === 'place' ? PLACES[A.place].region : 'z' + (A.region || ''), rb = B2.kind === 'place' ? PLACES[B2.place].region : 'z' + (B2.region || '');
+    return ra < rb ? -1 : ra > rb ? 1 : E.cardLabel(A) < E.cardLabel(B2) ? -1 : 1;
   });
   const recite = ui.reciting && iAmPlaying() && state.phase === 'recite';
-  $('#hand-hint').textContent = recite ? '(tap the card you will recite)' : `(${p.hand.length} cards${p.tokens ? `, ${p.tokens} token${p.tokens > 1 ? 's' : ''}` : ''})`;
+  $('#hand-hint').textContent = recite ? '(tap the card you will recite)' : ui.build ? '(tap the cards for your route)' : `(${p.hand.length} cards${p.tokens ? `, ${p.tokens} token${p.tokens > 1 ? 's' : ''}` : ''})`;
   $('#hand').innerHTML = hand.map((uid) => {
-    const c = d[uid];
-    return `<button type="button" class="jp-hc${used.has(uid) ? ' is-used' : ''}${recite ? ' is-pick' : ''}${fresh.has(uid) ? ' is-new' : ''}" data-hand="${uid}" style="--rc:${regionColor(c)}" aria-label="${esc(E.cardLabel(c))}${fresh.has(uid) ? ', just drawn' : ''}">
-      <img src="${cardImg(c)}" width="480" height="670" alt="${esc(E.cardLabel(c))}" loading="lazy" />${fresh.has(uid) ? '<span class="new">New</span>' : ''}</button>`;
+    const c = d[uid], isNew = fresh.has(uid);
+    return `<button type="button" class="jp-hc${inBuild.has(uid) ? ' is-used' : ''}${recite ? ' is-pick' : ''}${isNew ? ' is-new' : ''}${ui.build && !inBuild.has(uid) ? ' can-lay' : ''}" data-hand="${uid}" style="--rc:${regionColor(c)}" aria-label="${esc(E.cardLabel(c))}${isNew ? ', just drawn' : ''}">
+      <img src="${cardImg(c)}" width="480" height="670" alt="${esc(E.cardLabel(c))}" loading="lazy" />${isNew ? '<span class="new">New</span>' : ''}</button>`;
   }).join('') + (p.tokens ? Array.from({ length: p.tokens }, () => '<span class="jp-token" title="Scripture Memory Token: 5 points, or a wild card">Token</span>').join('') : '');
 }
 
@@ -179,6 +192,31 @@ function renderActions() {
   } else if (state.phase === 'play') {
     box.innerHTML = '<button type="button" class="btn btn-primary btn-sm" data-act="end">Finish my turn</button>';
   } else box.innerHTML = '';
+}
+
+// The bar at the foot of the screen while you lay a journey: the route so far, what to do next, and a small map.
+function renderBuilder() {
+  const bar = $('#builder'), b = ui.build;
+  const on = !!b && canBuild();
+  bar.hidden = !on; document.body.classList.toggle('has-builder', on);
+  if (!on) return;
+  const j = E.journeyById[b.jid], name = (id) => PLACES[id].name, last = B.lastPlace(b);
+  $('#b-title').innerHTML = `${esc(jTitle(j))} <span class="pts">${j.points} points</span>`;
+  const reuse = b.reuse.map((id) => `<span class="chip reuse">${esc(name(id))}</span>`).join('<i>&rarr;</i>');
+  const seq = b.seq.map((c) => `<span class="chip${c.kind === 'exact' ? '' : ' wild'}" title="${c.kind === 'exact' ? '' : c.kind === 'token' ? 'a Scripture token' : 'a Wild Card'}">${esc(name(c.place))}</span>`).join('<i>&rarr;</i>');
+  let route = [reuse, seq].filter(Boolean).join('<i>&rarr;</i>');
+  if (!route) route = `<span class="muted">Start at <b>${esc(name(j.a))}</b> or <b>${esc(name(j.b))}</b>.</span>`;
+  else if (b.target) route += `<i>&rarr;</i><span class="chip goal">${esc(name(b.target))}</span>`;
+  $('#b-route').innerHTML = route;
+  $('#b-msg').textContent = ui.msg || (last ? `Next: a place joined to ${name(last)} by a road or boat ride.` : b.mode === 'extend' ? `Continue from ${name(b.reuse[b.reuse.length - 1])} to ${name(b.target)}, or start a separate line.` : '');
+  const tokens = state.players[0].tokens - b.seq.filter((c) => c.kind === 'token').length;
+  $('#b-actions').innerHTML = [
+    b.seq.length ? '<button type="button" class="btn btn-outline-secondary btn-sm" data-b="undo">Undo</button>' : '',
+    b.mode === 'extend' && !b.seq.length ? '<button type="button" class="btn btn-outline-secondary btn-sm" data-b="fresh">Start a separate line</button>' : '',
+    tokens > 0 ? `<button type="button" class="btn btn-outline-secondary btn-sm" data-b="token">Use a token</button>` : '',
+    `<button type="button" class="btn btn-outline-secondary btn-sm" data-b="look">See the card</button>`,
+    '<button type="button" class="btn btn-outline-danger btn-sm" data-b="cancel">Cancel</button>',
+  ].join(' ');
 }
 
 function renderPlayers() {
@@ -218,13 +256,22 @@ function reciteDialog(uid) {
   $('#card-dialog').showModal();
 }
 
+// Which place does this Wild Card (or token) stand for? Only places that could come next are offered.
+function chooseStand(title, places, make) {
+  $('#card-title').textContent = title;
+  $('#card-body').innerHTML = `<div class="jp-choose">${places.map((id) => `<button type="button" class="btn btn-outline-primary" data-stand="${id}">${esc(PLACES[id].name)}</button>`).join('')}</div>`;
+  $('#card-actions').innerHTML = '<button value="close" class="btn btn-outline-secondary">Cancel</button>';
+  $('#card-body').querySelectorAll('[data-stand]').forEach((b) => { b.onclick = () => { $('#card-dialog').close(); apply(make(b.dataset.stand)); }; });
+  $('#card-dialog').showModal();
+}
+
 function showFinal() {
   const st = E.standings(state), win = E.winners(state);
   const youWon = win.includes(0);
   $('#final-title').textContent = win.length > 1 ? `A tie: ${win.map((i) => state.players[i].name).join(' and ')}` : youWon ? 'You win!' : `${state.players[win[0]].name} wins`;
   $('#final-body').innerHTML = `<p class="small text-muted">${state.endedBy === 'journeys' ? 'The last journey was completed.' : state.endedBy === 'stalled' ? 'Nobody could play any more cards.' : 'The game reached its round limit.'}</p>
-    <table class="table table-sm"><thead><tr><th>Player</th><th class="text-end">Journeys</th><th class="text-end">Tokens</th><th class="text-end">Total</th></tr></thead><tbody>${
-  st.map((r) => `<tr${win.includes(r.i) ? ' class="table-success"' : ''}><td>${esc(r.name)}</td><td class="text-end">${r.journeys}</td><td class="text-end">${r.tokens}</td><td class="text-end"><b>${r.total}</b></td></tr>`).join('')}</tbody></table>`;
+    <div class="table-responsive"><table class="table table-sm"><thead><tr><th>Player</th><th class="text-end">Journeys</th><th class="text-end">Tokens</th><th class="text-end">Total</th></tr></thead><tbody>${
+  st.map((r) => `<tr${win.includes(r.i) ? ' class="table-success"' : ''}><td>${esc(r.name)}</td><td class="text-end">${r.journeys}</td><td class="text-end">${r.tokens}</td><td class="text-end"><b>${r.total}</b></td></tr>`).join('')}</tbody></table></div>`;
   mountShare($('#final-body'));
   $('#final').showModal();
 }
@@ -259,27 +306,92 @@ async function mountShare(root) {
   }
 }
 
+// ---- laying a journey ----------------------------------------------------------------------------------------------
+function selectJourney(jid) {
+  if (ui.build && ui.build.jid === jid) { ui.build = null; ui.msg = ''; render(); return; }
+  const r = B.begin(state, jid);
+  if (r.inside) { commit(E.play(state, r.inside)); return; }          // wholly inside what you laid this turn: yours with no more cards
+  ui.build = r.build; ui.msg = '';
+  render();
+}
+
+function apply(card) {
+  try {
+    const r = B.add(ui.build, card);
+    ui.build = r.build; ui.msg = '';
+    if (r.done) { commit(E.play(state, B.toPlay(ui.build))); return; }
+    render();
+  } catch (e) { ui.msg = e.message; render(); }
+}
+
+function placeTapped(place) {
+  if (!canBuild()) return;
+  if (!ui.build) { ui.msg = ''; $('#status').textContent = 'Tap a journey card first, then lay your cards along its route.'; return; }
+  const ok = B.canPlace(ui.build, place);
+  if (!ok.ok) { ui.msg = ok.why; render(); return; }
+  const cards = B.cardsFor(state, ui.build, place);
+  if (!cards.length) { ui.msg = `You have no card for ${PLACES[place].name}.`; render(); return; }
+  const card = cards[0];
+  if (card.kind === 'token' && !confirm(`Use a Scripture Memory Token for ${PLACES[place].name}? You lose its 5 points.`)) return;
+  apply(card);
+}
+
+function cardTapped(uid) {
+  const c = defs()[uid];
+  if (c.kind === 'place') {
+    const ok = B.canPlace(ui.build, c.place);
+    if (!ok.ok) { ui.msg = ok.why; render(); return; }
+    if (ui.build.seq.some((x) => x.uid === uid)) { ui.msg = 'That card is already on your route.'; render(); return; }
+    apply({ place: c.place, uid, kind: 'exact' });
+    return;
+  }
+  const options = B.legalPlaces(ui.build).filter((id) => c.region === 'israel' || PLACES[id].region === c.region);
+  if (!options.length) { ui.msg = `${E.cardLabel(c)} cannot stand for any place that could come next.`; render(); return; }
+  const kind = c.region === 'israel' ? 'israel' : 'region';
+  if (options.length === 1) { apply({ place: options[0], uid, kind }); return; }
+  chooseStand(`Which place is this ${E.cardLabel(c)}?`, options, (place) => ({ place, uid, kind }));
+}
+
+function builderAction(what) {
+  const b = ui.build;
+  if (what === 'undo') { ui.build = B.undo(b); ui.msg = ''; render(); }
+  else if (what === 'fresh') { ui.build = B.startFresh(b); ui.msg = ''; render(); }
+  else if (what === 'cancel') { ui.build = null; ui.msg = ''; render(); }
+  else if (what === 'look') { const j = E.journeyById[b.jid]; zoom(`${IMG}${j.id}-755.webp`, `${jTitle(j)}: ${j.points} points`); }
+  else if (what === 'token') {
+    const options = B.legalPlaces(b);
+    if (!options.length) { ui.msg = 'No place could come next.'; render(); return; }
+    chooseStand('Which place will the token stand for? (You lose its 5 points.)', options, (place) => ({ place, uid: null, kind: 'token' }));
+  }
+}
+
 // ---- events ------------------------------------------------------------------------------------------------------
 document.addEventListener('click', (e) => {
+  if (!state) return;
+  const hit = e.target.closest('[data-place]');
+  if (hit && (hit.closest('#board') || hit.closest('#mini'))) { placeTapped(hit.dataset.place); return; }
   const t = e.target.closest('button');
-  if (!t || !state) return;
+  if (!t) return;
   if (t.dataset.zoomJ) { const j = E.journeyById[t.dataset.zoomJ]; zoom(`${IMG}${j.id}-755.webp`, `${jTitle(j)}: ${j.points} points`); return; }
+  if (t.dataset.b) { builderAction(t.dataset.b); return; }
+  if (t.dataset.jid) {
+    if (canBuild()) selectJourney(t.dataset.jid);
+    else { const j = E.journeyById[t.dataset.jid]; zoom(`${IMG}${j.id}-755.webp`, `${jTitle(j)}: ${j.points} points`); }
+    return;
+  }
   if (!iAmPlaying()) return;
   if (t.dataset.take !== undefined) {
     const from = t.dataset.take === 'down' ? 'down' : Number(t.dataset.take);
     if ((state.phase === 'draw' || state.phase === 'topup') && E.canTake(state, from)) commit(E.take(state, from));
   } else if (t.dataset.hand !== undefined) {
     const uid = Number(t.dataset.hand), c = defs()[uid];
-    if (ui.reciting && state.phase === 'recite') reciteDialog(uid); else zoom(cardImg(c, 755), E.cardLabel(c));
+    if (ui.reciting && state.phase === 'recite') reciteDialog(uid);
+    else if (ui.build && canBuild()) cardTapped(uid);
+    else zoom(cardImg(c, 755), E.cardLabel(c));
   } else if (t.dataset.act === 'recite') { ui.reciting = true; render(); }
   else if (t.dataset.act === 'cancel-recite') { ui.reciting = false; render(); }
   else if (t.dataset.act === 'skip') commit(E.skipRecite(state));
   else if (t.dataset.act === 'end') commit(E.endPlay(state));
-  else if (t.dataset.play !== undefined) {
-    const o = $('#plays')._best[Number(t.dataset.play)];
-    ui.preview = ui.preview && ui.preview.journey === o.journey && ui.preview.path.join() === o.path.join() && ui.preview.extends === o.extends ? null : o;
-    render();
-  } else if (t.dataset.lay && ui.preview) commit(E.play(state, ui.preview));
 });
 
 $('#start-btn').addEventListener('click', () => startGame({ bots: Number($('#bot-count').value), skill: $('#bot-skill').value, expansion: $('#expansion').checked }));
@@ -287,7 +399,7 @@ $('#resume-btn').addEventListener('click', () => { state = loadSaved(); $('#setu
 $('#discard-btn').addEventListener('click', () => { try { localStorage.removeItem(KEY); } catch { /* ignore */ } showSetup(); });
 $('#new-btn').addEventListener('click', () => { if (!state || state.over || confirm('Leave this game? Your game in progress is saved and you can resume it.')) showSetup(); });
 $('#final-again').addEventListener('click', (e) => { e.preventDefault(); $('#final').close(); startGame(); });
-$('#final').addEventListener('close', () => { /* leave the finished board visible */ });
 
 ui.last = { bots: 2, skill: 'steady', expansion: false };
+if (FAST) window.jwj = { get state() { return state; }, get ui() { return ui; } };   // for the browser tests
 showSetup();

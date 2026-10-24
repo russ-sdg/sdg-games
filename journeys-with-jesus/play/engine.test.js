@@ -166,14 +166,14 @@ test('extending: cards on top of the end of a laid journey complete another, reu
   // lay Capernaum-Magdala-Cana-Nazareth, then Nain on top completes Capernaum to Nain
   s = give(inPlay(s, 'capernaum-to-nazareth', 'nazareth-to-jerusalem', 'capernaum-to-nain'), 'capernaum', 'magdala', 'cana', 'nazareth', 'nain');
   s = E.play(s, E.plays(s).find((o) => o.journey === 'capernaum-to-nazareth'));
-  assert.deepEqual(s.chain, ['capernaum', 'magdala', 'cana', 'nazareth']);
+  assert.deepEqual(s.chains, [['capernaum', 'magdala', 'cana', 'nazareth']]);
   const ext = E.plays(s).filter((o) => o.extends);
   assert.ok(ext.some((o) => o.journey === 'capernaum-to-nain'));
   const o = ext.find((x) => x.journey === 'capernaum-to-nain');
   assert.equal(o.assign.length, 1, 'only the new card is needed');
   s = E.play(s, o);
   assert.equal(E.score(E.me(s)).total, 16 + 25);
-  assert.deepEqual(s.chain, ['capernaum', 'magdala', 'cana', 'nazareth', 'nain']);
+  assert.deepEqual(s.chains, [['capernaum', 'magdala', 'cana', 'nazareth', 'nain']]);
 });
 
 test('an extension can start in the middle of what was laid, in the same order', () => {
@@ -195,7 +195,7 @@ test('a journey wholly inside what you laid scores too, with no more cards (a ru
   const after = E.play(s, inside[0]);
   assert.equal(E.score(E.me(after)).total, 16 + 9);
   assert.equal(E.me(after).hand.length, 0, 'no card is used or lost');
-  assert.deepEqual(after.chain, ['capernaum', 'magdala', 'cana', 'nazareth']);
+  assert.deepEqual(after.chains, [['capernaum', 'magdala', 'cana', 'nazareth']]);
 });
 
 test('a journey laid in the other direction also counts as inside what you laid', () => {
@@ -208,13 +208,20 @@ test('a journey laid in the other direction also counts as inside what you laid'
   assert.equal(sub.length, 0, 'nothing else is wholly inside yet');
 });
 
-test('a completed journey is replaced from the deck at once and can be completed the same turn', () => {
+test('a completed journey is replaced only when the turn is over', () => {
   let s = toPlay(new2());
   s = give(inPlay(s, 'capernaum-to-bethsaida'), 'capernaum', 'bethsaida', 'jerusalem', 'bethlehem');
   s.jdeck = s.jdeck.filter((j) => j !== 'jerusalem-to-bethlehem'); s.jdeck.push('jerusalem-to-bethlehem');   // on top
   s = E.play(s, E.plays(s)[0]);
+  assert.deepEqual(s.inplay, [null], 'the place stays empty for the rest of the turn');
+  assert.equal(E.plays(s).length, 0, 'so the new journey cannot be completed this turn');
+  s = E.endPlay(s);
+  assert.equal(s.phase, 'topup');
+  assert.deepEqual(s.inplay, [null], 'still empty while you draw back up');
+  while (s.phase === 'topup') s = E.take(s, 'down');
   assert.deepEqual(s.inplay, ['jerusalem-to-bethlehem']);
-  assert.equal(E.plays(s).length, 1);
+  assert.deepEqual(s.recent.map((r) => r.journey), ['capernaum-to-bethsaida'], 'the next player can see what was just completed');
+  assert.deepEqual(s.turnRoutes, []);
 });
 
 test('the game ends when the last journey is completed; points are journeys plus 5 per unplayed token', () => {

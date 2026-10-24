@@ -3,12 +3,12 @@
 import * as E from '../js/engine.js';
 import * as AI from '../js/ai.js';
 
-const games = Number(process.argv[2] || 200), n = Number(process.argv[3] || 3), exp = process.argv[4] === 'expansion';
+const games = Number(process.argv[2] || 200), n = Number(process.argv[3] || 3), exp = process.argv[4] === 'expansion', only = process.argv[5];   // only: one skill for everybody
 const skills = ['casual', 'steady', 'sharp'];
 const wins = Object.fromEntries(skills.map((k) => [k, 0])), pts = Object.fromEntries(skills.map((k) => [k, 0]));
 let rounds = 0, ended = {}, count = {};
 for (let g = 0; g < games; g++) {
-  const players = Array.from({ length: n }, (_, i) => ({ name: 'P' + i, bot: true, skill: skills[(i + g) % 3] }));
+  const players = Array.from({ length: n }, (_, i) => ({ name: 'P' + i, bot: true, skill: only || skills[(i + g) % 3] }));
   let s = E.newGame({ seed: 1000 + g, players, expansion: exp });
   let r = mulberry(g + 7);
   while (!s.over) s = AI.turn(s, r);
