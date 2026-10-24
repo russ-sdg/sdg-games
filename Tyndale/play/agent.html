@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Join a Tyndale table in the same room: your phone is your map, die and scorecard as a Bishop's Agent." />
+    <title>Join a Tyndale Table - SDG Games</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="play.css?v=20261029" rel="stylesheet" />
+</head>
+<body class="sb-nav-fixed">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
+
+    <main class="ty container-fluid px-3 pb-5">
+        <div class="ty-title d-flex flex-wrap align-items-center gap-3 py-3">
+            <a href="../index.html"><img class="ty-logo" src="../../assets/TyndalelogoV1.png" alt="Tyndale" /></a>
+            <span class="badge text-bg-secondary">Same room, own phones &middot; Agent</span>
+            <a class="ms-auto small" href="index.html">Back to Play online</a>
+        </div>
+
+        <section id="join" aria-labelledby="join-title">
+            <div class="row g-4"><div class="col-lg-6">
+                <div class="card shadow-sm"><div class="card-body">
+                    <h1 class="h3" id="join-title">Join a table</h1>
+                    <div id="resume" class="alert alert-info d-flex flex-wrap align-items-center gap-2" hidden>
+                        <span id="resume-text"></span>
+                        <button type="button" class="btn btn-sm btn-primary" id="resume-btn">Resume</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="discard-btn">Discard it</button>
+                    </div>
+                    <p>Ask the host for the <b>table code</b> shown on their phone. You are a Bishop's Agent: this phone is your map, your die and your scorecard.</p>
+                    <label class="form-label" for="code">Table code</label>
+                    <input class="form-control form-control-lg mb-2 code-input" id="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12" placeholder="e.g. 4001A2B3" />
+                    <p class="small text-danger" id="code-err" hidden>That is not a table code. It is a digit followed by six letters or numbers.</p>
+                    <div id="seat-pick" hidden>
+                        <p class="mb-1 mt-2">Who are you? Each Agent picks a different name.</p>
+                        <div class="pick-list" id="seat-list"></div>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-lg mt-2" id="join-btn">Next</button>
+                </div></div>
+            </div></div>
+        </section>
+
+        <section id="game" hidden aria-label="Your scorecard">
+            <div class="ty-bar" role="status">
+                <div class="ty-bar-main" id="bar-main"></div>
+                <div class="ty-bar-actions"><button type="button" class="btn btn-sm btn-outline-light" id="undo-btn">Undo</button><button type="button" class="btn btn-sm btn-outline-light" id="leave-btn">Leave</button></div>
+            </div>
+            <div class="row g-3">
+                <div class="col-lg-8">
+                    <div class="ty-card" id="controls"></div>
+                    <div class="ty-board-wrap"><svg id="board" class="ty-board" viewBox="0 0 800 800" role="img" aria-label="Your map"></svg></div>
+                    <div class="ty-legend small text-muted mt-2">Pick a tool, then tap the map. <b>Pawn</b> places or moves yours. N, P, H, O, R and &times; are the clues you jot down as Agents report them. The green numbers by the coast are how many moves a shipment from there needs to reach London.</div>
+                </div>
+                <div class="col-lg-4" id="side"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-5 bg-dark">
+        <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class="current-year">2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../../js/scripts.js"></script>
+    <script type="module" src="js/agent.js?v=20261029"></script>
+</body>
+</html>

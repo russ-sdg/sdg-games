@@ -219,9 +219,11 @@ export function rollFor(state, pawnId) {
   return s;
 }
 
+// opts.free: the pawn belongs to a person at a shared table who rolled their own die, so any spot not held by another pawn will do.
 export function agentMove(state, pawnId, roll, pos, opts = {}) {
   if (state.phase !== 'agents') throw new Error('not the Agents\' turn');
-  if (!pawnTargets(state, pawnId, roll).includes(pos)) throw new Error('illegal move');
+  if (opts.free) { const o = pawnAt(state, pos); if (!pt[pos] || (o && o.id !== pawnId)) throw new Error('illegal move'); }
+  else if (!pawnTargets(state, pawnId, roll).includes(pos)) throw new Error('illegal move');
   const s = clone(state), pawn = s.pawns[pawnId];
   if (!pawn.trail) pawn.trail = [pawn.pos];                   // (games saved before routes were kept)
   if (pawn.pos !== pos) pawn.trail.push(pos);                 // the route of each pawn, for the results map

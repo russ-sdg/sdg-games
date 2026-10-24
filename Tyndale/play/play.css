@@ -90,3 +90,11 @@
 .agent-reveal li.out { opacity: .6; }
 .agent-reveal img { width: 44px; border-radius: 3px; flex: none; }
 .agent-reveal small { display: block; color: #6c757d; }
+
+/* ---- same room, own phones ---- */
+.code-big { font: 800 2.2rem/1.1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .18em; text-align: center; padding: .5rem; background: #f0f2fb; border: 2px dashed var(--ty-ink); border-radius: .5rem; margin-bottom: .5rem; user-select: all; }
+.code-input { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .15em; text-transform: uppercase; }
+.tool-row { display: flex; flex-wrap: wrap; gap: .35rem; }
+.tool-row .tool { border: 2px solid #ced4da; background: #fff; border-radius: .5rem; padding: .35rem .7rem; font-weight: 700; min-width: 2.6rem; }
+.tool-row .tool[aria-pressed="true"] { border-color: var(--ty-ink); background: var(--ty-ink); color: #fff; }
+.ty-reveal .report figure { max-width: 150px; }
