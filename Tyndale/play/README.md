@@ -26,9 +26,9 @@ steady a little, sharp a lot. `?fast` on the page URL skips the pauses (for test
 - **The host phone** runs the full engine (`js/table.js`): pawn placement, Tyndale (a person on that phone, or the computer), the answer cards,
   shipments, accusations and the results/share image. Nothing is sent anywhere; progress is saved in `localStorage` and every step can be undone.
 - **An Agent's phone** (`js/agent.js`) is a private scorecard: the character card (hidden until tapped), a 1 to 3 die with the reachable spots highlighted,
-  and clue tools (N, P, H, O, Rumors, nothing) for what the others report. The Agents tell the host where they landed; the host taps it in.
+  and clue tools (N, P, H, O, Rumors, nothing) for what the others report. The Agents tell the host where they landed; the host taps it in and reads out a two-character **answer code**, which the Agent types on their own phone to see their two cards privately (`answerCode` / `decodeAnswer`, scrambled by seed, seat and spot). No phone is passed around.
   Positions and clues are shared by talking, as in the physical game.
 - **Rules interpretations**: a table Agent rolls their own die, so `agentMove(..., { free: true })` accepts any spot not held by another pawn
   (the host checks the distance by eye, as at a physical table). The Secret Supporter is shown near/far, and the host asks what they report.
-  The answer cards are for the Agent being asked only; the host phone does see them.
+  The host phone can still show the cards under "Show the cards on this phone instead".
 - `js/boardview.js` draws the board for both pages. `table-core.test.js` covers the code, the shared deal and free moves.

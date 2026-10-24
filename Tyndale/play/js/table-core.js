@@ -40,3 +40,22 @@ export function reach(neighbors, from, steps) {
   for (let i = 0; i < steps; i++) { const nx = new Set(); cur.forEach((p) => neighbors(p).forEach((q) => nx.add(q))); cur = nx; }
   return [...cur];
 }
+
+// The answer cards without passing a phone around: the host phone shows a two-character code for the Agent's landing spot, the Agent
+// types it on their own phone, and their phone turns it back into the two cards. The code is scrambled with the table seed, the seat
+// and the spot, so hearing it read out tells nobody else anything. The second character catches a mistyped code.
+const LOCS = ['here', 'not', 'near', 'far'], BIBS = ['N', 'P', 'H', 'O', 'rumors', 'nothing'];
+const D36 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const spotNo = (pos) => 'ABCDEFGHIJK'.indexOf(pos[0]) * 11 + Number(pos.slice(1)) - 1;
+const keys = (seed, seat, pos) => { const n = 100000 + seat * 200 + spotNo(pos); return [Math.floor(hash01(seed, n) * 36), Math.floor(hash01(seed, n + 50000) * 36)]; };
+export function answerCode(seed, seat, pos, ans) {
+  const v = LOCS.indexOf(ans.loc) * 6 + BIBS.indexOf(ans.bible), [k1, k2] = keys(seed, seat, pos);
+  return D36[(v + k1) % 36] + D36[(v * 13 + k2) % 36];
+}
+export function decodeAnswer(seed, seat, pos, raw) {
+  const c = String(raw || '').toUpperCase().replace(/[^0-9A-Z]/g, '');
+  if (c.length !== 2) return null;
+  const [k1, k2] = keys(seed, seat, pos), v = (D36.indexOf(c[0]) - k1 + 36) % 36;
+  if (v >= 24 || D36[(v * 13 + k2) % 36] !== c[1]) return null;
+  return { loc: LOCS[Math.floor(v / 6)], bible: BIBS[v % 6] };
+}

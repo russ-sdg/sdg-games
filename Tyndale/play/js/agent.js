@@ -60,7 +60,7 @@ function tap(pos) {
   snap();
   if (st.tool === 'pawn') {
     if (st.roll && !targets().includes(pos)) { st.undo.pop(); return; }
-    st.pawns[st.sel] = pos; st.roll = null; st.moved = pos;
+    st.pawns[st.sel] = pos; st.roll = null; st.moved = pos; st.answer = null;
   } else if (st.tool === 'other') {
     st.others = st.others.includes(pos) ? st.others.filter((q) => q !== pos) : [...st.others, pos];
   } else if (st.tool === 'erase') {
@@ -79,9 +79,19 @@ function controls() {
     : `<div class="d-flex flex-wrap align-items-center gap-2 mb-2"><button type="button" class="btn btn-primary" data-do="roll" ${place ? 'disabled' : ''}>Roll the die</button>${st.moved && !place ? `<span class="small">Last landed on <b>${esc(st.pawns[st.sel])}</b> — tell the host.</span>` : ''}${place ? '<span class="small">Tap the map to place your pawn first, then tell the host where it is.</span>' : ''}</div>`;
   return `${pawnBtns}${rollHtml}<div class="tool-row" role="group" aria-label="Tool">${TOOLS.map(([k, l]) => `<button type="button" data-do="tool" data-k="${k}" aria-pressed="${st.tool === k}" class="tool tool-${k}">${esc(l)}</button>`).join('')}</div><p class="small text-muted mb-0 mt-1">${esc(TOOL_HELP[st.tool])}</p>`;
 }
+// The host reads out a short code after you land; it turns into the two cards here, for your eyes only.
+function answerHtml() {
+  if (!st.moved || !st.pawns[st.sel]) return '';
+  if (st.answer) { const a = st.answer; return `<div class="ty-card ty-reveal"><h2>Your answer from ${esc(st.pawns[st.sel])}</h2><div class="report">${card(T.LOC_CARD[a.loc], T.LOC_TEXT[a.loc])}${card(T.BIB_CARD[a.bible], a.bible === 'rumors' ? 'Rumors' : a.bible === 'nothing' ? 'Nothing to report' : E.PUB_NAMES[a.bible])}</div>
+    <p class="small mt-2 mb-2">Only you can see this. Tell the table what you found${me.supporter ? ', or say &ldquo;nothing to report&rdquo;' : ''}.</p><button type="button" class="btn btn-sm btn-outline-secondary" data-do="hideanswer">Hide it</button></div>`; }
+  return `<div class="ty-card"><h2>Answer code</h2><p class="small mb-2">After you tell the host where you landed, they read out a two-character code. Type it here to see your two cards.</p>
+    <div class="d-flex gap-2"><input class="form-control code-input" id="ans" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Code" aria-label="Answer code" style="max-width:8rem"><button type="button" class="btn btn-primary" data-do="decode">Show my cards</button></div>
+    <p class="small text-danger mt-1 mb-0" id="ans-err" hidden>That code does not fit where you landed. Check the spot and the code.</p></div>`;
+}
+const card = (id, cap) => `<figure><img src="${T.CARD(id)}" alt="${esc(cap)}" /><figcaption>${esc(cap)}</figcaption></figure>`;
 function side() {
   const shown = st.shown;
-  return `<div class="ty-card id-card"><img src="${T.CARD(me.char)}" alt="${shown ? esc(T.charName(me.char)) : 'Your character card (hidden)'}" ${shown ? '' : 'style="filter:blur(14px)"'}/><div><h2>You are ${esc(me.name)}</h2>
+  return answerHtml() + `<div class="ty-card id-card"><img src="${T.CARD(me.char)}" alt="${shown ? esc(T.charName(me.char)) : 'Your character card (hidden)'}" ${shown ? '' : 'style="filter:blur(14px)"'}/><div><h2>You are ${esc(me.name)}</h2>
       <p class="small mb-1">${shown ? `Your character card: <b>${esc(T.charName(me.char))}</b>.` : 'Your character card is hidden.'}</p>
       ${shown && me.supporter ? '<p class="mb-1"><b>You are the Secret Supporter.</b> You are on Tyndale\'s side. When the referee shows you Rumors or a translation, you decide whether to tell the others the truth or say &ldquo;nothing to report&rdquo;.</p>' : ''}
       <button type="button" class="btn btn-sm btn-outline-secondary" data-do="card">${shown ? 'Hide my card' : 'Show my card (private)'}</button></div></div>
@@ -109,6 +119,8 @@ function init() {
     if (d === 'roll') roll();
     else if (d === 'sel') { st.sel = Number(b.dataset.i); st.roll = null; save(); render(); }
     else if (d === 'tool') { st.tool = b.dataset.k; save(); render(); }
+    else if (d === 'decode') { const a = T.decodeAnswer(me.seed, me.seat, st.pawns[st.sel], $('ans').value); if (!a) { $('ans-err').hidden = false; return; } st.answer = a; save(); render(); }
+    else if (d === 'hideanswer') { st.answer = null; st.moved = null; save(); render(); }
     else if (d === 'card') { st.shown = !st.shown; save(); render(); }
   });
   $('undo-btn').addEventListener('click', undo);

@@ -57,3 +57,15 @@ test('at a table an Agent lands where their own die took them, and the engine an
   const caught = E.agentMove(s, 1, 0, 'F5', { free: true });
   assert.equal(caught.over, !E.isSupporterPawn(s, 1), 'landing on Tyndale ends the game, unless the Agent is his Secret Supporter');
 });
+
+test('an answer code turns back into the same two cards, only for the right seat and spot', () => {
+  for (const loc of ['here', 'not', 'near', 'far']) for (const bible of ['N', 'P', 'H', 'O', 'rumors', 'nothing']) {
+    const code = T.answerCode(12345, 2, 'F6', { loc, bible });
+    assert.match(code, /^[0-9A-Z]{2}$/);
+    assert.deepEqual(T.decodeAnswer(12345, 2, 'F6', code.toLowerCase()), { loc, bible });
+  }
+  const code = T.answerCode(12345, 2, 'F6', { loc: 'not', bible: 'N' });
+  const wrong = [T.decodeAnswer(12345, 3, 'F6', code), T.decodeAnswer(12345, 2, 'F7', code), T.decodeAnswer(999, 2, 'F6', code)];
+  assert.ok(wrong.some((w) => w === null), 'a code read at another seat or spot is usually rejected');
+  assert.equal(T.decodeAnswer(12345, 2, 'F6', 'ZZ'), null);
+});

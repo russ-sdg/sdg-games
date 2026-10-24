@@ -128,7 +128,7 @@ function finishMove(pos, from, choice) {
   const a = ui.cur, sup = E.isSupporterPawn(S, a.pawnId);
   const next = E.agentMove(S, a.pawnId, 0, pos, { free: true, report: sup ? (ans) => (choice === 'truth' ? ans.bible : null) : undefined });
   const r = next.lastResult;
-  ui.reveal = { name: S.seats[a.seat].name, pos, from, loc: r.loc, bible: r.bible, reported: r.reported, supporter: sup, captured: !!r.captured };
+  ui.reveal = { name: S.seats[a.seat].name, seat: a.seat, pos, from, loc: r.loc, bible: r.bible, reported: r.reported, supporter: sup, captured: !!r.captured };
   ui.report = null;
   if (!next.over) next.log.push({ round: next.round, text: `${S.seats[a.seat].name} → ${pos}: ${repText(r.reported === 'nothing' ? 'nothing' : r.reported)}.`, pub: true });
   commit(next, true);
@@ -232,14 +232,18 @@ function sideHtml() {
 function revealHtml() {
   const r = ui.reveal;
   const move = r.from === r.pos ? `Stayed at <b>${esc(r.pos)}</b>` : `Moved <b>${esc(r.from)}</b> → <b>${esc(r.pos)}</b>`;
-  return `<div class="ty-card ty-reveal"><h2>${esc(r.name)}'s cards</h2><p class="mb-2">${move}. <b>Show these to ${esc(r.name)} only.</b>${r.supporter ? ' (the Secret Supporter sees whether Tyndale is near or far)' : ''}</p>
-    <div class="report">${card(T.LOC_CARD[r.loc], T.LOC_TEXT[r.loc])}${card(T.BIB_CARD[r.bible], capBible(r.bible))}</div>
-    <p class="mt-2 mb-2"><b>${esc(r.name)} tells the table:</b> ${r.captured ? 'Tyndale is here!' : esc(repText(r.reported))}</p><button type="button" class="btn btn-primary" data-do="next">${r.captured ? 'Continue' : 'Next Agent'}</button></div>`;
+  return `<div class="ty-card ty-reveal"><h2>${esc(r.name)}'s answer</h2><p class="mb-2">${move}. ${codeHtml(r.name, r.pos, r.loc, r.bible, r.seat)}</p>
+    <p class="mb-2"><b>${esc(r.name)} tells the table:</b> ${r.captured ? 'Tyndale is here!' : esc(repText(r.reported))}</p><button type="button" class="btn btn-primary" data-do="next">${r.captured ? 'Continue' : 'Next Agent'}</button></div>`;
+}
+// The answer goes to the Agent's own phone as a short code, so this phone never has to be handed round. The cards can still be shown here.
+function codeHtml(name, pos, loc, bible, seat) {
+  const code = T.answerCode(cfg.seed, seat, pos, { loc, bible });
+  return `<span class="d-block mb-2">Read <b>${esc(name)}</b> this code to type on their phone:</span><span class="code-big" aria-label="Answer code ${code.split('').join(' ')}">${code}</span>
+    <details class="small"><summary>Show the cards on this phone instead</summary><div class="report mt-2">${card(T.LOC_CARD[loc], T.LOC_TEXT[loc])}${card(T.BIB_CARD[bible], capBible(bible))}</div></details>`;
 }
 function reportHtml() {
   const r = ui.report, nm = S.seats[ui.cur.seat].name;
-  return `<div class="ty-card ty-reveal"><h2>${esc(nm)}: what do you report?</h2><p class="mb-2">Show <b>${esc(nm)}</b> only:</p>
-    <div class="report">${card(T.LOC_CARD[r.ans.loc], T.LOC_TEXT[r.ans.loc])}${card(T.BIB_CARD[r.ans.bible], capBible(r.ans.bible))}</div>
+  return `<div class="ty-card ty-reveal"><h2>${esc(nm)}: what do you report?</h2><p class="mb-2">${codeHtml(nm, r.pos, r.ans.loc, r.ans.bible, ui.cur.seat)}</p>
     <p class="small mt-2 mb-2">The Secret Supporter may tell the others the truth, or say &ldquo;nothing to report&rdquo;. Ask which, then tap it. (Where Tyndale is stays private.)</p>
     <div class="d-flex flex-wrap gap-2"><button type="button" class="btn btn-primary" data-do="truth">Reports what was shown</button><button type="button" class="btn btn-outline-secondary" data-do="nothing">Nothing to report</button></div></div>`;
 }
