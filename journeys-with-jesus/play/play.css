@@ -159,3 +159,14 @@ body.has-ack { padding-bottom: 10rem; }
   .jp-ack-list { max-height: 3.2rem; }
   body.has-builder, body.has-ack { padding-bottom: 6rem; }
 }
+
+/* cards flipped face down while you recite, tokens in your hand, and newly turned-up cards */
+.jp-hc.is-down img { filter: none; }
+.jp-hc.is-off { opacity: .35; }
+.jp-hc.is-pick { cursor: pointer; }
+.jp-tok { border-style: dashed; background: #fff9e6; }
+.jp-tok img { padding: .3rem; aspect-ratio: 1; object-fit: contain; }
+.jp-tok.is-used { opacity: .45; }
+.jp-pile.is-new, .jp-journey.is-new { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold); animation: jp-new 1.6s ease-out 2; }
+.jp-pile .new, .jp-journey .new { position: absolute; top: -2px; left: -2px; z-index: 2; background: var(--gold); color: #3a2f08; font-size: .68rem; font-weight: 800; padding: 0 .4rem; border-radius: 9px 0 9px 0; }
+@media (prefers-reduced-motion: reduce) { .jp-pile.is-new, .jp-journey.is-new { animation: none; } }
