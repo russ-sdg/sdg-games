@@ -101,7 +101,7 @@ function showToast(title, big) {
 // ---- drawing the page --------------------------------------------------------------------------------------------
 function render() {
   if (!state) return;
-  renderBar(); renderStatus(); renderInplay(); renderBoard(); renderPiles(); renderHand(); renderDrawn(); renderActions(); renderBuilder(); renderAck(); renderPlayers(); renderLog();
+  renderBar(); renderStatus(); renderInplay(); renderBoard(); renderPiles(); renderHand(); renderDrawn(); renderActions(); renderBuilder(); renderAck(); renderDock(); renderPlayers(); renderLog();
 }
 
 function renderBar() {
@@ -241,6 +241,13 @@ function renderBuilder() {
     `<button type="button" class="btn btn-outline-secondary btn-sm" data-b="look">See the card</button>`,
     '<button type="button" class="btn btn-outline-danger btn-sm" data-b="cancel">Cancel</button>',
   ].join(' ');
+}
+
+// The instruction for the next step and its buttons (Finish my turn, recite, skip) stay in view at the foot of the screen, unless the
+// route bar or the computer's recap is already there.
+function renderDock() {
+  const on = !!state && !state.over && $('#builder').hidden && $('#ack').hidden;
+  $('#dock').hidden = !on; document.body.classList.toggle('has-dock', on);
 }
 
 // After a computer player's turn: what it did, and a Continue button, so you can look at the board before the next player starts.
