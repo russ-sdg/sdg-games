@@ -40,3 +40,13 @@
 .sd-diagram figcaption { text-align: center; color: var(--pp-muted); font-size: .9rem; margin-top: .6rem; }
 @media (max-width: 860px) { .sd-idea { grid-template-columns: 1fr; } .sd-board { gap: .3rem; } .sd-slot { font-size: .68rem; } }
 @media (prefers-reduced-motion: reduce) { .sd-slot.pop, .sd-em.is-ready, .sd-score i { animation: none; } }
+
+/* what's in the deck */
+.pp-deck { max-width: 640px; margin: 2rem auto 0; }
+.pp-deck h3 { font-size: 1.2rem; margin-bottom: .6rem; }
+.pp-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.pp-table th, .pp-table td { padding: .4rem .6rem; border-bottom: 1px solid rgba(0,0,0,.12); text-align: left; }
+.pp-table thead th { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: #5c636a; }
+.pp-table tbody th { font-weight: 700; }
+.pp-table td:nth-child(2) { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; width: 5rem; }
+.pp-table .total th, .pp-table .total td { border-top: 2px solid currentColor; border-bottom: 0; }

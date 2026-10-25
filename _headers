@@ -65,3 +65,6 @@
 
 /journeys-with-jesus/play/*
   Cache-Control: no-cache
+
+/6days/play/*
+  Cache-Control: no-cache
