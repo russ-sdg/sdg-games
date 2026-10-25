@@ -35,7 +35,7 @@ export function drawBoard(svg, { ends = [], build = [], routes = [], held = [], 
   svg.append(defs);
   svg.append(el('rect', { x: 0, y: 40, width: 450, height: 650, fill: 'url(#land)' }));
   svg.append(el('rect', { x: 0, y: 40, width: 450, height: 650, fill: '#6b5420', filter: 'url(#paper)' }));
-  const coast = 'M0 40 L170 40 L176 92 L168 108 L146 160 L128 212 L100 290 L74 372 L58 430 L36 500 L24 560 L0 600 Z';
+  const coast = 'M0 40 L170 40 L176 92 L168 108 L142 160 L118 212 L92 290 L50 372 L36 430 L12 500 L6 560 L0 600 Z';
   svg.append(el('path', { d: coast, fill: 'url(#sea)' }));
   svg.append(el('path', { d: coast.replace(/^M0 40 /, 'M170 40 ').replace(/ L0 600 Z$/, ''), fill: 'none', stroke: '#5f8fb0', 'stroke-width': 2, 'stroke-linejoin': 'round' }));
   svg.append(el('path', { d: 'M288 276 C296 320 300 350 296 384 C292 440 292 500 284 556', fill: 'none', stroke: '#6aa7d1', 'stroke-width': 3.5, opacity: 0.9 }));

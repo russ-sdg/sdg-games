@@ -58,7 +58,6 @@
         <!-- ================= GAME ================= -->
         <section id="game" hidden aria-label="Game">
             <div class="jp-bar" id="bar"></div>
-            <p class="jp-status" id="status" role="status" aria-live="polite"></p>
 
             <div class="jp-layout">
                 <div class="jp-card jp-journeys-box" id="journeys-box">
@@ -76,7 +75,6 @@
                 <div class="jp-card jp-hand-box" id="hand-box">
                     <h2>Your hand <span class="jp-hint" id="hand-hint"></span></h2>
                     <div class="jp-drawn" id="drawn" hidden></div>
-                    <div class="jp-actions" id="actions"></div>
                     <div class="jp-hand" id="hand"></div>
                 </div>
             </div>
@@ -98,6 +96,14 @@
                 <div class="jp-builder-msg" id="b-msg" role="status" aria-live="polite"></div>
                 <div class="jp-builder-actions" id="b-actions"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- what to do next, and the button to do it, pinned to the foot of the screen (hidden while the route bar or a computer's recap is up) -->
+    <div class="jp-builder jp-dock" id="dock" hidden>
+        <div class="jp-builder-main">
+            <div class="jp-builder-info"><p class="jp-dock-status" id="status" role="status" aria-live="polite"></p></div>
+            <div class="jp-actions" id="actions"></div>
         </div>
     </div>
 

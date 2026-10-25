@@ -1,5 +1,5 @@
 /* Journeys with Jesus: play online. Matches the look of the other online games on the site. */
-.jp, .jp-builder { --olive: #3f4a1d; --gold: #f3c24b; }
+.jp, .jp-builder { --olive: #3f4a1d; --gold: #f3c24b; --pick: #0a7a8f; }
 .jp { max-width: 1100px; margin: 0 auto; }
 .jp [hidden] { display: none !important; }
 .jp-logo { height: 44px; width: auto; max-width: 100%; }
@@ -57,7 +57,9 @@
 @media (min-width: 640px) { .jp-hand { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); } }
 .jp-hc { position: relative; padding: 0; border: 3px solid var(--rc); border-radius: 12px; background: #fff; overflow: hidden; }
 .jp-hc img { width: 100%; height: auto; display: block; border-radius: 8px; }
-.jp-hc.is-used { box-shadow: 0 0 0 4px var(--gold); transform: translateY(-4px); }
+.jp-hc.is-used { border-color: var(--pick); box-shadow: 0 0 0 4px var(--pick); transform: translateY(-4px); }
+.jp-hc.is-used.is-new { border-color: var(--pick); box-shadow: 0 0 0 4px var(--pick); animation: none; }
+.jp-hc.is-used::after { content: 'In route'; position: absolute; left: 50%; bottom: -2px; transform: translateX(-50%); background: var(--pick); color: #fff; font-size: .62rem; font-weight: 800; padding: 0 .4rem; border-radius: 4px; white-space: nowrap; }
 .jp-hc.is-pick { animation: jp-pulse 1.4s ease-in-out infinite; }
 @keyframes jp-pulse { 50% { box-shadow: 0 0 0 5px rgba(13,110,253,.35); } }
 @media (prefers-reduced-motion: reduce) { .jp-hc.is-pick { animation: none; outline: 3px solid #0d6efd; } }
@@ -101,7 +103,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .jp img, .jp svg { max-width: 100%; }
 .jp-journey.can-pick { cursor: pointer; }
 .jp-journey.can-pick:hover { border-color: #0d6efd; }
-.jp-journey.is-selected { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(243,194,75,.55); transform: translateY(-3px); }
+.jp-journey.is-selected { border-color: var(--pick); box-shadow: 0 0 0 4px rgba(10,122,143,.55); transform: translateY(-3px); }
 .jp-journey.is-won img { filter: saturate(.55) brightness(.9); }
 .jp-journey.is-won { border-color: #198754; animation: jp-won .9s ease-out; }
 .jp-journey .won { position: absolute; left: 4px; right: 4px; bottom: 6px; background: #198754; color: #fff; font-weight: 800; font-size: .95rem; padding: .1rem .3rem; border-radius: 6px; text-align: center; }
@@ -144,6 +146,15 @@ html, body { max-width: 100%; overflow-x: hidden; }
 body.has-builder { padding-bottom: 11rem; }
 .jp-choose { display: flex; flex-wrap: wrap; gap: .4rem; }
 
+/* what to do next, pinned to the foot of the screen */
+.jp-dock { border-top-color: #198754; }
+.jp-dock .jp-builder-main { align-items: center; flex-wrap: wrap; }
+.jp-dock .jp-builder-info { flex: 1 1 16rem; }
+.jp-dock-status { margin: 0; font-weight: 700; }
+.jp-dock .jp-actions { margin: 0; flex: 0 0 auto; align-items: center; }
+.jp-dock .jp-actions .btn { font-weight: 700; padding: .5rem .9rem; }
+body.has-dock { padding-bottom: 8rem; }
+
 /* after a computer player's turn */
 .jp-ack { border-top-color: #0d6efd; }
 .jp-ack .jp-builder-main { align-items: center; }
@@ -157,7 +168,7 @@ body.has-ack { padding-bottom: 10rem; }
   .jp-builder-info { display: flex; flex-wrap: wrap; align-items: center; gap: .1rem .8rem; }
   .jp-builder-msg { min-height: 0; }
   .jp-ack-list { max-height: 3.2rem; }
-  body.has-builder, body.has-ack { padding-bottom: 6rem; }
+  body.has-builder, body.has-ack, body.has-dock { padding-bottom: 6rem; }
 }
 
 /* cards flipped face down while you recite, tokens in your hand, and newly turned-up cards */
