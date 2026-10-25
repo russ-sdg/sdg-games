@@ -17,18 +17,15 @@ In Be Tyndale the Agents' skill sets how much they are tipped off about his real
 steady a little, sharp a lot. `?fast` on the page URL skips the pauses (for testing). Pace: normal play stops after each computer move (cards shown, move drawn on the map); accelerated play does not. `js/share.js` draws the result picture: the board with Tyndale's route and every Agent pawn's route (kept in `pawn.trail`), so you can see how close the Agents got.
 
 
-## Same room, own phones
+## Pass and play
 
-`table.html` (host) and `agent.html` (each Agent) let a group play at one table with no server and no sign-up.
+`pass.html` (`js/pass.js`) is for friends in the same room with one phone. Nothing is sent anywhere.
 
-- **The table code** is one digit (how many Agents) plus a 6-character base-36 seed (`js/table-core.js`). Every phone deals the same
-  character cards from it, so each Agent can see their own card and everyone agrees who holds the Secret Supporter (Stephen Vaughn) with 4+ Agents.
-- **The host phone** runs the full engine (`js/table.js`): pawn placement, Tyndale (a person on that phone, or the computer), the answer cards,
-  shipments, accusations and the results/share image. Nothing is sent anywhere; progress is saved in `localStorage` and every step can be undone.
-- **An Agent's phone** (`js/agent.js`) is a private scorecard: the character card (hidden until tapped), a 1 to 3 die with the reachable spots highlighted,
-  and clue tools (N, P, H, O, Rumors, nothing) for what the others report. The Agents tell the host where they landed; the host taps it in and reads out a two-character **answer code**, which the Agent types on their own phone to see their two cards privately (`answerCode` / `decodeAnswer`, scrambled by seed, seat and spot). No phone is passed around.
-  Positions and clues are shared by talking, as in the physical game.
-- **Rules interpretations**: a table Agent rolls their own die, so `agentMove(..., { free: true })` accepts any spot not held by another pawn
-  (the host checks the distance by eye, as at a physical table). The Secret Supporter is shown near/far, and the host asks what they report.
-  The host phone can still show the cards under "Show the cards on this phone instead".
-- `js/boardview.js` draws the board for both pages. `table-core.test.js` covers the code, the shared deal and free moves.
+- Agents (1 to 5, names editable) and Tyndale (a person, or the computer) share one phone. Before every private moment the phone shows a
+  **"Pass the phone to X"** screen and hides the map until X taps *Ready*: each Agent's character card at the start, Tyndale choosing where he
+  begins, Tyndale's secret moves, and each Agent's turn.
+- An Agent's turn: roll (1 to 3), tap a highlighted spot, see the two answer cards in private, then say what they found (the Secret Supporter
+  chooses what to report). What is reported goes on the shared map, ringed in that Agent's colour.
+- The map only draws Tyndale, his route and his shipments while the phone is with him (or the game is over). The computer's Tyndale moves as soon as the Agents finish.
+- It runs on the same engine as solo play (`js/engine.js`); `js/pass-core.js` deals the characters from a seed and `js/boardview.js` draws the board.
+  Saved in `localStorage`, undoable, with the same results and share image.
