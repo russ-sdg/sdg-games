@@ -90,3 +90,7 @@
 .agent-reveal li.out { opacity: .6; }
 .agent-reveal img { width: 44px; border-radius: 3px; flex: none; }
 .agent-reveal small { display: block; color: #6c757d; }
+
+/* ---- pass and play ---- */
+.gate { text-align: center; max-width: 34rem; margin: 2rem auto; padding: 1.5rem; }
+.gate h2 { font-size: 1.4rem; }

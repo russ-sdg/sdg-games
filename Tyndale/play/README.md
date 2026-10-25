@@ -16,3 +16,16 @@ Modes: **Hunt** (you are an Agent, a computer is Tyndale) and **Be Tyndale** (yo
 In Be Tyndale the Agents' skill sets how much they are tipped off about his real position (`PEEK` in `js/ai.js`): casual none,
 steady a little, sharp a lot. `?fast` on the page URL skips the pauses (for testing). Pace: normal play stops after each computer move (cards shown, move drawn on the map); accelerated play does not. `js/share.js` draws the result picture: the board with Tyndale's route and every Agent pawn's route (kept in `pawn.trail`), so you can see how close the Agents got.
 
+
+## Pass and play
+
+`pass.html` (`js/pass.js`) is for friends in the same room with one phone. Nothing is sent anywhere.
+
+- Agents (1 to 5, names editable) and Tyndale (a person, or the computer) share one phone. Before every private moment the phone shows a
+  **"Pass the phone to X"** screen and hides the map until X taps *Ready*: each Agent's character card at the start, Tyndale choosing where he
+  begins, Tyndale's secret moves, and each Agent's turn.
+- An Agent's turn: roll (1 to 3), tap a highlighted spot, see the two answer cards in private, then say what they found (the Secret Supporter
+  chooses what to report). What is reported goes on the shared map, ringed in that Agent's colour.
+- The map only draws Tyndale, his route and his shipments while the phone is with him (or the game is over). The computer's Tyndale moves as soon as the Agents finish.
+- It runs on the same engine as solo play (`js/engine.js`); `js/pass-core.js` deals the characters from a seed and `js/boardview.js` draws the board.
+  Saved in `localStorage`, undoable, with the same results and share image.
