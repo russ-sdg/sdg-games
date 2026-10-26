@@ -50,3 +50,4 @@
 .pp-table tbody th { font-weight: 700; }
 .pp-table td:nth-child(2) { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; width: 5rem; }
 .pp-table .total th, .pp-table .total td { border-top: 2px solid currentColor; border-bottom: 0; }
+.pp-play { margin: 1rem 0 .4rem; }

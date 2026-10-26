@@ -1,9 +1,10 @@
 # Six Days: play online
 
-`index.html` is a free solo game against 1 to 5 computer players (the box says 2 to 6 players). Not linked from the site yet, and set to `noindex` until launch day.
+`index.html` is a free solo game against 1 to 5 computer players (the box says 2 to 6 players). Linked from the Six Days page, the games list and the home page.
 
 - `js/engine.js` the rules as pure functions on plain JSON state (seeded shuffles, so a saved game resumes exactly). `js/ai.js` the computer players (casual / steady / sharp). `js/deck-data.js` is generated: `node 6days/play/tools/build-deck.mjs`.
 - `js/app.js` the page. State is saved in `localStorage`. `?fast` skips the computers' pauses, `?seed=N` replays a deal, `?debug` exposes `window.sixdays`.
+- `js/share.js` draws the shareable result picture (the six days with every card, and the scores); `share.test.js` checks the headline and message.
 - Tests: `node --test` in this folder. `node tools/sim.mjs 300 3` plays computer-only games (casual should trail steady and sharp).
 
 ## The deck

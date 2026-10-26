@@ -80,3 +80,6 @@ body.has-dock { padding-bottom: 8rem; }
 
 @media (max-width: 575px) { .sp-piles { grid-template-columns: repeat(2, 1fr); } .sp-cards { grid-template-columns: repeat(3, 1fr); } }
 @media (prefers-reduced-motion: no-preference) { .sp-hc, .sp-day, .sp-pile { transition: box-shadow .15s, transform .15s; } }
+
+.sp-wide { max-width: min(94vw, 40rem); max-height: 92vh; overflow: auto; }
+.sp-share-preview { width: 100%; height: auto; border-radius: .6rem; box-shadow: 0 2px 10px rgba(0,0,0,.3); display: block; }
