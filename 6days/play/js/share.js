@@ -14,17 +14,23 @@ export function result(state) {
   const best = Math.max(...state.players.map((p) => p.score));
   return { you, place, won: you.score === best, tied: state.players.filter((p) => p.score === best).length > 1, best };
 }
-export function headline(state) {
+// table = a game of pass and play: nobody is "I", the headline names the winner
+export function headline(state, table = false) {
+  if (table) {
+    const best = Math.max(...state.players.map((p) => p.score)), names = state.players.filter((p) => p.score === best).map((p) => p.name);
+    return names.length > 1 ? `${names.join(' and ')} tied for the win with ${best} points!` : `${names[0]} won Six Days with ${best} points!`;
+  }
   const { you, place, won, tied } = result(state);
   if (won) return tied ? `I tied for the win with ${you.score} points!` : `I won with ${you.score} points!`;
   return `I scored ${you.score} points and finished ${ORD(place)}.`;
 }
-export function shareMessage(state) {
+export function shareMessage(state, table = false) {
+  if (table) return `${headline(state, true)} Six Days, played with friends around one phone. ${SHARE_URL}`;
   const n = state.players.length - 1;
   return `${headline(state)} Six Days, against ${n} computer player${n > 1 ? 's' : ''}. ${SHARE_URL}`;
 }
 // The link lives in the text only. Passing it again as `url` makes many messaging apps paste it twice.
-export const nativeShareData = (file, state) => ({ files: [file], text: shareMessage(state) });
+export const nativeShareData = (file, state, table = false) => ({ files: [file], text: shareMessage(state, table) });
 
 const roundRect = (ctx, x, y, w, h, r) => { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); };
 const loadImage = (src) => new Promise((resolve, reject) => { const i = new Image(); i.onload = () => resolve(i); i.onerror = reject; i.src = src; });
@@ -37,7 +43,7 @@ export async function drawShareImage(canvas, state, info) {
   const H = rowsEnd + 70 + n * 40 + 90;
   canvas.width = SHARE_W; canvas.height = H;
   const ctx = canvas.getContext('2d');
-  const { you, won, tied } = result(state);
+  const r = result(state), table = !!info.table, won = table || r.won, tied = r.tied, shown = table ? r.best : r.you.score;
   const ids = [...new Set(state.stacks.flatMap((k) => [...k.cards, ...(k.em !== null ? [k.em] : [])]).map((u) => E.DEFS[u].id))];
   const images = Object.fromEntries(await Promise.all(ids.map(async (id) => [id, await loadImage(info.imgBase(id)).catch(() => null)])));
 
@@ -55,14 +61,14 @@ export async function drawShareImage(canvas, state, info) {
   ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
   ctx.fillStyle = '#f3c24b'; ctx.font = `800 70px ${SERIF}`; ctx.fillText('SIX DAYS', 60, 100);
   ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.font = `500 24px ${SANS}`; ctx.fillText('A creation card game', 64, 140);
-  ctx.fillStyle = '#fff'; const hl = headline(state); ctx.font = `800 ${fit(ctx, hl, 800, 46, 800, SANS)}px ${SANS}`; ctx.fillText(hl, 60, 205);
+  ctx.fillStyle = '#fff'; const hl = headline(state, table); ctx.font = `800 ${fit(ctx, hl, 800, 46, 800, SANS)}px ${SANS}`; ctx.fillText(hl, 60, 205);
   ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = `500 22px ${SANS}`;
   ctx.fillText(`${n} players · ${state.endedBy === 'complete' ? `all six days filled in ${state.round} rounds` : 'the cards ran out first'}`, 62, 236);
 
   // the score medallion
   ctx.beginPath(); ctx.arc(1040, 118, 78, 0, 7); ctx.fillStyle = won ? '#f3c24b' : 'rgba(255,255,255,.92)'; ctx.fill();
   ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.stroke();
-  ctx.textAlign = 'center'; ctx.fillStyle = '#1a2347'; ctx.font = `800 ${you.score >= 100 ? 54 : 70}px ${SANS}`; ctx.fillText(String(you.score), 1040, 134);
+  ctx.textAlign = 'center'; ctx.fillStyle = '#1a2347'; ctx.font = `800 ${shown >= 100 ? 54 : 70}px ${SANS}`; ctx.fillText(String(shown), 1040, 134);
   ctx.font = `700 20px ${SANS}`; ctx.fillText(won ? (tied ? 'TIED' : 'WINNER') : 'POINTS', 1040, 164);
 
   // the six days

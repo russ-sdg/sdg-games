@@ -21,3 +21,11 @@ test('the headline and the message read right and carry the link once', () => {
   const m = S.shareMessage(done([30, 20, 10]));
   assert.match(m, /against 2 computer players/); assert.equal(m.split('sdggames.fun').length, 2);
 });
+
+test('a pass-and-play result names the winner (or the tie) instead of saying "I"', () => {
+  const s = done([20, 30, 25]); s.players[0].name = 'Ann'; s.players[1].name = 'Ben';
+  assert.equal(S.headline(s, true), 'Ben won Six Days with 30 points!');
+  s.players[2].score = 30; s.players[2].name = 'Cy';
+  assert.equal(S.headline(s, true), 'Ben and Cy tied for the win with 30 points!');
+  assert.match(S.shareMessage(s, true), /played with friends around one phone/);
+});

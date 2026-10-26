@@ -19,3 +19,11 @@ The page's rules leave a few things open; these are the choices made, so they ar
 - **Draw:** the draw pile or the top of any discard pile; a turn is draw, then play *or* discard one card, so you always hold 2 cards between turns.
 - **Empty discard piles** are refilled from the draw pile at the end of a turn. If the draw pile runs out, the discards (all but each pile's top card) are shuffled back in, up to 3 times; after that, or after 80 rounds, the game ends and the points stand.
 - **The game ends** the moment every stack holds its full number of day cards; most points wins (ties share the win).
+
+## Pass and play
+`pass.html` (`js/pass.js`) is for 2 to 6 people sharing one phone, with computer players able to fill empty seats. It uses the same engine, AI and page pieces as the solo game; the difference is who is looking:
+
+- Before each person's turn the dock says **"Pass the phone to X"** and their hand stays hidden until they tap *I'm X, show me*. The days and discard piles stay on show, as at a table.
+- The phone shows what happened since the person last looked (the previous player's move and any computer moves).
+- If the previous mover was a person, the next person's screen has an **Undo** button until they pick the phone up (a computer move in between ends the chance to undo).
+- The share picture and text name the winner instead of saying "I".

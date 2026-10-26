@@ -83,3 +83,5 @@ body.has-dock { padding-bottom: 8rem; }
 
 .sp-wide { max-width: min(94vw, 40rem); max-height: 92vh; overflow: auto; }
 .sp-share-preview { width: 100%; height: auto; border-radius: .6rem; box-shadow: 0 2px 10px rgba(0,0,0,.3); display: block; }
+
+.sp-hidden { margin: 0; padding: 1.2rem .8rem; text-align: center; color: #5c636a; background: rgba(255,255,255,.6); border: 2px dashed #adb5bd; border-radius: .6rem; grid-column: 1 / -1; }
