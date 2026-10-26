@@ -1,0 +1,6 @@
+{
+  "name": "sixdays-play",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test" }
+}
