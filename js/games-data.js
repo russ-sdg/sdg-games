@@ -14,7 +14,7 @@
   else root.SDGGames = factory(root.SDGCore);
 })(typeof self !== 'undefined' ? self : this, function (core) {
   const GAMES = [
-    { slug: '6days', title: 'Six Days', tags: ['Card game'], art: 'sixdays', artAlt: 'The Mankind card from Six Days, with the first man among the animals', price: '19.99', launch: '2026-11-14', featured: true,
+    { slug: '6days', title: 'Six Days', tags: ['Card game'], art: 'sixdays', artAlt: 'The Mankind card from Six Days, with the first man among the animals', price: '19.99', launch: '2026-11-14', online: '6days/play/', featured: true,
       blurb: 'A family card game about the six days of creation: build them together, then score for yourself.', facts: ['2\u20136 players', 'Ages 12+', '72 cards'] },
     { slug: 'FotS', title: 'The Fruit of the Spirit', tags: ['Card game'], art: 'fots', artAlt: 'A tree with the nine fruit of the Spirit around it', price: '19.99',
       blurb: 'A take-that and give-that card game: be the first to collect all nine fruit of Galatians 5:22-23.', facts: ['Up to 4 players'] },

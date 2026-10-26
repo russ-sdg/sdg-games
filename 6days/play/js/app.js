@@ -1,6 +1,7 @@
 // Six Days: play online against 1 to 5 computer players. You are seat 0.
 import * as E from './engine.js';
 import * as AI from './ai.js';
+import { drawShareImage, canvasToBlob, nativeShareData, shareMessage } from './share.js';
 
 const KEY = 'sdg-6d-play-1';
 const $ = (id) => document.getElementById(id);
@@ -146,16 +147,36 @@ function renderDock() {
 }
 
 // ---- the end ----------------------------------------------------------------------------------------------------------------------
-function resultText() {
-  const w = E.winners(S), mePts = S.players[0].score, won = w.includes(0);
-  return won ? `I ${w.length > 1 ? 'tied for the win' : 'won'} Six Days with ${mePts} points against ${S.players.length - 1} computer player${S.players.length > 2 ? 's' : ''}!` : `I scored ${mePts} points in Six Days. ${S.players[w[0]].name} won with ${S.players[w[0]].score}.`;
-}
 function showFinal() {
   const w = E.winners(S), order = S.players.map((p, i) => ({ ...p, i })).sort((a, b) => b.score - a.score);
   $('final-title').textContent = w.includes(0) ? (w.length > 1 ? 'You tied for the win!' : 'You win!') : `${S.players[w[0]].name} wins`;
   $('final-body').innerHTML = `<p class="small text-muted">${S.endedBy === 'complete' ? `All six days were filled in ${S.round} rounds.` : 'The cards ran out before every day could be filled.'}</p>`
     + order.map((p) => `<div class="sp-final-row${w.includes(p.i) ? ' win' : ''}"><span>${esc(p.name)}</span><span>${p.score} points</span></div>`).join('');
+  mountShare($('final-body'), structuredClone(S));
   $('final').showModal();
+}
+
+// Share the result as a picture: the share sheet where the browser offers it, plus a download and copyable text.
+async function mountShare(root, snapshot) {
+  const box = document.createElement('div');
+  box.className = 'sp-share';
+  box.innerHTML = `<div class="d-flex flex-wrap gap-2 my-2"><button type="button" class="btn btn-primary btn-sm" id="share-dl" disabled>Download image</button>
+    <button type="button" class="btn btn-outline-primary btn-sm" id="share-native" hidden>Share\u2026</button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="share-copy">Copy text</button></div>
+    <img class="sp-share-preview" alt="Your result: the six days and the scores" hidden>
+    <p class="small text-muted mb-0" id="share-msg" aria-live="polite">Drawing your result picture\u2026</p>`;
+  root.appendChild(box);
+  const im = box.querySelector('img'), msg = box.querySelector('#share-msg'), dl = box.querySelector('#share-dl'), nat = box.querySelector('#share-native'), copy = box.querySelector('#share-copy');
+  copy.onclick = async () => { try { await navigator.clipboard.writeText(shareMessage(snapshot)); msg.textContent = 'Copied. Paste it anywhere.'; } catch { msg.textContent = shareMessage(snapshot); } };
+  try {
+    const canvas = await drawShareImage(document.createElement('canvas'), snapshot, { imgBase: (id) => img(id, 480), names: snapshot.players.map((p) => p.name) });
+    const blob = await canvasToBlob(canvas), url = URL.createObjectURL(blob);
+    im.src = url; im.hidden = false; dl.disabled = false; msg.textContent = '';
+    const file = new File([blob], 'six-days.png', { type: 'image/png' });
+    nat.hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+    dl.onclick = () => { const a = document.createElement('a'); a.href = url; a.download = 'six-days.png'; document.body.appendChild(a); a.click(); a.remove(); };
+    nat.onclick = async () => { try { await navigator.share(nativeShareData(file, snapshot)); } catch { /* cancelled */ } };
+  } catch { msg.textContent = 'Sorry, the picture could not be drawn in this browser. You can still copy the text.'; }
 }
 
 // ---- wiring --------------------------------------------------------------------------------------------------------------------------
@@ -177,10 +198,6 @@ function init() {
   document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[data-stack], .sp-zoombtn')) { e.preventDefault(); onClick(e); } });
   $('menu-btn').addEventListener('click', () => { if (S && !S.over && !confirm('Leave this game? It will be lost.')) return; token++; clearSave(); S = null; show('setup'); $('resume').hidden = true; });
   $('final-again').addEventListener('click', () => { token++; clearSave(); S = null; show('setup'); $('resume').hidden = true; });
-  $('final-share').addEventListener('click', async () => {
-    const text = `${resultText()} https://sdggames.fun/6days/`;
-    try { if (navigator.share) await navigator.share({ text }); else { await navigator.clipboard.writeText(text); $('final-share').textContent = 'Copied'; } } catch (e) { /* cancelled */ }
-  });
   const saved = load();
   if (saved && !saved.S.over) {
     $('resume').hidden = false;
