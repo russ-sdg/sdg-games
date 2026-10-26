@@ -74,6 +74,7 @@ function onTarget(kind, i) {
   if (S.over) { showFinal(); return; }
   run();
 }
+function openZoom(z) { $('zoom-img').src = img(z.dataset.zoom, 960); $('zoom-img').alt = z.dataset.cap; $('zoom-cap').textContent = z.dataset.cap; $('zoom').showModal(); }
 function onContinue() { ui.ack = false; ui.recap = []; ui.flash = null; save(); render(); }
 
 // ---- drawing the page -----------------------------------------------------------------------------------------------------------
@@ -96,20 +97,22 @@ function renderDays() {
     const st = S.stacks[i], n = i + 1, started = i < S.started, full = E.isFull(S, i), closed = E.isClosed(S, i), tg = t.stack[i], fl = ui.flash && ui.flash.stack === i;
     const state = closed ? '<span class="state ok">Closed ✓</span>' : full ? '<span class="state ok">Full: needs Evening &amp; Morning</span>'
       : started ? `<span class="state">${st.cards.length} of ${n} cards</span>` : i === S.started ? `<span class="state">Next: needs a Day ${n} card</span>` : '<span class="state">Not started</span>';
-    const cards = st.cards.map((u) => `<img src="${img(E.DEFS[u].id)}" alt="${esc(E.DEFS[u].name)}" data-zoom="${E.DEFS[u].id}" data-cap="${esc(E.label(u))}" width="1120" height="820" />`).join('')
-      + (st.em !== null ? `<img class="em" src="${img(E.DEFS[st.em].id)}" alt="Evening &amp; Morning" data-zoom="${E.DEFS[st.em].id}" data-cap="Evening &amp; Morning" width="1120" height="820" />` : '');
+    const fig = (u, cls = '') => `<figure class="sp-c${cls}"><img src="${img(E.DEFS[u].id)}" alt="${esc(E.label(u))}" data-zoom="${E.DEFS[u].id}" data-cap="${esc(E.label(u))}" width="1120" height="820" /><figcaption>${esc(E.DEFS[u].kind === 'em' ? 'Evening & Morning' : E.DEFS[u].name)}</figcaption></figure>`;
+    const cards = st.cards.map((u) => fig(u)).join('') + (st.em !== null ? fig(st.em, ' em') : '');
     return `<div class="sp-day${started ? '' : ' is-off'}${tg ? ' is-target' : ''}${fl ? ' is-flash' : ''}" style="--d:${d.color}" ${tg ? `data-stack="${i}" role="button" tabindex="0"` : ''} aria-label="Day ${n}, ${esc(d.name)}${tg ? `, play here for ${tg.pts} point${tg.pts === 1 ? '' : 's'}` : ''}">
       <div class="sp-day-head"><span class="num">Day ${n}</span><span>${esc(d.name)}</span>${state}</div>
       <div class="sp-cards">${cards || '<span class="empty">No cards yet</span>'}</div>${tg ? `<span class="sp-badge">${tg.type === 'close' ? 'Close' : '+' + tg.pts}</span>` : ''}</div>`;
   }).join('');
 }
+const zoomBtn = (uid) => `<span class="sp-zoombtn" role="button" tabindex="0" data-zoom="${E.DEFS[uid].id}" data-cap="${esc(E.label(uid))}" aria-label="Enlarge ${esc(E.label(uid))}">\u2922</span>`;
 function renderPiles() {
   const t = targets(), drawing = mine() && S.phase === 'draw';
-  const back = `<button type="button" class="sp-pile" data-draw="deck" ${drawing && S.draw.length ? '' : 'disabled'} aria-label="Draw pile, ${S.draw.length} cards"><span class="lbl">Draw pile</span><span class="back"><img src="${img('back')}" alt="" /></span><span class="count">${S.draw.length}</span></button>`;
+  const back = `<button type="button" class="sp-pile" data-draw="deck" ${drawing && S.draw.length ? '' : 'disabled'} aria-label="Draw pile, ${S.draw.length} cards"><span class="lbl">Draw pile</span><span class="back"><img src="${img('back')}" alt="" /></span><span class="count">${S.draw.length}</span><span class="cap">${drawing ? 'Face down: tap to draw' : 'Face down'}</span></button>`;
   const piles = S.piles.map((p, i) => {
     const top = p[p.length - 1], tg = t.pile[i], fl = ui.flash && (ui.flash.pile === i || ui.flash.from === i);
-    const inner = top !== undefined ? `<img src="${img(E.DEFS[top].id)}" alt="${esc(E.label(top))}" width="1120" height="820" />` : '<span class="gone">Empty</span>';
-    return `<button type="button" class="sp-pile${tg ? ' is-target' : ''}${fl ? ' is-flash' : ''}" ${tg ? `data-pile="${i}"` : drawing && top !== undefined ? `data-draw="${i}"` : 'disabled'} aria-label="Discard pile ${i + 1}${top !== undefined ? ', top: ' + esc(E.label(top)) : ', empty'}"><span class="lbl">${tg ? 'Discard here' : 'Discard ' + (i + 1)}</span>${inner}${p.length > 1 ? `<span class="count">${p.length}</span>` : ''}</button>`;
+    const inner = top !== undefined ? `<img src="${img(E.DEFS[top].id)}" alt="${esc(E.label(top))}" width="1120" height="820" />${zoomBtn(top)}` : '<span class="gone">Empty</span>';
+    const cap = top !== undefined ? (E.DEFS[top].kind === 'em' ? 'Evening & Morning' : `${E.DEFS[top].name} (Day ${E.DEFS[top].day})`) : '';
+    return `<button type="button" class="sp-pile${tg ? ' is-target' : ''}${fl ? ' is-flash' : ''}" ${tg ? `data-pile="${i}"` : drawing && top !== undefined ? `data-draw="${i}"` : 'disabled'} aria-label="Discard pile ${i + 1}${top !== undefined ? ', top: ' + esc(E.label(top)) : ', empty'}"><span class="lbl">${tg ? 'Discard here' : 'Discard ' + (i + 1)}</span>${inner}${p.length > 1 ? `<span class="count">${p.length}</span>` : ''}<span class="cap">${esc(cap)}</span></button>`;
   }).join('');
   $('piles').innerHTML = back + piles;
 }
@@ -118,7 +121,7 @@ function renderHand() {
   $('hand').innerHTML = p.hand.map((u) => {
     const sel = ui.sel === u, wait = !(mine() && S.phase === 'play');
     return `<button type="button" class="sp-hc${sel ? ' is-sel' : ''}${u === drawn ? ' is-new' : ''}${wait ? ' is-wait' : ''}" data-hand="${u}" aria-pressed="${sel}" aria-label="${esc(E.label(u))}${u === drawn ? ', just drawn' : ''}">
-      <img src="${img(E.DEFS[u].id)}" alt="" width="1120" height="820" /><span class="cap">${esc(E.DEFS[u].kind === 'em' ? 'Evening & Morning' : E.DEFS[u].name)}</span>${u === drawn ? '<span class="new">Just drawn</span>' : ''}</button>`;
+      <img src="${img(E.DEFS[u].id)}" alt="" width="1120" height="820" /><span class="cap">${esc(E.DEFS[u].kind === 'em' ? 'Evening & Morning' : `${E.DEFS[u].name} (Day ${E.DEFS[u].day})`)}</span>${zoomBtn(u)}${u === drawn ? '<span class="new">Just drawn</span>' : ''}</button>`;
   }).join('');
 }
 function renderLog() {
@@ -158,10 +161,11 @@ function showFinal() {
 // ---- wiring --------------------------------------------------------------------------------------------------------------------------
 function onClick(e) {
   const z = e.target.closest && e.target.closest('[data-zoom]');
+  if (z && z.classList.contains('sp-zoombtn')) { e.preventDefault(); openZoom(z); return; }
   const stack = e.target.closest && e.target.closest('[data-stack]'), pile = e.target.closest && e.target.closest('[data-pile]');
   if (stack) { onTarget('stack', Number(stack.dataset.stack)); return; }
   if (pile) { onTarget('pile', Number(pile.dataset.pile)); return; }
-  if (z) { $('zoom-img').src = img(z.dataset.zoom, 960); $('zoom-img').alt = z.dataset.cap; $('zoom-cap').textContent = z.dataset.cap; $('zoom').showModal(); return; }
+  if (z) { openZoom(z); return; }
   const d = e.target.closest && e.target.closest('[data-draw]'); if (d) { onDraw(d.dataset.draw === 'deck' ? 'deck' : Number(d.dataset.draw)); return; }
   const h = e.target.closest && e.target.closest('[data-hand]'); if (h) { onHand(Number(h.dataset.hand)); return; }
   const b = e.target.closest && e.target.closest('[data-do]'); if (!b) return;
@@ -170,7 +174,7 @@ function onClick(e) {
 function init() {
   $('start-btn').addEventListener('click', () => { clearSave(); token++; startGame(); });
   document.addEventListener('click', (e) => { if ($('game').hidden) return; onClick(e); });
-  document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[data-stack]')) { e.preventDefault(); onClick(e); } });
+  document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[data-stack], .sp-zoombtn')) { e.preventDefault(); onClick(e); } });
   $('menu-btn').addEventListener('click', () => { if (S && !S.over && !confirm('Leave this game? It will be lost.')) return; token++; clearSave(); S = null; show('setup'); $('resume').hidden = true; });
   $('final-again').addEventListener('click', () => { token++; clearSave(); S = null; show('setup'); $('resume').hidden = true; });
   $('final-share').addEventListener('click', async () => {
