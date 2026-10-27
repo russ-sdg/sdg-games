@@ -20,3 +20,4 @@
 .pk-buy-row .pp-shopify { margin: .5rem auto 0; }
 @media (max-width: 860px) { .pk-two { grid-template-columns: 1fr; } }
 .pk-buy-note { margin: 0 0 1rem; opacity: .95; }
+.pk-fold { margin: 1rem 0; }
