@@ -1,490 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Three-by-Three - An Educational Matching Game</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="../css/styles.css" rel="stylesheet" />
-    </head>
-    <body class="sb-nav-fixed">
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='main-nav'></nav>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <h1>Three-by-Three</h1>
-                        <div class="row">
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none full-center" href="#description">Game Description</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none full-center" href="#play">How to Play</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none full-center" href="#deck">Cards</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none full-center" href="#example">Example Game Play</a>
-                                </div>
-                              </div>
-                          </div>
-                       </div>
-                        <a id="description"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Game Description</strong>
-                            </div>
-                            <div class="card-body">
-                              <div class="container-fluid"> 
-                                <div class="row"> 
-                          
-                                    <div class="col-sm-8">
-                                      <p><em>Three-by-Three</em> is a simple matching game where players seek to collect three sets of three matching cards each.</p>
-                                      <img style="width: 90%;" src="../assets/3x3ThreeMatches.webp" alt="Three Matches">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>Three-by-Three - A Tribes of Israel Matching Game | SDG Games</title>
+<meta name="description" content="A simple matching game based on the tribes of Israel: collect three sets of three matching cards. 2-6 players, 10-20 minutes, $9.99." />
+<meta name="author" content="SDG Strategy, LLC" />
+<link rel="canonical" href="https://sdggames.fun/3x3/" />
 
-                                      <p>The game is based on the Tribes of Israel. In Numbers 2 we read God's instructions to Moses and Aaron concerning how the tribes were to camp as they passed through the wilderness during the Exodus:</p>
-                                      <ul>
-                                        <li>On the east side of the Tabernacle would be the standard of Judah, with the tribes of Judah, Issachar, and Zebulun.</li>
-                                        <li>On the south side of the Tabernacle would be the standard of Reuben, with the tribes of Reuben, Simeon, and Gad.</li>
-                                        <li>On the west side of the Tabernacle would be the standard of Ephraim, with the tribes of Ephraim, Manasseh, and Benjamin.</li>
-                                        <li>On the north side of the Tabernacle would be the standard of Dan, with the tribes of Dan, Asher, and Naphtali.</li>
-                                        <li>The tribe of Levi served in the Tabernacle and camped immediately around the Tabernacle.</li>
-                                      </ul>
-                                      <p>Then in Numbers 10, we read that when God would lead Israel to set out from camp, they were to go out in groups of three tribes in this order:</p>
-                                      <ul>
-                                        <li>Judah (v.14), Issachar (v. 15), and Zebulun (v. 16)</li>
-                                        <li>Part of Levi with the Tabernacle (v. 17)</li>
-                                        <li>Reuben (v. 18), Simeon (v. 19), and Gad (v. 20)</li>
-                                        <li>The rest of Levi with the holy things (v.21)</li>
-                                        <li>Ephraim (v. 22), Manasseh (v. 23), and Benjamin (v. 24)</li>
-                                        <li>Dan (v. 25), Asher (v. 26), and Naphtali (v. 27)</li>
-                                      </ul>
-                                      <p><em>Thus was the order of march of the children of Israel, according to their armies, when they began their journey.</em> (Numbers 10:28 NKJV)</p>
-                                      <p>The <em>Three-by-Three</em> game follows this same pattern. The game includes 39 cards, three each for the thirteen tribes numbered in the order of their departure (with the two parts of Levi combined as number 7). Players are trying to find and collect matching sets of all three cards from each of the tribes.</p>
-                                      <p>The game can be played by kids old enough to recognize numbers 1 - 13, is played by 2 - 6 players, and each game takes 10 - 20 minutes to play.</p>
+<!-- Open Graph / social share -->
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="SDG Games" />
+<meta property="og:title" content="Three-by-Three - A Tribes of Israel Matching Game" />
+<meta property="og:description" content="Peek at your opponents' cards, flip the matrix and remember: collect three sets of three matching tribes." />
+<meta property="og:url" content="https://sdggames.fun/3x3/" />
+<meta property="og:image" content="https://sdggames.fun/assets/3x3-web/3x3-share.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Three-by-Three - A Tribes of Israel Matching Game" />
+<meta name="twitter:description" content="Peek at your opponents' cards, flip the matrix and remember: collect three sets of three matching tribes." />
+<meta name="twitter:image" content="https://sdggames.fun/assets/3x3-web/3x3-share.jpg" />
 
-                                      <p>The winner is the first to either collect three sets of three matching Tribe cards, or to collect a set of three Levi cards.</p>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Three-by-Three",
+  "description": "A matching card game for 2 to 6 players, 10 to 20 minutes, based on the tribes of Israel in the wilderness. 42 cards: 39 Tribe cards (three of each of thirteen tribes) and 3 information cards. Collect three sets of three matching cards, or all three Levi cards.",
+  "image": ["https://sdggames.fun/assets/3x3-web/3x3-share.jpg"],
+  "brand": { "@type": "Brand", "name": "SDG Games" },
+  "category": "Card game",
+  "url": "https://sdggames.fun/3x3/",
+  "offers": { "@type": "Offer", "price": "9.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://sdggames.fun/3x3/" }
+}
+</script>
 
-                                    </div> 
-                                    <div class="col-sm-4">
-                                      <div class="text-center">
-                                        <!-- Product price-->
-                                        Introductory Price: <span class="text-muted text-decoration-line-through">$12.99</span> $9.99<br />
-                                      </div>
-                                      <div id='product-component-1771734545174'></div>
-                                      <script type="text/javascript">
-                                      /*<![CDATA[*/
-                                      (function () {
-                                        var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-                                        if (window.ShopifyBuy) {
-                                          if (window.ShopifyBuy.UI) {
-                                            ShopifyBuyInit();
-                                          } else {
-                                            loadScript();
-                                          }
-                                        } else {
-                                          loadScript();
-                                        }
-                                        function loadScript() {
-                                          var script = document.createElement('script');
-                                          script.async = true;
-                                          script.src = scriptURL;
-                                          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-                                          script.onload = ShopifyBuyInit;
-                                        }
-                                        function ShopifyBuyInit() {
-                                          var client = ShopifyBuy.buildClient({
-                                            domain: 'bd30ce-2.myshopify.com',
-                                            storefrontAccessToken: '7bf5f03bf3c7ba399d3ef67f8250c103',
-                                          });
-                                          ShopifyBuy.UI.onReady(client).then(function (ui) {
-                                            ui.createComponent('product', {
-                                              id: '8872978481301',
-                                              node: document.getElementById('product-component-1771734545174'),
-                                              moneyFormat: '%24%7B%7Bamount%7D%7D',
-                                              options: {
-                                        "product": {
-                                          "styles": {
-                                            "product": {
-                                              "@media (min-width: 601px)": {
-                                                "max-width": "calc(25% - 20px)",
-                                                "margin-left": "20px",
-                                                "margin-bottom": "50px"
-                                              }
-                                            },
-                                            "button": {
-                                              "font-family": "Avant Garde, sans-serif",
-                                              "font-size": "14px",
-                                              "padding-top": "15px",
-                                              "padding-bottom": "15px",
-                                              ":hover": {
-                                                "background-color": "#2d38e0"
-                                              },
-                                              "background-color": "#323ef9",
-                                              ":focus": {
-                                                "background-color": "#2d38e0"
-                                              },
-                                              "border-radius": "6px",
-                                              "padding-left": "20px",
-                                              "padding-right": "20px"
-                                            },
-                                            "quantityInput": {
-                                              "font-size": "14px",
-                                              "padding-top": "15px",
-                                              "padding-bottom": "15px"
-                                            }
-                                          },
-                                          "contents": {
-                                            "img": false,
-                                            "title": false,
-                                            "price": false
-                                          },
-                                          "text": {
-                                            "button": "Add to Cart"
-                                          }
-                                        },
-                                        "productSet": {
-                                          "styles": {
-                                            "products": {
-                                              "@media (min-width: 601px)": {
-                                                "margin-left": "-20px"
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "modalProduct": {
-                                          "contents": {
-                                            "img": false,
-                                            "imgWithCarousel": true,
-                                            "button": false,
-                                            "buttonWithQuantity": true
-                                          },
-                                          "styles": {
-                                            "product": {
-                                              "@media (min-width: 601px)": {
-                                                "max-width": "100%",
-                                                "margin-left": "0px",
-                                                "margin-bottom": "0px"
-                                              }
-                                            },
-                                            "button": {
-                                              "font-family": "Avant Garde, sans-serif",
-                                              "font-size": "14px",
-                                              "padding-top": "15px",
-                                              "padding-bottom": "15px",
-                                              ":hover": {
-                                                "background-color": "#2d38e0"
-                                              },
-                                              "background-color": "#323ef9",
-                                              ":focus": {
-                                                "background-color": "#2d38e0"
-                                              },
-                                              "border-radius": "6px",
-                                              "padding-left": "20px",
-                                              "padding-right": "20px"
-                                            },
-                                            "quantityInput": {
-                                              "font-size": "14px",
-                                              "padding-top": "15px",
-                                              "padding-bottom": "15px"
-                                            }
-                                          },
-                                          "text": {
-                                            "button": "Add to cart"
-                                          }
-                                        },
-                                        "option": {},
-                                        "cart": {
-                                          "styles": {
-                                            "button": {
-                                              "font-family": "Avant Garde, sans-serif",
-                                              "font-size": "14px",
-                                              "padding-top": "15px",
-                                              "padding-bottom": "15px",
-                                              ":hover": {
-                                                "background-color": "#2d38e0"
-                                              },
-                                              "background-color": "#323ef9",
-                                              ":focus": {
-                                                "background-color": "#2d38e0"
-                                              },
-                                              "border-radius": "6px"
-                                            }
-                                          },
-                                          "text": {
-                                            "total": "Subtotal",
-                                            "button": "Checkout"
-                                          }
-                                        },
-                                        "toggle": {
-                                          "styles": {
-                                            "toggle": {
-                                              "font-family": "Avant Garde, sans-serif",
-                                              "background-color": "#323ef9",
-                                              ":hover": {
-                                                "background-color": "#2d38e0"
-                                              },
-                                              ":focus": {
-                                                "background-color": "#2d38e0"
-                                              }
-                                            },
-                                            "count": {
-                                              "font-size": "14px"
-                                            }
-                                          }
-                                        }
-                                      },
-                                            });
-                                          });
-                                        }
-                                      })();
-                                      /*]]>*/
-                                      </script>                                </div> 
-                            </div> 
-                              
-                            </div>
-                        </div>
-                        <a id="play"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How To Play</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>There are 42 card in the <em>Three-by-Three</em> game: 39 Tribe Cards and 3 Informational Cards. (See Below.)</p>
+<link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap) -->
+<link href="../css/styles.css" rel="stylesheet" />
+<link href="../css/product-page.css?v=20261026" rel="stylesheet" />
+<link href="tt.css?v=20261105" rel="stylesheet" />
+<link rel="preload" as="image" href="../assets/3x3-web/matches.webp" fetchpriority="high" />
 
-                              <h4>Game Setup:</h4>
-                              <ol>
-                                <li>Shuffle the Tribe Cards.</li>
-                                <li>Each player is dealt three Tribe Cards.</li>
-                                <li>Deal the next nine Tribe Cards face down into the center of the playing area in a 3x3 matrix.</li>
-                                <li>Set the remaining Tribe Cards face down as a draw pile.</li>
-                              </ol>
-                              <p>Play begins with the player to the left of the dealer.</p>
-                              
-                              <h4>On a Player's Turn:</h4>
-                              <p>The player takes one of three actions:</p>
-                              <ol>
-                                <li>Show either his highest or lowest card.</li>
-                                <li>Ask another player to show his highest or lowest card.</li>
-                                <li>Flip to reveal a card from the center matrix.</li>
-                             </ol>
-                             <p>The player then again takes one of those same three actions. This can be the same action or a different one. It can be from the same source (player or matrix) or a different one.</p>
-                             <p>Note that any player's middle card is generally not in play, however, if you ask twice to see a player's highest card in the same turn, you will see their highest and their next highest (middle) card.</p>
-                             <p>If the two revealed cards match, then repeat the process a third time, hoping to find a matching set of three Tribe Cards.</p>
-                             <p>If a set of three is found, the player places them face up in front of him. Replace the taken cards with cards from the draw pile (if any are available) so that everyone has 3 cards in their hand and the matrix is full.</p>
-                             <p>If a match of three was not found, all cards return to their original locations.</p>
-                             <p>If a player found his third set of matching Tribe Cards, or found all three Levi cards, then the game ends. Otherwise, play passes to the next player to the left.</p>
-                             <p>If all players agree that no sets of three are in play, add three new cards from the draw pile (if available) to the matrix and continue play. The first time you do this, there will now be 12 cards in the matrix. If you do it a second time, there will now be 15 cards in the matrix.</p>
+<style>
+/* Three-by-Three palette: the night-blue of the wilderness camp, with the gold of the Tabernacle */
+.pp { --pp-primary: #3a2a6b; --pp-accent: #b8741a; --pp-gold: #f0c864; --pp-gold-ink: #251a47;
+      --pp-hero: linear-gradient(135deg, #1c1438 0%, #3a2a6b 55%, #2f5d7c 100%); }
+</style>
+</head>
+<body class="sb-nav-fixed pp">
+<a class="pp-skip" href="#game">Skip to content</a>
+<!-- Responsive navbar (loaded from nav-div.html by ../js/scripts.js) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
 
-                              <h4>Winning the Game:</h4>
-                              <ul>
-                                <li>A player wins when he has collected three sets of three matching Tribe Cards, or if he has collected a set of three matching Levi Tribe Cards.</li>
-                                <li>(Since Levi is the middle tribe, and since the middle card in a player's hand is generally not in play, collecting all three Levi cards is harder than getting three of any other tribe.)</li>
-                              </ul>
+<main>
+<!-- ============ HERO ============ -->
+<header class="pp-hero">
+  <div class="pp-wrap pp-hero-grid">
+    <div>
+      <p class="pp-eyebrow">A tribes of Israel matching game</p>
+      <h1>Three-by-Three</h1>
+      <p class="pp-tagline">A simple matching game based on the tribes of Israel: collect three sets of three matching cards.</p>
+      <ul class="pp-facts" aria-label="Game facts">
+        <li>2&ndash;6 players</li>
+        <li>10&ndash;20 min</li>
+        <li>42 cards</li>
+        <li>13 tribes</li>
+      </ul>
+      <p class="pp-launch"><strong>$9.99</strong> <s>$12.99</s> <span class="tt-intro">Introductory price</span></p>
+      <div class="tt-cta">
+        <a class="pp-btn pp-btn-gold" href="#play">How to play</a>
+        <div id="buy-now" class="pp-shopify" data-state="live"></div>
+      </div>
+      <p class="pp-fine">Ships from the SDG Biblical Wisdom shop.</p>
+    </div>
+    <figure class="tt-hero-art">
+      <img src="../assets/3x3-web/matches.webp" width="1200" height="750" fetchpriority="high" alt="Three sets of three matching Tribe cards: the Asher, Judah and Dan maps, each in a stack of three." />
+    </figure>
+  </div>
+</header>
 
-                            </div>
-                        </div>
-                        <a id="deck"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Cards</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>The <em>Three-by-Three</em> deck is comprised of 42 cards:
-                                <ul>
-                                    <li>3 of each of the 13 Tribes (39 total)</li>
-                                    <li>3 information cards about the tribes of Israel (3 total)</li>
-                                </ul>
-                              </p>
-                              <p>Only the Tribe Cards are used in playing the game.</p>
-                              <h4>Tribe Cards</h4>
-                              <p>Each of the Tribe Cards has the name of the tribe in the bottom right of the card, a number in the top left of the card indicating the order they set out from the camp, and a map showing the territory allotted to the tribe in the Promised Land. (Since Levi was not alloted a territory, the Levi card instead displays the breastplate of judgement worn by Aaron, with the twelve precious stones representing the twelve tribes of Israel - see Exodus 28:15-21.)</p>
-                              <p>The card backs depict the 12 tribes camped in the wilderness around the Tabernacle.</p>
-                              <img style="width: 30%;" src="../assets/3x3Judah.webp" alt="Judah Card">
-                              <img style="width: 30%;" src="../assets/3x3Issachar.webp" alt="Issachar Card">
-                              <img style="width: 30%;" src="../assets/3x3Zebulun.webp" alt="Zebulun Card">
-                              <img style="width: 30%;" src="../assets/3x3Reuben.webp" alt="Reuben Card">
-                              <img style="width: 30%;" src="../assets/3x3Simeon.webp" alt="Simeon Card">
-                              <img style="width: 30%;" src="../assets/3x3Gad.webp" alt="Gad Card">
-                              <img style="width: 30%;" src="../assets/3x3Levi.webp" alt="Levi Card">
-                              <img style="width: 30%;" src="../assets/3x3Ephraim.webp" alt="Ephraim Card">
-                              <img style="width: 30%;" src="../assets/3x3Manasseh.webp" alt="Manasseh Card">
-                              <img style="width: 30%;" src="../assets/3x3Benjamin.webp" alt="Benjamin Card">
-                              <img style="width: 30%;" src="../assets/3x3Dan.webp" alt="Dan Card">
-                              <img style="width: 30%;" src="../assets/3x3Asher.webp" alt="Asher Card">
-                              <img style="width: 30%;" src="../assets/3x3Naphtali.webp" alt="Naphtali Card">
-                              <img style="width: 30%;" src="../assets/3x3Back.webp" alt="Card Back">
+<!-- ============ STICKY TABS ============ -->
+<div class="pp-tabs">
+  <div class="pp-wrap">
+    <nav aria-label="On this page">
+      <a href="#game">The Game</a>
+      <a href="#deck">The Cards</a>
+      <a href="#play">How to Play</a>
+      <a href="#example">Example Game</a>
+      <a href="#buy">Get the Game</a>
+    </nav>
+    <a class="pp-btn pp-btn-primary" href="#buy">Get the game</a>
+  </div>
+</div>
 
-                              <h4>Informational Cards</h4>
-                              <p>The <em>Three-by-Three</em> deck includes three cards that provide additional information about the tribes of Israel:
-                              <ul>
-                                <li>The backs of the three cards show the allotment of territories in the promised land to all twelve tribes.</li>
-                                <li>One card lists the twelve sons of Jacob in birth order with their mother's name in parenthesis. It also lists the 2 sons of Joseph, each of which became a tribe of Israel.</li>
-                                <li>One card lists the tribes and their census numbers, according to Numbers 1.</li>
-                                <li>One card lists the tribes and their census numbers, according to Numbers 26.</li>
-                              </ul></p>
+<!-- ============ THE GAME ============ -->
+<section class="pp-band" id="game" aria-labelledby="game-h">
+  <div class="pp-wrap tt-narrow">
+    <h2 id="game-h">Match the tribes</h2>
+    <p class="pp-lede"><em>Three-by-Three</em> is a simple matching game where players seek to collect three sets of three matching cards each.</p>
+    <p>The game is based on the Tribes of Israel. In Numbers 2 we read God's instructions to Moses and Aaron concerning how the tribes were to camp as they passed through the wilderness during the Exodus:</p>
+    <ul> <li>On the east side of the Tabernacle would be the standard of Judah, with the tribes of Judah, Issachar, and Zebulun.</li> <li>On the south side of the Tabernacle would be the standard of Reuben, with the tribes of Reuben, Simeon, and Gad.</li> <li>On the west side of the Tabernacle would be the standard of Ephraim, with the tribes of Ephraim, Manasseh, and Benjamin.</li> <li>On the north side of the Tabernacle would be the standard of Dan, with the tribes of Dan, Asher, and Naphtali.</li> <li>The tribe of Levi served in the Tabernacle and camped immediately around the Tabernacle.</li> </ul>
+    <p>Then in Numbers 10, we read that when God would lead Israel to set out from camp, they were to go out in groups of three tribes in this order:</p>
+    <ul> <li>Judah (v.14), Issachar (v. 15), and Zebulun (v. 16)</li> <li>Part of Levi with the Tabernacle (v. 17)</li> <li>Reuben (v. 18), Simeon (v. 19), and Gad (v. 20)</li> <li>The rest of Levi with the holy things (v.21)</li> <li>Ephraim (v. 22), Manasseh (v. 23), and Benjamin (v. 24)</li> <li>Dan (v. 25), Asher (v. 26), and Naphtali (v. 27)</li> </ul>
+    <p class="tt-verse"><em>Thus was the order of march of the children of Israel, according to their armies, when they began their journey.</em> (Numbers 10:28 NKJV)</p>
+    <p>The <em>Three-by-Three</em> game follows this same pattern. The game includes 39 cards, three each for the thirteen tribes numbered in the order of their departure (with the two parts of Levi combined as number 7). Players are trying to find and collect matching sets of all three cards from each of the tribes.</p>
+    <p>The game can be played by kids old enough to recognize numbers 1 - 13, is played by 2 - 6 players, and each game takes 10 - 20 minutes to play.</p>
+    <p>The winner is the first to either collect three sets of three matching Tribe cards, or to collect a set of three Levi cards.</p>
+  </div>
+</section>
 
-                              <p>Here are the informational cards:</p>
-                              <img style="width: 30%;" src="../assets/3x3Israel.webp" alt="Tribal Allotments Card">
-                              <img style="width: 30%;" src="../assets/3x3JacobsSons.webp" alt="Jacob's Sons Card">
-                              <img style="width: 30%;" src="../assets/3x3Numbers1.webp" alt="Numbers 1 Census Card">
-                              <img style="width: 30%;" src="../assets/3x3Numbers26.webp" alt="Numbers 26 Census Card">
-
-                            </div>
-                        </div>
-                        <a id="example"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Example Game Play</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>Below we walk through a game between four players, turn by turn. To keep the graphics as simple and small as possible, and the game play easy to follow, we don't include any of the artwork on the cards. Instead, we have labelled the cards and, when a card is revealed, we simply show the numerical value of the card.</p>
-                              <p>Light blue cards are unplayed cards. White cards are those currently in play. Pink cards are matched Tribe sets that have been won.</p>
-                              <h5>Initial Deal:</h5>
-                              <p>At the beginning of the game, each player is dealt three cards. Players look at their cards and order them in their hand from low to high.</p>
-                              <p>Nine cards are dealt face down in the middle of the table in a matrix.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example100.webp" alt="Initial Deal">
-                              <h5>Player 1's Turn:</h5>
-                              <p>Player 1 asks Player 3 to show his highest card (an 8) and asks Player 4 to show his highest card (an 11).</p>
-                              <p>Since they don't match, Player 1's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example101.webp" alt="Initial Deal">
-                              <h5>Player 2's Turn:</h5>
-                              <p>Player 2 asks Player 3 to show his lowest card (a 2) and asks Player 4 to show his lowest card (a 1).</p>
-                              <p>Since they don't match, Player 2's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example102.webp" alt="Initial Deal">
-                              <h5>Player 3's Turn:</h5>
-                              <p>Player 3 asks Player 1 to show his highest card (a 7) and asks Player 2 to show his highest card (an 11).</p>
-                              <p>Since they don't match, Player 3's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example103.webp" alt="Initial Deal">
-                              <h5>Player 4's Turn:</h5>
-                              <p>Player 4 asks Player 2 to show his highest card (an 11) and flips over the Top Left card in the Matrix (a 4).</p>
-                              <p>Since they don't match, Player 4's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example104.webp" alt="Initial Deal">
-                              <h5>Player 1's Turn:</h5>
-                              <p>Player 1 asks Player 2 to show his highest card (an 11) and asks Player 4 to show his highest card (also an 11).</p>
-                              <p>Since they match, he gets to try to find the third match. He flips over the Top Right card in the Matrix (a 13).</p>
-                              <p>Since they don't match, Player 1's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example105.webp" alt="Initial Deal">
-                              <h5>Player 2's Turn:</h5>
-                              <p>Player 2 asks Player 1 to show his lowest card (a 1), asks Player 4 to show his lowest card (also a 1).</p>
-                              <p>Since they match, he gets to try to find the third match. He flips over the Top Center card in the Matrix (a 13).</p>
-                              <p>Since they don't match, Player 2's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example106.webp" alt="Initial Deal">
-                              <h5>Player 3's Turn:</h5>
-                              <p>Player 3 turns over the Bottom Left card in the Matrix (a 3) and turns over the Bottom Right card in the Matrix (a 10).</p>
-                              <p>Since they don't match, Player 3's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example107.webp" alt="Initial Deal">
-                              <h5>Player 4's Turn:</h5>
-                              <p>Player 4 asks Player 2 to show his lowest card (a 7), asks Player 1 to show his highest card (also a 7).</p>
-                              <p>Since they match, he gets to try to find the third match. He turns over the Bottom Center card in the Matrix (a 1).</p>
-                              <p>Since they don't match, Player 4's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example108.webp" alt="Initial Deal">
-                              <h5>Player 1's Turn:</h5>
-                              <p>Player 1 asks Player 4 to show his lowest card (a 1), turns over the Bottom Center card in the Matrix (also a 1).</p>
-                              <p>Since they match, he gets to try to find the third match. He reveals his lowest card (also a 1).</p>
-                              <p>Since all three match, Player 1 places the matched set in front of him.</p>
-                              <p>Player 4 and Player 1 each take a card from the draw pile and another card from the draw pile is used to fill the hole in the Matrix.</p>
-                              <p>Player 1's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example109.webp" alt="Initial Deal">
-                              <h5>Player 2's Turn:</h5>
-                              <p>Player 2 asks Player 1 to show his lowest card (a 2) and asks Player 4 to show his lowest card (an 8).</p>
-                              <p>Since they don't match, Player 2's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example110.webp" alt="Initial Deal">
-                              <h5>Player 3's Turn:</h5>
-                              <p>Player 3 turns over the Bottom Center card in the Matrix (an 8), asks Player 4 to show his lowest card (also an 8).</p>
-                              <p>Since they match, he gets to try to find the third match. He asks Player 3 to show his highest card (also an 8).</p>
-                              <p>Since all three match, Player 3 places the matched set in front of him.</p>
-                              <p>Player 3 and Player 4 each take a card from the draw pile and another card from the draw pile is used to fill the hole in the Matrix.</p>
-                              <p>Player 3's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example111.webp" alt="Initial Deal">
-                              <h5>Player 4's Turn:</h5>
-                              <p>Player 4 asks Player 3 to show his highest card (an 11) and turns over the Bottom Center card in the Matrix (a 9).</p>
-                              <p>Since they don't match, Player 3's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example112.webp" alt="Initial Deal">
-                              <h5>Player 1's Turn:</h5>
-                              <p>Player 1 asks Player 3 to show his highest card (an 11). He remembers that Player 4's highest card was also an 11, so asks to see it, but Player 4 has since drawn a 12 and so he shows that instead.</p>
-                              <p>Since the cards don't match, Player 1's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example113.webp" alt="Initial Deal">
-                              <h5>Player 2's Turn:</h5>
-                              <p>Player 2 turns over the Middle Center card in the Matrix (a 3), the Bottom Left card in the Matrix (also a 3).</p>
-                              <p>Since they match, he gets to try to find the third match. He turns over the Middle Left card in the Matrix (a 2).</p>
-                              <p>Since they don't match, Player 2's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example114.webp" alt="Initial Deal">
-                              <h5>Player 3's Turn:</h5>
-                              <p>Player 3 asks Player 1 to show his lowest card (a 2), turns over the Middle Left card in the Matrix (also a 2).</p>
-                              <p>Since they match, he gets to try to find the third match. He shows his own lowest card (also a 2).</p>
-                              <p>Since all three match, Player 3 places the matched set in front of him.</p>
-                              <p>Player 1 and Player 3 each take a card from the draw pile and another card is taken from the draw pile to fill the hole in the Matrix.</p>
-                              <p>Player 3's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example115.webp" alt="Initial Deal">
-                              <h5>Player 4's Turn:</h5>
-                              <p>Player 4 asks Player 3 to show his lowest card (a 3), turns over the Bottom Left card in the Matrix (also a 3).</p>
-                              <p>Since they match, he gets to try to find the third match. He turns over the Middle Center card in the Matrix (also a 3).</p>
-                              <p>Since all three match, Player 4 places the matched set in front of him.</p>
-                              <p>Player 3 takes a card from the draw pile and two more cards are taken from the draw pile to fill the holes in the Matrix.</p>
-                              <p>Player 4's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example116.webp" alt="Initial Deal">
-                              <h5>Player 1's Turn:</h5>
-                              <p>Player 1 asks Player 3 to show his lowest card (a 6) and turns over the Bottom Left card in the Matrix (a 4).</p>
-                              <p>Since they don't match, Player 1's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example117.webp" alt="Initial Deal">
-                              <h5>Player 2's Turn:</h5>
-                              <p>Player 2 asks to see Player 1's lowest card (a 4), turns over the Bottom Left card in the Matrix (also a 4).</p>
-                              <p>Since they match, he gets to try to find the third match. He turns over the Top Left card in the Matrix (also a 4).</p>
-                              <p>Since all three match, Player 2 places the matched set in front of him.</p>
-                              <p>Player 1 takes a card from the draw pile and two other cards are taken from the draw pile to fill the holes in the Matrix.</p>
-                              <p>Player 2's turn is over.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example118.webp" alt="Initial Deal">
-                              <h5>Player 3's Turn:</h5>
-                              <p>Player 3 asks Player 1 to show his lowest card (a 7), asks Player 2 to show his lowest card (also a 7).</p>
-                              <p>Since they match, he gets to try to find the third match. He turns over the Top Left card in the Matrix (also a 7).</p>
-                              <p>Since all three match, Player 3 collects the matched set.</p>
-                              <p>Player 3 wins the game both because that is his 3rd matched set, but also because he collected the set of all three 7 cards.</p>
-                              <img style="width: 90%;" src="../assets/3x3Example119.webp" alt="Initial Deal">
-  
-                              <h5>Game Over!</h5>
-                            </div>
-                          </div>
-                        </div>
-
-                    </div>
-                </main>
-            </div>
+<!-- ============ THE CARDS ============ -->
+<section class="pp-band alt" id="deck" aria-labelledby="deck-h">
+  <div class="pp-wrap tt-narrow">
+    <h2 id="deck-h">The cards</h2>
+    <p class="pp-lede">The <em>Three-by-Three</em> deck is comprised of 42 cards:</p>
+    <ul> <li>3 of each of the 13 Tribes (39 total)</li> <li>3 information cards about the tribes of Israel (3 total)</li> </ul>
+    <p>Only the Tribe Cards are used in playing the game.</p>
+    <h3 class="tt-h3">Tribe cards</h3>
+    <p>Each of the Tribe Cards has the name of the tribe in the bottom right of the card, a number in the top left of the card indicating the order they set out from the camp, and a map showing the territory allotted to the tribe in the Promised Land. (Since Levi was not alloted a territory, the Levi card instead displays the breastplate of judgement worn by Aaron, with the twelve precious stones representing the twelve tribes of Israel - see Exodus 28:15-21.)</p>
+    <p>The card backs depict the 12 tribes camped in the wilderness around the Tabernacle.</p>
+    <h3 class="tt-h3">Informational cards</h3>
+    <p>The <em>Three-by-Three</em> deck includes three cards that provide additional information about the tribes of Israel:</p>
+    <ul> <li>The backs of the three cards show the allotment of territories in the promised land to all twelve tribes.</li> <li>One card lists the twelve sons of Jacob in birth order with their mother's name in parenthesis. It also lists the 2 sons of Joseph, each of which became a tribe of Israel.</li> <li>One card lists the tribes and their census numbers, according to Numbers 1.</li> <li>One card lists the tribes and their census numbers, according to Numbers 26.</li> </ul>
+    <p>Here are the informational cards:</p>
+    <div class="pp-acc">
+      <details id="all-cards">
+        <summary>Browse all the cards</summary>
+        <div class="body">
+          <!-- Filled from cards-data.js (made by 3x3/tools/build-cards.py from assets/3x3*.webp) -->
+          <div class="pp-gallery" data-gallery hidden>
+            <h3 data-gallery-title>A closer look at the cards</h3>
+            <div class="pp-chips" role="group" aria-label="Show cards from"></div>
+            <ul class="pp-grid"></ul>
+          </div>
         </div>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2024</span> SDG Strategy, LLC | To God be the glory</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- Core theme JS-->
-        <script src="../js/scripts.js"></script>
+      </details>
+    </div>
+  </div>
+</section>
 
-    </body>
+<!-- ============ HOW TO PLAY ============ -->
+<section class="pp-band" id="play" aria-labelledby="play-h">
+  <div class="pp-wrap">
+    <h2 id="play-h">How to play</h2>
+    <p class="pp-lede">Reveal two cards from hands or the matrix. If they match, go for a third. Collect three sets of three, or all three Levi cards, to win.</p>
+    <p>There are 42 cards in the <em>Three-by-Three</em> game: 39 Tribe Cards and 3 Informational Cards. (See Below.)</p>
+    <div class="pp-acc">
+      <details open>
+        <summary>Game setup</summary>
+        <div class="body">
+          <ol> <li>Shuffle the Tribe Cards.</li> <li>Each player is dealt three Tribe Cards.</li> <li>Deal the next nine Tribe Cards face down into the center of the playing area in a 3x3 matrix.</li> <li>Set the remaining Tribe Cards face down as a draw pile.</li> </ol>
+          <p>Play begins with the player to the left of the dealer.</p>
+        </div>
+      </details>
+      <details>
+        <summary>On a player's turn</summary>
+        <div class="body">
+          <p>The player takes one of three actions:</p>
+          <ol> <li>Show either his highest or lowest card.</li> <li>Ask another player to show his highest or lowest card.</li> <li>Flip to reveal a card from the center matrix.</li> </ol>
+          <p>The player then again takes one of those same three actions. This can be the same action or a different one. It can be from the same source (player or matrix) or a different one.</p>
+          <p>Note that any player's middle card is generally not in play, however, if you ask twice to see a player's highest card in the same turn, you will see their highest and their next highest (middle) card.</p>
+          <p>If the two revealed cards match, then repeat the process a third time, hoping to find a matching set of three Tribe Cards.</p>
+          <p>If a set of three is found, the player places them face up in front of him. Replace the taken cards with cards from the draw pile (if any are available) so that everyone has 3 cards in their hand and the matrix is full.</p>
+          <p>If a match of three was not found, all cards return to their original locations.</p>
+          <p>If a player found his third set of matching Tribe Cards, or found all three Levi cards, then the game ends. Otherwise, play passes to the next player to the left.</p>
+          <p>If all players agree that no sets of three are in play, add three new cards from the draw pile (if available) to the matrix and continue play. The first time you do this, there will now be 12 cards in the matrix. If you do it a second time, there will now be 15 cards in the matrix.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Winning the game</summary>
+        <div class="body">
+          <ul> <li>A player wins when he has collected three sets of three matching Tribe Cards, or if he has collected a set of three matching Levi Tribe Cards.</li> <li>(Since Levi is the middle tribe, and since the middle card in a player's hand is generally not in play, collecting all three Levi cards is harder than getting three of any other tribe.)</li> </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXAMPLE GAME ============ -->
+<section class="pp-band alt" id="example" aria-labelledby="example-h">
+  <div class="pp-wrap">
+    <h2 id="example-h">Example game</h2>
+    <p class="pp-lede">Below we walk through a game between four players, turn by turn. To keep the graphics as simple and small as possible, and the game play easy to follow, we don't include any of the artwork on the cards. Instead, we have labelled the cards and, when a card is revealed, we simply show the numerical value of the card.</p>
+    <p>Light blue cards are unplayed cards. White cards are those currently in play. Pink cards are matched Tribe sets that have been won.</p>
+    <div class="pp-acc tt-example">
+      <details open>
+        <summary>Initial deal</summary>
+        <div class="body">
+          <p>At the beginning of the game, each player is dealt three cards. Players look at their cards and order them in their hand from low to high.</p>
+          <p>Nine cards are dealt face down in the middle of the table in a matrix.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example100.webp" data-caption="Initial deal"><img src="../assets/3x3Example100.webp" width="669" height="610" loading="lazy" alt="The table after the initial deal: three cards in each hand and nine face down in the matrix." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 1: Player 1</summary>
+        <div class="body">
+          <p>Player 1 asks Player 3 to show his highest card (an 8) and asks Player 4 to show his highest card (an 11).</p>
+          <p>Since they don't match, Player 1's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example101.webp" data-caption="Turn 1: Player 1"><img src="../assets/3x3Example101.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 1: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 2: Player 2</summary>
+        <div class="body">
+          <p>Player 2 asks Player 3 to show his lowest card (a 2) and asks Player 4 to show his lowest card (a 1).</p>
+          <p>Since they don't match, Player 2's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example102.webp" data-caption="Turn 2: Player 2"><img src="../assets/3x3Example102.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 2: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 3: Player 3</summary>
+        <div class="body">
+          <p>Player 3 asks Player 1 to show his highest card (a 7) and asks Player 2 to show his highest card (an 11).</p>
+          <p>Since they don't match, Player 3's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example103.webp" data-caption="Turn 3: Player 3"><img src="../assets/3x3Example103.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 3: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 4: Player 4</summary>
+        <div class="body">
+          <p>Player 4 asks Player 2 to show his highest card (an 11) and flips over the Top Left card in the Matrix (a 4).</p>
+          <p>Since they don't match, Player 4's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example104.webp" data-caption="Turn 4: Player 4"><img src="../assets/3x3Example104.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 4: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 5: Player 1</summary>
+        <div class="body">
+          <p>Player 1 asks Player 2 to show his highest card (an 11) and asks Player 4 to show his highest card (also an 11).</p>
+          <p>Since they match, he gets to try to find the third match. He flips over the Top Right card in the Matrix (a 13).</p>
+          <p>Since they don't match, Player 1's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example105.webp" data-caption="Turn 5: Player 1"><img src="../assets/3x3Example105.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 5: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 6: Player 2</summary>
+        <div class="body">
+          <p>Player 2 asks Player 1 to show his lowest card (a 1), asks Player 4 to show his lowest card (also a 1).</p>
+          <p>Since they match, he gets to try to find the third match. He flips over the Top Center card in the Matrix (a 13).</p>
+          <p>Since they don't match, Player 2's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example106.webp" data-caption="Turn 6: Player 2"><img src="../assets/3x3Example106.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 6: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 7: Player 3</summary>
+        <div class="body">
+          <p>Player 3 turns over the Bottom Left card in the Matrix (a 3) and turns over the Bottom Right card in the Matrix (a 10).</p>
+          <p>Since they don't match, Player 3's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example107.webp" data-caption="Turn 7: Player 3"><img src="../assets/3x3Example107.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 7: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 8: Player 4</summary>
+        <div class="body">
+          <p>Player 4 asks Player 2 to show his lowest card (a 7), asks Player 1 to show his highest card (also a 7).</p>
+          <p>Since they match, he gets to try to find the third match. He turns over the Bottom Center card in the Matrix (a 1).</p>
+          <p>Since they don't match, Player 4's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example108.webp" data-caption="Turn 8: Player 4"><img src="../assets/3x3Example108.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 8: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 9: Player 1</summary>
+        <div class="body">
+          <p>Player 1 asks Player 4 to show his lowest card (a 1), turns over the Bottom Center card in the Matrix (also a 1).</p>
+          <p>Since they match, he gets to try to find the third match. He reveals his lowest card (also a 1).</p>
+          <p>Since all three match, Player 1 places the matched set in front of him.</p>
+          <p>Player 4 and Player 1 each take a card from the draw pile and another card from the draw pile is used to fill the hole in the Matrix.</p>
+          <p>Player 1's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example109.webp" data-caption="Turn 9: Player 1"><img src="../assets/3x3Example109.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 9: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 10: Player 2</summary>
+        <div class="body">
+          <p>Player 2 asks Player 1 to show his lowest card (a 2) and asks Player 4 to show his lowest card (an 8).</p>
+          <p>Since they don't match, Player 2's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example110.webp" data-caption="Turn 10: Player 2"><img src="../assets/3x3Example110.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 10: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 11: Player 3</summary>
+        <div class="body">
+          <p>Player 3 turns over the Bottom Center card in the Matrix (an 8), asks Player 4 to show his lowest card (also an 8).</p>
+          <p>Since they match, he gets to try to find the third match. He asks Player 3 to show his highest card (also an 8).</p>
+          <p>Since all three match, Player 3 places the matched set in front of him.</p>
+          <p>Player 3 and Player 4 each take a card from the draw pile and another card from the draw pile is used to fill the hole in the Matrix.</p>
+          <p>Player 3's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example111.webp" data-caption="Turn 11: Player 3"><img src="../assets/3x3Example111.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 11: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 12: Player 4</summary>
+        <div class="body">
+          <p>Player 4 asks Player 3 to show his highest card (an 11) and turns over the Bottom Center card in the Matrix (a 9).</p>
+          <p>Since they don't match, Player 3's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example112.webp" data-caption="Turn 12: Player 4"><img src="../assets/3x3Example112.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 12: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 13: Player 1</summary>
+        <div class="body">
+          <p>Player 1 asks Player 3 to show his highest card (an 11). He remembers that Player 4's highest card was also an 11, so asks to see it, but Player 4 has since drawn a 12 and so he shows that instead.</p>
+          <p>Since the cards don't match, Player 1's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example113.webp" data-caption="Turn 13: Player 1"><img src="../assets/3x3Example113.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 13: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 14: Player 2</summary>
+        <div class="body">
+          <p>Player 2 turns over the Middle Center card in the Matrix (a 3), the Bottom Left card in the Matrix (also a 3).</p>
+          <p>Since they match, he gets to try to find the third match. He turns over the Middle Left card in the Matrix (a 2).</p>
+          <p>Since they don't match, Player 2's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example114.webp" data-caption="Turn 14: Player 2"><img src="../assets/3x3Example114.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 14: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 15: Player 3</summary>
+        <div class="body">
+          <p>Player 3 asks Player 1 to show his lowest card (a 2), turns over the Middle Left card in the Matrix (also a 2).</p>
+          <p>Since they match, he gets to try to find the third match. He shows his own lowest card (also a 2).</p>
+          <p>Since all three match, Player 3 places the matched set in front of him.</p>
+          <p>Player 1 and Player 3 each take a card from the draw pile and another card is taken from the draw pile to fill the hole in the Matrix.</p>
+          <p>Player 3's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example115.webp" data-caption="Turn 15: Player 3"><img src="../assets/3x3Example115.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 15: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 16: Player 4</summary>
+        <div class="body">
+          <p>Player 4 asks Player 3 to show his lowest card (a 3), turns over the Bottom Left card in the Matrix (also a 3).</p>
+          <p>Since they match, he gets to try to find the third match. He turns over the Middle Center card in the Matrix (also a 3).</p>
+          <p>Since all three match, Player 4 places the matched set in front of him.</p>
+          <p>Player 3 takes a card from the draw pile and two more cards are taken from the draw pile to fill the holes in the Matrix.</p>
+          <p>Player 4's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example116.webp" data-caption="Turn 16: Player 4"><img src="../assets/3x3Example116.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 16: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 17: Player 1</summary>
+        <div class="body">
+          <p>Player 1 asks Player 3 to show his lowest card (a 6) and turns over the Bottom Left card in the Matrix (a 4).</p>
+          <p>Since they don't match, Player 1's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example117.webp" data-caption="Turn 17: Player 1"><img src="../assets/3x3Example117.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 17: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 18: Player 2</summary>
+        <div class="body">
+          <p>Player 2 asks to see Player 1's lowest card (a 4), turns over the Bottom Left card in the Matrix (also a 4).</p>
+          <p>Since they match, he gets to try to find the third match. He turns over the Top Left card in the Matrix (also a 4).</p>
+          <p>Since all three match, Player 2 places the matched set in front of him.</p>
+          <p>Player 1 takes a card from the draw pile and two other cards are taken from the draw pile to fill the holes in the Matrix.</p>
+          <p>Player 2's turn is over.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example118.webp" data-caption="Turn 18: Player 2"><img src="../assets/3x3Example118.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 18: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Turn 19: Player 3</summary>
+        <div class="body">
+          <p>Player 3 asks Player 1 to show his lowest card (a 7), asks Player 2 to show his lowest card (also a 7).</p>
+          <p>Since they match, he gets to try to find the third match. He turns over the Top Left card in the Matrix (also a 7).</p>
+          <p>Since all three match, Player 3 collects the matched set.</p>
+          <p>Player 3 wins the game both because that is his 3rd matched set, but also because he collected the set of all three 7 cards.</p>
+          <figure class="tt-fig"><button type="button" class="pp-zoom" data-zoom="../assets/3x3Example119.webp" data-caption="Turn 19: Player 3"><img src="../assets/3x3Example119.webp" width="669" height="610" loading="lazy" alt="The table at the end of turn 19: each hand, the matrix and the sets won so far." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Game over!</summary>
+        <div class="body">
+          <p>Game over!</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GET THE GAME ============ -->
+<section class="pp-cta" id="buy" aria-labelledby="buy-h">
+  <div class="pp-wrap">
+    <h2 id="buy-h">Get Three-by-Three</h2>
+    <p><strong>$9.99</strong> <s>$12.99</s> &middot; Introductory price. Orders from the SDG Biblical Wisdom shop typically ship within a couple of days.</p>
+    <div class="tt-buy-row">
+      <div class="pp-shopify" data-state="live"></div>
+    </div>
+  </div>
+</section>
+</main>
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+<div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- Core theme JS-->
+<script src="../js/scripts.js"></script>
+<!-- ===== Page settings ===== -->
+<script>
+window.SDG_PRODUCT = {
+  // On sale now: the Shopify product id below turns each ".pp-shopify" spot into a buy button.
+  productId: '8872978481301',
+  buttonText: 'Buy Three-by-Three',
+};
+</script>
+<script src="../js/product-core.js?v=20261026"></script>
+<script src="cards-data.js?v=20261105"></script>
+<script src="../js/product-gallery.js?v=20261101"></script>
+<script src="../js/product-page.js?v=20261026"></script>
+</body>
 </html>

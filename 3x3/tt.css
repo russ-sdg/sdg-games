@@ -1,0 +1,21 @@
+/* Three-by-Three: page-specific styles (the shared design is css/product-page.css) */
+.tt-cta { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .9rem; margin: 1rem 0 .6rem; }
+.tt-cta .pp-shopify, .tt-cta .pp-shopify > *, .tt-cta .shopify-buy__product, .tt-cta .shopify-buy__btn-wrapper { margin: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; max-width: none !important; }
+.tt-cta .shopify-buy__btn { margin: 0 !important; min-height: 3.1rem; }
+.tt-cta .pp-btn { min-height: 3.1rem; display: inline-flex; align-items: center; margin: 0; }
+.tt-hero-art { margin: 0; justify-self: center; width: 100%; }
+.tt-hero-art img { display: block; width: 100%; height: auto; margin: 0 auto; box-shadow: 0 14px 30px rgba(0,0,0,.5); }
+.tt-note { border-left: 4px solid var(--pp-accent); background: #fff6e6; padding: .7rem 1rem; border-radius: 0 .5rem .5rem 0; margin: 1.2rem 0 0; }
+.tt-narrow { max-width: 820px; }
+.tt-types .pp-type img { border-radius: 8px; width: 90%; max-width: 330px; }
+.tt-types .pp-zoom { display: block; margin: 0 auto; }
+.tt-fig { margin: 1rem 0; text-align: center; }
+.tt-fig .pp-zoom { display: block; width: 100%; max-width: 420px; margin: 0 auto; }
+.tt-fig img { display: block; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 6px 14px rgba(0,0,0,.25); }
+.pp-acc .body ol, .pp-acc .body ul { padding-left: 1.3rem; }
+.tt-buy-row .pp-shopify { margin: .5rem auto 0; }
+.tt-hero-art img { max-width: 560px; border-radius: 14px; }
+.pp-launch s, .pp-cta s { opacity: .7; margin-right: .4rem; }
+.tt-intro { font-size: .9rem; color: var(--pp-gold); font-weight: 700; }
+.tt-verse { border-left: 4px solid var(--pp-accent); margin: 1rem 0; padding: .2rem 0 .2rem 1rem; font-size: 1.1rem; color: var(--pp-primary); }
+.tt-h3 { margin: 2rem 0 .6rem; font-size: 1.25rem; }
