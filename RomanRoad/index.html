@@ -1,495 +1,325 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Roman Road - A Fast-Paced Gospel Game</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="../css/styles.css" rel="stylesheet" />
-    </head>
-    <body class="sb-nav-fixed">
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='main-nav'></nav>
-          <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <img class="img-responsive img-fluid" style="padding: 10px;" src="../assets/RRlogoV1.png" alt="Roman Road">
-                        <div class="row">
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#description">Game Description</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#deck">Deck Description</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#play">How to Play</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#variations">Variations</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="#buy">How to Buy</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none" href="scorepad.html">Scorepad</a>
-                                </div>
-                              </div>
-                          </div>
-                        </div>
-                        <a id="description"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Game Description</strong>
-                            </div>
-                            <div class="card-body">
-                              <p><em>Roman Road</em> is a fast-paced multi-player card game based on the game Nerts. As the game is played, the gospel of Jesus Christ is presented using four verses from the Biblical book of Romans.</p>
-                              <p>Each player has their own deck of cards. In each hand, players race to play all the cards from their “Store” pile before their opponents do so. When one player has played all their “Store” cards that hand is over and everyone counts the points they’ve earned. The game is over when one player reaches 40 points.</p>
-                              <p>The game may be played by two to four players and typically takes 15 to 30 minutes to play.</p>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>Roman Road - A Fast-Paced Gospel Card Game | SDG Games</title>
+<meta name="description" content="A fast-paced, Nerts-style card game that presents the gospel through four verses from Romans. 2-4 players, 15-30 minutes, $34.99." />
+<meta name="author" content="SDG Strategy, LLC" />
+<link rel="canonical" href="https://sdggames.fun/RomanRoad/" />
 
-                            </div>
-                        </div>
-                        <a id="deck"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Deck Description</strong>
-                            </div>
-                            <div class="card-body">
-                              <p><em>Illuminate</em> is also the name of the deck of cards used to play the game.</p>
+<!-- Open Graph / social share -->
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="SDG Games" />
+<meta property="og:title" content="Roman Road - A Fast-Paced Gospel Card Game" />
+<meta property="og:description" content="Race to play your cards in a Nerts-style game, and read the gospel aloud in four verses from Romans as you build." />
+<meta property="og:url" content="https://sdggames.fun/RomanRoad/" />
+<meta property="og:image" content="https://sdggames.fun/assets/rr-web/rr-share.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Roman Road - A Fast-Paced Gospel Card Game" />
+<meta name="twitter:description" content="Race to play your cards in a Nerts-style game, and read the gospel aloud in four verses from Romans as you build." />
+<meta name="twitter:image" content="https://sdggames.fun/assets/rr-web/rr-share.jpg" />
 
-                              <p>The <em>Roman Road</em> game includes four 32-card playing decks for use by up to 4 players (a total of 128 cards).</p>
-                              <p>The different decks are identified by the color and icon on the back of the card. The four icons represent the four traditional symbols for the four gospel writers:
-                                <ul>
-                                  <li>Matthew -- a man (green)</li>
-                                  <li>Mark -- a lion (orange)</li>
-                                  <li>Luke -- an ox (red)</li>
-                                  <li>John -- an eagle (blue)</li>
-                                </ul>
-                              </p>
-                              <p>This traditional symbolism is based on the four living creatures described as surrounding the throne in <a href="https://www.biblegateway.com/passage/?search=Revelation+4%3A6-7">Revelation 4:6,7</a>.
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RRcardbacksV1.png" width="100%">
-                              </div>
-                              <p>The artwork is by Andrew Schwilling (© 2022).</p>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Roman Road",
+  "description": "A fast-paced, Nerts-style card game for 2 to 4 players, 15 to 30 minutes. Four 32-card decks (128 cards); players race to play their cards while building and reading aloud four gospel verses from the book of Romans.",
+  "image": ["https://sdggames.fun/assets/rr-web/rr-share.jpg"],
+  "brand": { "@type": "Brand", "name": "SDG Games" },
+  "category": "Card game",
+  "url": "https://sdggames.fun/RomanRoad/",
+  "offers": { "@type": "Offer", "price": "34.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://sdggames.fun/RomanRoad/" }
+}
+</script>
 
-                              <p>Each playing deck has 4 suits, each based on one verse from the book of Romans in the Bible.</p>
-                              <p>Each suit has 8 cards each of which has one or a few words from that verse.</p>
-                              <p>The position of each card in the verse is represented by the number in the top left corner of the card.</p>
-                              <p>The suit (or verse) is represented by the verse reference in the middle of the card, by the color of most of the text on the card, and by a representative icon in the top right corner of the card.</p>
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RRfaces.png" width="100%">
-                              </div>
-                              <p>The four verses used for the four suits are:
-                                <ul>
-                                  <li><a href="https://biblia.com/bible/esv/Rom%203.23">Romans 3:23</a> (Red, Apple): For all have sinned and fall short of the glory of God.</li>
-                                  <li><a href="https://biblia.com/bible/esv/Rom%206.23">Romans 6:23</a> (Orange, Arrows): For the wages of sin is death, but the free gift of God is eternal life in Christ Jesus our Lord.</li>
-                                  <li><a href="https://biblia.com/bible/esv/Rom%205.8">Romans 5:8</a> (Blue, Cross): But God commends his own love toward us, in that while we were yet sinners, Christ died for us.</li>
-                                  <li><a href="https://biblia.com/bible/esv/Rom%2010.13">Romans 10:13</a> (Green, Life Ring): For, “Whoever will call on the name of the Lord will be saved.”</li>
-                                </ul>
-                              </p>
-                              <p><a href="https://www.flaticon.com/free-icons/double-arrow">Double arrow icon</a> created by DinosoftLabs – Flaticon</br>
-                                <a href="https://www.flaticon.com/free-icons/life-buoy">Life buoy icon</a> created by Vector Stall – Flaticon</p>
+<link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap) -->
+<link href="../css/styles.css" rel="stylesheet" />
+<link href="../css/product-page.css?v=20261026" rel="stylesheet" />
+<link href="rr.css?v=20261104" rel="stylesheet" />
+<link rel="preload" as="image" href="../assets/rr-web/hero.webp" fetchpriority="high" />
 
-                              <p>Scripture is taken from the <a href="https://worldenglish.bible/">World English Bible</a> which is in the public domain.</p>
-                          </div>
-                        </div>
-                        <a id="play"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How To Play</strong>
-                            </div>
-                            <div class="card-body">
-                              <p><em>Roman Road</em> is a fast-paced game where all players are playing their cards simultaneously. The goal in each hand is to play all the cards from your Store pile before your opponents play all the cards from their Store piles.</p>
+<style>
+/* Roman Road palette: the deep blue of the decks, with the orange and gold of the card backs */
+.pp { --pp-primary: #1f3a6e; --pp-accent: #c4491c; --pp-gold: #f7be50; --pp-gold-ink: #1b2238;
+      --pp-hero: linear-gradient(135deg, #131f3d 0%, #1f3a6e 55%, #2a6a73 100%); }
+</style>
+</head>
+<body class="sb-nav-fixed pp">
+<a class="pp-skip" href="#game">Skip to content</a>
+<!-- Responsive navbar (loaded from nav-div.html by ../js/scripts.js) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
 
-                              <p>You score points based on the number of cards you moved to Foundation piles and you lose points based on the number of cards left in your Store pile.</p>
+<main>
+<!-- ============ HERO ============ -->
+<header class="pp-hero">
+  <div class="pp-wrap pp-hero-grid">
+    <div>
+      <p class="pp-eyebrow">A fast-paced gospel card game</p>
+      <h1>Roman Road</h1>
+      <p class="pp-tagline">Race to play your cards, and read the gospel aloud in four verses from Romans as you build.</p>
+      <ul class="pp-facts" aria-label="Game facts">
+        <li>2&ndash;4 players</li>
+        <li>15&ndash;30 min</li>
+        <li>Four 32-card decks</li>
+        <li>Nerts-style</li>
+      </ul>
+      <p class="pp-launch"><strong>$34.99</strong></p>
+      <div class="rr-cta">
+        <a class="pp-btn pp-btn-gold" href="#play">How to play</a>
+        <div id="buy-now" class="pp-shopify" data-state="live"></div>
+      </div>
+      <p class="pp-fine">Ships from the SDG Biblical Wisdom shop.</p>
+    </div>
+    <figure class="rr-hero-art">
+      <img src="../assets/rr-web/hero.webp" width="450" height="300" fetchpriority="high" alt="The four Roman Road card backs: an orange lion, a red ox, a green man and a blue eagle." />
+    </figure>
+  </div>
+</header>
 
-                              <p>There are four types of card piles that come into play: Store, Foundation, Work, and Search. Each will be described in turn.</p>
-                              <p>At the beginning of each hand, you shuffle the cards in your deck and then deal one card each, face up, into three Work piles in front of you. You then deal ten (10) cards face up into a Store pile next to the three Work piles.</p>
+<!-- ============ STICKY TABS ============ -->
+<div class="pp-tabs">
+  <div class="pp-wrap">
+    <nav aria-label="On this page">
+      <a href="#game">The Game</a>
+      <a href="#deck">The Cards</a>
+      <a href="#play">How to Play</a>
+      <a href="#variations">Variations</a>
+      <a href="scorepad.html">Scorepad</a>
+      <a href="#buy">Get the Game</a>
+    </nav>
+    <a class="pp-btn pp-btn-primary" href="#buy">Get the game</a>
+  </div>
+</div>
 
-                              <p>You hold the remaining un-dealt cards face-down in your hand. These cards will be played into a Search pile after play begins.</p>
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RRInitialSetupV2.png" width="100%">
-                              </div>
+<!-- ============ THE GAME ============ -->
+<section class="pp-band" id="game" aria-labelledby="game-h">
+  <div class="pp-wrap">
+    <h2 id="game-h">Play fast, read aloud</h2>
+    <p class="pp-lede"><em>Roman Road</em> is a fast-paced multi-player card game based on the game Nerts. As the game is played, the gospel of Jesus Christ is presented using four verses from the Biblical book of Romans.</p>
+    <p>Each player has their own deck of cards. In each hand, players race to play all the cards from their “Store” pile before their opponents do so. When one player has played all their “Store” cards that hand is over and everyone counts the points they’ve earned. The game is over when one player reaches 40 points.</p>
+    <p>The game may be played by two to four players and typically takes 15 to 30 minutes to play.</p>
+    <p class="rr-note">Keeping score? <a href="scorepad.html">Open the scorepad</a> to add up the hands.</p>
+  </div>
+</section>
 
-                              <h4>Beginning and Ending a Hand</h4>
+<!-- ============ THE CARDS ============ -->
+<section class="pp-band alt" id="deck" aria-labelledby="deck-h">
+  <div class="pp-wrap">
+    <h2 id="deck-h">The cards</h2>
+    <p class="pp-lede">The <em>Roman Road</em> game includes four 32-card playing decks for use by up to 4 players (a total of 128 cards).</p>
+    <p>The different decks are identified by the color and icon on the back of the card. The four icons represent the four traditional symbols for the four gospel writers:</p>
+    <ul>
+      <li>Matthew &mdash; a man (green)</li>
+      <li>Mark &mdash; a lion (orange)</li>
+      <li>Luke &mdash; an ox (red)</li>
+      <li>John &mdash; an eagle (blue)</li>
+    </ul>
+    <p>This traditional symbolism is based on the four living creatures described as surrounding the throne in <a href="https://www.biblegateway.com/passage/?search=Revelation+4%3A6-7">Revelation 4:6,7</a>.</p>
+    <figure class="rr-wide"><button type="button" class="pp-zoom" data-zoom="../assets/rr-web/backs.webp" data-caption="The four decks are told apart by the colour and icon on the back."><img src="../assets/rr-web/backs.webp" width="867" height="270" loading="lazy" alt="The four Roman Road card backs: a red ox, a green man, an orange lion and a blue eagle." /></button></figure>
+    <p>The artwork is by Andrew Schwilling (&copy; 2022).</p>
+    <h3 class="rr-h3">What is on a card</h3>
+    <p>Each playing deck has 4 suits, each based on one verse from the book of Romans in the Bible.</p>
+    <p>Each suit has 8 cards each of which has one or a few words from that verse.</p>
+    <p>The position of each card in the verse is represented by the number in the top left corner of the card.</p>
+    <p>The suit (or verse) is represented by the verse reference in the middle of the card, by the color of most of the text on the card, and by a representative icon in the top right corner of the card.</p>
+    <figure class="rr-wide"><button type="button" class="pp-zoom" data-zoom="../assets/rr-web/faces.webp" data-caption="The first four cards of the four verses: the number, the words, the verse reference and the icon."><img src="../assets/rr-web/faces.webp" width="1600" height="550" loading="lazy" alt="Four Roman Road cards, numbered 1 to 4: For, Of sin is death, His own love, and On the name." /></button></figure>
+    <h3 class="rr-h3">The four verses</h3>
+    <p>The four verses used for the four suits are:</p>
+    <div class="pp-acc">
+      <details>
+        <summary>Romans 3:23 &middot; Red, apple</summary>
+        <div class="body">
+          <p><a href="https://biblia.com/bible/esv/Rom%203.23">Romans 3:23</a> (Red, Apple): For all have sinned and fall short of the glory of God.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Romans 6:23 &middot; Orange, arrows</summary>
+        <div class="body">
+          <p><a href="https://biblia.com/bible/esv/Rom%206.23">Romans 6:23</a> (Orange, Arrows): For the wages of sin is death, but the free gift of God is eternal life in Christ Jesus our Lord.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Romans 5:8 &middot; Blue, cross</summary>
+        <div class="body">
+          <p><a href="https://biblia.com/bible/esv/Rom%205.8">Romans 5:8</a> (Blue, Cross): But God commends his own love toward us, in that while we were yet sinners, Christ died for us.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Romans 10:13 &middot; Green, life ring</summary>
+        <div class="body">
+          <p><a href="https://biblia.com/bible/esv/Rom%2010.13">Romans 10:13</a> (Green, Life Ring): For, &ldquo;Whoever will call on the name of the Lord will be saved.&rdquo;</p>
+        </div>
+      </details>
+    </div>
+    <p class="rr-fine"><a href="https://www.flaticon.com/free-icons/double-arrow">Double arrow icon</a> created by DinosoftLabs &ndash; Flaticon<br />
+      <a href="https://www.flaticon.com/free-icons/life-buoy">Life buoy icon</a> created by Vector Stall &ndash; Flaticon</p>
+    <p class="rr-fine">Scripture is taken from the <a href="https://worldenglish.bible/">World English Bible</a> which is in the public domain.</p>
+  </div>
+</section>
 
-                              <p>Play begins when everyone is ready and someone says “Begin.”</p>
+<!-- ============ HOW TO PLAY ============ -->
+<section class="pp-band" id="play" aria-labelledby="play-h">
+  <div class="pp-wrap">
+    <h2 id="play-h">How to play</h2>
+    <p class="pp-lede">Everyone plays at once. Be first to play all ten cards from your Store pile and call &ldquo;Amen&rdquo;, then count your points. The first player to 40 wins.</p>
+    <p><em>Roman Road</em> is a fast-paced game where all players are playing their cards simultaneously. The goal in each hand is to play all the cards from your Store pile before your opponents play all the cards from their Store piles.</p>
+    <div class="pp-acc">
+      <details open>
+        <summary>Setup: the four piles</summary>
+        <div class="body">
+          <p>You score points based on the number of cards you moved to Foundation piles and you lose points based on the number of cards left in your Store pile.</p>
+          <p>There are four types of card piles that come into play: Store, Foundation, Work, and Search. Each will be described in turn.</p>
+          <p>At the beginning of each hand, you shuffle the cards in your deck and then deal one card each, face up, into three Work piles in front of you. You then deal ten (10) cards face up into a Store pile next to the three Work piles.</p>
+          <p>You hold the remaining un-dealt cards face-down in your hand. These cards will be played into a Search pile after play begins.</p>
+          <figure class="rr-fig"><button type="button" class="pp-zoom" data-zoom="../assets/rr-web/setup.webp" data-caption="Your setup: three Work piles and a Store pile."><img src="../assets/rr-web/setup.webp" width="800" height="600" loading="lazy" alt="A player&rsquo;s setup: three Work piles with one card each, and a Store pile of ten cards." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Beginning and ending a hand</summary>
+        <div class="body">
+          <p>Play begins when everyone is ready and someone says “Begin.”</p>
+          <p>You may move the top card from your Store pile either onto one of your Work piles or onto a Foundation pile in the common area between all the players as described below. You have to play the Store cards in order, working your way down from the top.</p>
+          <p>When you play the last card from your Store pile you call out “Amen” and the hand is over. All players stop playing and points for the hand are calculated.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Moving Store cards to a Foundation pile</summary>
+        <div class="body">
+          <p>If the top card in your Store pile is the first word in a verse/suit (it has a 1 in the top left corner), you may move it to any open space in the common area between the players, where everyone can reach it. As you do, read aloud the word or words on the card. For example if playing the first card from Romans 3:23, you would call out “For” as you play it.</p>
+          <p>This starts a Foundation pile that everyone can play onto.</p>
+          <p>If any player (yourself or others) has played a “1” card from a given verse/suit and the top card in your Store pile is the “2” from the same verse/suit, you can play your “2” card on top of their “1” card as you read aloud the word or words on the card (e.g. calling out “All” as you play the “2” card from Romans 3:23). You cannot play your “2” on top of the “2” played by someone else, so if multiple players have the “2” it becomes a race to see who can play their card first.</p>
+          <p>The Foundation piles continue to grow as players play cards from that verse/suit in order until the 8th card is played. If the common area is getting crowded, that completed stack can then be removed and set aside until it’s time to calculate the score.</p>
+          <figure class="rr-fig"><button type="button" class="pp-zoom" data-zoom="../assets/rr-web/foundation.webp" data-caption="Foundation piles build up from 1 to 8."><img src="../assets/rr-web/foundation.webp" width="800" height="600" loading="lazy" alt="Foundation piles in the middle of the table, each building up from 1." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Moving Store cards to Work piles</summary>
+        <div class="body">
+          <p>Foundation piles build up from 1 to 8, but the Work piles in front of you build down from 8 to 1. If the top card in your Store pile is from a different verse/suit/color and is one less than the top card in one of your Work piles, you can move that card from your Store pile to the corresponding Work pile.</p>
+          <p>You can also move a card from one Work pile onto another Work pile using the same ordering rules. If the card you are moving has other cards on it, the entire stack is moved.</p>
+          <figure class="rr-fig"><button type="button" class="pp-zoom" data-zoom="../assets/rr-web/movement.webp" data-caption="Work piles build down from 8 to 1, in alternating suits."><img src="../assets/rr-web/movement.webp" width="800" height="600" loading="lazy" alt="Moving cards between Work piles: only a card one lower and a different colour goes on top." /></button></figure>
+                    <p>If any of your Work piles are completely depleted (the bottom card is moved to a Foundation pile or onto another Work pile), you can immediately move the top card from your Store pile into the open space to restart that Work pile.</p>
+          <p><strong>Note:</strong> You do not read the words from the cards when you move them from Store to Work, only when you play them onto a Foundation pile.</p>
+          <figure class="rr-fig"><button type="button" class="pp-zoom" data-zoom="../assets/rr-web/firstplay.webp" data-caption="The first plays of a hand."><img src="../assets/rr-web/firstplay.webp" width="800" height="600" loading="lazy" alt="A game just started: each player has played from their Store pile to their Work piles." /></button></figure>
+        </div>
+      </details>
+      <details>
+        <summary>Moving Work cards to Foundation piles</summary>
+        <div class="body">
+          <p>If the top card in one of your Work piles is the first word in a verse/suit (it has a 1 in the top left corner), you may move it to any open spot in the common area and start a Foundation pile.</p>
+          <p>Just like with moving cards from Store to Foundation piles you can continue to play the top card from any Work pile onto a growing Foundation pile if that card is the next in the verse/suit/color (counting up).</p>
+          <p>As with Store cards, you read aloud the word or words on the card each time you move one onto a Foundation pile.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Playing Search cards</summary>
+        <div class="body">
+          <p>The cards from your deck that aren’t dealt into either the Work or Store piles are called Search cards.  You hold them in your hand face-down.</p>
+          <p>When you no longer can (or can, but don’t want to) move cards in your Store and Work piles, you start playing your Search cards. Take the top 3 cards from the Search deck in your hand and play them face up in a Search pile in front of you.</p>
+          <p>If you can move the top card in your Search pile either onto either a Foundation or Work pile, following the rules described above, you may do so (but you don’t have to). As always, if you play a card onto a Foundation pile, read the word or words on the card aloud as you play it.</p>
+          <p>If you move the top card to a Foundation or Work pile, the card underneath will be exposed. If you can move that one, you are free to do so.</p>
+          <p>When you are ready, you can flip the next 3 cards from the Search deck in your hand onto your Search pile and determine whether or not you can play the top card. When you have 3 or less cards remaining in the Search deck in your hand, flip them onto your Search pile and decide whether or not to play the top card.</p>
+          <p>After you have flipped all the cards from the Search deck in your hand onto the Search pile in front of you, you can pick your Search pile up, turn it over (face down) and begin the process all over again.</p>
+        </div>
+      </details>
+      <details>
+        <summary>If no one can play</summary>
+        <div class="body">
+          <p>Sometimes, all players have gone through their entire Search deck multiple times without finding any plays that they can make and the game is stuck.</p>
+          <p>When that happens, if you have some cards in your Search deck and some in the Search pile, finish playing through the entire Search deck and take the complete deck into your hands.</p>
+          <p>When all players are ready, each player moves the top card from their Search deck to the bottom of the deck and they begin playing again, flipping the new top 3 cards from the Search deck onto the Search pile. This almost always enables one or more players to be able to play cards and the game continues as before.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Scoring</summary>
+        <div class="body">
+          <p>When one player plays the last card from her Store pile and calls out “Amen”, all other players immediately stop playing. Even if you have cards you could move, you are not allowed to do so.</p>
+          <p>The cards that have been played onto Foundation piles are sorted and distributed back to each player based on the color and icon on the back of the cards. You count how many cards you played and you get 1 point for each.</p>
+          <p>You count how many cards remain in your Store pile and you subtract 2 points for each.</p>
+          <p>The number of points you get for that hand is the number of cards you  played to Foundation piles minus 2 times the number of cards you had remaining in your Store. Note that you cannot get negative points for a hand.</p>
+          <p>For example:</p>
+          <ul> <li>You play 12 cards to Foundation Piles</li> <li>You have 4 cards remaining in your Store</li> <li>Your score for the hand is 12 - (2x4) = 4 Points</li> </ul>
+          <p>Or another example:</p>
+          <ul> <li>You played 8 cards to Foundation Piles</li> <li>You have 6 cards remaining in your Store</li> <li>8 - (2x6) = -4. Since you cannot have a negative score for a hand, your score for the hand is 0.</li> </ul>
+          <p>Each player adds their score for the hand to the overall score they had before to determine their new overall score.</p>
+          <p>When at least one player reaches an overall score of 40, the game is over and the player with the highest score wins.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
 
-                              <p>You may move the top card from your Store pile either onto one of your Work piles or onto a Foundation pile in the common area between all the players as described below. You have to play the Store cards in order, working your way down from the top.</p>
-
-                              <p>When you play the last card from your Store pile you call out “Amen” and the hand is over. All players stop playing and points for the hand are calculated.</p>
-
-                              <h4>Moving Store Cards to a Foundation Pile</h4>
-
-                              <p>If the top card in your Store pile is the first word in a verse/suit (it has a 1 in the top left corner), you may move it to any open space in the common area between the players, where everyone can reach it. As you do, read aloud the word or words on the card. For example if playing the first card from Romans 3:23, you would call out “For” as you play it.</p>
-                              <p>This starts a Foundation pile that everyone can play onto.</p>
-                              <p>If any player (yourself or others) has played a “1” card from a given verse/suit and the top card in your Store pile is the “2” from the same verse/suit, you can play your “2” card on top of their “1” card as you read aloud the word or words on the card (e.g. calling out “All” as you play the “2” card from Romans 3:23). You cannot play your “2” on top of the “2” played by someone else, so if multiple players have the “2” it becomes a race to see who can play their card first.</p>
-
-                              <p>The Foundation piles continue to grow as players play cards from that verse/suit in order until the 8th card is played. If the common area is getting crowded, that completed stack can then be removed and set aside until it’s time to calculate the score.</p>
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RRFoundationPilesV2.png" width="100%">
-                              </div>
-
-                              <h4>Moving Store Cards to Work Piles</h4>
-
-                              <p>Foundation piles build up from 1 to 8, but the Work piles in front of you build down from 8 to 1. If the top card in your Store pile is from a different verse/suit/color and is one less than the top card in one of your Work piles, you can move that card from your Store pile to the corresponding Work pile.</p>
-
-                              <p>You can also move a card from one Work pile onto another Work pile using the same ordering rules. If the card you are moving has other cards on it, the entire stack is moved.</p>
-
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RRMovementBeforeV2.png" width="100%">
-                              </div>
-
-                              <p>If any of your Work piles are completely depleted (the bottom card is moved to a Foundation pile or onto another Work pile), you can immediately move the top card from your Store pile into the open space to restart that Work pile.</p>
-                              <p><strong>Note:</strong> You do not read the words from the cards when you move them from Store to Work, only when you play them onto a Foundation pile.</p>
-
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RRFirstPlayV1.png" width="100%">
-                              </div>
-
-                              <h4>Moving Cards from Work Piles to Foundation Piles</h4>
-
-                              <p>If the top card in one of your Work piles is the first word in a verse/suit (it has a 1 in the top left corner), you may move it to any open spot in the common area and start a Foundation pile.</p>
-                              <p>Just like with moving cards from Store to Foundation piles you can continue to play the top card from any Work pile onto a growing Foundation pile if that card is the next in the verse/suit/color (counting up).</p>
-                              <p>As with Store cards, you read aloud the word or words on the card each time you move one onto a Foundation pile.</p>
-
-                              <h4>Playing Search Cards</h4>
-
-                              <p>The cards from your deck that aren’t dealt into either the Work or Store piles are called Search cards.  You hold them in your hand face-down.</p>
-
-                              <p>When you no longer can (or can, but don’t want to) move cards in your Store and Work piles, you start playing your Search cards. Take the top 3 cards from the Search deck in your hand and play them face up in a Search pile in front of you.</p>
-
-                              <p>If you can move the top card in your Search pile either onto either a Foundation or Work pile, following the rules described above, you may do so (but you don’t have to). As always, if you play a card onto a Foundation pile, read the word or words on the card aloud as you play it.</p>
-
-                              <p>If you move the top card to a Foundation or Work pile, the card underneath will be exposed. If you can move that one, you are free to do so.</p>
-
-                              <p>When you are ready, you can flip the next 3 cards from the Search deck in your hand onto your Search pile and determine whether or not you can play the top card. When you have 3 or less cards remaining in the Search deck in your hand, flip them onto your Search pile and decide whether or not to play the top card.</p>
-
-                              <p>After you have flipped all the cards from the Search deck in your hand onto the Search pile in front of you, you can pick your Search pile up, turn it over (face down) and begin the process all over again.</p>
-
-                              <h4>If No One Can Play</h4>
-
-                              <p>Sometimes, all players have gone through their entire Search deck multiple times without finding any plays that they can make and the game is stuck.</p>
-
-                              <p>When that happens, if you have some cards in your Search deck and some in the Search pile, finish playing through the entire Search deck and take the complete deck into your hands.</p>
-
-                              <p>When all players are ready, each player moves the top card from their Search deck to the bottom of the deck and they begin playing again, flipping the new top 3 cards from the Search deck onto the Search pile. This almost always enables one or more players to be able to play cards and the game continues as before.</p>
-
-                              <h4>Scoring</h4>
-
-                              <p>When one player plays the last card from her Store pile and calls out “Amen”, all other players immediately stop playing. Even if you have cards you could move, you are not allowed to do so.</p>
-
-                              <p>The cards that have been played onto Foundation piles are sorted and distributed back to each player based on the color and icon on the back of the cards. You count how many cards you played and you get 1 point for each.</p>
-
-                              <p>You count how many cards remain in your Store pile and you subtract 2 points for each.</p>
-
-                              <p>The number of points you get for that hand is the number of cards you  played to Foundation piles minus 2 times the number of cards you had remaining in your Store. Note that you cannot get negative points for a hand.</p>
-
-                              <p>For example:
-                                <ul>
-                                  <li>You play 12 cards to Foundation Piles</li>
-                                  <li>You have 4 cards remaining in your Store</li>
-                                  <li>Your score for the hand is 12 - (2x4) = 4 Points</li>
-                                </ul>
-                              </p>
-
-                              <p>Or another example:
-                                <ul>
-                                  <li>You played 8 cards to Foundation Piles</li>
-                                  <li>You have 6 cards remaining in your Store</li>
-                                  <li>8 - (2x6) = -4. Since you cannot have a negative score for a hand, your score for the hand is 0.</li>
-                                </ul>
-                              </p>
-
-                              <p>Each player adds their score for the hand to the overall score they had before to determine their new overall score.</p>
-
-                              <p>When at least one player reaches an overall score of 40, the game is over and the player with the highest score wins.</p>
-
-                          </div>
-                        </div>
-                        <a id="variations"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Game Variations</strong>
-                            </div>
-                            <div class="card-body">
-                              <h4><em>Roman Road</em> Scoring Variations:</h4>
-
-                              <ul>
+<!-- ============ VARIATIONS ============ -->
+<section class="pp-band alt" id="variations" aria-labelledby="var-h">
+  <div class="pp-wrap">
+    <h2 id="var-h">Variations</h2>
+    <div class="pp-acc">
+      <details>
+        <summary>Roman Road scoring variations</summary>
+        <div class="body">
+          <ul>
                                 <li><strong>Amen Bonus:</strong> Each hand, the player that calls “Amen” gets a bonus of 10 points.</li>
                                 <li><strong>Negative Scores:</strong> If a player plays to Foundation piles less than twice the number of cards remaining in their Store, they can receive a negative score for the hand.</li>
                                 <li><strong>Different Goals:</strong> Players can agree to play to a winning score that is different from 40.</li>
                               </ul>
-
-                              <h4><em>Building Roman Roads</em> Game</h4>
-
-                              <p>Another game that can be played with the Roman Road deck is Building Roman Roads.</p>
-                              <p>Building Roman Roads is less fast-paced than the original Roman Road game. Players take turns and the winner is the first player to play all of their cards. Up to six players can play the game, which typically takes 10-15 minutes to play.</p>
-                              <p>How to begin <em>Building Roman Roads</em>:
-                              <ul>
-                                <li>Use the number of Roman Road decks equal to the number of players (or all 4 decks if more than 4 players are playing). For example, if 2 players are playing, you might use the Red/Ox and Blue/Eagle decks of cards.</li>
-                                <li>Shuffle the decks of cards together to make one, large, well-shuffled deck of cards.</li>
-                                <li>Deal 7 cards face-down to each player.</li>
-                                <li>Place the remaining cards in a face down draw pile in the middle of the playing area.</li>
-                                <li>Take the top 4 cards from the draw pile and place them face up, one card on each side of the draw pile, forming a cross.</li>
-                              </ul>
-
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RRBuilding Start.png" width="100%">
-                              </div>
-                              <p>Players take turns starting with the player to the left of the dealer. Players build the roads leading away from the draw pile (Rome) by building up from the lower cards to higher cards, all in the same suit.</p>
-                              <p>On your turn you:
-                                <ul>
-                                  <li>First, draw a card from the draw pile.</li>
-                                  <li>Play as many cards or make as many moves as you can as described below.</li>
-                                  <li>If you have any “1” cards, if there is a space in a corner (coming out diagonally from the “Rome” draw deck), you can play the “1” in the corner and start building a new road.</li>
-                                  <li>If you have the next card in the series for any of the roads leading away from Rome (e.g. if the top card on a “road” is the orange “3” and you have the orange “4”, you can play that card from your hand on top of the “3”.)</li>
-                                  <li>Move some or all of the cards from one road to another road. </li>
-                                  <li>If you complete a corner road (it goes from 1 to 8 in a single suit), read the entire verse and then remove the road to make room to build another road.</li>
-                                  <li>If one of the main (horizontal or vertical) roads has been removed, you can start a new road there by playing any card of your choice in that space.</li>
-                                  <li>You can continue to build roads by playing cards from your hand or moving cards as long as possible.</li>
-                                  <li>If you are unable to play any cards from your hand in your turn, you must, one-by-one, draw cards from the draw pile until you can play a card. If playing that card enables you to play more cards or make other moves, feel free to do so.</li>
-                                  <li>Your turn is over when you can not make any more moves.</li>
-                                </ul>
-                              </p>
-                              <div class="text-center" style="padding: 10px; width: 100%">
-                                <img src="../assets/RRPlaying Start.png" width="100%">
-                              </div>
-
-                              <p>How to End <em>Building Roman Roads</em>:
-                                <ul>
-                                  <li>The game ends when one player is able to play the last card in their hand.</li>
-                                  <li>That player is the winner.</li>
-                                </ul>
-                              </p>
-                            </div>
-                        </div>
-                        <a id="buy"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How to Buy</strong>
-                            </div>
-                            <div class="card-body">
-                              <p><em>If inventory is available, orders from the SDG Biblical Wisdom shop typically ship within a couple of days.<br />
-                                <div id='product-component-1705351038689'></div>
-<script type="text/javascript">
-/*<![CDATA[*/
-(function () {
-  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-  if (window.ShopifyBuy) {
-    if (window.ShopifyBuy.UI) {
-      ShopifyBuyInit();
-    } else {
-      loadScript();
-    }
-  } else {
-    loadScript();
-  }
-  function loadScript() {
-    var script = document.createElement('script');
-    script.async = true;
-    script.src = scriptURL;
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-    script.onload = ShopifyBuyInit;
-  }
-  function ShopifyBuyInit() {
-    var client = ShopifyBuy.buildClient({
-      domain: 'bd30ce-2.myshopify.com',
-      storefrontAccessToken: '7bf5f03bf3c7ba399d3ef67f8250c103',
-    });
-    ShopifyBuy.UI.onReady(client).then(function (ui) {
-      ui.createComponent('product', {
-        id: '8113777606805',
-        node: document.getElementById('product-component-1705351038689'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: {
-  "product": {
-    "styles": {
-      "product": {
-        "@media (min-width: 601px)": {
-          "max-width": "calc(25% - 20px)",
-          "margin-left": "20px",
-          "margin-bottom": "50px"
-        }
-      },
-      "button": {
-        "font-family": "Avant Garde, sans-serif",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        "background-color": "#323ef9",
-        ":focus": {
-          "background-color": "#2d38e0"
-        },
-        "border-radius": "6px",
-        "padding-left": "20px",
-        "padding-right": "20px"
-      },
-      "quantityInput": {
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px"
-      }
-    },
-    "contents": {
-      "img": false,
-      "title": false,
-      "price": false
-    },
-    "text": {
-      "button": "Buy Roman Road"
-    }
-  },
-  "productSet": {
-    "styles": {
-      "products": {
-        "@media (min-width: 601px)": {
-          "margin-left": "-20px"
-        }
-      }
-    }
-  },
-  "modalProduct": {
-    "contents": {
-      "img": false,
-      "imgWithCarousel": true,
-      "button": false,
-      "buttonWithQuantity": true
-    },
-    "styles": {
-      "product": {
-        "@media (min-width: 601px)": {
-          "max-width": "100%",
-          "margin-left": "0px",
-          "margin-bottom": "0px"
-        }
-      },
-      "button": {
-        "font-family": "Avant Garde, sans-serif",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        "background-color": "#323ef9",
-        ":focus": {
-          "background-color": "#2d38e0"
-        },
-        "border-radius": "6px",
-        "padding-left": "20px",
-        "padding-right": "20px"
-      },
-      "quantityInput": {
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px"
-      }
-    },
-    "text": {
-      "button": "Add to cart"
-    }
-  },
-  "option": {},
-  "cart": {
-    "styles": {
-      "button": {
-        "font-family": "Avant Garde, sans-serif",
-        "font-size": "14px",
-        "padding-top": "15px",
-        "padding-bottom": "15px",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        "background-color": "#323ef9",
-        ":focus": {
-          "background-color": "#2d38e0"
-        },
-        "border-radius": "6px"
-      }
-    },
-    "text": {
-      "total": "Subtotal",
-      "button": "Checkout"
-    }
-  },
-  "toggle": {
-    "styles": {
-      "toggle": {
-        "font-family": "Avant Garde, sans-serif",
-        "background-color": "#323ef9",
-        ":hover": {
-          "background-color": "#2d38e0"
-        },
-        ":focus": {
-          "background-color": "#2d38e0"
-        }
-      },
-      "count": {
-        "font-size": "14px"
-      }
-    }
-  }
-},
-      });
-    });
-  }
-})();
-/*]]>*/
-</script></p>
-                              <p>Otherwise you can order from The Game Crafter print-on-demand store.<br />
-                                <a class="btn btn-primary" href="https://www.thegamecrafter.com/games/roman-road" role="button">Order</a></p>
-
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
         </div>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2024</span> SDG Strategy, LLC | To God be the glory</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- Core theme JS-->
-        <script src="../js/scripts.js"></script>
+      </details>
+      <details>
+        <summary>Building Roman Roads: a turn-taking game</summary>
+        <div class="body">
+          <p>Another game that can be played with the Roman Road deck is Building Roman Roads.</p>
+          <p>Building Roman Roads is less fast-paced than the original Roman Road game. Players take turns and the winner is the first player to play all of their cards. Up to six players can play the game, which typically takes 10-15 minutes to play.</p>
+          <p>How to begin <em>Building Roman Roads</em>:</p>
+          <ul> <li>Use the number of Roman Road decks equal to the number of players (or all 4 decks if more than 4 players are playing). For example, if 2 players are playing, you might use the Red/Ox and Blue/Eagle decks of cards.</li> <li>Shuffle the decks of cards together to make one, large, well-shuffled deck of cards.</li> <li>Deal 7 cards face-down to each player.</li> <li>Place the remaining cards in a face down draw pile in the middle of the playing area.</li> <li>Take the top 4 cards from the draw pile and place them face up, one card on each side of the draw pile, forming a cross.</li> </ul>
+          <figure class="rr-fig"><button type="button" class="pp-zoom" data-zoom="../assets/rr-web/building-start.webp" data-caption="Building Roman Roads: the draw pile (Rome) with four cards around it."><img src="../assets/rr-web/building-start.webp" width="1200" height="1200" loading="lazy" alt="The start of Building Roman Roads: the draw pile in the middle with a face-up card on each side, forming a cross." /></button></figure>
+                    <p>Players take turns starting with the player to the left of the dealer. Players build the roads leading away from the draw pile (Rome) by building up from the lower cards to higher cards, all in the same suit.</p>
+          <p>On your turn you:</p>
+          <ul> <li>First, draw a card from the draw pile.</li> <li>Play as many cards or make as many moves as you can as described below.</li> <li>If you have any “1” cards, if there is a space in a corner (coming out diagonally from the “Rome” draw deck), you can play the “1” in the corner and start building a new road.</li> <li>If you have the next card in the series for any of the roads leading away from Rome (e.g. if the top card on a “road” is the orange “3” and you have the orange “4”, you can play that card from your hand on top of the “3”.)</li> <li>Move some or all of the cards from one road to another road. </li> <li>If you complete a corner road (it goes from 1 to 8 in a single suit), read the entire verse and then remove the road to make room to build another road.</li> <li>If one of the main (horizontal or vertical) roads has been removed, you can start a new road there by playing any card of your choice in that space.</li> <li>You can continue to build roads by playing cards from your hand or moving cards as long as possible.</li> <li>If you are unable to play any cards from your hand in your turn, you must, one-by-one, draw cards from the draw pile until you can play a card. If playing that card enables you to play more cards or make other moves, feel free to do so.</li> <li>Your turn is over when you can not make any more moves.</li> </ul>
+          <figure class="rr-fig"><button type="button" class="pp-zoom" data-zoom="../assets/rr-web/building-play.webp" data-caption="Building Roman Roads: roads leading away from Rome."><img src="../assets/rr-web/building-play.webp" width="1200" height="1067" loading="lazy" alt="Roads of cards built out from the draw pile in the middle of the table." /></button></figure>
+                    <p>How to End <em>Building Roman Roads</em>:</p>
+          <ul> <li>The game ends when one player is able to play the last card in their hand.</li> <li>That player is the winner.</li> </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
 
-    </body>
+<!-- ============ GET THE GAME ============ -->
+<section class="pp-cta" id="buy" aria-labelledby="buy-h">
+  <div class="pp-wrap">
+    <h2 id="buy-h">Get Roman Road</h2>
+    <p><strong>$34.99</strong> &middot; If inventory is available, orders from the SDG Biblical Wisdom shop typically ship within a couple of days.</p>
+    <div class="rr-buy-row">
+      <div class="pp-shopify" data-state="live"></div>
+    </div>
+  </div>
+</section>
+</main>
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+<div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- Core theme JS-->
+<script src="../js/scripts.js"></script>
+<!-- ===== Page settings ===== -->
+<script>
+window.SDG_PRODUCT = {
+  // On sale now: the Shopify product id below turns each ".pp-shopify" spot into a buy button.
+  productId: '8113777606805',
+  buttonText: 'Buy Roman Road',
+};
+</script>
+<script src="../js/product-core.js?v=20261026"></script>
+<script src="../js/product-page.js?v=20261026"></script>
+</body>
 </html>
