@@ -33,7 +33,7 @@
     { slug: 'roman-catacombs', title: 'Roman Catacombs', tags: ['Flip-and-write'], art: 'catacombs', artAlt: 'A figure with raised arms painted in a Roman catacomb', price: '34.99', online: 'roman-catacombs/play/',
       blurb: 'Be the librarian of a church in the catacombs of Rome and build a library of Scripture in canon order.', facts: ['1–6 players', 'Ages 12+', '15–30 min'] },
     { slug: 'RomanRoad', title: 'Roman Road', tags: ['Card game'], art: 'romanroad', artAlt: 'Roman Road game art', price: '34.99',
-      blurb: 'A fast-paced, Nerts-style card game that presents the gospel through four verses from Romans.', facts: ['2–4 players', '15–30 min'] },
+      blurb: 'A fast-paced, Nerts-style card game that presents the gospel through four verses from Romans.', facts: ['2–4 players', 'Ages 12+', '15–30 min'] },
     { slug: '3x3', title: 'Three-by-Three', tags: ['Card game'], art: '3x3', artAlt: 'Three-by-Three game art', price: '9.99', was: '12.99', badge: 'Introductory pricing',
       blurb: 'A simple matching game based on the tribes of Israel: collect three sets of three.', facts: ['2–6 players', '10–20 min'] },
     { slug: 'Tyndale', title: 'Tyndale', tags: ['Board game'], art: 'tyndale', artAlt: 'William Tyndale, hunted across Europe', price: '49.99', online: 'Tyndale/play/', featured: true,
