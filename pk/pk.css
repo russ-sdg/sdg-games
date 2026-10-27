@@ -1,0 +1,22 @@
+/* Prophets & Kings: page-specific styles (the shared design is css/product-page.css) */
+.pk-cta { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .9rem; margin: 1rem 0 .6rem; }
+.pk-cta .pp-shopify, .pk-cta .pp-shopify > *, .pk-cta .shopify-buy__product, .pk-cta .shopify-buy__btn-wrapper { margin: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; max-width: none !important; }
+.pk-cta .shopify-buy__btn { margin: 0 !important; min-height: 3.1rem; }
+.pk-cta .pp-btn { min-height: 3.1rem; display: inline-flex; align-items: center; margin: 0; }
+.pk-hero-art { margin: 0; justify-self: center; width: 100%; }
+.pk-hero-art img { display: block; width: 100%; max-width: 640px; height: auto; margin: 0 auto; filter: drop-shadow(0 14px 26px rgba(0,0,0,.5)); }
+.pk-two { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2.2rem; align-items: center; }
+.pk-fig { margin: 1rem 0 1.4rem; text-align: center; }
+.pk-fig .pp-zoom { display: block; width: 100%; }
+.pk-fig img { display: block; width: 100%; height: auto; border-radius: 8px; filter: drop-shadow(0 6px 12px rgba(42,24,64,.3)); }
+.pk-fig figcaption { margin-top: .4rem; color: var(--pp-muted); font-size: .92rem; }
+.pk-fig.is-small { max-width: 420px; margin-left: auto; margin-right: auto; }
+.pk-alt { margin-top: 1.2rem; color: var(--pp-muted); }
+.pp-acc .body ol, .pp-acc .body ul { padding-left: 1.3rem; }
+.pk-table { width: 100%; max-width: 420px; border-collapse: collapse; margin: 1rem 0; }
+.pk-table th, .pk-table td { padding: .45rem .8rem; border-bottom: 1px solid rgba(0,0,0,.14); text-align: left; }
+.pk-table thead th { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--pp-muted); }
+.pk-table td:nth-child(2), .pk-table th:nth-child(2) { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pk-buy-row .pp-shopify { margin: .5rem auto 0; }
+@media (max-width: 860px) { .pk-two { grid-template-columns: 1fr; } }
+.pk-buy-note { margin: 0 0 1rem; opacity: .95; }
