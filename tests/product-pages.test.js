@@ -6,7 +6,7 @@ const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..');
 const BOOKS = ['tyndale_book/index.html', 'FPtF/index.html', 'WICRBC/index.html'];   // several formats, so several prices
-const PAGES = ['6days/index.html', 'FotS/index.html', 'fruity/index.html', 'JfP/index.html', 'roman-catacombs/index.html', 'Tyndale/index.html', 'journeys-with-jesus/index.html', ...BOOKS];
+const PAGES = ['6days/index.html', 'FotS/index.html', 'fruity/index.html', 'illuminate/index.html', 'JfP/index.html', 'roman-catacombs/index.html', 'Tyndale/index.html', 'journeys-with-jesus/index.html', ...BOOKS];
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 const stripComments = (h) => h.replace(/<!--[\s\S]*?-->/g, '');
