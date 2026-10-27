@@ -17,7 +17,7 @@
     { slug: '6days', title: 'Six Days', tags: ['Card game'], art: 'sixdays', artAlt: 'The Mankind card from Six Days, with the first man among the animals', price: '19.99', launch: '2026-11-14', online: '6days/play/', featured: true,
       blurb: 'A family card game about the six days of creation: build them together, then score for yourself.', facts: ['2\u20136 players', 'Ages 12+', '72 cards'] },
     { slug: 'FotS', title: 'The Fruit of the Spirit', tags: ['Card game'], art: 'fots', artAlt: 'A tree with the nine fruit of the Spirit around it', price: '19.99',
-      blurb: 'A take-that and give-that card game: be the first to collect all nine fruit of Galatians 5:22-23.', facts: ['Up to 4 players'] },
+      blurb: 'A take-that and give-that card game: be the first to collect all nine fruit of Galatians 5:22-23.', facts: ['Up to 4 players', 'Ages 12+', '15\u201330 min'] },
     { slug: 'fruity', title: 'Fruity', tags: ['Card game'], art: 'fruity', artAlt: 'A grid of fruit symbols', price: '12.99',
       blurb: 'A simple set-collecting card game that teaches pattern matching and the fruit of the Spirit.', facts: ['2–6 players', '5–10 min'] },
     { slug: 'illuminate', title: 'Illuminate', tags: ['Card game'], art: 'illuminate', artAlt: 'The four gospel writers’ symbols in coloured circles', price: '19.99',
