@@ -10,10 +10,15 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-SRC, OUT = os.path.join(ROOT, 'assets'), os.path.join(ROOT, 'assets', 'illuminate')
-PICS = {'box': ('IlluminateBox3D.png', 876), 'banner': ('MMLJrowV1.png', 400), 'four-suits': ('FourSuits.png', 1200),
-        'role-cards': ('RoleCardsV1.png', 1200), 'special-cards': ('SpecialCardsV1.png', 1200), 'mark-cards': ('MarkCards.png', 1200),
-        'card-summary': ('CardSummary.png', 417), 'kells': ('Kells-Gospel-Plates.png', 1200)}
+SRC, OUT = os.path.join(ROOT, 'assets'), os.path.join(ROOT, 'assets', 'illuminate-web')
+PICS = {'box': ('IlluminateBox3D.png', 876), 'banner': ('MMLJrowV1.png', 400), 'card-summary': ('CardSummary.png', 417),
+        'kells': ('Kells-Gospel-Plates.png', 1200)}
+CARDS = os.path.join(SRC, 'Illuminate')            # the card pictures (assets/Illuminate/*.png)
+# pictures made by laying cards from assets/Illuminate side by side: name -> card files
+ROWS = {'four-suits': ['Matthew 22-37-39-V4', 'Mark-7-14-V3', 'Luke-11-28-V3', 'John-9-6-7-V3'],
+        'role-cards': ['Doctor-Card-V2', 'Neighbor-Card-V2', 'Preacher-Card-V2', 'Teacher-Card-V2'],
+        'special-cards': ['Matthew 19-30-V4', 'John-1-5-V3', 'Mark-14-27-V3', 'Luke-19-24-V3'],
+        'mark-cards': ['Mark-1-11-V3', 'Mark-1-31-V3', 'Mark-4-2-V3']}
 FONT_BOLD = next((p for p in ('/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf', '/usr/share/fonts/dejavu/DejaVuSerif-Bold.ttf') if os.path.exists(p)), None)
 FONT = next((p for p in ('/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf', '/usr/share/fonts/dejavu/DejaVuSerif.ttf') if os.path.exists(p)), None)
 
@@ -27,6 +32,13 @@ def main():
         im = Image.open(src).convert('RGBA')
         if im.width > w: im = im.resize((w, round(w * im.height / im.width)), Image.LANCZOS)
         im.save(out, 'WEBP', quality=82, method=6); print('wrote', name, im.size)
+    for name, files in ROWS.items():
+        out = os.path.join(OUT, name + '.webp'); paths = [os.path.join(CARDS, f + '.png') for f in files]
+        if all(newer(out, p) for p in paths): continue
+        w, gap = 400, 20; ims = [Image.open(p).convert('RGBA') for p in paths]; h = round(w * ims[0].height / ims[0].width)
+        row = Image.new('RGBA', (len(ims) * w + (len(ims) - 1) * gap, h), (0, 0, 0, 0))
+        for i, im in enumerate(ims): row.alpha_composite(im.resize((w, h), Image.LANCZOS), (i * (w + gap), 0))
+        row.save(out, 'WEBP', quality=84, method=6); print('wrote', name, row.size)
     out = os.path.join(OUT, 'illuminate-share.jpg')
     if os.path.exists(out): return
     bg = Image.new('RGB', (1200, 630)); d = ImageDraw.Draw(bg)

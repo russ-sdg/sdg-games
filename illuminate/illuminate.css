@@ -20,3 +20,4 @@
 .il-buy-row .pp-shopify { margin: .5rem auto 0; }
 @media (max-width: 560px) { .il-table th, .il-table td { padding: .35rem .3rem; font-size: .86rem; } }
 .il-buy-note { margin: 0 0 1rem; opacity: .95; }
+.il-fold { margin-top: 1.2rem; }
