@@ -1,0 +1,38 @@
+/* Fruity: page-specific styles (the shared design is css/product-page.css) */
+.fy-cta { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .9rem; margin: 1rem 0 .6rem; }
+.fy-cta .pp-shopify, .fy-cta .pp-shopify > *, .fy-cta .shopify-buy__product, .fy-cta .shopify-buy__btn-wrapper { margin: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; max-width: none !important; }
+.fy-cta .shopify-buy__btn { margin: 0 !important; min-height: 3.1rem; }
+.fy-cta .pp-btn { min-height: 3.1rem; display: inline-flex; align-items: center; margin: 0; }
+.fy-hero-art { margin: 0; justify-self: center; width: 100%; }
+.fy-hero-art img { display: block; width: 100%; max-width: 560px; height: auto; margin: 0 auto; filter: drop-shadow(0 14px 26px rgba(0,0,0,.5)); }
+.fy-two { display: grid; grid-template-columns: 1.3fr 1fr; gap: 2.2rem; align-items: center; }
+.fy-verse { border-left: 4px solid var(--pp-accent); margin: 0 0 1.2rem; padding: .2rem 0 .2rem 1rem; font-size: 1.15rem; font-style: italic; color: var(--pp-primary); }
+.fy-verse cite { display: block; font-size: .95rem; font-style: normal; color: var(--pp-muted); margin-top: .2rem; }
+.fy-fig { margin: 0; text-align: center; }
+.fy-fig .pp-zoom { display: block; width: 100%; max-width: 420px; margin: 0 auto; }
+.fy-fig img { display: block; width: 100%; height: auto; filter: drop-shadow(0 6px 12px rgba(36,19,95,.3)); }
+.fy-types .pp-type img { border-radius: 0; box-shadow: none; filter: drop-shadow(0 6px 12px rgba(36,19,95,.3)); width: 56%; max-width: 200px; }
+.fy-types .pp-zoom { display: block; margin: 0 auto; }
+.fy-deck { max-width: 640px; margin: 2rem auto; }
+.fy-deck h3 { font-size: 1.2rem; margin-bottom: .6rem; }
+.pp-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.pp-table th, .pp-table td { padding: .4rem .6rem; border-bottom: 1px solid rgba(0,0,0,.12); text-align: left; }
+.pp-table thead th { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--pp-muted); }
+.pp-table tbody th { font-weight: 700; }
+.pp-table td:nth-child(2) { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; width: 5rem; }
+.pp-table .total th, .pp-table .total td { border-top: 2px solid currentColor; border-bottom: 0; }
+.fy-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: .8rem; margin: 1rem 0 .4rem; }
+.fy-gallery.is-one { grid-template-columns: minmax(110px, 200px); }
+.fy-gallery .pp-zoom { display: block; width: 100%; }
+.fy-gallery img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 3px 8px rgba(36,19,95,.3); }
+.pp-acc .body ol, .pp-acc .body ul { padding-left: 1.3rem; }
+/* the example game: each player has a colour, as in the old page */
+.fy-player { border-radius: .6rem; padding: .6rem .8rem; margin: 0 0 .7rem; color: #1b1b2e; }
+.fy-player.p1 { background: #D79DE2; } .fy-player.p2 { background: #A9DFBF; } .fy-player.p3 { background: #FAD7A0; }
+.fy-player p { margin: .3rem 0; }
+.fy-player .fy-who { font-weight: 800; margin: 0 0 .2rem; }
+.fy-cards { display: flex; flex-wrap: wrap; gap: .4rem; margin: .3rem 0 .5rem; }
+.fy-cards img { width: 84px; height: auto; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,.35); }
+.fy-buy-row .pp-shopify { margin: .5rem auto 0; }
+@media (max-width: 860px) { .fy-two { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .fy-cards img { width: 70px; } }
