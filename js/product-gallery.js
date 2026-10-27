@@ -36,7 +36,7 @@
   host.hidden = false;
   host.querySelector('[data-gallery-title]').textContent = data.total >= data.expected ? 'Browse all ' + data.total + ' ' + (data.noun || 'card designs') : 'A closer look at the cards';
   var counts = {};
-  var back = data.back && { src: data.back.src, widths: data.back.widths, w: data.back.w, h: data.back.h, group: 'back', name: 'Card back' };
+  var back = data.back && { src: data.back.src, widths: data.back.widths, w: data.back.w, h: data.back.h, group: 'back', name: 'Card back', alt: data.back.alt };
   if (back) counts.back = 1;
   data.cards.forEach(function (c) { counts[c.group] = (counts[c.group] || 0) + (c.copies || 1); });   // a picture printed several times counts each copy
   var chips = host.querySelector('.pp-chips'), grid = host.querySelector('.pp-grid');

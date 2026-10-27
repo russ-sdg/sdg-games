@@ -21,7 +21,7 @@
     { slug: 'fruity', title: 'Fruity', tags: ['Card game'], art: 'fruity', artAlt: 'A grid of fruit symbols', price: '12.99',
       blurb: 'A simple set-collecting card game that teaches pattern matching and the fruit of the Spirit.', facts: ['2–6 players', '5–10 min'] },
     { slug: 'illuminate', title: 'Illuminate', tags: ['Card game'], art: 'illuminate', artAlt: 'The four gospel writers’ symbols in coloured circles', price: '19.99',
-      blurb: 'A trick-taking game with a Biblical twist: your role from the gospels turns matching cards into grace cards.', facts: [] },
+      blurb: 'A trick-taking game with a Biblical twist: your role from the gospels turns matching cards into grace cards.', facts: ['2\u20134 players', 'Ages 12+', '30\u201360 min'] },
     { slug: 'JfP', title: 'Journeys for Paul', tags: ['Board game'], art: 'jfp', artAlt: 'Journeys for Paul game art', price: '34.99', online: 'JfP/play/',
       blurb: 'Send three evangelists to the churches Paul planted.', facts: ['2–4 players', 'Ages 12+', '15–30 min'] },
     { slug: 'JtJ', title: 'Journeys through Jerusalem', tags: ['Board game'], art: 'jtj', artAlt: 'Journeys through Jerusalem game art', price: '49.99', featured: true,
