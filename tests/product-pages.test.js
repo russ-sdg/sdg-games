@@ -58,6 +58,11 @@ for (const page of PAGES) {
     assert.ok(checked > (BOOKS.includes(page) ? 8 : 15), `only ${checked} local files checked`);
   });
 
+  test(`${page}: the buy button's text is plain text (a script string does not decode HTML, so "&amp;" would show as written)`, () => {
+    const m = /buttonText:\s*'([^']*)'/.exec(html);
+    if (m) assert.ok(!/&[a-z#0-9]+;/i.test(m[1]), `buttonText has an HTML entity: ${m[1]}`);
+  });
+
   test(`${page}: structured data is valid JSON for a Product`, () => {
     const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
     assert.equal(blocks.length, 1);
