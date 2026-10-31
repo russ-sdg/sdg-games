@@ -1,342 +1,379 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="Six Days is a family card game about the Genesis creation account. Build the six days of creation together, then score for yourself. From SDG Games." />
-        <meta name="author" content="SDG Strategy, LLC" />
-        <title>Six Days - A Creation Card Game</title>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>Six Days - A Creation Card Game | SDG Games</title>
+<meta name="description" content="Build the six days of creation together, then score for yourself. Play free online. 72 cards, 2-6 players, $19.99. Launching November 14, 2026." />
+<meta name="author" content="SDG Strategy, LLC" />
+<link rel="canonical" href="https://sdggames.fun/6days/" />
 
-        <!-- Open Graph / social share -->
-        <meta property="og:type" content="product" />
-        <meta property="og:title" content="Six Days - A Creation Card Game" />
-        <meta property="og:description" content="Build the six days of creation together, then score for yourself. A fast, illustrated family card game from SDG Games." />
-        <meta property="og:url" content="https://sdggames.fun/6days" />
-        <meta property="og:image" content="https://sdggames.fun/assets/SixDaysDayMankind.png" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Six Days - A Creation Card Game" />
-        <meta name="twitter:description" content="Build the six days of creation together, then score for yourself." />
-        <meta name="twitter:image" content="https://sdggames.fun/assets/SixDaysDayMankind.png" />
+<!-- Open Graph / social share -->
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="SDG Games" />
+<meta property="og:title" content="Six Days - A Creation Card Game" />
+<meta property="og:description" content="Build the six days of creation together, then score for yourself. 72 illustrated cards, 2-6 players, $19.99. Launching November 14, 2026." />
+<meta property="og:url" content="https://sdggames.fun/6days/" />
+<meta property="og:image" content="https://sdggames.fun/assets/6days/six-days-share.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Six Days - A Creation Card Game" />
+<meta name="twitter:description" content="Build the six days of creation together, then score for yourself. Launching November 14, 2026." />
+<meta name="twitter:image" content="https://sdggames.fun/assets/6days/six-days-share.jpg" />
 
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="../css/styles.css" rel="stylesheet" />
+<!-- Search engines: product data. When the game goes on sale, add an "offers" block (price 19.99 USD, availability InStock). -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Six Days",
+  "description": "A family card game about the Genesis creation account. Build the six days of creation together, then score for yourself. 72 illustrated cards for 2-6 players, ages 12 and up, 15-30 minutes.",
+  "image": ["https://sdggames.fun/assets/6days/six-days-share.jpg"],
+  "brand": { "@type": "Brand", "name": "SDG Games" },
+  "category": "Card game",
+  "releaseDate": "2026-11-14",
+  "url": "https://sdggames.fun/6days/"
+}
+</script>
 
-        <style>
-            /* ---- Six Days page-scoped styling ---- */
-            .sd-hero {
-                background: linear-gradient(135deg, #2b1a3a 0%, #3b2b6d 55%, #b7541f 100%);
-                border-radius: 12px;
-                color: #fff;
-                padding: 2.5rem;
-                margin-bottom: 1.5rem;
-                overflow: hidden;
-            }
-            .sd-hero h1 {
-                font-size: clamp(2.5rem, 6vw, 4rem);
-                font-weight: 700;
-                letter-spacing: -0.5px;
-                margin-bottom: 0.25rem;
-            }
-            .sd-hero .sd-tagline {
-                font-size: 1.25rem;
-                opacity: 0.92;
-                margin-bottom: 1.25rem;
-                max-width: 34ch;
-            }
-            .sd-facts {
-                list-style: none;
-                padding: 0;
-                margin: 0 0 1.5rem 0;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.5rem 0.75rem;
-            }
-            .sd-facts li {
-                background: rgba(255, 255, 255, 0.15);
-                border: 1px solid rgba(255, 255, 255, 0.25);
-                border-radius: 999px;
-                padding: 0.35rem 0.9rem;
-                font-size: 0.95rem;
-                white-space: nowrap;
-            }
-            /* Rounded "card" look for the untrimmed square-corner art */
-            .sd-card-img {
-                border-radius: 5%;
-                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-                max-width: 100%;
-                height: auto;
-            }
-            .sd-hero-art {
-                position: relative;
-                min-height: 260px;
-            }
-            .sd-hero-art img {
-                width: 74%;
-            }
-            .sd-hero-art .sd-back {
-                position: absolute;
-                top: 8%;
-                right: 4%;
-                width: 60%;
-                transform: rotate(7deg);
-                opacity: 0.96;
-            }
-            .sd-hero-art .sd-front {
-                position: relative;
-                margin-top: 6%;
-                transform: rotate(-4deg);
-            }
-            /* Primary buy button (matches the site's Shopify button styling) */
-            .sd-buy-btn {
-                display: inline-block;
-                font-family: "Avant Garde", sans-serif;
-                font-size: 16px;
-                font-weight: 600;
-                color: #fff;
-                background-color: #323ef9;
-                border: none;
-                border-radius: 6px;
-                padding: 15px 28px;
-                text-decoration: none;
-                cursor: pointer;
-                transition: background-color 0.15s ease;
-            }
-            .sd-buy-btn:hover { background-color: #2d38e0; color: #fff; }
-            .sd-buy-btn:disabled,
-            .sd-buy-btn.is-soon {
-                background-color: #6c74c9;
-                cursor: default;
-            }
-            .sd-buy-note { font-size: 0.9rem; opacity: 0.85; margin-top: 0.6rem; }
+<link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap) -->
+<link href="../css/styles.css" rel="stylesheet" />
+<link href="../css/product-page.css?v=20261019" rel="stylesheet" />
+<link href="demo.css?v=20261101" rel="stylesheet" />
+<link rel="preload" as="image" href="../assets/6days/cards/day6-mankind-01-960.webp" imagesrcset="../assets/6days/cards/day6-mankind-01-480.webp 480w, ../assets/6days/cards/day6-mankind-01-960.webp 960w" imagesizes="(max-width: 860px) 60vw, 330px" fetchpriority="high" />
 
-            /* Card-type showcase */
-            .sd-type-img { border-radius: 5%; box-shadow: 0 6px 16px rgba(0,0,0,0.18); }
+<style>
+/* Six Days palette: deep plum and violet with a burnt-orange sunrise, taken from the box art */
+.pp { --pp-primary: #3b2b6d; --pp-accent: #b7541f; --pp-gold: #f6c453; --pp-gold-ink: #2b1a3a;
+      --pp-hero: linear-gradient(135deg, #2b1a3a 0%, #3b2b6d 55%, #b7541f 100%); }
+</style>
+</head>
+<body class="sb-nav-fixed pp">
+<a class="pp-skip" href="#idea">Skip to content</a>
+<!-- Responsive navbar (loaded from nav-div.html by ../js/scripts.js) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
 
-            @media (max-width: 767px) {
-                .sd-hero { padding: 1.75rem 1.25rem; text-align: center; }
-                .sd-facts { justify-content: center; }
-                .sd-hero-art { margin-top: 1.5rem; }
-            }
-        </style>
-    </head>
-    <body class="sb-nav-fixed">
-        <!-- Responsive navbar (loaded from nav-div.html by ../js/scripts.js) -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='main-nav'></nav>
+<main>
+<!-- ============ HERO ============ -->
+<header class="pp-hero">
+  <div class="pp-wrap pp-hero-grid">
+    <div>
+      <p class="pp-eyebrow">A creation card game</p>
+      <h1>Six Days</h1>
+      <p class="pp-tagline">Build the six days of creation together&nbsp;&mdash; then out&#8209;score everyone at the table.</p>
+      <ul class="pp-facts" aria-label="Game facts">
+        <li>2&ndash;6 players</li>
+        <li>Ages 12+</li>
+        <li>15&ndash;30 min</li>
+        <li>72 cards</li>
+      </ul>
+      <p class="pp-launch"><strong>$19.99</strong> <span data-state="soon">Launching <span data-launch-date>November 14, 2026</span> <span class="pp-count" data-countdown></span></span><span data-state="live" hidden>Available now</span></p>
 
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
+      <p class="pp-play"><a class="pp-btn pp-btn-gold" href="play/">Play free online</a></p>
 
-                        <!-- ============ HERO ============ -->
-                        <section class="sd-hero">
-                            <div class="row align-items-center">
-                                <div class="col-md-6">
-                                    <h1>Six Days</h1>
-                                    <p class="sd-tagline">Build the six days of creation together&nbsp;&mdash; then out&#8209;score everyone at the table.</p>
-                                    <ul class="sd-facts">
-                                        <li>2&ndash;6 players</li>
-                                        <li>Ages 12+</li>
-                                        <li>15&ndash;30 min</li>
-                                        <li>Family &amp; group play</li>
-                                    </ul>
-
-                                    <!-- ===== PRIMARY BUY CTA ===== -->
-                                    <!-- TODO: when the Shopify product exists, replace the button below with the
-                                         Shopify buy-button snippet (see the "How to Buy" section at the bottom
-                                         for the drop-in location and the pattern used on other game pages). -->
-                                    <a class="sd-buy-btn is-soon" href="#buy" role="button">Coming soon</a>
-                                    <div class="sd-buy-note">Not yet available for purchase &mdash; check back soon.</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="sd-hero-art text-center">
-                                        <img class="sd-card-img sd-back" src="../assets/SixDaysDayMoon.png" alt="Six Days &ldquo;Moon&rdquo; day card">
-                                        <img class="sd-card-img sd-front" src="../assets/SixDaysDayMankind.png" alt="Six Days &ldquo;Mankind&rdquo; day card">
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- ============ SECTION NAV CARDS ============ -->
-                        <div class="row">
-                            <div class="col ml-auto">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <a class="text-white stretched-link text-decoration-none full-center" href="#overview">Overview</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col ml-auto">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <a class="text-white stretched-link text-decoration-none full-center" href="#cards">The Cards</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col ml-auto">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <a class="text-white stretched-link text-decoration-none full-center" href="#play">How to Play</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col ml-auto">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <a class="text-white stretched-link text-decoration-none full-center" href="#buy">How to Buy</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ============ OVERVIEW ============ -->
-                        <a id="overview"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Overview</strong>
-                            </div>
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-md-7">
-                                        <p>In <em>Six Days</em>, players work together to rebuild the six days of creation described in Genesis &mdash; light, sky and sea, land and plants, sun and moon, birds and fish, animals and mankind. Each day&rsquo;s stack grows one card at a time until it holds its matching number of cards: day 1 needs 1 card, day 2 needs 2, all the way up to day 6.</p>
-                                        <p>But while everyone builds the same six days, <strong>you score for yourself.</strong> Every card you play earns points, and closing out a completed day with an <em>Evening &amp; Morning</em> card is worth the most of all. Once all six days are finished, the player who read the moment best &mdash; and collected the most points &mdash; wins.</p>
-                                        <p>It&rsquo;s a quick, beautifully illustrated card game that teaches the creation account while it plays &mdash; easy enough for young children, with enough scoring tension to keep older players sharp.</p>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <div class="text-center" style="padding: 10px">
-                                            <img class="sd-type-img" style="max-width: 90%;" src="../assets/SixDaysEMCard.png" alt="&ldquo;There was evening and there was morning&rdquo; card">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ============ THE CARDS ============ -->
-                        <a id="cards"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>The Cards</strong>
-                            </div>
-                            <div class="card-body">
-                                <p>There are three types of cards in the game:</p>
-                                <div class="row text-center">
-                                    <div class="col-md-4 mb-4">
-                                        <img class="sd-type-img" style="max-width: 80%;" src="../assets/SixDaysDayMankind.png" alt="Day card">
-                                        <h5 class="mt-3">Day Cards</h5>
-                                        <p class="px-2">Numbered 1&ndash;6, each showing a unique element of creation. These are the cards you stack to build the six days.</p>
-                                    </div>
-                                    <div class="col-md-4 mb-4">
-                                        <img class="sd-type-img" style="max-width: 80%;" src="../assets/SixDaysEMCard.png" alt="Evening and Morning card">
-                                        <h5 class="mt-3">Evening &amp; Morning Cards</h5>
-                                        <p class="px-2">Played to close out a day once it has its full complement of day cards &mdash; and worth points equal to that day&rsquo;s number.</p>
-                                    </div>
-                                    <div class="col-md-4 mb-4">
-                                        <img class="sd-type-img" style="max-width: 80%;" src="../assets/SixDaysPointCard.png" alt="Point card">
-                                        <h5 class="mt-3">Point Cards</h5>
-                                        <p class="px-2">Values 1&ndash;6, collected as you play. Some are double&#8209;sided for either 1 or 2 points. Most points at the end wins.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ============ HOW TO PLAY (full rules) ============ -->
-                        <a id="play"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How to Play</strong>
-                            </div>
-                            <div class="card-body">
-                                <h4>The Goal</h4>
-                                <ul>
-                                    <li>Players work together to complete all six days of creation.</li>
-                                    <li>Each day&rsquo;s stack must contain a matching number of <strong>day cards</strong>: day 1 needs 1 day card, and so on up to day 6 needing 6 day cards.</li>
-                                    <li>The game ends when all six days have their matching number of day cards.</li>
-                                    <li>The player who has collected the most points wins.</li>
-                                </ul>
-
-                                <h4>Setup</h4>
-                                <ol>
-                                    <li>Set aside all <strong>points cards</strong>.</li>
-                                    <li>Place the <strong>day 1 card</strong> face&#8209;up in the center of the table.</li>
-                                    <li>Shuffle the remaining <strong>day cards</strong> and <strong>E&amp;M cards</strong> and deal 2 to each player.</li>
-                                    <li>Place the rest of the <strong>day cards</strong> and <strong>E&amp;M cards</strong> face&#8209;down as a draw pile.</li>
-                                    <li>Flip the top 3 draw&#8209;pile cards over to start 3 discard piles.</li>
-                                    <li>The youngest player goes first; play proceeds clockwise.</li>
-                                </ol>
-
-                                <h4>On Your Turn</h4>
-                                <ol>
-                                    <li><strong>Draw:</strong> Take the top card from the draw pile or from any discard pile (refill the discard piles if empty).</li>
-                                    <li><strong>Play or Discard:</strong> Take one of four actions:
-                                        <ol type="a">
-                                            <li>Start a new day by playing an unplayed <strong>day card</strong> in the next open position (e.g. playing a day 2 card next to the day 1 card).</li>
-                                            <li>Play a <strong>day card</strong> onto its own or a later day&rsquo;s stack that does not yet have a full set of day cards (e.g. a 3rd day card on the day 3 stack).</li>
-                                            <li>Play an <strong>E&amp;M card</strong> onto a day stack that has its full complement of day cards (e.g. 4 day cards on the day 4 stack). Note: when a day is completed with an E&amp;M card, its day cards can no longer be played.</li>
-                                            <li>Discard a <strong>day card</strong> or an <strong>E&amp;M card</strong> face&#8209;up onto one of the discard piles.</li>
-                                        </ol>
-                                    </li>
-                                    <li><strong>Collect Points:</strong> Take the matching <strong>points card</strong> based on what you played.</li>
-                                </ol>
-
-                                <h4>Scoring</h4>
-                                <ul>
-                                    <li><strong>0 Points:</strong> Discard a card.</li>
-                                    <li><strong>1 Point:</strong> Play a day card onto a day stack that already has the same kind of creation.</li>
-                                    <li><strong>2 Points:</strong> Play a day card onto a day stack that does not yet have the same kind of creation.</li>
-                                    <li><strong>1&ndash;6 Points:</strong> Play an E&amp;M card on a fully completed day stack &mdash; the score equals that day&rsquo;s number (e.g. 4 points for day 4). Only 1 E&amp;M card per day stack.</li>
-                                </ul>
-
-                                <h4>End of Game</h4>
-                                <p>The game ends immediately once every day stack contains its full number of <strong>day cards</strong>, whether or not each day has an E&amp;M card. Players total their collected <strong>points cards</strong>. Highest score wins.</p>
-                            </div>
-                        </div>
-
-                        <!-- ============ HOW TO BUY ============ -->
-                        <a id="buy"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How to Buy</strong>
-                            </div>
-                            <div class="card-body">
-                                <p><em>Six Days</em> is coming soon to the SDG Biblical Wisdom shop.</p>
-
-                                <!-- =================================================================
-                                     SHOPIFY BUY BUTTON DROP-IN
-                                     When the Shopify product is ready, delete the placeholder button
-                                     below and paste the Shopify buy-button snippet here (same pattern as
-                                     journeys-with-jesus/index.html). You only need to change:
-                                       - id:            the Six Days product ID
-                                       - text.button:   "Buy Six Days"
-                                     The domain ('bd30ce-2.myshopify.com') and storefrontAccessToken
-                                     are the same as the other game pages.
-                                     ================================================================= -->
-                                <a class="sd-buy-btn is-soon" href="#buy" role="button">Coming soon</a>
-                                <p class="sd-buy-note">Want to know when it&rsquo;s available? Check the <a href="https://blog.sdggames.fun/">News</a> page for updates.</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </main>
-            </div>
+      <!-- Before launch: email signup, fed to Mailchimp (see window.SDG_PRODUCT below) -->
+      <form class="pp-signup" data-state="soon" novalidate>
+        <label class="pp-sr" for="email-hero">Your email address</label>
+        <div class="pp-row">
+          <input type="email" id="email-hero" name="EMAIL" placeholder="Your email address" autocomplete="email" required />
+          <button type="submit" class="pp-btn pp-btn-gold">Notify me at launch</button>
         </div>
+        <input class="pp-honey" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <p class="pp-signup-msg" role="status" aria-live="polite"></p>
+        <p class="pp-fine">One email when it&rsquo;s available. Unsubscribe any time.</p>
+      </form>
+      <!-- On launch day: the Shopify buy button appears here instead -->
+      <div id="buy-now" class="pp-shopify" data-state="live" hidden></div>
+    </div>
 
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2024</span> SDG Strategy, LLC | To God be the glory</p></div>
-        </footer>
+    <div class="pp-hero-art" aria-hidden="true">
+      <img class="pp-fan f1" src="../assets/6days/cards/day4-moon-22-960.webp" srcset="../assets/6days/cards/day4-moon-22-480.webp 480w, ../assets/6days/cards/day4-moon-22-960.webp 960w" sizes="(max-width: 860px) 40vw, 330px" width="1120" height="820" alt="" />
+      <img class="pp-fan f2" src="../assets/6days/cards/evening-morning-evening-and-morning-40-960.webp" srcset="../assets/6days/cards/evening-morning-evening-and-morning-40-480.webp 480w, ../assets/6days/cards/evening-morning-evening-and-morning-40-960.webp 960w" sizes="(max-width: 860px) 40vw, 330px" width="1120" height="820" alt="" />
+      <img class="pp-fan f3" src="../assets/6days/cards/day6-mankind-01-960.webp" srcset="../assets/6days/cards/day6-mankind-01-480.webp 480w, ../assets/6days/cards/day6-mankind-01-960.webp 960w" sizes="(max-width: 860px) 60vw, 330px" width="1120" height="820" alt="" fetchpriority="high" />
+    </div>
+  </div>
+</header>
 
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- Core theme JS-->
-        <script src="../js/scripts.js"></script>
+<!-- ============ STICKY TABS ============ -->
+<div class="pp-tabs">
+  <div class="pp-wrap">
+    <nav aria-label="On this page">
+      <a href="#idea">The Idea</a>
+      <a href="#days">The Six Days</a>
+      <a href="#cards">The Cards</a>
+      <a href="#play">How to Play</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="pp-btn pp-btn-primary" href="play/">Play online</a>
+    <a class="pp-btn pp-btn-primary" href="#notify" data-state="soon">Notify me</a>
+    <a class="pp-btn pp-btn-primary" href="#notify" data-state="live" hidden>Buy now</a>
+  </div>
+</div>
+
+<!-- ============ THE IDEA ============ -->
+<section class="pp-band" id="idea" aria-labelledby="idea-h">
+  <div class="pp-wrap sd-idea">
+    <div>
+      <h2 id="idea-h">Build together. Score alone.</h2>
+      <p class="pp-lede">Everyone works on the same six days of creation from Genesis &mdash; light, sky, earth, seas, and plants, sun, moon, stars, birds and fish, animals and mankind &mdash; but every card you play earns <em>you</em> points.</p>
+      <ol class="pp-steps is-stack">
+        <li><h3>Build the days together</h3><p>Each day&rsquo;s stack grows one card at a time until it holds its matching number of cards: day 1 needs 1, day 2 needs 2, all the way up to day 6.</p></li>
+        <li><h3>Close each day</h3><p>Finish a completed day with an <em>Evening &amp; Morning</em> card. It&rsquo;s worth the day&rsquo;s number in points &mdash; the biggest score in the game.</p></li>
+        <li><h3>Collect your points</h3><p>Once all six days are finished, the player who read the moment best &mdash; and collected the most points &mdash; wins.</p></li>
+      </ol>
+    </div>
+    <figure class="sd-diagram" style="margin:0">
+      <div data-sd-static aria-hidden="true"></div>
+      <figcaption>Day 1 needs 1 card, day 2 needs 2&hellip; day 6 needs 6. Fill every stack to end the game.</figcaption>
+    </figure>
+  </div>
+  <div class="pp-wrap" style="margin-top:1.5rem">
+    <p class="pp-lede" style="margin:0">A quick, beautifully illustrated card game that teaches the creation account while it plays &mdash; easy enough for young children, with enough scoring tension to keep older players sharp.</p>
+  </div>
+</section>
+
+<!-- ============ THE SIX DAYS ============ -->
+<section class="pp-band alt" id="days" aria-labelledby="days-h">
+  <div class="pp-wrap">
+    <h2 id="days-h">Six days, six worlds</h2>
+    <p class="pp-lede">Each day of creation has its own colour, its own artwork and its own set of creatures. Tap a card to see it up close.</p>
+    <ul class="pp-days">
+      <li class="pp-day" data-day="1" style="--d:#a85a05"><div class="pp-day-art"><span class="num">1</span></div><div class="pp-day-body"><h3>Day 1 &middot; Light</h3><p>Genesis 1:3&ndash;5 &middot; needs 1 card &middot; 1 in the deck</p></div></li>
+      <li class="pp-day" data-day="2" style="--d:#2a6fa8"><div class="pp-day-art"><span class="num">2</span></div><div class="pp-day-body"><h3>Day 2 &middot; Sky</h3><p>Genesis 1:6&ndash;8 &middot; needs 2 cards &middot; 7 in the deck</p></div></li>
+      <li class="pp-day" data-day="3" data-feature="earth" style="--d:#2f7d46"><div class="pp-day-art"><span class="num">3</span></div><div class="pp-day-body"><h3>Day 3 &middot; Earth, Seas, and Plants</h3><p>Genesis 1:9&ndash;13 &middot; needs 3 cards &middot; 7 in the deck</p></div></li>
+      <li class="pp-day" data-day="4" style="--d:#2a3490">
+        <button type="button" class="pp-zoom pp-day-art" data-zoom="../assets/6days/cards/day4-moon-22-1120.webp" data-caption="Day 4 card: Moon. &ldquo;God made the lesser light to rule the night.&rdquo;">
+          <img src="../assets/6days/cards/day4-moon-22-480.webp" srcset="../assets/6days/cards/day4-moon-22-480.webp 480w, ../assets/6days/cards/day4-moon-22-960.webp 960w" sizes="(max-width: 860px) 46vw, 360px" width="1120" height="820" loading="lazy" alt="Day 4 card: Moon. A huge orange moon rises over dark pine trees under a starry sky." />
+          <span class="badge-n" aria-hidden="true">4</span>
+        </button>
+        <div class="pp-day-body"><h3>Day 4 &middot; Sun, Moon, Stars</h3><p>Genesis 1:14&ndash;19 &middot; needs 4 cards &middot; 8 in the deck</p></div>
+      </li>
+      <li class="pp-day" data-day="5" style="--d:#0b7777"><div class="pp-day-art"><span class="num">5</span></div><div class="pp-day-body"><h3>Day 5 &middot; Birds and Fish</h3><p>Genesis 1:20&ndash;23 &middot; needs 5 cards &middot; 8 in the deck</p></div></li>
+      <li class="pp-day" data-day="6" style="--d:#8e4a3d">
+        <button type="button" class="pp-zoom pp-day-art" data-zoom="../assets/6days/cards/day6-mankind-01-1120.webp" data-caption="Day 6 card: Mankind. &ldquo;God said, &lsquo;Let&rsquo;s make man in our image, after our likeness.&rsquo;&rdquo;">
+          <img src="../assets/6days/cards/day6-mankind-01-480.webp" srcset="../assets/6days/cards/day6-mankind-01-480.webp 480w, ../assets/6days/cards/day6-mankind-01-960.webp 960w" sizes="(max-width: 860px) 46vw, 360px" width="1120" height="820" loading="lazy" alt="Day 6 card: Mankind. A man sits beside a leopard in a lush green garden." />
+          <span class="badge-n" aria-hidden="true">6</span>
+        </button>
+        <div class="pp-day-body"><h3>Day 6 &middot; Animals and Mankind</h3><p>Genesis 1:24&ndash;31 &middot; needs 6 cards &middot; 9 in the deck</p></div>
+      </li>
+    </ul>
+    <!-- Tiles without artwork fill themselves from assets/6days/cards-source/ (see 6days/tools/build-cards.py) -->
+  </div>
+</section>
+
+<!-- ============ THE CARDS ============ -->
+<section class="pp-band" id="cards" aria-labelledby="cards-h">
+  <div class="pp-wrap">
+    <h2 id="cards-h">72 cards, three kinds</h2>
+    <p class="pp-lede">Everything you need is in the box &mdash; 72 cards and a rulebook, no board, no pieces: 40 Day cards, 6 Evening &amp; Morning cards and 26 Point cards. Tap any card to enlarge it.</p>
+    <div class="pp-types">
+      <div class="pp-type">
+        <button type="button" class="pp-zoom" data-zoom="../assets/6days/cards/day6-mankind-01-1120.webp" data-caption="A Day card (this one is Day 6, Mankind)">
+          <img src="../assets/6days/cards/day6-mankind-01-480.webp" srcset="../assets/6days/cards/day6-mankind-01-480.webp 480w, ../assets/6days/cards/day6-mankind-01-960.webp 960w" sizes="(max-width: 860px) 80vw, 340px" width="1120" height="820" loading="lazy" alt="A Day card: Day 6, Mankind." />
+        </button>
+        <h3>Day Cards</h3>
+        <p>40 cards numbered 1&ndash;6, each showing a unique element of creation. These are the cards you stack to build the six days.</p>
+      </div>
+      <div class="pp-type">
+        <button type="button" class="pp-zoom" data-zoom="../assets/6days/cards/evening-morning-evening-and-morning-40-1120.webp" data-caption="An Evening &amp; Morning card: &ldquo;There was evening and there was morning.&rdquo;">
+          <img src="../assets/6days/cards/evening-morning-evening-and-morning-40-480.webp" srcset="../assets/6days/cards/evening-morning-evening-and-morning-40-480.webp 480w, ../assets/6days/cards/evening-morning-evening-and-morning-40-960.webp 960w" sizes="(max-width: 860px) 80vw, 340px" width="1120" height="820" loading="lazy" alt="An Evening and Morning card: a starry blue night over pine trees. &ldquo;There was evening and there was morning.&rdquo;" />
+        </button>
+        <h3>Evening &amp; Morning Cards</h3>
+        <p>6 cards, played to close out a day once it has its full complement of day cards &mdash; and worth points equal to that day&rsquo;s number.</p>
+      </div>
+      <div class="pp-type">
+        <button type="button" class="pp-zoom" data-zoom="../assets/6days/cards/points-6-points-48-1120.webp" data-caption="A Point card (this one is worth 6 points)">
+          <img src="../assets/6days/cards/points-6-points-48-480.webp" srcset="../assets/6days/cards/points-6-points-48-480.webp 480w, ../assets/6days/cards/points-6-points-48-960.webp 960w" sizes="(max-width: 860px) 80vw, 340px" width="1120" height="820" loading="lazy" alt="A gold Point card showing six coins and the words 6 Points." />
+        </button>
+        <h3>Point Cards</h3>
+        <p>26 cards, collected as you play: 22 are double&#8209;sided (1 point on one side, 2 on the other), plus one each of 3, 4, 5 and 6 points. Most points at the end wins.</p>
+      </div>
+    </div>
+
+    <div class="pp-deck" aria-labelledby="deck-h">
+      <h3 id="deck-h">What&rsquo;s in the deck</h3>
+      <table class="pp-table">
+        <thead><tr><th scope="col">Cards</th><th scope="col">How many</th><th scope="col">Notes</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Day 1</th><td>1</td><td>Light</td></tr>
+          <tr><th scope="row">Day 2</th><td>7</td><td>Sky</td></tr>
+          <tr><th scope="row">Day 3</th><td>7</td><td>including 2 Seas</td></tr>
+          <tr><th scope="row">Day 4</th><td>8</td><td>including 2 Sun, 2 Moon and 2 Stars</td></tr>
+          <tr><th scope="row">Day 5</th><td>8</td><td>including 2 Fish, 2 Birds and 3 Approval</td></tr>
+          <tr><th scope="row">Day 6</th><td>9</td><td>including 2 Mankind and 3 Approval</td></tr>
+          <tr><th scope="row">Evening &amp; Morning</th><td>6</td><td></td></tr>
+          <tr><th scope="row">Points: 1 or 2</th><td>22</td><td>1 point on one side, 2 points on the other</td></tr>
+          <tr><th scope="row">Points: 3, 4, 5, 6</th><td>4</td><td>one card of each</td></tr>
+          <tr class="total"><th scope="row">Total</th><td>72</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Filled from cards-data.js (made by 6days/tools/build-cards.py from assets/6days/cards-source/) -->
+    <div class="pp-gallery" data-gallery hidden>
+      <h3 data-gallery-title>A closer look at the cards</h3>
+      <div class="pp-chips" role="group" aria-label="Show cards from"></div>
+      <ul class="pp-grid"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW TO PLAY ============ -->
+<section class="pp-band alt" id="play" aria-labelledby="play-h">
+  <div class="pp-wrap">
+    <h2 id="play-h">How to play</h2>
+    <p class="pp-lede">On your turn you draw a card, then play it onto the days or discard it. That&rsquo;s it &mdash; the fun is in choosing when. <a href="play/">Try it free online</a> against the computer, or <a href="play/pass.html">pass and play</a> with friends on one phone.</p>
+
+    <ol class="pp-steps">
+      <li><h3>Draw</h3><p>Take the top card of the draw pile, or from any discard pile.</p></li>
+      <li><h3>Play or discard</h3><p>Add a day card to the days, close a full day with Evening &amp; Morning, or discard.</p></li>
+      <li><h3>Take points</h3><p>Collect the matching point card for what you played. When every day is full, most points wins.</p></li>
+    </ol>
+
+    <!-- Animated sample game -->
+    <div class="sd-player" data-sd-player>
+      <h3>Watch a sample game</h3>
+      <p class="sub">Three players, ten moves. It plays itself &mdash; or step through at your own pace.</p>
+      <div data-board></div>
+      <div class="sd-scores" data-scores aria-label="Scores"></div>
+      <p class="sd-caption" data-sd-caption aria-live="polite"></p>
+      <div class="sd-controls">
+        <button type="button" data-first aria-label="Back to the start" title="Back to the start">&#9198;</button>
+        <button type="button" data-back aria-label="Previous move" title="Previous move">&#9664;</button>
+        <button type="button" data-play></button>
+        <button type="button" data-fwd aria-label="Next move" title="Next move">&#9654;</button>
+        <input type="range" min="0" max="9" value="0" data-range aria-label="Position in the sample game" />
+        <select data-speed aria-label="Speed"><option value="slow">Slow</option><option value="normal" selected>Normal</option><option value="fast">Fast</option></select>
+      </div>
+      <noscript><p>The sample game needs JavaScript. The full rules are just below.</p></noscript>
+    </div>
+
+    <h3 style="margin:2.2rem 0 .8rem;font-size:1.3rem">The full rules</h3>
+    <div class="pp-acc">
+      <details open>
+        <summary>The Goal</summary>
+        <div class="body"><ul>
+          <li>Players work together to complete all six days of creation.</li>
+          <li>Each day&rsquo;s stack must contain a matching number of <strong>day cards</strong>: day 1 needs 1 day card, and so on up to day 6 needing 6 day cards.</li>
+          <li>The game ends when all six days have their matching number of day cards.</li>
+          <li>The player who has collected the most points wins.</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Setup</summary>
+        <div class="body"><ol>
+          <li>Set aside all <strong>points cards</strong>.</li>
+          <li>Place the <strong>day 1 card</strong> face&#8209;up in the center of the table.</li>
+          <li>Shuffle the remaining <strong>day cards</strong> and <strong>E&amp;M cards</strong> and deal 2 to each player.</li>
+          <li>Place the rest of the <strong>day cards</strong> and <strong>E&amp;M cards</strong> face&#8209;down as a draw pile.</li>
+          <li>Flip the top 3 draw&#8209;pile cards over to start 3 discard piles.</li>
+          <li>The youngest player goes first; play proceeds clockwise.</li>
+        </ol></div>
+      </details>
+      <details>
+        <summary>On Your Turn</summary>
+        <div class="body"><ol>
+          <li><strong>Draw:</strong> Take the top card from the draw pile or from any discard pile (refill the discard piles if empty).</li>
+          <li><strong>Play or Discard:</strong> Take one of four actions:
+            <ol type="a">
+              <li>Start a new day by playing an unplayed <strong>day card</strong> in the next open position (e.g. playing a day 2 card next to the day 1 card).</li>
+              <li>Play a <strong>day card</strong> onto its own or a later day&rsquo;s stack that does not yet have a full set of day cards (e.g. a 3rd day card on the day 3 stack).</li>
+              <li>Play an <strong>E&amp;M card</strong> onto a day stack that has its full complement of day cards (e.g. 4 day cards on the day 4 stack). Note: when a day is completed with an E&amp;M card, its day cards can no longer be played.</li>
+              <li>Discard a <strong>day card</strong> or an <strong>E&amp;M card</strong> face&#8209;up onto one of the discard piles.</li>
+            </ol>
+          </li>
+          <li><strong>Collect Points:</strong> Take the matching <strong>points card</strong> based on what you played.</li>
+        </ol></div>
+      </details>
+      <details>
+        <summary>Scoring</summary>
+        <div class="body"><ul>
+          <li><strong>0 Points:</strong> Discard a card.</li>
+          <li><strong>1 Point:</strong> Play a day card onto a day stack that already has the same kind of creation.</li>
+          <li><strong>2 Points:</strong> Play a day card onto a day stack that does not yet have the same kind of creation.</li>
+          <li><strong>1&ndash;6 Points:</strong> Play an E&amp;M card on a fully completed day stack &mdash; the score equals that day&rsquo;s number (e.g. 4 points for day 4). Only 1 E&amp;M card per day stack.</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>End of Game</summary>
+        <div class="body"><p>The game ends immediately once every day stack contains its full number of <strong>day cards</strong>, whether or not each day has an E&amp;M card. Players total their collected <strong>points cards</strong>. Highest score wins.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="pp-band" id="faq" aria-labelledby="faq-h">
+  <div class="pp-wrap">
+    <h2 id="faq-h">Questions</h2>
+    <div class="pp-acc">
+      <details><summary>Is it cooperative or competitive?</summary><div class="body"><p>A bit of both. Everyone builds the same six days together, but every card you play earns points for you alone, so you&rsquo;re always deciding when to help the days along and when to grab the points.</p></div></details>
+      <details><summary>How many can play, and how long does it take?</summary><div class="body"><p>2&ndash;6 players, and a game takes about 15&ndash;30 minutes.</p></div></details>
+      <details><summary>What ages is it for?</summary><div class="body"><p>The box says ages 12 and up. The rules are simple enough that younger children can often join in with a little help.</p></div></details>
+      <details><summary>Do we need to know the creation story?</summary><div class="body"><p>No. The cards walk through the six days of Genesis 1 as you play, so you&rsquo;ll learn the story while you build it.</p></div></details>
+      <details><summary>What&rsquo;s in the box?</summary><div class="body"><p>72 illustrated cards (day cards, Evening &amp; Morning cards, and point cards) and a rulebook. No board or extra pieces.</p></div></details>
+      <details><summary>Why are Adam and Eve depicted as they are?</summary><div class="body"><p>We don&rsquo;t know what Adam and Eve actually looked like, but since Adam was formed out of the dust of the earth, we chose to depict him with earth colored skin and as a mighty man. Since Eve was formed from the rib of Adam, we chose to depict her with bone colored skin and as beautiful helpmate to Adam.</p></div></details>
+      <details><summary>When can I get it, and what does it cost?</summary><div class="body"><p>Six Days launches <span data-launch-date>November 14, 2026</span> for $19.99. <a href="#notify">Sign up</a> and we&rsquo;ll email you the day it&rsquo;s available.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CALL TO ACTION ============ -->
+<section class="pp-cta" id="notify" aria-labelledby="notify-h">
+  <div class="pp-wrap">
+    <h2 id="notify-h" data-state="soon">Be the first to play</h2>
+    <h2 data-state="live" hidden>Get Six Days</h2>
+    <p><strong>$19.99</strong> &middot; <span data-state="soon">launching <span data-launch-date>November 14, 2026</span></span><span data-state="live" hidden>ships from the SDG Biblical Wisdom shop</span></p>
+    <form class="pp-signup" data-state="soon" novalidate>
+      <label class="pp-sr" for="email-cta">Your email address</label>
+      <div class="pp-row">
+        <input type="email" id="email-cta" name="EMAIL" placeholder="Your email address" autocomplete="email" required />
+        <button type="submit" class="pp-btn pp-btn-gold">Notify me at launch</button>
+      </div>
+      <input class="pp-honey" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <p class="pp-signup-msg" role="status" aria-live="polite"></p>
+      <p class="pp-fine">One email when it&rsquo;s available. Unsubscribe any time. Or follow the <a href="https://blog.sdggames.fun/" style="color:#fff">SDG Games news</a>.</p>
+    </form>
+    <div class="pp-shopify" data-state="live" hidden></div>
+  </div>
+</section>
+</main>
+
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+<div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+</footer>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- Core theme JS-->
+<script src="../js/scripts.js"></script>
+
+<!-- ===== Page settings ===== -->
+<script>
+window.SDG_PRODUCT = {
+  launch: '2026-11-14',
+  // MAILCHIMP: the SDG Games audience's "embedded form" action URL (Audience > Signup forms > Embedded forms).
+  // Only the email address is collected. If this is ever emptied, the signup boxes show an "opening soon" message instead.
+  mailchimpUrl: 'https://fun.us10.list-manage.com/subscribe/post?u=d219b8c03fa7cf86fcb6c66fa&id=2b88c7f29c&f_id=00c54ae4f0',
+  // Optional: Mailchimp tag ids so Six Days fans can be told apart in your audience, e.g. [123456].
+  mailchimpTags: [],
+  // LAUNCH DAY: put the Six Days Shopify product id here to turn every "Notify me" into a "Buy" button.
+  productId: '',
+  buttonText: 'Buy Six Days',
+};
+</script>
+<script src="../js/product-core.js?v=20261015"></script>
+<script src="cards-data.js?v=20261015"></script>
+<script src="../js/product-gallery.js?v=20261015"></script>
+<script src="../js/product-page.js?v=20261015"></script>
+<script src="demo-core.js?v=20261015"></script>
+<script src="demo.js?v=20261015"></script>
 <!-- Default Statcounter code for SDG Games
 https://sdggames.fun -->
 <script type="text/javascript">
@@ -354,5 +391,5 @@ src="https://c.statcounter.com/13364187/0/487bfc6e/1/"
 alt="Web Analytics Made Easy - Statcounter"
 referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->
-    </body>
+</body>
 </html>

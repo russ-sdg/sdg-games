@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Pass and play Six Days, free: build the six days of creation with friends on one phone, handed round the table." />
+    <title>Pass and Play Six Days - SDG Games</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="play.css?v=20261101" rel="stylesheet" />
+</head>
+<body class="sb-nav-fixed">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
+
+    <main class="sp container-fluid px-3 pb-5">
+        <div class="sp-title d-flex flex-wrap align-items-center gap-3 py-3">
+            <a href="../index.html" class="sp-name">Six Days</a>
+            <span class="badge text-bg-secondary">Pass and play</span>
+            <a class="ms-auto small" href="./">Play against the computer</a> <a class="small" href="../index.html">About the game</a>
+        </div>
+
+        <!-- ================= SETUP ================= -->
+        <section id="setup" aria-labelledby="setup-title">
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card shadow-sm"><div class="card-body">
+                        <h1 class="h3" id="setup-title">New game</h1>
+                        <div id="resume" class="alert alert-info d-flex flex-wrap align-items-center gap-2" hidden>
+                            <span id="resume-text">You have a game in progress.</span>
+                            <button type="button" class="btn btn-sm btn-primary" id="resume-btn">Resume</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="discard-btn">Discard it</button>
+                        </div>
+                        <p>One phone, handed round the table. Before each turn the phone says who should hold it and hides their hand until they are ready. The days and the discard piles stay on show, as they would on a table.</p>
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-6"><label class="form-label" for="humans">People playing</label>
+                                <select class="form-select" id="humans"><option value="2" selected>2 people</option><option value="3">3 people</option><option value="4">4 people</option><option value="5">5 people</option><option value="6">6 people</option></select></div>
+                            <div class="col-sm-6"><label class="form-label" for="bot-count">Computer players to fill the table</label>
+                                <select class="form-select" id="bot-count"></select></div>
+                        </div>
+                        <div class="mb-3"><span class="form-label d-block">Names</span><div class="row g-2" id="names"></div></div>
+                        <div class="mb-3" id="skill-wrap" hidden><label class="form-label" for="bot-skill">How well do the computers play?</label>
+                            <select class="form-select" id="bot-skill"><option value="casual">Casual</option><option value="steady" selected>Steady</option><option value="sharp">Sharp</option><option value="mixed">A mix</option></select></div>
+                        <button type="button" class="btn btn-primary btn-lg" id="start-btn">Start the game</button>
+                    </div></div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card shadow-sm"><div class="card-body small">
+                        <h2 class="h6">How a turn goes</h2>
+                        <ol>
+                            <li>The phone says who should have it. They tap <b>I'm &hellip; &mdash; show me</b>, and their hand appears.</li>
+                            <li><b>Draw</b> a card from the draw pile or the top of a discard pile, then <b>play</b> one card on the days or <b>discard</b> it.</li>
+                            <li>The phone then asks you to pass it on. If you tapped the wrong card, the next screen has an <b>Undo</b> button until they pick the phone up.</li>
+                        </ol>
+                        <p>Scoring is as in the box: 2 points to start a day or add a new kind of creature, 1 for a kind already there, and the day's number for closing a full day with Evening &amp; Morning.</p>
+                        <p class="mb-0"><a href="../index.html#play-h">Read the full rules</a></p>
+                    </div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= GAME ================= -->
+        <section id="game" hidden aria-label="Game">
+            <div class="sp-bar" id="bar"></div>
+            <h2 class="sp-h">The six days</h2>
+            <div class="sp-days" id="days"></div>
+            <div class="row g-3 mt-1">
+                <div class="col-lg-6"><h2 class="sp-h">Draw and discard piles</h2><div class="sp-piles" id="piles"></div></div>
+                <div class="col-lg-6"><h2 class="sp-h" id="hand-title">Your hand</h2><div class="sp-hand" id="hand"></div></div>
+            </div>
+            <div class="sp-card mt-3"><h2 class="sp-h">What happened</h2><ol class="sp-log" id="log"></ol></div>
+            <p class="mt-3"><button type="button" class="btn btn-outline-secondary btn-sm" id="menu-btn">New game</button></p>
+        </section>
+    </main>
+
+    <!-- what to do next, pinned to the foot of the screen -->
+    <div class="sp-dock" id="dock" hidden>
+        <div class="sp-dock-main"><p class="sp-dock-text" id="status" role="status" aria-live="polite"></p><div class="sp-dock-actions" id="actions"></div></div>
+    </div>
+
+    <dialog id="zoom" class="sp-dialog"><form method="dialog"><img id="zoom-img" alt="" /><p id="zoom-cap" class="small mb-2"></p><button value="close" class="btn btn-outline-secondary btn-sm">Close</button></form></dialog>
+    <dialog id="final" class="sp-dialog sp-wide" aria-labelledby="final-title">
+        <form method="dialog">
+            <h2 class="h5" id="final-title"></h2>
+            <div id="final-body"></div>
+            <div class="d-flex flex-wrap gap-2 mt-3"><button value="again" class="btn btn-primary" id="final-again">New game</button><button value="close" class="btn btn-outline-secondary">Close</button></div>
+        </form>
+    </dialog>
+
+    <footer class="py-5 bg-dark">
+        <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class="current-year">2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../../js/scripts.js"></script>
+    <script type="module" src="js/pass.js?v=20261101"></script>
+<!-- Default Statcounter code for SDG Games
+https://sdggames.fun -->
+<script type="text/javascript">
+var sc_project=13364187;
+var sc_invisible=1;
+var sc_security="487bfc6e";
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics
+Made Easy - Statcounter" href="https://statcounter.com/"
+target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/13364187/0/487bfc6e/1/"
+alt="Web Analytics Made Easy - Statcounter"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+</body>
+</html>

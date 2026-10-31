@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Pass and play Tyndale: one phone, handed round the table. Each Bishop's Agent takes a turn in private; Tyndale can be a person or the computer." />
+    <title>Pass and Play Tyndale - SDG Games</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="play.css?v=20261030" rel="stylesheet" />
+</head>
+<body class="sb-nav-fixed">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
+
+    <main class="ty container-fluid px-3 pb-5">
+        <div class="ty-title d-flex flex-wrap align-items-center gap-3 py-3">
+            <a href="../index.html"><img class="ty-logo" src="../../assets/TyndalelogoV1.png" alt="Tyndale" /></a>
+            <span class="badge text-bg-secondary">Pass and play</span>
+            <a class="ms-auto small" href="index.html">Back to Play online</a>
+        </div>
+
+        <section id="setup" aria-labelledby="setup-title">
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card shadow-sm"><div class="card-body">
+                        <h1 class="h3" id="setup-title">Pass and play</h1>
+                        <div id="resume" class="alert alert-info d-flex flex-wrap align-items-center gap-2" hidden>
+                            <span id="resume-text">You have a game in progress.</span>
+                            <button type="button" class="btn btn-sm btn-primary" id="resume-btn">Resume</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="discard-btn">Discard it</button>
+                        </div>
+                        <p>One phone, handed round the table. Before each turn the phone asks who should have it and hides the map until they say they are ready, so secrets stay secret.</p>
+                        <div class="mb-3"><label class="form-label" for="agents">Bishop's Agent players</label>
+                            <select class="form-select" id="agents">
+                                <option value="1">1 (with 4 pawns)</option>
+                                <option value="2">2 (2 pawns each)</option>
+                                <option value="3">3</option>
+                                <option value="4" selected>4 (with a Secret Supporter)</option>
+                                <option value="5">5 (with a Secret Supporter)</option>
+                            </select></div>
+                        <div class="mb-3"><span class="form-label d-block">Names</span><div class="row g-2" id="names"></div></div>
+                        <fieldset class="mb-3">
+                            <legend class="h6">Who plays Tyndale?</legend>
+                            <div class="choice-grid">
+                                <label class="choice"><input type="radio" name="ty" value="person" checked /><span><b>A person</b><small>One more player is William Tyndale. The phone is passed to them for their secret moves.</small></span></label>
+                                <label class="choice"><input type="radio" name="ty" value="computer" /><span><b>The computer</b><small>Everyone is an Agent; the computer plays Tyndale in secret.</small></span></label>
+                            </div>
+                        </fieldset>
+                        <div class="mb-3" id="skill-wrap" hidden><label class="form-label" for="skill">Tyndale's skill</label>
+                            <select class="form-select" id="skill">
+                                <option value="casual">Casual &ndash; wanders, takes risks</option>
+                                <option value="steady" selected>Steady &ndash; keeps clear of the Agents</option>
+                                <option value="sharp">Sharp &ndash; slips past the Agents</option>
+                            </select></div>
+                        <p class="small text-muted" id="supp-note">With 4 or more Agents, one of the character cards is Tyndale's Secret Supporter. Each Agent is shown their own card in private at the start.</p>
+                        <button type="button" class="btn btn-primary btn-lg" id="start-btn">Start the game</button>
+                    </div></div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card shadow-sm"><div class="card-body">
+                        <h2 class="h5">How a turn goes</h2>
+                        <ol class="small mb-0">
+                            <li>The phone says who should hold it. They tap <b>Ready</b>.</li>
+                            <li>An Agent rolls the die (1 to 3), taps where the pawn goes, and sees the two answer cards in private.</li>
+                            <li>They tell the table what they found &mdash; or, if they are the Secret Supporter, whatever they choose. What they report goes on the shared map.</li>
+                            <li>Tyndale (a person) plans a secret route; the map hides it again before the phone is passed on.</li>
+                        </ol>
+                    </div></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="game" hidden aria-label="The game">
+            <div class="ty-bar" role="status" aria-live="polite">
+                <div class="ty-bar-main" id="bar-main"></div>
+                <div class="ty-bar-pubs" id="bar-pubs" aria-label="Scripture delivered to London"></div>
+                <div class="ty-bar-actions"><button type="button" class="btn btn-sm btn-outline-light" id="undo-btn">Undo</button><button type="button" class="btn btn-sm btn-outline-light" id="menu-btn">New game</button></div>
+            </div>
+            <div id="gate" hidden></div>
+            <div class="row g-3" id="play-row">
+                <div class="col-lg-8">
+                    <div class="ty-board-wrap"><svg id="board" class="ty-board" viewBox="0 0 800 800" role="img" aria-label="The game board"></svg></div>
+                    <div class="ty-legend small text-muted mt-2" id="legend"></div>
+                </div>
+                <div class="col-lg-4" id="side"></div>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="final" class="ty-dialog" aria-labelledby="final-title">
+        <form method="dialog">
+            <h2 class="h5" id="final-title"></h2>
+            <div id="final-body"></div>
+            <div class="pick-actions"><button type="button" class="btn btn-outline-secondary" id="final-route">Show the routes</button><button value="again" class="btn btn-primary" id="final-again">New game</button><button value="close" class="btn btn-outline-secondary">Close</button></div>
+        </form>
+    </dialog>
+
+    <footer class="py-5 bg-dark">
+        <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class="current-year">2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../../js/scripts.js"></script>
+    <script type="module" src="js/pass.js?v=20261030"></script>
+<!-- Default Statcounter code for SDG Games
+https://sdggames.fun -->
+<script type="text/javascript">
+var sc_project=13364187;
+var sc_invisible=1;
+var sc_security="487bfc6e";
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics
+Made Easy - Statcounter" href="https://statcounter.com/"
+target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/13364187/0/487bfc6e/1/"
+alt="Web Analytics Made Easy - Statcounter"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+</body>
+</html>

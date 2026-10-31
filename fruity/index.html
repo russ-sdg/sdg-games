@@ -1,610 +1,453 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Fruity - A Simple Card Collecting Game</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="../css/styles.css" rel="stylesheet" />
-    </head>
-    <body class="sb-nav-fixed">
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id='main-nav'></nav>
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid px-4">
-                        <img class="img-responsive img-fluid" style="max-height: 100px;" src="../assets/Fruity Logo.svg" alt="Fruity">
-                        <div class="row">
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none full-center" href="#description">Game Description</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none full-center" href="#play">How to Play</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none full-center" href="#deck">Cards</a>
-                                </div>
-                              </div>
-                          </div>
-                          <div class="col ml-auto">
-                              <div class="card bg-primary text-white mb-4">
-                                <div class="card-body d-flex align-items-center justify-content-between">
-                                  <a class="text-white stretched-link text-decoration-none full-center" href="#example">Example Game Play</a>
-                                </div>
-                              </div>
-                          </div>
-                       </div>
-                        <a id="description"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Game Description</strong>
-                            </div>
-                            <div class="card-body">
-                              <div class="container-fluid"> 
-                                <div class="row"> 
-                          
-                                    <div class="col-sm-8">
-                                      <p><em>Fruity</em> is a simple card set collecting game that teaches pattern matching and the Biblical Fruit of the Spirit.</p>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<title>Fruity - A Simple Card Collecting Game | SDG Games</title>
+<meta name="description" content="A simple set-collecting card game that teaches pattern matching and the fruit of the Spirit. 2-6 players, 5-10 minutes, 54 cards, $12.99." />
+<meta name="author" content="SDG Strategy, LLC" />
+<link rel="canonical" href="https://sdggames.fun/fruity/" />
 
-                                      <p>The goal of the game is to collect one each of three Fruit cards to complete their Fruit Basket.</p>
-                                      <p>The game can be played by kids old enough to recognize matching symbols, is played by 2 - 6 players, and each game takes 5 - 10 minutes to play.</p>
-                                      <p class='text-center'><em>But the fruit of the Spirit is love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, self-control; against such things there is no law.</em> (Galatians 5:22-23 ESV)</p>
+<!-- Open Graph / social share -->
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="SDG Games" />
+<meta property="og:title" content="Fruity - A Simple Card Collecting Game" />
+<meta property="og:description" content="Collect three fruits of the Spirit to fill your basket. A quick matching game for kids and grown-ups." />
+<meta property="og:url" content="https://sdggames.fun/fruity/" />
+<meta property="og:image" content="https://sdggames.fun/assets/fruity/fruity-share.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Fruity - A Simple Card Collecting Game" />
+<meta name="twitter:description" content="Collect three fruits of the Spirit to fill your basket. A quick matching game for kids and grown-ups." />
+<meta name="twitter:image" content="https://sdggames.fun/assets/fruity/fruity-share.jpg" />
 
-                                      <div class="text-center" style="padding: 10px">
-                                        <img class="img-responsive img-fluid" src="../assets/Fruity Complete Set 1 v1.webp" alt="Fruity Cards">
-                                      </div>
-                                      
-                                      <p>Players win when they've collected all three fruits in their basket. The game continues until all players have won.</p>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Fruity",
+  "description": "A simple card set-collecting game that teaches pattern matching and the fruit of the Spirit, for 2 to 6 players, 5 to 10 minutes a game. Collect one each of three Fruit cards to complete your Fruit Basket. 54 cards.",
+  "image": ["https://sdggames.fun/assets/fruity/fruity-share.jpg"],
+  "brand": { "@type": "Brand", "name": "SDG Games" },
+  "category": "Card game",
+  "url": "https://sdggames.fun/fruity/",
+  "offers": { "@type": "Offer", "price": "12.99", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://sdggames.fun/fruity/" }
+}
+</script>
 
-                                    </div> 
-                                    <div class="col-sm-4">
-                                      <div class="text-center">
-                                        <!-- Product price-->
-                                        $12.99<br />
-                                      </div>
-                                      <div class="text-center">
-                                            <!-- Buy Button -->
-                                            <div id='product-component-1742575098894'></div>
-                                            <script type="text/javascript">
-                                            /*<![CDATA[*/
-                                            (function () {
-                                              var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-                                              if (window.ShopifyBuy) {
-                                                if (window.ShopifyBuy.UI) {
-                                                  ShopifyBuyInit();
-                                                } else {
-                                                  loadScript();
-                                                }
-                                              } else {
-                                                loadScript();
-                                              }
-                                              function loadScript() {
-                                                var script = document.createElement('script');
-                                                script.async = true;
-                                                script.src = scriptURL;
-                                                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
-                                                script.onload = ShopifyBuyInit;
-                                              }
-                                              function ShopifyBuyInit() {
-                                                var client = ShopifyBuy.buildClient({
-                                                  domain: 'bd30ce-2.myshopify.com',
-                                                  storefrontAccessToken: '7bf5f03bf3c7ba399d3ef67f8250c103',
-                                                });
-                                                ShopifyBuy.UI.onReady(client).then(function (ui) {
-                                                  ui.createComponent('product', {
-                                                    id: '8739650830485',
-                                                    node: document.getElementById('product-component-1742575098894'),
-                                                    moneyFormat: '%24%7B%7Bamount%7D%7D',
-                                                    options: {
-                                              "product": {
-                                                "styles": {
-                                                  "product": {
-                                                    "@media (min-width: 601px)": {
-                                                      "max-width": "calc(25% - 20px)",
-                                                      "margin-left": "20px",
-                                                      "margin-bottom": "50px"
-                                                    }
-                                                  },
-                                                  "button": {
-                                                    "font-family": "Avant Garde, sans-serif",
-                                                    "font-size": "14px",
-                                                    "padding-top": "15px",
-                                                    "padding-bottom": "15px",
-                                                    ":hover": {
-                                                      "background-color": "#2d38e0"
-                                                    },
-                                                    "background-color": "#323ef9",
-                                                    ":focus": {
-                                                      "background-color": "#2d38e0"
-                                                    },
-                                                    "border-radius": "6px",
-                                                    "padding-left": "20px",
-                                                    "padding-right": "20px"
-                                                  },
-                                                  "quantityInput": {
-                                                    "font-size": "14px",
-                                                    "padding-top": "15px",
-                                                    "padding-bottom": "15px"
-                                                  }
-                                                },
-                                                "contents": {
-                                                  "img": false,
-                                                  "title": false,
-                                                  "price": false
-                                                },
-                                                "text": {
-                                                  "button": "Add to Cart"
-                                                }
-                                              },
-                                              "productSet": {
-                                                "styles": {
-                                                  "products": {
-                                                    "@media (min-width: 601px)": {
-                                                      "margin-left": "-20px"
-                                                    }
-                                                  }
-                                                }
-                                              },
-                                              "modalProduct": {
-                                                "contents": {
-                                                  "img": false,
-                                                  "imgWithCarousel": true,
-                                                  "button": false,
-                                                  "buttonWithQuantity": true
-                                                },
-                                                "styles": {
-                                                  "product": {
-                                                    "@media (min-width: 601px)": {
-                                                      "max-width": "100%",
-                                                      "margin-left": "0px",
-                                                      "margin-bottom": "0px"
-                                                    }
-                                                  },
-                                                  "button": {
-                                                    "font-family": "Avant Garde, sans-serif",
-                                                    "font-size": "14px",
-                                                    "padding-top": "15px",
-                                                    "padding-bottom": "15px",
-                                                    ":hover": {
-                                                      "background-color": "#2d38e0"
-                                                    },
-                                                    "background-color": "#323ef9",
-                                                    ":focus": {
-                                                      "background-color": "#2d38e0"
-                                                    },
-                                                    "border-radius": "6px",
-                                                    "padding-left": "20px",
-                                                    "padding-right": "20px"
-                                                  },
-                                                  "quantityInput": {
-                                                    "font-size": "14px",
-                                                    "padding-top": "15px",
-                                                    "padding-bottom": "15px"
-                                                  }
-                                                },
-                                                "text": {
-                                                  "button": "Add to cart"
-                                                }
-                                              },
-                                              "option": {},
-                                              "cart": {
-                                                "styles": {
-                                                  "button": {
-                                                    "font-family": "Avant Garde, sans-serif",
-                                                    "font-size": "14px",
-                                                    "padding-top": "15px",
-                                                    "padding-bottom": "15px",
-                                                    ":hover": {
-                                                      "background-color": "#2d38e0"
-                                                    },
-                                                    "background-color": "#323ef9",
-                                                    ":focus": {
-                                                      "background-color": "#2d38e0"
-                                                    },
-                                                    "border-radius": "6px"
-                                                  }
-                                                },
-                                                "text": {
-                                                  "total": "Subtotal",
-                                                  "button": "Checkout"
-                                                }
-                                              },
-                                              "toggle": {
-                                                "styles": {
-                                                  "toggle": {
-                                                    "font-family": "Avant Garde, sans-serif",
-                                                    "background-color": "#323ef9",
-                                                    ":hover": {
-                                                      "background-color": "#2d38e0"
-                                                    },
-                                                    ":focus": {
-                                                      "background-color": "#2d38e0"
-                                                    }
-                                                  },
-                                                  "count": {
-                                                    "font-size": "14px"
-                                                  }
-                                                }
-                                              }
-                                            },
-                                                  });
-                                                });
-                                              }
-                                            })();
-                                            /*]]>*/
-                                            </script>
-                                      </div>                          
-                                    </div> 
-                                </div> 
-                            </div> 
-                              
-                            </div>
-                        </div>
-                        <a id="play"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>How To Play</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>There are 54 card in the <em>Fruity</em> game: 36 Fruit Cards, 12 Basket Cards, 6 Turn Instruction Cards. (See Below.)</p>
-                              <p>The objective of the game is for each player to collect one each of three Fruit Cards to complete their Fruit Basket.</p>
-                              <p><strong>Note:</strong> The initial printing of the game includes one Fruit Basket card that has the wrong symbol next to a fruit name. If a player has this Fruit Basket, they can complete the basket by either matching the word or the symbol.</p>
+<link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+<!-- Core theme CSS (includes Bootstrap) -->
+<link href="../css/styles.css" rel="stylesheet" />
+<link href="../css/product-page.css?v=20261026" rel="stylesheet" />
+<link href="fruity.css?v=20261101" rel="stylesheet" />
+<link rel="preload" as="image" href="../assets/fruity/set.webp" fetchpriority="high" />
 
-                              <h4>Game Setup:</h4>
-                              <ol>
-                                <li>Each player is given a Turn Instruction card and a Fruit Basket card. (The unused Turn Instruction and Fruit Basket cards are set aside and not used in the rest of the game.)</li>
-                                <li>Each player is dealt three Fruit cards.</li>
-                                <li>If any of the Fruit cards dealt to a player match a fruit on that player's Fruit Basket card, that Fruit card is placed face-up in front of the player. (But only one of each Fruit.)</li>
-                                <li>The remaining undealt Fruit cards are placed face-down as a draw pile.</li>
-                                <li>The top Fruit card in the draw pile is turned face-up to form a discard pile.</li>
-                              </ol>
-                              
-                              <h4>Beginning the Game:</h4>
-                              <ol>
-                                <li>Choose a player to go first.</li>
-                                <li>This player draws a Fruit card from the face-down draw pile.</li>
-                                <li>If this Fruit is one in the player's Fruit Basket that he hasn't yet collected, he places the Fruit card face up in front of him.</li>
-                                <li>The player chooses a Fruit card in his hand and passes it to the player to his right.</li>
-                              </ol>
+<style>
+/* Fruity palette: the deep indigo and bright red of the card borders, with a ripe orange */
+.pp { --pp-primary: #3a1f93; --pp-accent: #d9531e; --pp-gold: #ffc94d; --pp-gold-ink: #24135f;
+      --pp-hero: linear-gradient(135deg, #1b1058 0%, #3a1f93 55%, #8a2a78 100%); }
+</style>
+</head>
+<body class="sb-nav-fixed pp">
+<a class="pp-skip" href="#game">Skip to content</a>
+<!-- Responsive navbar (loaded from nav-div.html by ../js/scripts.js) -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
 
-                              <h4>Subsequent Turns:</h4>
-                              <p>Play continues with the next player to the right:</p>
-                              <ol>
-                                <li>This player receives the Fruit card passed by the previous player.</li>
-                                <li>If this Fruit is one in the player's Fruit Basket that he hasn't yet collected, he places the Fruit card face up in front of him.</li>
-                                <li>He chooses a Fruit card in his hand and places it face-up on the discard pile.</li>
-                                <li>He then draws a Fruit card from the face-down draw pile.</li>
-                                <li>If this Fruit is one in the player's Fruit Basket that he hasn't yet collected, he places the Fruit card face up in front of him.</li>
-                                <li>The player chooses a Fruit card in his hand and passes it to the player to his right.</li>
-                              </ol>
+<main>
+<!-- ============ HERO ============ -->
+<header class="pp-hero">
+  <div class="pp-wrap pp-hero-grid">
+    <div>
+      <p class="pp-eyebrow">A simple card collecting game</p>
+      <h1>Fruity</h1>
+      <p class="pp-tagline">Collect three fruits of the Spirit to fill your basket&nbsp;&mdash; a quick matching game for kids and grown-ups.</p>
+      <ul class="pp-facts" aria-label="Game facts">
+        <li>2&ndash;6 players</li>
+        <li>5&ndash;10 min</li>
+        <li>54 cards</li>
+        <li>Pattern matching</li>
+      </ul>
+      <p class="pp-launch"><strong>$12.99</strong></p>
+      <div class="fy-cta">
+        <a class="pp-btn pp-btn-gold" href="#play">How to play</a>
+        <div id="buy-now" class="pp-shopify" data-state="live"></div>
+      </div>
+      <p class="pp-fine">Ships from the SDG Biblical Wisdom shop.</p>
+    </div>
+    <figure class="fy-hero-art">
+      <img src="../assets/fruity/set.webp" width="1100" height="432" fetchpriority="high" alt="Four Fruity cards: a Fruit Basket card listing Faithfulness, Gentleness and Self-Control, and the Faithfulness, Gentleness and Self-Control Fruit cards, each with its own fruit." />
+    </figure>
+  </div>
+</header>
 
-                              <h4>Winning the Game:</h4>
-                              <ul>
+<!-- ============ STICKY TABS ============ -->
+<div class="pp-tabs">
+  <div class="pp-wrap">
+    <nav aria-label="On this page">
+      <a href="#game">The Game</a>
+      <a href="#parts">What&rsquo;s in the Box</a>
+      <a href="#play">How to Play</a>
+      <a href="#example">Example Game</a>
+      <a href="#buy">Get the Game</a>
+    </nav>
+    <a class="pp-btn pp-btn-primary" href="#buy">Get the game</a>
+  </div>
+</div>
+
+<!-- ============ THE GAME ============ -->
+<section class="pp-band" id="game" aria-labelledby="game-h">
+  <div class="pp-wrap fy-two">
+    <div>
+      <h2 id="game-h">Fill your basket</h2>
+      <blockquote class="fy-verse">&ldquo;But the fruit of the Spirit is love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, self-control; against such things there is no law.&rdquo;<cite>Galatians 5:22&ndash;23 ESV</cite></blockquote>
+      <p class="pp-lede"><em>Fruity</em> is a simple card set collecting game that teaches pattern matching and the Biblical Fruit of the Spirit.</p>
+      <p>The goal of the game is to collect one each of three Fruit cards to complete their Fruit Basket.</p>
+      <p>The game can be played by kids old enough to recognize matching symbols, is played by 2 - 6 players, and each game takes 5 - 10 minutes to play.</p>
+      <p>Players win when they&rsquo;ve collected all three fruits in their basket. The game continues until all players have won.</p>
+    </div>
+    <div>
+      <figure class="fy-fig"><button type="button" class="pp-zoom" data-zoom="../assets/Fruity glance v1.webp" data-caption="Fruity cards: a Fruit Basket card and the Fruit cards that fill it."><img src="../assets/Fruity glance v1.webp" width="400" height="300" loading="lazy" alt="A Fruit Basket card fanned out with the Faithfulness, Gentleness and Self-Control Fruit cards." /></button></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT'S IN THE BOX ============ -->
+<section class="pp-band alt" id="parts" aria-labelledby="parts-h">
+  <div class="pp-wrap">
+    <h2 id="parts-h">What&rsquo;s in the box</h2>
+    <p class="pp-lede">A deck of 54 cards and nothing else. Tap a card to enlarge it.</p>
+    <div class="pp-types fy-types">
+      <figure class="pp-type">
+        <button type="button" class="pp-zoom" data-zoom="../assets/FruityPatience.webp" data-caption="Patience: one of the nine Fruit cards."><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /></button>
+        <h3>36 Fruit cards</h3>
+        <p>Four of each of the nine fruits of the Spirit, each with its own fruit picture.</p>
+      </figure>
+      <figure class="pp-type">
+        <button type="button" class="pp-zoom" data-zoom="../assets/FruityBasket1.webp" data-caption="A Fruit Basket card."><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Fruit Basket card" /></button>
+        <h3>12 Fruit Basket cards</h3>
+        <p>Each lists three fruits. The basket you are dealt is the three you are collecting.</p>
+      </figure>
+      <figure class="pp-type">
+        <button type="button" class="pp-zoom" data-zoom="../assets/FruityInstructions.webp" data-caption="The Turn Instruction card."><img src="../assets/fruity/instructions-320.webp" width="320" height="481" loading="lazy" alt="Turn Instruction card" /></button>
+        <h3>6 Turn Instruction cards</h3>
+        <p>Shows, in words and symbols, what you do on your turn, in order.</p>
+      </figure>
+    </div>
+
+    <div class="fy-deck">
+      <h3>The 54 cards</h3>
+      <table class="pp-table">
+        <thead><tr><th scope="col">Cards</th><th scope="col">How many</th><th scope="col">Notes</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Fruit cards</th><td>36</td><td>4 of each of the 9 fruits</td></tr>
+          <tr><th scope="row">Fruit Basket cards</th><td>12</td><td>12 different baskets</td></tr>
+          <tr><th scope="row">Turn Instruction cards</th><td>6</td><td>one for each player</td></tr>
+          <tr class="total"><th scope="row">Total</th><td>54</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pp-acc fy-acc">
+      <details>
+        <summary>The Fruit cards</summary>
+        <div class="body">
+          <p>Each of the Fruit cards has the name of the fruit at the bottom of the card for the player to read, the name upside down at the top of the card for the other players to read, and an icon of a kind of fruit in the center of the card representing that fruit of the Spirit.</p>
+          <div class="fy-gallery">
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityLove.webp" data-caption="Love card."><img src="../assets/fruity/love-320.webp" width="320" height="481" loading="lazy" alt="Love card" /></button>
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityJoy.webp" data-caption="Joy card."><img src="../assets/fruity/joy-320.webp" width="320" height="481" loading="lazy" alt="Joy card" /></button>
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityPeace.webp" data-caption="Peace card."><img src="../assets/fruity/peace-320.webp" width="320" height="481" loading="lazy" alt="Peace card" /></button>
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityPatience.webp" data-caption="Patience card."><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /></button>
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityKindness.webp" data-caption="Kindness card."><img src="../assets/fruity/kindness-320.webp" width="320" height="481" loading="lazy" alt="Kindness card" /></button>
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityGoodness.webp" data-caption="Goodness card."><img src="../assets/fruity/goodness-320.webp" width="320" height="481" loading="lazy" alt="Goodness card" /></button>
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityFaithfulness.webp" data-caption="Faithfulness card."><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /></button>
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityGentleness.webp" data-caption="Gentleness card."><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /></button>
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruitySelfControl.webp" data-caption="Self-Control card."><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /></button>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>The Fruit Basket cards</summary>
+        <div class="body">
+          <p>Each Fruit Basket card has three fruit of the Spirit and their associated icons. Each player gets a Fruit Basket card and this determines which Fruit cards he is trying to collect.</p>
+          <p><strong>Note:</strong> The initial printing of the game includes one Fruit Basket card that has the wrong symbol next to a fruit name. If a player has this Fruit Basket, they can complete the basket by either matching the word or the symbol.</p>
+          <p>Here are a few examples:</p>
+          <div class="fy-gallery">
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityBasket1.webp" data-caption="A Fruit Basket card."><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Fruit Basket card" /></button>
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityBasket4.webp" data-caption="A Fruit Basket card."><img src="../assets/fruity/basket4-320.webp" width="320" height="481" loading="lazy" alt="Fruit Basket card" /></button>
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityBasket8.webp" data-caption="A Fruit Basket card."><img src="../assets/fruity/basket8-320.webp" width="320" height="481" loading="lazy" alt="Fruit Basket card" /></button>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>The Turn Instruction card</summary>
+        <div class="body">
+          <p>Each player is given an Instruction card, which shows in words and symbols, the actions they take, in order, on their turn.</p>
+          <div class="fy-gallery is-one">
+            <button type="button" class="pp-zoom" data-zoom="../assets/FruityInstructions.webp" data-caption="The Turn Instruction card."><img src="../assets/fruity/instructions-320.webp" width="320" height="481" loading="lazy" alt="Turn Instruction card" /></button>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW TO PLAY ============ -->
+<section class="pp-band" id="play" aria-labelledby="play-h">
+  <div class="pp-wrap">
+    <h2 id="play-h">How to play</h2>
+    <p class="pp-lede">Draw a card, keep the fruits in your basket, pass on the one you do not need. The first to fill a basket wins; play on until everyone has.</p>
+    <div class="pp-acc">
+      <details open>
+        <summary>The goal</summary>
+        <div class="body">
+          <p>There are 54 cards in the <em>Fruity</em> game: 36 Fruit Cards, 12 Basket Cards, 6 Turn Instruction Cards. (See Below.)</p>
+          <p>The objective of the game is for each player to collect one each of three Fruit Cards to complete their Fruit Basket.</p>
+          <p><strong>Note:</strong> The initial printing of the game includes one Fruit Basket card that has the wrong symbol next to a fruit name. If a player has this Fruit Basket, they can complete the basket by either matching the word or the symbol.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Setup</summary>
+        <div class="body"><ol><li>Each player is given a Turn Instruction card and a Fruit Basket card. (The unused Turn Instruction and Fruit Basket cards are set aside and not used in the rest of the game.)</li><li>Each player is dealt three Fruit cards.</li><li>If any of the Fruit cards dealt to a player match a fruit on that player's Fruit Basket card, that Fruit card is placed face-up in front of the player. (But only one of each Fruit.)</li><li>The remaining undealt Fruit cards are placed face-down as a draw pile.</li><li>The top Fruit card in the draw pile is turned face-up to form a discard pile.</li></ol></div>
+      </details>
+      <details>
+        <summary>Beginning the game</summary>
+        <div class="body"><ol><li>Choose a player to go first.</li><li>This player draws a Fruit card from the face-down draw pile.</li><li>If this Fruit is one in the player's Fruit Basket that he hasn't yet collected, he places the Fruit card face up in front of him.</li><li>The player chooses a Fruit card in his hand and passes it to the player to his right.</li></ol></div>
+      </details>
+      <details>
+        <summary>Subsequent turns</summary>
+        <div class="body"><p>Play continues with the next player to the right:</p><ol><li>This player receives the Fruit card passed by the previous player.</li><li>If this Fruit is one in the player's Fruit Basket that he hasn't yet collected, he places the Fruit card face up in front of him.</li><li>He chooses a Fruit card in his hand and places it face-up on the discard pile.</li><li>He then draws a Fruit card from the face-down draw pile.</li><li>If this Fruit is one in the player's Fruit Basket that he hasn't yet collected, he places the Fruit card face up in front of him.</li><li>The player chooses a Fruit card in his hand and passes it to the player to his right.</li></ol></div>
+      </details>
+      <details>
+        <summary>Winning the game</summary>
+        <div class="body"><ul>
                                 <li>A player wins when he has placed face-up in front of him one of each of the Fruit cards in his Fruit Basket.</li>
                                 <li>The player passes his remaining card to the player to his right and play continues with the remaining players until all have completed their Fruit Baskets.</li>
-                              </ul>
+                              </ul></div>
+      </details>
+    </div>
+  </div>
+</section>
 
-                            </div>
-                        </div>
-                        <a id="deck"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Cards</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>The <em>Fruity</em> deck is comprised of 54 cards:
-                                <ul>
-                                    <li>4 of each of the 9 Fruit cards (36 total)</li>
-                                    <li>12 unique Fruit Basket cards (12 total)</li>
-                                    <li>6 Turn Instruction cards (6 total)</li>
-                                </ul>
-                              </p>
-                              <h4>Fruit Cards</h4>
-                              <p>Each of the Fruit cards has the name of the fruit at the bottom of the card for the player to read, the name upside down at the top of the card for the other players to read, and an icon of a kind of fruit in the center of the card representing that fruit of the Spirit.</p>
-                              <img style="width: 30%;" src="../assets/FruityLove.webp" alt="Love Card">
-                              <img style="width: 30%;" src="../assets/FruityJoy.webp" alt="Joy Card">
-                              <img style="width: 30%;" src="../assets/FruityPeace.webp" alt="Peace Card">
-                              <img style="width: 30%;" src="../assets/FruityPatience.webp" alt="Patience Card">
-                              <img style="width: 30%;" src="../assets/FruityKindness.webp" alt="Kindness Card">
-                              <img style="width: 30%;" src="../assets/FruityGoodness.webp" alt="Goodness Card">
-                              <img style="width: 30%;" src="../assets/FruityFaithfulness.webp" alt="Faithfulness Card">
-                              <img style="width: 30%;" src="../assets/FruityGentleness.webp" alt="Gentleness Card">
-                              <img style="width: 30%;" src="../assets/FruitySelfControl.webp" alt="Self-Control Card">
-
-                              <h4>Fruit Basket Cards</h4>
-                              <p>Each Fruit Basket card has three fruit of the Spirit and their associated icons. Each player gets a Fruit Basket card and this determines which Fruit cards he is trying to collect.</p>
-                              <p><strong>Note:</strong> The initial printing of the game includes one Fruit Basket card that has the wrong symbol next to a fruit name. If a player has this Fruit Basket, they can complete the basket by either matching the word or the symbol.</p>
-
-                              <p>Here are a few examples:</p>
-                              <img style="width: 30%;" src="../assets/FruityBasket1.webp" alt="Fruit Basket Card">
-                              <img style="width: 30%;" src="../assets/FruityBasket4.webp" alt="Fruit Basket Card">
-                              <img style="width: 30%;" src="../assets/FruityBasket8.webp" alt="Fruit Basket Card">
-
-                              <h4>Turn Instruction Card</h4>
-                              <p>Each player is given an Instruction card, which shows in words and symbols, the actions they take, in order, on their turn.</p>
-                              <img style="width: 30%;" src="../assets/FruityInstructions.webp" alt="Instructions Card">
-
-
-
-                            </div>
-                        </div>
-                        <a id="example"></a>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                <strong>Example Game Play</strong>
-                            </div>
-                            <div class="card-body">
-                              <p>Below we walk through a game between three players, turn by turn. The different background colors will indicate the activities of each player.</p>
-                              <h5>Initial Deal:</h5>
-                              <p>At the beginning of the game, each player is given a Turn Instruction card and a Fruit Basket card, and is dealt three Fruit cards, as shown below.</p>
-                              <div style="background-color: #D79DE2; width: 100%">
-                                <strong>Player 1:</strong><br />
-                                <img style="width: 20%;" src="../assets/FruityBasket1.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityKindness.webp" alt="Fruit Card">
-                              </div>
-                              <div style="background-color: #A9DFBF; width: 100%">
-                                <strong>Player 2:</strong><br />
-                                <img style="width: 20%;" src="../assets/FruityBasket4.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityGoodness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                                <p>Faithfulness is one of the fruits in his basket, so Player 2 lays down the Faithfulness card in front of him.</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket4.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                              </div>
-                              <div style="background-color: #FAD7A0; width: 100%">
-                                <strong>Player 3:</strong><br />
-                                <img style="width: 20%;" src="../assets/FruityBasket8.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                              </div>
-                              <h5>Round 1:</h5>
-                              <div style="background-color: #D79DE2; width: 100%">
-                                <strong>Player 1:</strong><br />
-                                <p>Player 1 matching cards played face up: (none yet)</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket1.webp" alt="Fruit Basket Card">
-                                <p>Player 1 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityKindness.webp" alt="Fruit Card">
-                                <p>Player 1 draws Joy card</p>
-                                <p>Player 1 lays down Joy card in front of him.</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket1.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityJoy.webp" alt="Fruit Card">
-                                <p>Player 1 passes Patience card to Player 2.</p>
-                                <p>Player 1 hand at end of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityKindness.webp" alt="Fruit Card">
-                              </div>
-                              <div style="background-color: #A9DFBF; width: 100%">
-                                <strong>Player 2:</strong><br />
-                                <p>Player 2 matching cards played face up:</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket4.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <p>Player 2 receives Patience card from Player 1</p>
-                                <p>Player 2 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruityGoodness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <p>Player 2 discards Goodness card.</p>
-                                <p>Player 2 draws Faithfulness card.</p>
-                                <p>Player 2 lays down Patience card.</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket4.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <p>Player 2 passes Faithfulness card to Player 3.</p>
-                                <p>Player 2 hand at end of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                              </div>
-                              <div style="background-color: #FAD7A0; width: 100%">
-                                <strong>Player 3:</strong><br />
-                                <p>Player 3 matching cards played face up: (none yet)</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket8.webp" alt="Fruit Basket Card">
-                                <p>Player 3 receives Faithfulness card from Player 2.</p>
-                                <p>Player 3 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <p>Player 3 discards Patience card.</p>
-                                <p>Player 3 draws Self-Control card.</p>
-                                <p>Player 3 lays down Faithfulness card.</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket8.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <p>Player 3 passes the Gentleness card to Player 1.</p>
-                                <p>Player 3 hand at end of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                              </div>
-                              <h5>Round 2:</h5>
-                              <div style="background-color: #D79DE2; width: 100%">
-                                <strong>Player 1:</strong><br />
-                                <p>Player 1 matching cards played face up:</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket1.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityJoy.webp" alt="Fruit Card">
-                                <p>Player 1 receives Gentleness card from Player 3.</p>
-                                <p>Player 1 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityKindness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                                <p>Player 1 discards Kindness card</p>
-                                <p>Player 1 draws Love card</p>
-                                <p>Player 1 lays down Love card in front of him.</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket1.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityJoy.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityLove.webp" alt="Fruit Card">
-                                <p>Player 1 passes Self-Control card to Player 2.</p>
-                                <p>Player 1 hand at end of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                              </div>
-                              <div style="background-color: #A9DFBF; width: 100%">
-                                <strong>Player 2:</strong><br />
-                                <p>Player 2 matching cards played face up:</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket4.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <p>Player 2 receives Self-Control card from Player 1</p>
-                                <p>Player 2 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <p>Player 2 discards Gentleness card.</p>
-                                <p>Player 2 draws Joy card.</p>
-                                <p>Player 2 passes Joy card to Player 3.</p>
-                                <p>Player 2 hand at end of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                              </div>
-                              <div style="background-color: #FAD7A0; width: 100%">
-                                <strong>Player 3:</strong><br />
-                                <p>Player 3 matching cards played face up:</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket8.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <p>Player 3 receives Joy card from Player 2.</p>
-                                <p>Player 3 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityJoy.webp" alt="Fruit Card">
-                                <p>Player 3 discards Patience card.</p>
-                                <p>Player 3 draws Goodness card.</p>
-                                <p>Player 3 lays down Joy and Goodness cards.</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket8.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityJoy.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityGoodness.webp" alt="Fruit Card">
-                                <p><strong>Player 3 wins!</strong></p>
-                                <p>Player 3 passes the Self Control card to Player 1.</p>
-                              </div>
-                              <h5>Round 3:</h5>
-                              <div style="background-color: #D79DE2; width: 100%">
-                                <strong>Player 1:</strong><br />
-                                <p>Player 1 matching cards played face up:</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket1.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityJoy.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityLove.webp" alt="Fruit Card">
-                                <p>Player 1 receives Self-Control card from Player 3.</p>
-                                <p>Player 1 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <p>Player 1 discards Self Control card</p>
-                                <p>Player 1 draws Self Control card</p>
-                                <p>Player 1 passes Gentleness card to Player 2.</p>
-                                <p>Player 1 hand at end of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                              </div>
-                              <div style="background-color: #A9DFBF; width: 100%">
-                                <strong>Player 2:</strong><br />
-                                <p>Player 2 matching cards played face up:</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket4.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <p>Player 2 receives Gentleness card from Player 1</p>
-                                <p>Player 2 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                                <p>Player 2 discards Gentleness card.</p>
-                                <p>Player 2 draws Self-Control card.</p>
-                                <p>Player 2 passes Self-Control card to Player 1.</p>
-                                <p>Player 2 hand at end of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                              </div>
-                              <h5>Round 4:</h5>
-                              <div style="background-color: #D79DE2; width: 100%">
-                                <strong>Player 1:</strong><br />
-                                <p>Player 1 matching cards played face up:</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket1.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityJoy.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityLove.webp" alt="Fruit Card">
-                                <p>Player 1 receives Self-Control card from Player 2.</p>
-                                <p>Player 1 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <p>Player 1 discards Self Control card</p>
-                                <p>Player 1 draws Love card</p>
-                                <p>Player 1 passes Love card to Player 2.</p>
-                                <p>Player 1 hand at end of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                              </div>
-                              <div style="background-color: #A9DFBF; width: 100%">
-                                <strong>Player 2:</strong><br />
-                                <p>Player 2 matching cards played face up:</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket4.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <p>Player 2 receives Love card from Player 1</p>
-                                <p>Player 2 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityLove.webp" alt="Fruit Card">
-                                <p>Player 2 discards Self-Control card.</p>
-                                <p>Player 2 draws Gentleness card.</p>
-                                <p>Player 3 lays down Love card.</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket4.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityFaithfulness.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityPatience.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityLove.webp" alt="Fruit Card">
-                                <p><strong>Player 2 wins!</strong></p>
-                                <p>Player 2 passes Gentleness card to Player 1.</p>
-                              </div>
-                              <h5>Round 5:</h5>
-                              <div style="background-color: #D79DE2; width: 100%">
-                                <strong>Player 1:</strong><br />
-                                <p>Player 1 matching cards played face up:</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket1.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityJoy.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityLove.webp" alt="Fruit Card">
-                                <p>Player 1 receives Gentleness card from Player 2.</p>
-                                <p>Player 1 hand at start of turn:</p>
-                                <img style="width: 20%;" src="../assets/FruitySelfControl.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityGentleness.webp" alt="Fruit Card">
-                                <p>Player 1 discards Self-Control card</p>
-                                <p>Player 1 draws Peace card</p>
-                                <p>Player 1 lays down Peace card.</p>
-                                <img style="width: 20%;" src="../assets/FruityBasket1.webp" alt="Fruit Basket Card">
-                                <img style="width: 20%;" src="../assets/FruityJoy.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityLove.webp" alt="Fruit Card">
-                                <img style="width: 20%;" src="../assets/FruityPeace.webp" alt="Fruit Card">
-                                <p><strong>Player 1 wins!</strong></p>
-                              </div>
-                              <h5>Game Over!</h5>
-                            </div>
-                          </div>
-                        </div>
-
-                    </div>
-                </main>
-            </div>
+<!-- ============ EXAMPLE GAME ============ -->
+<section class="pp-band alt" id="example" aria-labelledby="example-h">
+  <div class="pp-wrap">
+    <h2 id="example-h">Example game</h2>
+    <p class="pp-lede">Below we walk through a game between three players, turn by turn. The different background colors will indicate the activities of each player.</p>
+    <div class="pp-acc fy-example">
+      <details open>
+        <summary>Initial Deal</summary>
+        <div class="body">
+<p>At the beginning of the game, each player is given a Turn Instruction card and a Fruit Basket card, and is dealt three Fruit cards, as shown below.</p>
+<div class="fy-player p1"><p class="fy-who">Player 1</p>
+<div class="fy-cards"><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Player 1's Fruit Basket card" /><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /><img src="../assets/fruity/kindness-320.webp" width="320" height="481" loading="lazy" alt="Kindness card" /></div></div>
+<div class="fy-player p2"><p class="fy-who">Player 2</p>
+<div class="fy-cards"><img src="../assets/fruity/basket4-320.webp" width="320" height="481" loading="lazy" alt="Player 2's Fruit Basket card" /><img src="../assets/fruity/goodness-320.webp" width="320" height="481" loading="lazy" alt="Goodness card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /></div>
+<p>Faithfulness is one of the fruits in his basket, so Player 2 lays down the Faithfulness card in front of him.</p>
+<div class="fy-cards"><img src="../assets/fruity/basket4-320.webp" width="320" height="481" loading="lazy" alt="Player 2's Fruit Basket card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /></div></div>
+<div class="fy-player p3"><p class="fy-who">Player 3</p>
+<div class="fy-cards"><img src="../assets/fruity/basket8-320.webp" width="320" height="481" loading="lazy" alt="Player 3's Fruit Basket card" /><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /></div></div>
         </div>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2024</span> SDG Strategy, LLC | To God be the glory</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <!-- Core theme JS-->
-        <script src="../js/scripts.js"></script>
+      </details>
+      <details>
+        <summary>Round 1</summary>
+        <div class="body">
 
+<div class="fy-player p1"><p class="fy-who">Player 1</p>
+<p>Player 1 matching cards played face up: (none yet)</p>
+<div class="fy-cards"><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Player 1's Fruit Basket card" /></div>
+<p>Player 1 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /><img src="../assets/fruity/kindness-320.webp" width="320" height="481" loading="lazy" alt="Kindness card" /></div>
+<p>Player 1 draws Joy card</p>
+<p>Player 1 lays down Joy card in front of him.</p>
+<div class="fy-cards"><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Player 1's Fruit Basket card" /><img src="../assets/fruity/joy-320.webp" width="320" height="481" loading="lazy" alt="Joy card" /></div>
+<p>Player 1 passes Patience card to Player 2.</p>
+<p>Player 1 hand at end of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /><img src="../assets/fruity/kindness-320.webp" width="320" height="481" loading="lazy" alt="Kindness card" /></div></div>
+<div class="fy-player p2"><p class="fy-who">Player 2</p>
+<p>Player 2 matching cards played face up:</p>
+<div class="fy-cards"><img src="../assets/fruity/basket4-320.webp" width="320" height="481" loading="lazy" alt="Player 2's Fruit Basket card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /></div>
+<p>Player 2 receives Patience card from Player 1</p>
+<p>Player 2 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/goodness-320.webp" width="320" height="481" loading="lazy" alt="Goodness card" /><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /></div>
+<p>Player 2 discards Goodness card.</p>
+<p>Player 2 draws Faithfulness card.</p>
+<p>Player 2 lays down Patience card.</p>
+<div class="fy-cards"><img src="../assets/fruity/basket4-320.webp" width="320" height="481" loading="lazy" alt="Player 2's Fruit Basket card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /></div>
+<p>Player 2 passes Faithfulness card to Player 3.</p>
+<p>Player 2 hand at end of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /></div></div>
+<div class="fy-player p3"><p class="fy-who">Player 3</p>
+<p>Player 3 matching cards played face up: (none yet)</p>
+<div class="fy-cards"><img src="../assets/fruity/basket8-320.webp" width="320" height="481" loading="lazy" alt="Player 3's Fruit Basket card" /></div>
+<p>Player 3 receives Faithfulness card from Player 2.</p>
+<p>Player 3 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /></div>
+<p>Player 3 discards Patience card.</p>
+<p>Player 3 draws Self-Control card.</p>
+<p>Player 3 lays down Faithfulness card.</p>
+<div class="fy-cards"><img src="../assets/fruity/basket8-320.webp" width="320" height="481" loading="lazy" alt="Player 3's Fruit Basket card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /></div>
+<p>Player 3 passes the Gentleness card to Player 1.</p>
+<p>Player 3 hand at end of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /></div></div>
+        </div>
+      </details>
+      <details>
+        <summary>Round 2</summary>
+        <div class="body">
+
+<div class="fy-player p1"><p class="fy-who">Player 1</p>
+<p>Player 1 matching cards played face up:</p>
+<div class="fy-cards"><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Player 1's Fruit Basket card" /><img src="../assets/fruity/joy-320.webp" width="320" height="481" loading="lazy" alt="Joy card" /></div>
+<p>Player 1 receives Gentleness card from Player 3.</p>
+<p>Player 1 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /><img src="../assets/fruity/kindness-320.webp" width="320" height="481" loading="lazy" alt="Kindness card" /><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /></div>
+<p>Player 1 discards Kindness card</p>
+<p>Player 1 draws Love card</p>
+<p>Player 1 lays down Love card in front of him.</p>
+<div class="fy-cards"><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Player 1's Fruit Basket card" /><img src="../assets/fruity/joy-320.webp" width="320" height="481" loading="lazy" alt="Joy card" /><img src="../assets/fruity/love-320.webp" width="320" height="481" loading="lazy" alt="Love card" /></div>
+<p>Player 1 passes Self-Control card to Player 2.</p>
+<p>Player 1 hand at end of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /></div></div>
+<div class="fy-player p2"><p class="fy-who">Player 2</p>
+<p>Player 2 matching cards played face up:</p>
+<div class="fy-cards"><img src="../assets/fruity/basket4-320.webp" width="320" height="481" loading="lazy" alt="Player 2's Fruit Basket card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /></div>
+<p>Player 2 receives Self-Control card from Player 1</p>
+<p>Player 2 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /></div>
+<p>Player 2 discards Gentleness card.</p>
+<p>Player 2 draws Joy card.</p>
+<p>Player 2 passes Joy card to Player 3.</p>
+<p>Player 2 hand at end of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /></div></div>
+<div class="fy-player p3"><p class="fy-who">Player 3</p>
+<p>Player 3 matching cards played face up:</p>
+<div class="fy-cards"><img src="../assets/fruity/basket8-320.webp" width="320" height="481" loading="lazy" alt="Player 3's Fruit Basket card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /></div>
+<p>Player 3 receives Joy card from Player 2.</p>
+<p>Player 3 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /><img src="../assets/fruity/joy-320.webp" width="320" height="481" loading="lazy" alt="Joy card" /></div>
+<p>Player 3 discards Patience card.</p>
+<p>Player 3 draws Goodness card.</p>
+<p>Player 3 lays down Joy and Goodness cards.</p>
+<div class="fy-cards"><img src="../assets/fruity/basket8-320.webp" width="320" height="481" loading="lazy" alt="Player 3's Fruit Basket card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /><img src="../assets/fruity/joy-320.webp" width="320" height="481" loading="lazy" alt="Joy card" /><img src="../assets/fruity/goodness-320.webp" width="320" height="481" loading="lazy" alt="Goodness card" /></div>
+<p><strong>Player 3 wins!</strong></p>
+<p>Player 3 passes the Self Control card to Player 1.</p></div>
+        </div>
+      </details>
+      <details>
+        <summary>Round 3</summary>
+        <div class="body">
+
+<div class="fy-player p1"><p class="fy-who">Player 1</p>
+<p>Player 1 matching cards played face up:</p>
+<div class="fy-cards"><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Player 1's Fruit Basket card" /><img src="../assets/fruity/joy-320.webp" width="320" height="481" loading="lazy" alt="Joy card" /><img src="../assets/fruity/love-320.webp" width="320" height="481" loading="lazy" alt="Love card" /></div>
+<p>Player 1 receives Self-Control card from Player 3.</p>
+<p>Player 1 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /></div>
+<p>Player 1 discards Self Control card</p>
+<p>Player 1 draws Self Control card</p>
+<p>Player 1 passes Gentleness card to Player 2.</p>
+<p>Player 1 hand at end of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /></div></div>
+<div class="fy-player p2"><p class="fy-who">Player 2</p>
+<p>Player 2 matching cards played face up:</p>
+<div class="fy-cards"><img src="../assets/fruity/basket4-320.webp" width="320" height="481" loading="lazy" alt="Player 2's Fruit Basket card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /></div>
+<p>Player 2 receives Gentleness card from Player 1</p>
+<p>Player 2 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /></div>
+<p>Player 2 discards Gentleness card.</p>
+<p>Player 2 draws Self-Control card.</p>
+<p>Player 2 passes Self-Control card to Player 1.</p>
+<p>Player 2 hand at end of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /></div></div>
+        </div>
+      </details>
+      <details>
+        <summary>Round 4</summary>
+        <div class="body">
+
+<div class="fy-player p1"><p class="fy-who">Player 1</p>
+<p>Player 1 matching cards played face up:</p>
+<div class="fy-cards"><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Player 1's Fruit Basket card" /><img src="../assets/fruity/joy-320.webp" width="320" height="481" loading="lazy" alt="Joy card" /><img src="../assets/fruity/love-320.webp" width="320" height="481" loading="lazy" alt="Love card" /></div>
+<p>Player 1 receives Self-Control card from Player 2.</p>
+<p>Player 1 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /></div>
+<p>Player 1 discards Self Control card</p>
+<p>Player 1 draws Love card</p>
+<p>Player 1 passes Love card to Player 2.</p>
+<p>Player 1 hand at end of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /></div></div>
+<div class="fy-player p2"><p class="fy-who">Player 2</p>
+<p>Player 2 matching cards played face up:</p>
+<div class="fy-cards"><img src="../assets/fruity/basket4-320.webp" width="320" height="481" loading="lazy" alt="Player 2's Fruit Basket card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /></div>
+<p>Player 2 receives Love card from Player 1</p>
+<p>Player 2 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /><img src="../assets/fruity/love-320.webp" width="320" height="481" loading="lazy" alt="Love card" /></div>
+<p>Player 2 discards Self-Control card.</p>
+<p>Player 2 draws Gentleness card.</p>
+<p>Player 2 lays down Love card.</p>
+<div class="fy-cards"><img src="../assets/fruity/basket4-320.webp" width="320" height="481" loading="lazy" alt="Player 2's Fruit Basket card" /><img src="../assets/fruity/faithfulness-320.webp" width="320" height="481" loading="lazy" alt="Faithfulness card" /><img src="../assets/fruity/patience-320.webp" width="320" height="481" loading="lazy" alt="Patience card" /><img src="../assets/fruity/love-320.webp" width="320" height="481" loading="lazy" alt="Love card" /></div>
+<p><strong>Player 2 wins!</strong></p>
+<p>Player 2 passes Gentleness card to Player 1.</p></div>
+        </div>
+      </details>
+      <details>
+        <summary>Round 5</summary>
+        <div class="body">
+
+<div class="fy-player p1"><p class="fy-who">Player 1</p>
+<p>Player 1 matching cards played face up:</p>
+<div class="fy-cards"><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Player 1's Fruit Basket card" /><img src="../assets/fruity/joy-320.webp" width="320" height="481" loading="lazy" alt="Joy card" /><img src="../assets/fruity/love-320.webp" width="320" height="481" loading="lazy" alt="Love card" /></div>
+<p>Player 1 receives Gentleness card from Player 2.</p>
+<p>Player 1 hand at start of turn:</p>
+<div class="fy-cards"><img src="../assets/fruity/selfcontrol-320.webp" width="320" height="481" loading="lazy" alt="Self-Control card" /><img src="../assets/fruity/gentleness-320.webp" width="320" height="481" loading="lazy" alt="Gentleness card" /></div>
+<p>Player 1 discards Self-Control card</p>
+<p>Player 1 draws Peace card</p>
+<p>Player 1 lays down Peace card.</p>
+<div class="fy-cards"><img src="../assets/fruity/basket1-320.webp" width="320" height="481" loading="lazy" alt="Player 1's Fruit Basket card" /><img src="../assets/fruity/joy-320.webp" width="320" height="481" loading="lazy" alt="Joy card" /><img src="../assets/fruity/love-320.webp" width="320" height="481" loading="lazy" alt="Love card" /><img src="../assets/fruity/peace-320.webp" width="320" height="481" loading="lazy" alt="Peace card" /></div>
+<p><strong>Player 1 wins!</strong></p></div>
+        </div>
+      </details>
+      <details>
+        <summary>Game over!</summary>
+        <div class="body"><p>All three players have filled their baskets: Player 3 won in round 2, Player 2 in round 4 and Player 1 in round 5.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GET THE GAME ============ -->
+<section class="pp-cta" id="buy" aria-labelledby="buy-h">
+  <div class="pp-wrap">
+    <h2 id="buy-h">Get Fruity</h2>
+    <p><strong>$12.99</strong> &middot; Orders ship from the SDG Biblical Wisdom shop.</p>
+    <div class="fy-buy-row">
+      <div class="pp-shopify" data-state="live"></div>
+    </div>
+  </div>
+</section>
+</main>
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+<div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class='current-year'>2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- Core theme JS-->
+<script src="../js/scripts.js"></script>
+<!-- ===== Page settings ===== -->
+<script>
+window.SDG_PRODUCT = {
+  // On sale now: the Shopify product id below turns each ".pp-shopify" spot into a buy button.
+  productId: '8739650830485',
+  buttonText: 'Buy Fruity',
+};
+</script>
+<script src="../js/product-core.js?v=20261026"></script>
+<script src="../js/product-page.js?v=20261026"></script>
 <!-- Default Statcounter code for SDG Games
 https://sdggames.fun -->
 <script type="text/javascript">
@@ -622,5 +465,5 @@ src="https://c.statcounter.com/13364187/0/487bfc6e/1/"
 alt="Web Analytics Made Easy - Statcounter"
 referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
 <!-- End of Statcounter Code -->
-    </body>
+</body>
 </html>

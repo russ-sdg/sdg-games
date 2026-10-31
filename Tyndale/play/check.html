@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>Tyndale board check</title>
+<style>body{font-family:system-ui,sans-serif;margin:1rem;max-width:900px}svg{width:100%;height:auto;border:1px solid #888}
+text{font-family:system-ui,sans-serif;text-anchor:middle;dominant-baseline:central}li{margin:.2rem 0}</style></head>
+<body><h1>Tyndale board data check</h1>
+<p>Each point on the board is marked with what the game believes about it. Please look for any that are wrong.
+<b>Red ring</b> = red land point, <b>blue ring</b> = blue land point, <b>grey</b> = water. A <b>gold square with a name</b> = Printing Centre.
+A <b>green number</b> = Coastal City and its distance to London (moves). Coordinates run A–K across and 1–11 down.</p>
+<svg id="b" viewBox="0 0 800 800"></svg>
+<h2>Lists to check</h2><div id="lists"></div>
+<script type="module">
+import { POINTS, PX, COLS } from './js/board-data.js';
+const svg = document.getElementById('b'), NS = 'http://www.w3.org/2000/svg';
+const mk = (t, a, tx) => { const n = document.createElementNS(NS, t); for (const k in a) n.setAttribute(k, a[k]); if (tx !== undefined) n.textContent = tx; svg.appendChild(n); return n; };
+mk('image', { href: '../../assets/tyndale/board.webp', width: 800, height: 800 });
+const col = { red: '#d00000', blue: '#0050ff', water: '#777' };
+for (const p of POINTS) {
+  const c = COLS.indexOf(p.id[0]), r = Number(p.id.slice(1)) - 1, x = PX[c], y = PX[r];
+  mk('circle', { cx: x, cy: y, r: 10, fill: 'none', stroke: col[p.kind], 'stroke-width': 3 });
+  if (p.centre) { mk('rect', { x: x - 20, y: y - 20, width: 40, height: 40, fill: 'none', stroke: '#e0a800', 'stroke-width': 4 }); mk('text', { x, y: y + 31, 'font-size': 12, 'font-weight': 700, fill: '#000', stroke: '#fff', 'stroke-width': 3, 'paint-order': 'stroke' }, p.centre); }
+  if (p.coast !== null) mk('text', { x: x + 16, y: y - 16, 'font-size': 15, 'font-weight': 800, fill: '#0a7a2f', stroke: '#fff', 'stroke-width': 3, 'paint-order': 'stroke' }, p.coast >= 11 ? '>10' : p.coast);
+  mk('text', { x: x - 14, y: y - 15, 'font-size': 8, fill: '#000', stroke: '#fff', 'stroke-width': 2, 'paint-order': 'stroke' }, p.id);
+}
+const L = document.getElementById('lists');
+const cs = POINTS.filter((p) => p.centre), co = POINTS.filter((p) => p.coast !== null);
+L.innerHTML = `<h3>Printing Centres (${cs.length})</h3><ul>${cs.map((p) => `<li>${p.centre}: ${p.id}</li>`).join('')}</ul>
+<h3>Coastal Cities (${co.length}) and distance to London</h3><ul>${co.map((p) => `<li>${p.id}: ${p.coast >= 11 ? '>10' : p.coast}${p.centre ? ' (' + p.centre + ')' : ''}</li>`).join('')}</ul>`;
+<!-- Default Statcounter code for SDG Games
+https://sdggames.fun -->
+<script type="text/javascript">
+var sc_project=13364187;
+var sc_invisible=1;
+var sc_security="487bfc6e";
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics
+Made Easy - Statcounter" href="https://statcounter.com/"
+target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/13364187/0/487bfc6e/1/"
+alt="Web Analytics Made Easy - Statcounter"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+</script></body></html>

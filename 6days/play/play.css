@@ -1,0 +1,87 @@
+/* Six Days: play online */
+.sp { --gold: #f3c24b; --pick: #0a7a8f; --ink: #24304f; max-width: 1100px; margin: 0 auto; }
+.sp-name { font: 800 1.6rem/1 Georgia, serif; color: var(--ink); text-decoration: none; }
+.sp-h { font-size: 1.05rem; font-weight: 800; margin: .9rem 0 .4rem; }
+.sp-card { background: #fff; border: 1px solid #dee2e6; border-radius: .6rem; padding: .7rem .85rem; }
+
+[hidden] { display: none !important; }
+
+/* the scores */
+.sp-bar { display: flex; flex-wrap: wrap; gap: .4rem; position: sticky; top: 0; z-index: 30; padding: .45rem 0; background: #f0f2f5; }
+.sp-score { display: flex; align-items: baseline; gap: .45rem; padding: .3rem .7rem; border: 2px solid #ced4da; border-radius: .6rem; background: #fff; }
+.sp-score .n { font-weight: 700; } .sp-score .pts { font-size: 1.15rem; font-weight: 800; }
+.sp-score.is-turn { border-color: var(--gold); background: #fff9e6; }
+.sp-round { margin-left: auto; align-self: center; font-size: .85rem; color: #5c636a; text-align: right; }
+
+/* the six stacks */
+.sp-days { display: grid; gap: .5rem; }
+.sp-day { display: block; width: 100%; text-align: left; background: #fff; border: 3px solid #dee2e6; border-left: 10px solid var(--d); border-radius: .6rem; padding: .4rem .6rem; position: relative; }
+.sp-day.is-off { opacity: .55; }
+.sp-day-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .15rem .6rem; font-weight: 700; }
+.sp-day-head .num { color: var(--d); font-size: 1.1rem; }
+.sp-day-head .state { font-size: .8rem; font-weight: 600; color: #5c636a; margin-left: auto; }
+.sp-day-head .state.ok { color: #198754; }
+.sp-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(7.4rem, 1fr)); gap: .4rem .5rem; margin-top: .3rem; }
+.sp-c { margin: 0; text-align: center; }
+.sp-c img { width: 100%; height: auto; aspect-ratio: 1120 / 820; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,.4); cursor: zoom-in; background: #fff; display: block; }
+.sp-c figcaption { font-size: .78rem; font-weight: 700; line-height: 1.15; margin-top: .15rem; }
+.sp-c.em img { outline: 3px solid var(--d); }
+.sp-cards .empty { color: #868e96; font-size: .85rem; grid-column: 1 / -1; }
+.sp-day.is-target { border-color: var(--pick); box-shadow: 0 0 0 3px rgba(10,122,143,.35); cursor: pointer; }
+.sp-day.is-target:hover { background: #effafc; }
+.sp-day.is-flash { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold); }
+.sp-badge { position: absolute; right: .5rem; bottom: .4rem; background: var(--pick); color: #fff; border-radius: 1rem; padding: .05rem .6rem; font-weight: 800; font-size: .85rem; }
+
+/* the piles */
+.sp-piles { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; }
+.sp-pile { position: relative; background: #fff; border: 3px solid #dee2e6; border-radius: .6rem; padding: .3rem; text-align: center; min-height: 5.5rem; }
+.sp-pile .lbl { font-size: .72rem; font-weight: 700; color: #5c636a; display: block; }
+.sp-pile .cap { display: block; font-size: .78rem; font-weight: 700; line-height: 1.15; margin-top: .2rem; }
+.sp-zoombtn, .sp-hc .sp-zoombtn { position: absolute; right: .3rem; width: 1.9rem; height: 1.9rem; display: grid; place-items: center; background: rgba(36,48,79,.88); color: #fff; border-radius: 50%; font-size: 1.1rem; line-height: 1; cursor: zoom-in; }
+.sp-pile .sp-zoombtn { top: 1.3rem; }
+.sp-hc .sp-zoombtn { top: .3rem; }
+.sp-pile img { width: 100%; height: auto; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+.sp-pile .back { aspect-ratio: 1120 / 820; display: grid; place-items: center; }
+.sp-pile .back img { width: 73%; transform: rotate(90deg); aspect-ratio: auto; }
+.sp-pile .count { position: absolute; top: 1.2rem; left: .3rem; background: rgba(36,48,79,.9); color: #fff; border-radius: 1rem; padding: 0 .45rem; font-size: .75rem; font-weight: 800; }
+.sp-pile .gone { color: #868e96; font-size: .8rem; padding-top: 1rem; display: block; }
+.sp-pile.is-target { border-color: var(--pick); box-shadow: 0 0 0 3px rgba(10,122,143,.35); cursor: pointer; }
+.sp-pile.is-flash { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold); }
+button.sp-pile:disabled { opacity: 1; }
+
+/* your hand: gold = just drawn, teal = the card you picked */
+.sp-hand { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .5rem; }
+.sp-hc { position: relative; padding: 0; border: 3px solid #adb5bd; border-radius: 10px; background: #fff; overflow: hidden; }
+.sp-hc img { width: 100%; height: auto; display: block; aspect-ratio: 1120 / 820; }
+.sp-hc .cap { display: block; font-size: .78rem; font-weight: 700; padding: .1rem .2rem; text-align: center; }
+.sp-hc.is-new { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold); }
+.sp-hc .new { position: absolute; top: 0; left: 0; background: var(--gold); color: #3a2f08; font-size: .65rem; font-weight: 800; padding: 0 .35rem; border-radius: 0 0 8px 0; }
+.sp-hc.is-sel { border-color: var(--pick); box-shadow: 0 0 0 4px var(--pick); transform: translateY(-4px); }
+.sp-hc.is-sel::after { content: 'Picked'; position: absolute; left: 50%; bottom: 1.5rem; transform: translateX(-50%); background: var(--pick); color: #fff; font-size: .65rem; font-weight: 800; padding: 0 .4rem; border-radius: 4px; }
+.sp-hc.is-wait { opacity: .7; }
+
+.sp-log { margin: 0; padding-left: 1.2rem; font-size: .88rem; display: flex; flex-direction: column-reverse; }
+.sp-log li.me { font-weight: 700; }
+
+/* what to do next, pinned to the foot of the screen */
+.sp-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: #fffdf5; border-top: 3px solid #198754; box-shadow: 0 -6px 18px rgba(0,0,0,.25); padding: .5rem .8rem calc(.5rem + env(safe-area-inset-bottom)); }
+.sp-dock[hidden] { display: none; }
+.sp-dock-main { display: flex; flex-wrap: wrap; gap: .4rem .8rem; align-items: center; max-width: 1100px; margin: 0 auto; }
+.sp-dock-text { margin: 0; font-weight: 700; flex: 1 1 16rem; }
+.sp-dock-text small { display: block; font-weight: 500; }
+.sp-dock-actions { display: flex; gap: .4rem; flex: 0 0 auto; }
+body.has-dock { padding-bottom: 8rem; }
+
+.sp-dialog { border: 0; border-radius: .8rem; max-width: min(92vw, 34rem); padding: 1rem 1.2rem; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+.sp-dialog::backdrop { background: rgba(0,0,0,.5); }
+.sp-dialog img { width: 100%; height: auto; border-radius: .5rem; margin-bottom: .5rem; }
+.sp-final-row { display: flex; justify-content: space-between; padding: .25rem 0; border-bottom: 1px solid #e9ecef; }
+.sp-final-row.win { font-weight: 800; color: #0f5132; }
+
+@media (max-width: 575px) { .sp-piles { grid-template-columns: repeat(2, 1fr); } .sp-cards { grid-template-columns: repeat(3, 1fr); } }
+@media (prefers-reduced-motion: no-preference) { .sp-hc, .sp-day, .sp-pile { transition: box-shadow .15s, transform .15s; } }
+
+.sp-wide { max-width: min(94vw, 40rem); max-height: 92vh; overflow: auto; }
+.sp-share-preview { width: 100%; height: auto; border-radius: .6rem; box-shadow: 0 2px 10px rgba(0,0,0,.3); display: block; }
+
+.sp-hidden { margin: 0; padding: 1.2rem .8rem; text-align: center; color: #5c636a; background: rgba(255,255,255,.6); border: 2px dashed #adb5bd; border-radius: .6rem; grid-column: 1 / -1; }
