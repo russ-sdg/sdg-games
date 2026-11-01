@@ -103,3 +103,5 @@ body.has-dock { padding-bottom: 8rem; }
 /* card names, in the colors printed on the cards */
 .g-prophets { color: var(--prophet); } .g-israel { color: var(--israel); } .g-judah { color: var(--judah); } .g-gentile { color: var(--gentile); }
 .g-prophets, .g-israel, .g-judah, .g-gentile { font-weight: 700; }
+
+.pk-share-preview { width: 100%; height: auto; border-radius: .6rem; box-shadow: 0 2px 10px rgba(0,0,0,.3); display: block; }
