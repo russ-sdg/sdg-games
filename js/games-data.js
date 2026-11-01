@@ -28,7 +28,7 @@
       blurb: 'Follow Biblical characters through Jesus’ final days in Jerusalem and complete their journeys to score.', facts: ['2–6 players', 'Ages 12+', '15–30 min'] },
     { slug: 'journeys-with-jesus', title: 'Journeys with Jesus', tags: ['Board game'], art: 'jwj', artAlt: 'Journeys with Jesus game art', price: '34.99', online: 'journeys-with-jesus/play/',
       blurb: 'Travel with Jesus through the gospels, learning their geography and memorizing Scripture along the way.', facts: ['Up to 4 players', 'Ages 12+', '15–30 min'] },
-    { slug: 'pk', title: 'Prophets & Kings', tags: ['Card game'], art: 'pk', artAlt: 'A crown and a scroll', price: '19.99',
+    { slug: 'pk', title: 'Prophets & Kings', tags: ['Card game'], art: 'pk', artAlt: 'A crown and a scroll', price: '19.99', online: 'pk/play/',
       blurb: 'Build sets that match each Old Testament prophet with the kings of his day, or each king with his prophets.', facts: ['1\u20136 players', 'Ages 12+', '15\u201330 min'] },
     { slug: 'roman-catacombs', title: 'Roman Catacombs', tags: ['Flip-and-write'], art: 'catacombs', artAlt: 'A figure with raised arms painted in a Roman catacomb', price: '34.99', online: 'roman-catacombs/play/',
       blurb: 'Be the librarian of a church in the catacombs of Rome and build a library of Scripture in canon order.', facts: ['1–6 players', 'Ages 12+', '15–30 min'] },

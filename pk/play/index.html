@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Play Prophets & Kings online, free: build sets that match each Old Testament prophet with the kings of his day, against 1 to 5 computer players." />
+    <title>Play Prophets &amp; Kings Online - SDG Games</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="play.css?v=20261101" rel="stylesheet" />
+</head>
+<body class="sb-nav-fixed">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
+
+    <main class="pk container-fluid px-3 pb-5">
+        <div class="pk-title d-flex flex-wrap align-items-center gap-3 py-3">
+            <a href="../index.html" class="pk-name">Prophets &amp; Kings</a>
+            <span class="badge text-bg-secondary">Play online</span>
+            <a class="ms-auto small" href="../index.html">About the game</a> <a class="small" href="../scorepad.html">Scorepad</a>
+        </div>
+
+        <!-- ================= SETUP ================= -->
+        <section id="setup" aria-labelledby="setup-title">
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card shadow-sm"><div class="card-body">
+                        <h1 class="h3" id="setup-title">New game</h1>
+                        <div id="resume" class="alert alert-info d-flex flex-wrap align-items-center gap-2" hidden>
+                            <span id="resume-text">You have a game in progress.</span>
+                            <button type="button" class="btn btn-sm btn-primary" id="resume-btn">Resume</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="discard-btn">Discard it</button>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-6"><label class="form-label" for="bot-count">Computer players</label>
+                                <select class="form-select" id="bot-count"><option value="1">1 opponent</option><option value="2" selected>2 opponents</option><option value="3">3 opponents</option><option value="4">4 opponents</option><option value="5">5 opponents</option></select></div>
+                            <div class="col-sm-6"><label class="form-label" for="bot-skill">How well do they play?</label>
+                                <select class="form-select" id="bot-skill"><option value="casual">Casual</option><option value="steady" selected>Steady</option><option value="sharp">Sharp</option><option value="mixed">A mix</option></select></div>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-lg" id="start-btn">Start the game</button>
+                    </div></div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card shadow-sm"><div class="card-body small">
+                        <h2 class="h6">How it works</h2>
+                        <p>Match each <b>prophet</b> with the <b>kings</b> who reigned while he prophesied (or each king with his prophets). The longer the set, the more it scores. Every card says who it matches at the bottom; tap a card's magnifier to read it.</p>
+                        <ul>
+                            <li><b>Draw</b> until you hold 7 cards. Take from the draw pile, the top of any discard pile, or blindly from another player's hand, in any mix.</li>
+                            <li><b>Play</b> a prophet with a matching king to start a set, and add more matching cards to your sets (no card of the same name twice in a set).</li>
+                            <li><b>Discard</b> down to 5, which ends your turn.</li>
+                            <li>The game ends when the last card is taken from the draw pile. Sets score <b>2 / 5 / 10 / 25 / 50 / 100</b> points for 2 / 3 / 4 / 5 / 6 / 7 cards.</li>
+                        </ul>
+                        <p class="mb-0"><a href="../index.html#play-h">Read the full rules</a></p>
+                    </div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= GAME ================= -->
+        <section id="game" hidden aria-label="Game">
+            <div class="pk-bar" id="bar"></div>
+            <div id="opps" class="pk-opps"></div>
+            <h2 class="pk-h">The table</h2>
+            <div class="pk-table" id="table"></div>
+            <h2 class="pk-h">Your sets</h2>
+            <div class="pk-sets" id="mine"></div>
+            <h2 class="pk-h d-flex flex-wrap align-items-baseline gap-3">Your hand <label class="pk-hint small fw-normal"><input type="checkbox" id="hints" checked /> Highlight cards that can be played</label></h2>
+            <div class="pk-hand" id="hand"></div>
+            <div class="pk-card mt-3"><h2 class="pk-h">What happened</h2><ol class="pk-log" id="log"></ol></div>
+            <p class="mt-3"><button type="button" class="btn btn-outline-secondary btn-sm" id="menu-btn">New game</button></p>
+        </section>
+    </main>
+
+    <!-- what to do next, pinned to the foot of the screen -->
+    <div class="pk-dock" id="dock" hidden>
+        <div class="pk-dock-main"><p class="pk-dock-text" id="status" role="status" aria-live="polite"></p><div class="pk-dock-actions" id="actions"></div></div>
+    </div>
+
+    <dialog id="zoom" class="pk-dialog"><form method="dialog"><img id="zoom-img" alt="" /><p id="zoom-cap" class="small mb-2"></p><button value="close" class="btn btn-outline-secondary btn-sm">Close</button></form></dialog>
+    <dialog id="pick" class="pk-dialog" aria-labelledby="pick-title">
+        <form method="dialog">
+            <h2 class="h6" id="pick-title"></h2>
+            <p class="small mb-2">Which card goes on top? Every other card in the set has to match it.</p>
+            <div class="pk-pick" id="pick-body"></div>
+            <button value="cancel" class="btn btn-outline-secondary btn-sm mt-2">Cancel</button>
+        </form>
+    </dialog>
+    <dialog id="final" class="pk-dialog pk-wide" aria-labelledby="final-title">
+        <form method="dialog">
+            <h2 class="h5" id="final-title"></h2>
+            <div id="final-body"></div>
+            <div class="d-flex flex-wrap gap-2 mt-3"><button value="again" class="btn btn-primary" id="final-again">New game</button><button value="close" class="btn btn-outline-secondary">Close</button></div>
+        </form>
+    </dialog>
+
+    <footer class="py-5 bg-dark">
+        <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class="current-year">2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../../js/scripts.js"></script>
+    <script type="module" src="js/app.js?v=20261101"></script>
+<!-- Default Statcounter code for SDG Games
+https://sdggames.fun -->
+<script type="text/javascript">
+var sc_project=13364187;
+var sc_invisible=1;
+var sc_security="487bfc6e";
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics
+Made Easy - Statcounter" href="https://statcounter.com/"
+target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/13364187/0/487bfc6e/1/"
+alt="Web Analytics Made Easy - Statcounter"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+</body>
+</html>

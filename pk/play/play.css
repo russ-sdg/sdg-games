@@ -1,0 +1,105 @@
+/* Prophets & Kings: play online */
+.pk { --gold: #f0c45e; --pick: #0a7a8f; --ink: #2a1840; --prophet: #c00000; --israel: #2233cc; --judah: #4f8a3a; --gentile: #6a1b8a; --cw: clamp(88px, 21vw, 140px); max-width: 1200px; margin: 0 auto; }
+.pk-name { font: 800 1.6rem/1 Georgia, serif; color: var(--ink); text-decoration: none; }
+.pk-h { font-size: 1.05rem; font-weight: 800; margin: 1rem 0 .4rem; }
+.pk-card { background: #fff; border: 1px solid #dee2e6; border-radius: .6rem; padding: .7rem .85rem; }
+.pk-hint input { margin-right: .25rem; }
+[hidden] { display: none !important; }
+
+/* the scores */
+.pk-bar { display: flex; flex-wrap: wrap; gap: .4rem; position: sticky; top: 0; z-index: 30; padding: .45rem 0; background: #f0f2f5; }
+.pk-score { display: flex; align-items: baseline; gap: .45rem; padding: .3rem .7rem; border: 2px solid #ced4da; border-radius: .6rem; background: #fff; }
+.pk-score .n { font-weight: 700; } .pk-score .pts { font-size: 1.15rem; font-weight: 800; }
+.pk-score.is-turn { border-color: var(--gold); background: #fff9e6; }
+.pk-round { margin-left: auto; align-self: center; font-size: .85rem; color: #5c636a; text-align: right; }
+
+/* the other players */
+.pk-opps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: .6rem; }
+.pk-opp { background: #fff; border: 3px solid #dee2e6; border-radius: .6rem; padding: .45rem .6rem; }
+.pk-opp.is-turn { border-color: var(--gold); }
+.pk-opp-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .1rem .6rem; font-weight: 700; }
+.pk-opp-head .meta { font-size: .8rem; font-weight: 600; color: #5c636a; margin-left: auto; }
+.pk-fan { display: flex; margin: .35rem 0; min-height: 3.6rem; }
+.pk-fan img { width: 2.6rem; height: auto; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.45); margin-right: -1.5rem; }
+.pk-fan .none { color: #868e96; font-size: .85rem; align-self: center; }
+.pk-opp .seen { font-size: .78rem; color: #495057; margin: 0 0 .3rem; }
+.pk-opp .none { font-size: .82rem; color: #868e96; }
+
+/* the draw pile and the four discard piles */
+.pk-table { display: grid; grid-template-columns: repeat(5, 1fr); gap: .5rem; max-width: 46rem; }
+.pk-pile { position: relative; background: #fff; border: 3px solid #dee2e6; border-radius: .6rem; padding: .3rem; text-align: center; min-height: 6rem; }
+.pk-pile .lbl { font-size: .72rem; font-weight: 700; color: #5c636a; display: block; margin-bottom: .15rem; }
+.pk-pile img { width: 100%; height: auto; aspect-ratio: 825 / 1125; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,.4); display: block; }
+.pk-pile .count { position: absolute; bottom: .5rem; left: .5rem; background: rgba(42,24,64,.92); color: #fff; border-radius: 1rem; padding: 0 .45rem; font-size: .75rem; font-weight: 800; }
+.pk-pile .gone { color: #868e96; font-size: .8rem; padding-top: 1.2rem; display: block; }
+.pk-pile.is-target { border-color: var(--pick); box-shadow: 0 0 0 3px rgba(10,122,143,.35); cursor: pointer; }
+.pk-pile.is-flash { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold); }
+button.pk-pile:disabled { opacity: 1; }
+.pk-zoombtn { position: absolute; right: .3rem; width: 1.8rem; height: 1.8rem; display: grid; place-items: center; background: rgba(42,24,64,.9); color: #fff; border-radius: 50%; font-size: 1.05rem; line-height: 1; cursor: zoom-in; z-index: 2; }
+.pk-pile .pk-zoombtn { bottom: .5rem; }
+.pk-hc .pk-zoombtn { bottom: .3rem; }
+
+/* sets: the head on top, the cards behind it peeking out with their names showing */
+.pk-sets { display: flex; flex-wrap: wrap; gap: .8rem 1rem; align-items: flex-start; }
+.pk-set { width: calc(var(--cw) * .82); text-align: center; border-radius: .5rem; padding: .25rem; border: 3px solid transparent; }
+.pk-set .stack img { width: 100%; height: auto; display: block; border-radius: 5px; box-shadow: 0 1px 4px rgba(0,0,0,.45); cursor: zoom-in; }
+.pk-set .strip { aspect-ratio: 825 / 235; overflow: hidden; border-radius: 5px 5px 0 0; margin-bottom: -1px; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+.pk-set .strip img { box-shadow: none; border-radius: 0; }
+.pk-set .cap { font-size: .78rem; font-weight: 700; line-height: 1.2; margin-top: .25rem; }
+.pk-set.is-target { border-color: var(--pick); box-shadow: 0 0 0 3px rgba(10,122,143,.35); cursor: pointer; background: #effafc; }
+.pk-set.is-flash { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold); }
+.pk-badge { display: inline-block; background: var(--pick); color: #fff; border-radius: 1rem; padding: .03rem .55rem; font-weight: 800; font-size: .8rem; margin-top: .15rem; }
+.pk-none { color: #868e96; font-size: .9rem; }
+.pk-opp .pk-sets { gap: .4rem .6rem; }
+.pk-opp .pk-set { width: 4.6rem; padding: .1rem; }
+.pk-opp .pk-set .cap { font-size: .68rem; }
+
+/* your hand: gold = just taken, teal = the card you picked, green dot = can be played */
+.pk-hand { display: flex; flex-wrap: wrap; gap: .5rem; }
+.pk-hc { position: relative; width: var(--cw); padding: 0; border: 3px solid #adb5bd; border-radius: 10px; background: #fff; overflow: hidden; }
+.pk-hc img { width: 100%; height: auto; display: block; aspect-ratio: 825 / 1125; }
+.pk-hc.is-new { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold); }
+.pk-hc.is-sel { border-color: var(--pick); box-shadow: 0 0 0 4px var(--pick); transform: translateY(-4px); }
+.pk-hc.is-partner { border-color: var(--pick); box-shadow: 0 0 0 3px rgba(10,122,143,.45); }
+.pk-hc.can::after { content: '✓ can play'; position: absolute; left: 0; bottom: 0; background: #198754; color: #fff; font-size: .65rem; font-weight: 800; padding: 0 .4rem; border-radius: 0 8px 0 0; }
+.pk-hc.can .pk-zoombtn { bottom: 1.4rem; }
+.pk-hc.is-sel::before { content: 'Picked'; position: absolute; left: 50%; top: 2.3rem; transform: translateX(-50%); background: var(--pick); color: #fff; font-size: .65rem; font-weight: 800; padding: 0 .4rem; border-radius: 4px; z-index: 2; }
+.pk-hc.is-wait { opacity: .7; }
+
+.pk-log { margin: 0; padding-left: 1.2rem; font-size: .88rem; display: flex; flex-direction: column-reverse; }
+.pk-log li.me { font-weight: 700; }
+
+/* what to do next, pinned to the foot of the screen */
+.pk-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: #fffdf5; border-top: 3px solid #4a2a78; box-shadow: 0 -6px 18px rgba(0,0,0,.25); padding: .5rem .8rem calc(.5rem + env(safe-area-inset-bottom)); }
+.pk-dock-main { display: flex; flex-wrap: wrap; gap: .4rem .8rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+.pk-dock-text { margin: 0; font-weight: 700; flex: 1 1 16rem; }
+.pk-dock-text small { display: block; font-weight: 500; }
+.pk-dock-actions { display: flex; gap: .4rem; flex: 0 0 auto; }
+body.has-dock { padding-bottom: 8rem; }
+
+.pk-dialog { border: 0; border-radius: .8rem; max-width: min(92vw, 34rem); padding: 1rem 1.2rem; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+.pk-dialog::backdrop { background: rgba(0,0,0,.5); }
+.pk-dialog > form > img { width: 100%; max-height: 70vh; object-fit: contain; border-radius: .5rem; margin-bottom: .5rem; }
+.pk-wide { max-width: min(94vw, 40rem); max-height: 92vh; overflow: auto; }
+.pk-pick { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.pk-pick button { background: #fff; border: 3px solid #adb5bd; border-radius: .6rem; padding: .3rem; text-align: center; font-size: .85rem; font-weight: 700; }
+.pk-pick button:hover, .pk-pick button:focus-visible { border-color: var(--pick); }
+.pk-pick img { width: 100%; max-width: 8rem; height: auto; border-radius: 5px; display: block; margin: 0 auto .25rem; }
+.pk-pick small { display: block; font-weight: 500; }
+.pk-final-row { display: flex; justify-content: space-between; padding: .25rem 0; border-bottom: 1px solid #e9ecef; }
+.pk-final-row.win { font-weight: 800; color: #0f5132; }
+.pk-final-sets { font-size: .8rem; color: #495057; margin: .15rem 0 .4rem; }
+
+@media (max-width: 575px) {
+  .pk-table { grid-template-columns: repeat(3, 1fr); } .pk-pick { grid-template-columns: 1fr; }
+  .pk-fan { min-height: 2.6rem; margin: .2rem 0; } .pk-fan img { width: 1.8rem; margin-right: -1rem; }
+  .pk-opp { padding: .35rem .5rem; } .pk-opp .seen { margin-bottom: .2rem; }
+  .pk-dock { padding-top: .35rem; } .pk-dock-text { font-size: .88rem; } .pk-dock-text small { font-size: .8rem; }
+  .pk-dock-actions .btn { padding: .25rem .6rem; font-size: .85rem; }
+  body.has-dock { padding-bottom: 7rem; }
+}
+@media (prefers-reduced-motion: no-preference) { .pk-hc, .pk-set, .pk-pile { transition: box-shadow .15s, transform .15s; } }
+
+/* card names, in the colors printed on the cards */
+.g-prophets { color: var(--prophet); } .g-israel { color: var(--israel); } .g-judah { color: var(--judah); } .g-gentile { color: var(--gentile); }
+.g-prophets, .g-israel, .g-judah, .g-gentile { font-weight: 700; }
