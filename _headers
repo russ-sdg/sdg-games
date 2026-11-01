@@ -68,3 +68,6 @@
 
 /6days/play/*
   Cache-Control: no-cache
+
+/pk/play/*
+  Cache-Control: no-cache
