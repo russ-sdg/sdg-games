@@ -1,202 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Prophets and Kings Scorepad</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="../js/ProphetsKings.js"></script>
-  <!-- Favicon-->
-  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
-  <link rel="stylesheet" type="text/css" href="../css/ProphetsKings.css">
-
-  <script>
-  $( document ).ready(function() {
-
-    initializePK();
-
-  });
-  </script>
-
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="A free scorepad for Prophets & Kings: tap in each player's sets and see the scores and standings add up as you play." />
+    <title>Prophets &amp; Kings Scorepad - SDG Games</title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <link href="../css/styles.css" rel="stylesheet" />
+    <link href="scorepad.css?v=20261104" rel="stylesheet" />
 </head>
-<body>
-    <a href="index.html" target="_blank"><img src="../assets/PKicons.png" /></a>
-<h1>Scorepad</h1>
-<div id="scorepad">
-  <div id="scoringinputs">
-      <p>Select how many of each size of set you have:</p>
-    <table>
-        <tr id="7row">
-            <th>Sets of 7 Cards:</th>
-            <td>
-                <select id="7cards" class="cards">
-                    <option value=0 selected=true>0</option>
-                    <option value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=3>3</option>
-                    <option value=4>4</option>
-                    <option value=5>5</option>
-                    <option value=6>6</option>
-                    <option value=7>7</option>
-                    <option value=8>8</option>
-                    <option value=9>9</option>
-                    <option value=10>10</option>
-                </select>
-            </td>
-        </tr>
-        <tr id="6row">
-            <th>Sets of 6 Cards:</th>
-            <td>
-                <select id="6cards" class="cards">
-                    <option value=0 selected=true>0</option>
-                    <option value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=3>3</option>
-                    <option value=4>4</option>
-                    <option value=5>5</option>
-                    <option value=6>6</option>
-                    <option value=7>7</option>
-                    <option value=8>8</option>
-                    <option value=9>9</option>
-                    <option value=10>10</option>
-                </select>
-            </td>
-        </tr>
-        <tr id="5row">
-            <th>Sets of 5 Cards:</th>
-            <td>
-                <select id="5cards" class="cards">
-                    <option value=0 selected=true>0</option>
-                    <option value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=3>3</option>
-                    <option value=4>4</option>
-                    <option value=5>5</option>
-                    <option value=6>6</option>
-                    <option value=7>7</option>
-                    <option value=8>8</option>
-                    <option value=9>9</option>
-                    <option value=10>10</option>
-                </select>
-            </td>
-        </tr>
-        <tr id="4row">
-            <th>Sets of 4 Cards:</th>
-            <td>
-                <select id="4cards" class="cards">
-                    <option value=0 selected=true>0</option>
-                    <option value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=3>3</option>
-                    <option value=4>4</option>
-                    <option value=5>5</option>
-                    <option value=6>6</option>
-                    <option value=7>7</option>
-                    <option value=8>8</option>
-                    <option value=9>9</option>
-                    <option value=10>10</option>
-                    <option value=11>11</option>
-                    <option value=12>12</option>
-                    <option value=13>13</option>
-                    <option value=14>14</option>
-                    <option value=15>15</option>
-                </select>
-            </td>
-        </tr>
-        <tr id="3row">
-            <th>Sets of 3 Cards:</th>
-            <td>
-                <select id="3cards" class="cards">
-                    <option value=0 selected=true>0</option>
-                    <option value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=3>3</option>
-                    <option value=4>4</option>
-                    <option value=5>5</option>
-                    <option value=6>6</option>
-                    <option value=7>7</option>
-                    <option value=8>8</option>
-                    <option value=9>9</option>
-                    <option value=10>10</option>
-                    <option value=11>11</option>
-                    <option value=12>12</option>
-                    <option value=13>13</option>
-                    <option value=14>14</option>
-                    <option value=15>15</option>
-                </select>
-            </td>
-        </tr>
-        <tr id="2row">
-            <th>Sets of 2 Cards:</th>
-            <td>
-                <select id="2cards" class="cards">
-                    <option value=0 selected=true>0</option>
-                    <option value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=3>3</option>
-                    <option value=4>4</option>
-                    <option value=5>5</option>
-                    <option value=6>6</option>
-                    <option value=7>7</option>
-                    <option value=8>8</option>
-                    <option value=9>9</option>
-                    <option value=10>10</option>
-                    <option value=11>11</option>
-                    <option value=12>12</option>
-                    <option value=13>13</option>
-                    <option value=14>14</option>
-                    <option value=15>15</option>
-                    <option value=16>16</option>
-                    <option value=17>17</option>
-                    <option value=18>18</option>
-                    <option value=19>19</option>
-                 </select>
-            </td>
-        </tr>
-        <tr>
-            <th>Score:</th>
-            <td><span id="score">0</span></td>
-        </tr>
-    </table>
-  </div>
-  <div id="scoring">
-      <h3>Scoring</h3>
-      <p>Scoring is based on the number of cards in each set (counting both the prophet and king cards in the set). The table below explains how much each set is worth:</p>
-      <table border=1>
-          <tr>
-              <th># of Cards in Set</th>
-              <th>Score</th>
-          </tr>
-          <tr>
-              <td>2</td>
-              <td>2</td>
-          </tr>
-          <tr>
-              <td>3</td>
-              <td>5</td>
-          </tr>
-          <tr>
-              <td>4</td>
-              <td>10</td>
-          </tr>
-          <tr>
-              <td>5</td>
-              <td>25</td>
-          </tr>
-          <tr>
-              <td>6</td>
-              <td>50</td>
-          </tr>
-          <tr>
-              <td>7</td>
-              <td>100</td>
-          </tr>
-      </table>
+<body class="sb-nav-fixed">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
 
-  </div>
-</div>
+    <main class="ps container-fluid px-3 pb-5">
+        <div class="ps-title d-flex flex-wrap align-items-center gap-3 py-3">
+            <a href="index.html" class="ps-name">Prophets &amp; Kings</a>
+            <span class="badge text-bg-secondary">Scorepad</span>
+            <a class="ms-auto small" href="play/">Play online</a> <a class="small" href="index.html">About the game</a>
+        </div>
 
+        <p class="ps-help">Playing at the table? When the game ends, tap <b>+</b> for each set a player built, by how many cards it has (the prophet or king on top counts). The scores add up as you go.</p>
+        <noscript><p class="alert alert-warning">The scorepad needs JavaScript. The table: sets of 2, 3, 4, 5, 6 and 7 cards score 2, 5, 10, 25, 50 and 100.</p></noscript>
+
+        <div class="ps-bar" id="bar" aria-live="polite"></div>
+        <div class="ps-players" id="players"></div>
+
+        <div class="ps-actions d-flex flex-wrap gap-2 my-3">
+            <button type="button" class="btn btn-outline-primary" id="add-btn">Add a player</button>
+            <button type="button" class="btn btn-outline-secondary" id="copy-btn">Copy the scores</button>
+            <button type="button" class="btn btn-outline-danger ms-auto" id="reset-btn">Clear the scores</button>
+        </div>
+        <p class="small text-muted" id="msg" aria-live="polite"></p>
+
+        <section class="ps-card" aria-labelledby="table-h">
+            <h2 class="ps-h" id="table-h">Scoring</h2>
+            <div class="ps-table" id="table"></div>
+            <p class="small mb-0 mt-2">Count both the prophet and king cards in a set. Add up every set a player has built; the most points wins.</p>
+        </section>
+    </main>
+
+    <footer class="py-5 bg-dark">
+        <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class="current-year">2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/scripts.js"></script>
+    <script type="module" src="scorepad.js?v=20261104"></script>
 <!-- Default Statcounter code for SDG Games
 https://sdggames.fun -->
 <script type="text/javascript">

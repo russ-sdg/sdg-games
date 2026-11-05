@@ -1,0 +1,43 @@
+/* Prophets & Kings scorepad: the same royal purple and gold as the online game */
+.ps { --gold: #f0c45e; --ink: #2a1840; --purple: #4a2a78; max-width: 1100px; margin: 0 auto; }
+.ps-name { font: 800 1.6rem/1 Georgia, serif; color: var(--ink); text-decoration: none; }
+.ps-help { max-width: 46rem; color: #495057; }
+.ps-h { font-size: 1.05rem; font-weight: 800; margin: 0 0 .5rem; }
+.ps-card { background: #fff; border: 1px solid #dee2e6; border-radius: .6rem; padding: .8rem 1rem; max-width: 24rem; }
+[hidden] { display: none !important; }
+
+/* the standings, pinned to the top while you scroll the players */
+.ps-bar { display: flex; flex-wrap: wrap; gap: .4rem; position: sticky; top: 0; z-index: 30; padding: .45rem 0; background: #f0f2f5; }
+.ps-chip { display: flex; align-items: baseline; gap: .45rem; padding: .3rem .7rem; border: 2px solid #ced4da; border-radius: .6rem; background: #fff; }
+.ps-chip .rank { font-size: .8rem; font-weight: 800; color: #5c636a; min-width: .8rem; text-align: center; }
+.ps-chip .n { font-weight: 700; max-width: 9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ps-chip .pts { font-size: 1.15rem; font-weight: 800; }
+.ps-chip.is-lead { border-color: var(--gold); background: #fff9e6; }
+.ps-chip.is-lead .rank { color: #b8860b; }
+
+/* a player */
+.ps-players { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr)); gap: .8rem; margin-top: .6rem; }
+.ps-player { background: #fff; border: 3px solid #dee2e6; border-top: 8px solid var(--purple); border-radius: .6rem; padding: .6rem .75rem .5rem; }
+.ps-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .3rem; }
+.ps-name-in { flex: 1 1 auto; min-width: 0; font: 800 1.15rem/1.2 Georgia, serif; color: var(--ink); border: 0; border-bottom: 2px dashed #ced4da; background: transparent; padding: .15rem 0; }
+.ps-name-in:focus { outline: 0; border-bottom-color: var(--purple); }
+.ps-total { text-align: right; line-height: 1; }
+.ps-total b { display: block; font-size: 2.1rem; font-weight: 800; color: var(--purple); font-variant-numeric: tabular-nums; }
+.ps-total small { font-size: .72rem; color: #5c636a; text-transform: uppercase; letter-spacing: .04em; }
+.ps-row { display: grid; grid-template-columns: 1fr auto 3.2rem; align-items: center; gap: .5rem; padding: .3rem 0; border-top: 1px solid #eceff1; }
+.ps-row .lbl b { display: block; line-height: 1.1; }
+.ps-row .lbl small { color: #5c636a; font-size: .75rem; }
+.ps-row .sub { text-align: right; font-weight: 700; color: #495057; font-variant-numeric: tabular-nums; }
+.stepper { display: flex; align-items: center; gap: .4rem; }
+.stepper output { min-width: 1.8rem; text-align: center; font-size: 1.25rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ps-btn { width: 2.9rem; height: 2.9rem; border-radius: 50%; border: 2px solid #adb5bd; background: #fff; color: var(--ink); font-size: 1.6rem; font-weight: 700; line-height: 1; display: grid; place-items: center; padding: 0; touch-action: manipulation; }
+.ps-btn.plus { background: var(--purple); border-color: var(--purple); color: #fff; }
+.ps-btn:active { transform: scale(.94); }
+.ps-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.ps-foot { display: flex; justify-content: space-between; align-items: center; margin-top: .3rem; padding-top: .4rem; border-top: 1px solid #eceff1; font-size: .8rem; color: #5c636a; }
+
+/* the scoring table */
+.ps-tr { display: flex; justify-content: space-between; padding: .25rem 0; border-bottom: 1px solid #e9ecef; font-variant-numeric: tabular-nums; }
+.ps-tr span:last-child { font-weight: 800; }
+.ps-tr.head { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: #5c636a; }
+@media (prefers-reduced-motion: no-preference) { .ps-btn { transition: transform .08s; } }
