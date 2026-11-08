@@ -12,7 +12,7 @@ const BOTS = ['Peter', 'Mary', 'John', 'Ruth', 'Paul'];
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 
 let S = null, cfg = null, token = 0;
-let ui = { flash: null, msg: '' };
+let ui = { flash: null, msg: '', waiting: false };
 const mine = () => !!S && !S.over && S.turn === 0;
 const tribe = (v) => `${v}. ${E.name(v)}`;
 
@@ -29,13 +29,13 @@ function startGame() {
   const players = [{ name: 'You', bot: false }, ...Array.from({ length: n }, (_, i) => ({ name: BOTS[i], bot: true, skill: pick === 'mixed' ? skills[(i + 1) % 3] : pick }))];
   cfg = { bots: n, skill: pick, seed };
   S = E.newGame({ seed, players, first: Math.floor(E.rng(seed + 1)() * players.length) });
-  ui = { flash: null, msg: '' };
+  ui = { flash: null, msg: '', waiting: false };
   save(); show('game'); render(); run();
 }
 
 // ---- the computer players --------------------------------------------------------------------------------------------------------
 async function run() {
-  const my = ++token;
+  const my = ++token; ui.waiting = false; if (release) release();
   while (!S.over && E.me(S).bot) {
     const p = E.me(S), seat = S.turn;
     ui.msg = `${p.name} is playing…`; ui.flash = null; render();
@@ -48,11 +48,18 @@ async function run() {
       await sleep(1100); if (my !== token) return;
     }
     ui.msg = S.outcome === 'set' ? `${p.name} found a set of ${E.name(S.reveals[0].v)}!` : `${p.name} did not find a set. Every card goes back.`;
-    render(); await sleep(S.outcome === 'set' ? 1900 : 1500); if (my !== token) return;
+    await waitForClick(); if (my !== token) return;                 // the cards stay face up until you say so
     S = E.endTurn(S); ui.flash = null; ui.msg = ''; save(); render();
   }
   ui.msg = ''; ui.flash = null; save(); render();
   if (S.over) showFinal();
+}
+
+let release = null;
+function waitForClick() {
+  if (FAST) return Promise.resolve();
+  ui.waiting = true; render();
+  return new Promise((res) => { release = () => { release = null; ui.waiting = false; res(); }; });
 }
 
 // ---- your turn -------------------------------------------------------------------------------------------------------------------
@@ -79,9 +86,10 @@ const rowName = (i) => { const r = Math.floor(i / E.COLS), c = i % E.COLS, rows 
 function said(e) {
   const W = nm(e.who ?? 0);
   switch (e.t) {
-    case 'ask': return e.from === e.who ? `${W} ${verb(e.who, 'show')} ${poss(e.who)} ${e.which === 'hi' ? 'highest' : 'lowest'} card: ${tribe(e.v)}.` : `${W} ${verb(e.who, 'ask')} ${nm(e.from)} to show ${poss(e.from)} ${e.which === 'hi' ? 'highest' : 'lowest'} card: ${tribe(e.v)}.`;
-    case 'flip': return `${W} ${verb(e.who, 'turn')} over the ${rowName(e.cell)} card in the matrix: ${tribe(e.v)}.`;
-    case 'miss': return `${W} ${e.who === 0 ? 'did' : 'did'} not find a set.`;
+    // The log says which card was shown, never what it was: you have to remember that yourself.
+    case 'ask': return e.from === e.who ? `${W} ${verb(e.who, 'show')} ${poss(e.who)} ${e.which === 'hi' ? 'highest' : 'lowest'} card.` : `${W} ${verb(e.who, 'ask')} ${nm(e.from)} to show ${poss(e.from)} ${e.which === 'hi' ? 'highest' : 'lowest'} card.`;
+    case 'flip': return `${W} ${verb(e.who, 'turn')} over the ${rowName(e.cell)} card in the matrix.`;
+    case 'miss': return `${W} did not find a set.`;
     case 'set': return `${W} ${verb(e.who, 'collect')} a set of ${E.name(e.v)}!`;
     case 'more': return `No set can be found, so ${e.n} more cards go into the matrix (${e.size} cards now).`;
     default: return '';
@@ -154,7 +162,10 @@ function renderDock() {
   if (!on) return;
   const R = S.reveals;
   let t = '', acts = '';
-  if (S.turn !== 0) t = esc(ui.msg || `${E.me(S).name}'s turn…`);
+  if (S.turn !== 0) {
+    t = esc(ui.msg || `${E.me(S).name}'s turn…`);
+    if (ui.waiting) { t += '<small>Take a good look at the cards that were shown.</small>'; acts = '<button type="button" class="btn btn-primary" data-do="next">OK, next player</button>'; }
+  }
   else if (S.outcome === 'set') {
     t = `You found a set of ${esc(E.name(R[0].v))}!<small>Take it. Cards are replaced from the draw pile.</small>`;
     acts = '<button type="button" class="btn btn-primary" data-do="continue">Take the set</button>';
@@ -184,7 +195,7 @@ function onClick(e) {
   const c = (sel) => e.target.closest && e.target.closest(sel);
   const f = c('[data-flip]'); if (f) { doReveal({ kind: 'cell', i: Number(f.dataset.flip) }); return; }
   const a = c('[data-ask]'); if (a) { const [p, which] = a.dataset.ask.split(':'); doReveal({ kind: 'hand', p: Number(p), which }); return; }
-  const b = c('[data-do]'); if (b) { if (b.dataset.do === 'continue') onContinue(); return; }
+  const b = c('[data-do]'); if (b) { if (b.dataset.do === 'continue') onContinue(); else if (b.dataset.do === 'next' && release) release(); return; }
   const z = c('[data-zoom]'); if (z) openZoom(Number(z.dataset.zoom));
 }
 function setMemory(on) {
@@ -199,7 +210,7 @@ function init() {
   $('start-btn').addEventListener('click', () => { clearSave(); token++; startGame(); });
   $('menu-btn').addEventListener('click', () => { token++; refreshResume(); show('setup'); });
   $('final-again').addEventListener('click', () => { clearSave(); token++; show('setup'); refreshResume(); });
-  $('resume-btn').addEventListener('click', () => { const v = load(); if (!v) return; S = v.S; cfg = v.cfg; ui = { flash: null, msg: '' }; show('game'); render(); run(); });
+  $('resume-btn').addEventListener('click', () => { const v = load(); if (!v) return; S = v.S; cfg = v.cfg; ui = { flash: null, msg: '', waiting: false }; show('game'); render(); run(); });
   $('discard-btn').addEventListener('click', () => { clearSave(); refreshResume(); });
   document.addEventListener('click', onClick);
   refreshResume();
