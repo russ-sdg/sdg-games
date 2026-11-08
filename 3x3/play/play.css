@@ -1,0 +1,82 @@
+/* Three-by-Three: play online. Night blue and Tabernacle gold, as on the product page. */
+.tt { --gold: #f0c864; --ink: #251a47; --blue: #3a2a6b; --pick: #0a7a8f; --ok: #198754; --cw: clamp(70px, 17vw, 112px); max-width: 1200px; margin: 0 auto; }
+.tt-name { font: 800 1.6rem/1 Georgia, serif; color: var(--ink); text-decoration: none; }
+.tt-h { font-size: 1.05rem; font-weight: 800; margin: 1rem 0 .4rem; }
+.tt-card { background: #fff; border: 1px solid #dee2e6; border-radius: .6rem; padding: .7rem .85rem; }
+[hidden] { display: none !important; }
+
+/* the scores */
+.tt-bar { display: flex; flex-wrap: wrap; gap: .4rem; position: sticky; top: 0; z-index: 30; padding: .45rem 0; background: #f0f2f5; }
+.tt-score { display: flex; align-items: center; gap: .5rem; padding: .3rem .7rem; border: 2px solid #ced4da; border-radius: .6rem; background: #fff; }
+.tt-score .n { font-weight: 700; }
+.tt-score.is-turn { border-color: var(--gold); background: #fff9e6; }
+.tt-pips { letter-spacing: .1rem; font-size: 1.05rem; color: var(--blue); }
+.tt-round { margin-left: auto; align-self: center; font-size: .85rem; color: #5c636a; text-align: right; }
+
+/* a player's three cards in a row; one slot each */
+.tt-hand { display: flex; gap: .45rem; }
+.tt-slot { width: var(--cw); text-align: center; }
+.tt-slot .rank { display: block; font-size: .68rem; font-weight: 700; color: #6c757d; text-transform: uppercase; letter-spacing: .03em; min-height: 1em; }
+.tt-c { position: relative; display: block; width: 100%; padding: 0; border: 3px solid #adb5bd; border-radius: 9px; background: #fff; overflow: hidden; }
+.tt-c img { width: 100%; height: auto; display: block; aspect-ratio: 745 / 1120; }
+.tt-c.is-up { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold); }
+.tt-c.is-match { border-color: var(--ok); box-shadow: 0 0 0 4px var(--ok); }
+.tt-c.is-flash { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold); }
+button.tt-c { cursor: pointer; }
+button.tt-c:disabled { cursor: default; opacity: 1; }
+button.tt-c.can:hover, button.tt-c.can:focus-visible { border-color: var(--pick); box-shadow: 0 0 0 3px rgba(10,122,143,.45); }
+.tt-c.hole { aspect-ratio: 745 / 1120; border-style: dashed; background: transparent; }
+.tt-mem { position: absolute; left: 0; bottom: 0; background: rgba(37,26,71,.92); color: #fff; font-size: .72rem; font-weight: 800; padding: 0 .4rem; border-radius: 0 7px 0 0; }
+.tt-shown { position: absolute; left: 0; top: 0; background: var(--gold); color: var(--ink); font-size: .65rem; font-weight: 800; padding: 0 .35rem; border-radius: 0 0 7px 0; }
+.tt-ask { display: flex; gap: .3rem; margin-top: .35rem; flex-wrap: wrap; }
+.tt-ask .btn { padding: .1rem .5rem; font-size: .8rem; }
+
+/* the other players */
+.tt-opps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: .6rem; }
+.tt-opp { background: #fff; border: 3px solid #dee2e6; border-radius: .6rem; padding: .45rem .6rem; }
+.tt-opp.is-turn { border-color: var(--gold); }
+.tt-opp-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .1rem .6rem; font-weight: 700; margin-bottom: .3rem; }
+.tt-opp-head .meta { font-size: .8rem; font-weight: 600; color: #5c636a; margin-left: auto; }
+.tt-opp .tt-hand { --cw: clamp(60px, 14vw, 84px); }
+.tt-won { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .45rem; min-height: 1.6rem; align-items: center; }
+.tt-won .none { color: #868e96; font-size: .82rem; }
+.tt-won figure { margin: 0; width: 2.4rem; text-align: center; }
+.tt-won img { width: 100%; height: auto; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.45); display: block; cursor: zoom-in; }
+.tt-won figcaption { font-size: .62rem; font-weight: 700; line-height: 1.1; }
+
+/* the matrix */
+.tt-matrix { display: grid; grid-template-columns: repeat(3, var(--cw)); gap: .5rem; }
+
+/* you */
+.tt-me { background: #fff; border: 3px solid #dee2e6; border-radius: .6rem; padding: .5rem .6rem; }
+.tt-me.is-turn { border-color: var(--gold); }
+.tt-me .tt-won figure { width: 3rem; }
+
+.tt-log { margin: 0; padding-left: 1.2rem; font-size: .88rem; display: flex; flex-direction: column-reverse; }
+.tt-log li.me { font-weight: 700; }
+.tt-log li.note { color: #5c636a; font-style: italic; }
+
+/* what to do next, pinned to the foot of the screen */
+.tt-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: #fffdf5; border-top: 3px solid var(--blue); box-shadow: 0 -6px 18px rgba(0,0,0,.25); padding: .5rem .8rem calc(.5rem + env(safe-area-inset-bottom)); }
+.tt-dock-main { display: flex; flex-wrap: wrap; gap: .4rem .8rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+.tt-dock-text { margin: 0; font-weight: 700; flex: 1 1 16rem; }
+.tt-dock-text small { display: block; font-weight: 500; }
+.tt-dock-actions { display: flex; gap: .4rem; flex: 0 0 auto; }
+body.has-dock { padding-bottom: 8rem; }
+
+.tt-dialog { border: 0; border-radius: .8rem; max-width: min(92vw, 34rem); padding: 1rem 1.2rem; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+.tt-dialog::backdrop { background: rgba(0,0,0,.5); }
+.tt-dialog > form > img { width: 100%; max-height: 70vh; object-fit: contain; border-radius: .5rem; margin-bottom: .5rem; }
+.tt-wide { max-width: min(94vw, 40rem); max-height: 92vh; overflow: auto; }
+.tt-final-row { display: flex; justify-content: space-between; padding: .25rem 0; border-bottom: 1px solid #e9ecef; }
+.tt-final-row.win { font-weight: 800; color: #0f5132; }
+.tt-final-sets { display: flex; flex-wrap: wrap; gap: .3rem; margin: .2rem 0 .5rem; min-height: 2rem; }
+.tt-final-sets img { width: 2.6rem; height: auto; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+
+@media (max-width: 575px) {
+  .tt-matrix { gap: .35rem; } .tt-hand { gap: .3rem; }
+  .tt-dock { padding-top: .35rem; } .tt-dock-text { font-size: .88rem; } .tt-dock-text small { font-size: .8rem; }
+  .tt-dock-actions .btn { padding: .25rem .6rem; font-size: .85rem; }
+  body.has-dock { padding-bottom: 7.5rem; }
+}
+@media (prefers-reduced-motion: no-preference) { .tt-c { transition: box-shadow .15s, border-color .15s; } }
