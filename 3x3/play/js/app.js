@@ -102,6 +102,7 @@ function render() {
   if (!S) return;
   renderBar(); renderOpps(); renderMatrix(); renderMe(); renderLog(); renderDock();
 }
+const ZOOM = '<span class="tt-zoom" aria-hidden="true">⤢</span>';     // tells you a face-up card can be tapped to read it
 const shownAt = (kind, a, b) => S.reveals.findIndex((x) => x.kind === kind && (kind === 'cell' ? x.i === a : x.p === a && x.idx === b));
 const matched = () => S.reveals.length >= 2 && E.matching(S);
 function cardClasses(r) { return r >= 0 ? ` is-up${matched() ? ' is-match' : ''}` : ''; }
@@ -124,7 +125,7 @@ function handHtml(p, { own }) {
     const face = own || up;
     const fl = ui.flash && ui.flash.kind === 'hand' && ui.flash.p === p && ui.flash.idx === idx ? ' is-flash' : '';
     return `<div class="tt-slot"><span class="rank">${rank}</span><div class="tt-c${cardClasses(r)}${fl}" ${face ? `data-zoom="${v}" role="img" aria-label="${esc(tribe(v))}"` : `role="img" aria-label="Face down card, ${rank}"`}>
-      <img src="${face ? E.cardImage(v, 320) : E.backImage(320)}" alt="" />${up && own ? '<span class="tt-shown">shown</span>' : ''}${mem ? `<span class="tt-mem">${mem}</span>` : ''}</div></div>`;
+      <img src="${face ? E.cardImage(v, 320) : E.backImage(320)}" alt="" />${face ? ZOOM : ''}${up && own ? '<span class="tt-shown">shown</span>' : ''}${mem ? `<span class="tt-mem">${mem}</span>` : ''}</div></div>`;
   }).join('')}</div>`
     + (hand.length ? `<div class="tt-ask">${can ? `<button type="button" class="btn btn-outline-primary" data-ask="${p}:hi"${ends.hi === null ? ' disabled' : ''}>${own ? 'Show my highest' : 'Ask for highest'}</button><button type="button" class="btn btn-outline-primary" data-ask="${p}:lo"${ends.lo === null ? ' disabled' : ''}>${own ? 'Show my lowest' : 'Ask for lowest'}</button>` : ''}</div>` : '<p class="small text-muted mb-0">No cards left in hand.</p>');
 }
@@ -145,7 +146,7 @@ function renderMatrix() {
     const fl = ui.flash && ui.flash.kind === 'cell' && ui.flash.i === i ? ' is-flash' : '';
     const label = up ? tribe(v) : `Face down card, ${rowName(i)}`;
     return `<button type="button" class="tt-c${cardClasses(r)}${fl}${can && !up ? ' can' : ''}" ${can && !up ? `data-flip="${i}"` : up ? `data-zoom="${v}"` : 'disabled'} aria-label="${esc(label)}">
-      <img src="${up ? E.cardImage(v, 320) : E.backImage(320)}" alt="" />${mem ? `<span class="tt-mem">${mem}</span>` : ''}</button>`;
+      <img src="${up ? E.cardImage(v, 320) : E.backImage(320)}" alt="" />${up ? ZOOM : ''}${mem ? `<span class="tt-mem">${mem}</span>` : ''}</button>`;
   }).join('');
   $('matrix-note').textContent = S.matrix.length > 9 ? `${S.matrix.filter((c) => c !== null).length} cards` : '';
 }
@@ -239,6 +240,7 @@ function init() {
   $('resume-btn').addEventListener('click', () => { const v = load(); if (!v) return; S = v.S; cfg = v.cfg; ui = { flash: null, msg: '', waiting: false }; show('game'); render(); run(); });
   $('discard-btn').addEventListener('click', () => { clearSave(); refreshResume(); });
   document.addEventListener('click', onClick);
+  $('zoom').addEventListener('click', (e) => { if (e.target === $('zoom')) $('zoom').close(); });      // tap outside the card to close
   refreshResume();
   const v = load();
   if (v && params.has('resume')) $('resume-btn').click();
