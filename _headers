@@ -71,3 +71,6 @@
 
 /pk/play/*
   Cache-Control: no-cache
+
+/3x3/play/*
+  Cache-Control: no-cache

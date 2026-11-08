@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Play Three-by-Three online, free: find three matching tribes of Israel before your computer opponents do. Play against 1 to 5 computer players." />
+    <title>Play Three-by-Three Online - SDG Games</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="play.css?v=20261108" rel="stylesheet" />
+</head>
+<body class="sb-nav-fixed">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
+
+    <main class="tt container-fluid px-3 pb-5">
+        <div class="tt-title d-flex flex-wrap align-items-center gap-3 py-3">
+            <a href="../index.html" class="tt-name">Three-by-Three</a>
+            <span class="badge text-bg-secondary">Play online</span>
+            <a class="ms-auto small" href="../index.html">About the game</a>
+        </div>
+
+        <!-- ================= SETUP ================= -->
+        <section id="setup" aria-labelledby="setup-title">
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card shadow-sm"><div class="card-body">
+                        <h1 class="h3" id="setup-title">New game</h1>
+                        <div id="resume" class="alert alert-info d-flex flex-wrap align-items-center gap-2" hidden>
+                            <span>You have a game in progress.</span>
+                            <button type="button" class="btn btn-sm btn-primary" id="resume-btn">Resume</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="discard-btn">Discard it</button>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-6"><label class="form-label" for="bot-count">Computer players</label>
+                                <select class="form-select" id="bot-count"><option value="1">1 opponent</option><option value="2" selected>2 opponents</option><option value="3">3 opponents</option><option value="4">4 opponents</option><option value="5">5 opponents</option></select></div>
+                            <div class="col-sm-6"><label class="form-label" for="bot-skill">How well do they play?</label>
+                                <select class="form-select" id="bot-skill"><option value="casual">Casual (forgets a lot)</option><option value="steady" selected>Steady</option><option value="sharp">Sharp (remembers everything)</option><option value="mixed">A mix</option></select></div>
+                        </div>
+                        <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="memory" /><label class="form-check-label" for="memory">Remind me what has been shown <span class="text-muted">(a memory helper for learning the game)</span></label></div>
+                        <button type="button" class="btn btn-primary btn-lg" id="start-btn">Start the game</button>
+                    </div></div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card shadow-sm"><div class="card-body small">
+                        <h2 class="h6">How it works</h2>
+                        <p>The deck has three cards for each of the thirteen tribes of Israel, numbered 1 to 13 in the order they set out from camp. Be the first to collect <b>three sets of three</b> matching cards, or <b>all three Levi cards</b>.</p>
+                        <ul>
+                            <li>Everyone holds three cards, lined up from lowest to highest. Nine more lie face down in the matrix.</li>
+                            <li>On your turn, turn over two cards, one at a time: <b>flip a matrix card</b>, or <b>ask anyone (even yourself) to show their highest or lowest card</b>.</li>
+                            <li>If the two match, turn over a third. If all three match, they are yours. If not, every card goes back.</li>
+                            <li>Remember what you see: you will need it. A hand's middle card is hidden unless you ask for the highest (or lowest) twice.</li>
+                        </ul>
+                        <p class="mb-0"><a href="../index.html#play">Read the full rules</a></p>
+                    </div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= GAME ================= -->
+        <section id="game" hidden aria-label="Game">
+            <div class="tt-bar" id="bar"></div>
+            <div id="opps" class="tt-opps"></div>
+            <h2 class="tt-h d-flex flex-wrap align-items-baseline gap-3">The matrix <small class="fw-normal text-muted" id="matrix-note"></small></h2>
+            <div class="tt-matrix" id="matrix"></div>
+            <h2 class="tt-h">You</h2>
+            <div class="tt-me" id="me"></div>
+            <div class="tt-card mt-3"><h2 class="tt-h mt-0">What happened</h2><ol class="tt-log" id="log"></ol></div>
+            <p class="mt-3 d-flex flex-wrap gap-3 align-items-center"><button type="button" class="btn btn-outline-secondary btn-sm" id="menu-btn">New game</button>
+                <label class="small"><input type="checkbox" id="memory2" /> Remind me what has been shown</label></p>
+        </section>
+    </main>
+
+    <!-- what to do next, pinned to the foot of the screen -->
+    <div class="tt-dock" id="dock" hidden>
+        <div class="tt-dock-main"><p class="tt-dock-text" id="status" role="status" aria-live="polite"></p><div class="tt-dock-actions" id="actions"></div></div>
+    </div>
+
+    <dialog id="zoom" class="tt-dialog"><form method="dialog"><img id="zoom-img" alt="" /><p id="zoom-cap" class="small mb-2"></p><button value="close" class="btn btn-outline-secondary btn-sm">Close</button></form></dialog>
+    <dialog id="final" class="tt-dialog tt-wide" aria-labelledby="final-title">
+        <form method="dialog">
+            <h2 class="h5" id="final-title"></h2>
+            <div id="final-body"></div>
+            <div class="d-flex flex-wrap gap-2 mt-3"><button value="again" class="btn btn-primary" id="final-again">New game</button><button value="close" class="btn btn-outline-secondary">Close</button></div>
+        </form>
+    </dialog>
+
+    <footer class="py-5 bg-dark">
+        <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class="current-year">2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../../js/scripts.js"></script>
+    <script type="module" src="js/app.js?v=20261108"></script>
+<!-- Default Statcounter code for SDG Games
+https://sdggames.fun -->
+<script type="text/javascript">
+var sc_project=13364187;
+var sc_invisible=1;
+var sc_security="487bfc6e";
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics
+Made Easy - Statcounter" href="https://statcounter.com/"
+target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/13364187/0/487bfc6e/1/"
+alt="Web Analytics Made Easy - Statcounter"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+</body>
+</html>
