@@ -1,6 +1,7 @@
 // Three-by-Three: play online against 1 to 5 computer players. You are seat 0.
 import * as E from './engine.js';
 import * as AI from './ai.js';
+import { drawShareImage, canvasToBlob, nativeShareData, shareMessage } from './share.js';
 
 const KEY = 'sdg-3x3-play-1', MEM = 'sdg-3x3-memory';
 const $ = (id) => document.getElementById(id);
@@ -186,7 +187,32 @@ function showFinal() {
   const why = { sets: 'collected three sets of three', levi: 'collected all three Levi cards', stalemate: 'No more sets could be found, so the player with the most sets wins.', limit: 'The game ran very long, so the player with the most sets wins.' }[S.endedBy];
   $('final-body').innerHTML = `<p class="small text-muted">${S.endedBy === 'sets' || S.endedBy === 'levi' ? `${esc(S.players[w[0]].name)} ${why}.` : why}</p>`
     + order.map((p) => `<div class="tt-final-row${w.includes(p.i) ? ' win' : ''}"><span>${esc(p.name)}</span><span>${plural(p.sets.length, 'set')}</span></div><div class="tt-final-sets">${p.sets.map((v) => `<img src="${E.cardImage(v, 320)}" alt="${esc(E.name(v))}" title="${esc(tribe(v))}" />`).join('')}</div>`).join('');
+  $('final-body').insertAdjacentHTML('beforeend', '<div id="share-slot"></div>');
+  mountShare($('share-slot'), structuredClone(S));
   $('final').showModal();
+}
+
+// Share the result as a picture: the share sheet where the browser offers it, plus a download and copyable text (which has the link).
+async function mountShare(root, snapshot) {
+  const box = document.createElement('div');
+  box.className = 'tt-share';
+  box.innerHTML = `<h3 class="h6 mt-3">Share your result</h3><div class="d-flex flex-wrap gap-2 my-2"><button type="button" class="btn btn-primary btn-sm" id="share-native" hidden>Share\u2026</button>
+    <button type="button" class="btn btn-primary btn-sm" id="share-dl" disabled>Download image</button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="share-copy">Copy text and link</button></div>
+    <img class="tt-share-preview" alt="Your result: the sets you won and the final standings" hidden>
+    <p class="small text-muted mb-0" id="share-msg" aria-live="polite">Drawing your result picture\u2026</p>`;
+  root.appendChild(box);
+  const im = box.querySelector('img'), msg = box.querySelector('#share-msg'), dl = box.querySelector('#share-dl'), nat = box.querySelector('#share-native'), copy = box.querySelector('#share-copy');
+  copy.onclick = async () => { try { await navigator.clipboard.writeText(shareMessage(snapshot)); msg.textContent = 'Copied. Paste it anywhere.'; } catch { msg.textContent = shareMessage(snapshot); } };
+  try {
+    const canvas = await drawShareImage(document.createElement('canvas'), snapshot, { imgBase: (v) => E.cardImage(v, 320), names: snapshot.players.map((p) => p.name) });
+    const blob = await canvasToBlob(canvas), url = URL.createObjectURL(blob);
+    im.src = url; im.hidden = false; dl.disabled = false; msg.textContent = '';
+    const file = new File([blob], 'three-by-three.png', { type: 'image/png' });
+    nat.hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+    dl.onclick = () => { const a = document.createElement('a'); a.href = url; a.download = 'three-by-three.png'; document.body.appendChild(a); a.click(); a.remove(); };
+    nat.onclick = async () => { try { await navigator.share(nativeShareData(file, snapshot)); } catch { /* cancelled */ } };
+  } catch { msg.textContent = 'Sorry, the picture could not be drawn in this browser. You can still copy the text.'; }
 }
 function openZoom(v) { $('zoom-img').src = E.cardImage(v, 640); $('zoom-img').alt = tribe(v); $('zoom-cap').textContent = tribe(v); $('zoom').showModal(); }
 
