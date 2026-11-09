@@ -24,12 +24,10 @@
 .tt-c.is-flash { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold); }
 button.tt-c { cursor: pointer; }
 button.tt-c:disabled { cursor: default; opacity: 1; }
-button.tt-c.can:hover, button.tt-c.can:focus-visible { border-color: var(--pick); box-shadow: 0 0 0 3px rgba(10,122,143,.45); }
+button.tt-c.can:hover, button.tt-c.can:focus-visible, div.tt-c.can:hover, div.tt-c.can:focus-visible { border-color: var(--pick); box-shadow: 0 0 0 3px rgba(10,122,143,.45); }
 .tt-c.hole { aspect-ratio: 745 / 1120; border-style: dashed; background: transparent; }
 .tt-mem { position: absolute; left: 0; bottom: 0; background: rgba(37,26,71,.92); color: #fff; font-size: .72rem; font-weight: 800; padding: 0 .4rem; border-radius: 0 7px 0 0; }
 .tt-shown { position: absolute; left: 0; top: 0; background: var(--gold); color: var(--ink); font-size: .65rem; font-weight: 800; padding: 0 .35rem; border-radius: 0 0 7px 0; }
-.tt-ask { display: flex; gap: .3rem; margin-top: .35rem; flex-wrap: wrap; }
-.tt-ask .btn { padding: .1rem .5rem; font-size: .8rem; }
 
 /* the other players */
 .tt-opps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: .6rem; }
@@ -94,3 +92,8 @@ body.has-dock { padding-bottom: 8rem; }
   .tt-dialog { max-width: 96vw; width: 96vw; }
   .tt-wide { width: 94vw; }
 }
+
+/* the cards you can tap to turn over: the ends of each hand */
+div.tt-c.can { cursor: pointer; border-color: var(--pick); }
+.rank.tap { color: var(--pick); }
+.tt-zoom[role=button] { pointer-events: auto; cursor: zoom-in; }
