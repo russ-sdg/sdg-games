@@ -4,6 +4,7 @@
 // A turn: draw (the draw pile or the top of any discard pile) -> play or discard one card -> the turn ends.
 //   start    play the next unplayed day's card (a Day 2 card next to Day 1)                       2 points
 //   add      play a day card on its own day's stack or a later one that is started, open and not full   1 point if that kind is already on the stack, else 2
+//            (but never once its own day is closed: a closed day's cards can no longer be played anywhere)
 //   close    play an Evening & Morning card on a full stack that has none                          the day's number
 //   discard  put any card face-up on one of the three discard piles                                0 points
 // The game ends the moment all six stacks hold their full number of day cards.
@@ -64,7 +65,8 @@ export function moves(s, uid) {
   const d = DEFS[uid], out = [];
   if (d.kind === 'day') {
     if (d.day === s.started + 1 && s.started < 6) out.push({ type: 'start', stack: s.started, pts: 2 });
-    for (let i = d.day - 1; i < s.started; i++) {
+    // Once a day is closed (its Evening & Morning card is down), that day's cards are out of the game: not on it, and not on any later day either.
+    for (let i = d.day - 1; i < s.started && !isClosed(s, d.day - 1); i++) {
       if (isClosed(s, i) || isFull(s, i)) continue;
       out.push({ type: 'add', stack: i, pts: stackKinds(s, i).includes(d.name) ? 1 : 2 });
     }
