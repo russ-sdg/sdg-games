@@ -115,19 +115,24 @@ function wonHtml(p) {
   return p.sets.map((v) => `<figure><img src="${E.cardImage(v, 320)}" alt="Set of ${E.name(v)}" data-zoom="${v}" /><figcaption>${tribe(v)} ×3</figcaption></figure>`).join('');
 }
 // One player's cards. `own` shows their faces to you; others are face down until shown.
+// On your turn, tap a hand's lowest or highest card to have it shown (the middle one only becomes an end once the card above or below it has been shown).
 function handHtml(p, { own }) {
-  const hand = S.players[p].hand, can = mine() && !S.outcome;
+  const hand = S.players[p].hand, acting = mine() && !S.outcome;
   const ends = E.ends(S, p);
+  if (!hand.length) return '<p class="small text-muted mb-0">No cards left in hand.</p>';
   return `<div class="tt-hand">${hand.map((v, idx) => {
     const r = shownAt('hand', p, idx), up = r >= 0;
+    const which = acting && !up ? (idx === ends.hi ? 'hi' : idx === ends.lo ? 'lo' : null) : null;
     const rank = hand.length === 3 ? ['lowest', 'middle', 'highest'][idx] : (idx === 0 ? 'lowest' : idx === hand.length - 1 ? 'highest' : '');
     const mem = !own && !up && memoryOn() && S.know[0][`h:${p}:${idx}`];
     const face = own || up;
     const fl = ui.flash && ui.flash.kind === 'hand' && ui.flash.p === p && ui.flash.idx === idx ? ' is-flash' : '';
-    return `<div class="tt-slot"><span class="rank">${rank}</span><div class="tt-c${cardClasses(r)}${fl}" ${face ? `data-zoom="${v}" role="img" aria-label="${esc(tribe(v))}"` : `role="img" aria-label="Face down card, ${rank}"`}>
-      <img src="${face ? E.cardImage(v, 320) : E.backImage(320)}" alt="" />${face ? ZOOM : ''}${up && own ? '<span class="tt-shown">shown</span>' : ''}${mem ? `<span class="tt-mem">${mem}</span>` : ''}</div></div>`;
-  }).join('')}</div>`
-    + (hand.length ? `<div class="tt-ask">${can ? `<button type="button" class="btn btn-outline-primary" data-ask="${p}:hi"${ends.hi === null ? ' disabled' : ''}>${own ? 'Show my highest' : 'Ask for highest'}</button><button type="button" class="btn btn-outline-primary" data-ask="${p}:lo"${ends.lo === null ? ' disabled' : ''}>${own ? 'Show my lowest' : 'Ask for lowest'}</button>` : ''}</div>` : '<p class="small text-muted mb-0">No cards left in hand.</p>');
+    const label = which ? `${own ? 'Show your' : `Ask ${S.players[p].name} to show their`} ${which === 'hi' ? 'highest' : 'lowest'} card` : face ? tribe(v) : `Face down card, ${rank}`;
+    const act = which ? `data-ask="${p}:${which}" role="button" tabindex="0"` : up ? `data-zoom="${v}" role="button" tabindex="0"` : 'role="img"';
+    const zoom = face ? (which ? `<span class="tt-zoom" role="button" tabindex="0" data-zoom="${v}" aria-label="Read ${esc(tribe(v))}">⤢</span>` : ZOOM) : '';     // your own unshown cards: tap the card to show it, the corner to read it
+    return `<div class="tt-slot"><span class="rank${which ? ' tap' : ''}">${rank}</span><div class="tt-c${cardClasses(r)}${fl}${which ? ' can' : ''}" ${act} aria-label="${esc(label)}">
+      <img src="${face ? E.cardImage(v, 320) : E.backImage(320)}" alt="" />${zoom}${up && own ? '<span class="tt-shown">shown</span>' : ''}${mem ? `<span class="tt-mem">${mem}</span>` : ''}</div></div>`;
+  }).join('')}</div>`;
 }
 function renderOpps() {
   $('opps').innerHTML = S.players.slice(1).map((pl, k) => {
@@ -175,7 +180,7 @@ function renderDock() {
     t = R.length === 2 ? `${esc(tribe(R[0].v))} and ${esc(tribe(R[1].v))} don't match.` : `The third card is ${esc(tribe(R[2].v))}. No set.`;
     t += '<small>Take a good look: every card goes back where it was.</small>';
     acts = '<button type="button" class="btn btn-primary" data-do="continue">OK, next player</button>';
-  } else if (!R.length) t = 'Your turn. Turn over a card: flip one in the matrix, or ask anyone (even yourself) to show their highest or lowest card.';
+  } else if (!R.length) t = "Your turn. Tap a card to turn it over: any card in the matrix, or the highest or lowest card in anyone's hand (even yours).";
   else if (R.length === 1) t = `You have ${esc(tribe(R[0].v))}. Now turn over a second card.`;
   else t = `They match: ${esc(E.name(R[0].v))}! Turn over a third to make a set.`;
   $('status').innerHTML = t; $('actions').innerHTML = acts;
@@ -220,6 +225,7 @@ function openZoom(v) { $('zoom-img').src = E.cardImage(v, 640); $('zoom-img').al
 // ---- wiring ----------------------------------------------------------------------------------------------------------------------
 function onClick(e) {
   const c = (sel) => e.target.closest && e.target.closest(sel);
+  const zz = c('.tt-zoom[data-zoom]'); if (zz) { openZoom(Number(zz.dataset.zoom)); return; }
   const f = c('[data-flip]'); if (f) { doReveal({ kind: 'cell', i: Number(f.dataset.flip) }); return; }
   const a = c('[data-ask]'); if (a) { const [p, which] = a.dataset.ask.split(':'); doReveal({ kind: 'hand', p: Number(p), which }); return; }
   const b = c('[data-do]'); if (b) { if (b.dataset.do === 'continue') onContinue(); else if (b.dataset.do === 'next' && release) release(); return; }
@@ -240,6 +246,7 @@ function init() {
   $('resume-btn').addEventListener('click', () => { const v = load(); if (!v) return; S = v.S; cfg = v.cfg; ui = { flash: null, msg: '', waiting: false }; show('game'); render(); run(); });
   $('discard-btn').addEventListener('click', () => { clearSave(); refreshResume(); });
   document.addEventListener('click', onClick);
+  document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role=button]')) { e.preventDefault(); e.target.click(); } });
   $('zoom').addEventListener('click', (e) => { if (e.target === $('zoom')) $('zoom').close(); });      // tap outside the card to close
   refreshResume();
   const v = load();
