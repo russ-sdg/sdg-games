@@ -320,6 +320,8 @@ function renderHud() {
   }
   $('#hud').innerHTML = body;
   const rb = $('#roll-btn'); if (rb) rb.onclick = doRoll;
+  const end = $('#end-btn'); if (end) end.onclick = () => commit(G.endTurn(state));
+  const undo = $('#undo-btn'); if (undo) undo.onclick = doUndo;
   document.documentElement.style.setProperty('--dock-h', `${$('#hud').offsetHeight}px`);     // keeps the page and the verse toast clear of the dock
   $('#hud').querySelectorAll('[data-mode]').forEach((b) => { b.onclick = () => commit(G.chooseMode(state, b.dataset.mode)); });
   $('#hud').querySelectorAll('[data-announce]').forEach((b) => { b.onclick = () => commit(G.announceRoll(state, b.dataset.announce)); });
