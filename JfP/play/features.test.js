@@ -151,3 +151,12 @@ test('solo with no simulated opponents: you roll every turn and the game still c
     }
   }
 });
+
+test('the pinned status bar wires up its End turn and Undo buttons (they live in renderHud, not in the side panel)', async () => {
+  const { readFileSync } = await import('node:fs');
+  const src = readFileSync(new URL('./js/app.js', import.meta.url), 'utf8');
+  const hud = src.slice(src.indexOf('function renderHud'), src.indexOf('function renderBoard'));
+  assert.match(hud, /id="end-btn"/);
+  assert.match(hud, /\$\('#end-btn'\)[^\n]*onclick\s*=/);
+  assert.match(hud, /\$\('#undo-btn'\)[^\n]*onclick\s*=/);
+});
