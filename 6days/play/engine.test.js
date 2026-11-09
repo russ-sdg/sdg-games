@@ -75,6 +75,16 @@ test('Evening & Morning closes a full stack once, for the day number; day cards 
   assert.deepEqual(E.moves(t, em + 1).filter((m) => m.type === 'close').map((m) => m.stack), [0]);
 });
 
+test('once a day is closed its cards cannot be played on later days either', () => {
+  const em = E.DEFS.findIndex((d) => d.kind === 'em'), sky = uidOf(2, 'Sky', 0), day3 = uidOf(3, 'Earth');
+  const s = rigged([sky, day3], (x) => { x.started = 4; x.stacks[1].cards.push(uidOf(2, 'Sky', 1), uidOf(2, 'Sky', 2)); x.stacks[2].cards.push(uidOf(3, 'Seas')); x.stacks[1].em = em; return x; });
+  assert.deepEqual(E.moves(s, sky).filter((m) => m.type === 'add'), []);                      // Day 2 is closed: its cards fit nowhere, not even Day 3 or Day 4
+  assert.deepEqual(E.moves(s, day3).filter((m) => m.type === 'add').map((m) => m.stack), [2, 3]);   // Day 3 is still open
+  assert.throws(() => E.play(s, sky, { type: 'add', stack: 3 }));
+  const t = structuredClone(s); t.stacks[2].em = em + 1;                                      // close Day 3 as well
+  assert.deepEqual(E.moves(t, day3).filter((m) => m.type === 'add'), []);
+});
+
 test('discarding scores nothing and goes on the pile you pick; empty piles are refilled from the draw pile', () => {
   const sky = uidOf(2, 'Sky');
   let s = rigged([sky]);

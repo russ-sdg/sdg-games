@@ -309,11 +309,18 @@ function renderHud() {
   } else {
     const actor = s.seatNames[s.actor];
     const say = table && s.role === 'roller' ? `<div class="say-it">Tell the table: &ldquo;${MODE_NAMES[s.mode]}!&rdquo;</div>` : '';
+    const can = G.canEndTurn(s), forced = s.actions === 0 && G.nothingToDo(s);
+    const optional = s.role === 'other' && s.actions === 0 && !forced;     // a non-roller may act, but doesn't have to
+    const next = s.queue.length && s.kind === 'pass' ? s.seatNames[s.queue[0]] : null;
+    const endLabel = forced ? 'No move possible &ndash; pass' : optional ? `Don't act${next ? ` &rarr; ${esc(next)}` : ''}` : next ? `End turn &rarr; ${esc(next)}` : 'End turn';
     body = `${dieImg()}${head}${esc(actor)} &middot; Round ${s.round}</div><div class="sub">${roleText()}</div>${say}</div>
-      <div class="die ${s.face === 'choice' ? 'choice' : ''}" title="${s.face === 'choice' ? 'Chosen with Player\'s Choice' : 'Rolled'}">${dieFace(s.mode)}</div>`;
+      <div class="die ${s.face === 'choice' ? 'choice' : ''}" title="${s.face === 'choice' ? 'Chosen with Player\'s Choice' : 'Rolled'}">${dieFace(s.mode)}</div>
+      <div class="dock-actions"><button class="btn btn-primary${G.nothingToDo(s) ? ' nudge' : ''}" id="end-btn" ${can ? '' : 'disabled'}>${endLabel}</button>
+      <button class="btn btn-outline-light" id="undo-btn" ${ui.history.length ? '' : 'disabled'}>Undo</button></div>`;
   }
   $('#hud').innerHTML = body;
   const rb = $('#roll-btn'); if (rb) rb.onclick = doRoll;
+  document.documentElement.style.setProperty('--dock-h', `${$('#hud').offsetHeight}px`);     // keeps the page and the verse toast clear of the dock
   $('#hud').querySelectorAll('[data-mode]').forEach((b) => { b.onclick = () => commit(G.chooseMode(state, b.dataset.mode)); });
   $('#hud').querySelectorAll('[data-announce]').forEach((b) => { b.onclick = () => commit(G.announceRoll(state, b.dataset.announce)); });
 }
@@ -453,11 +460,7 @@ function renderSide() {
     const can = G.canEndTurn(s);
     const forced = s.actions === 0 && G.nothingToDo(s);
     const optional = s.role === 'other' && s.actions === 0 && !forced;     // a non-roller may act, but doesn't have to
-    const next = s.queue.length && s.kind === 'pass' ? s.seatNames[s.queue[0]] : null;
-    controls = `<div class="actionbar">
-      <button class="btn btn-primary${G.nothingToDo(s) ? ' nudge' : ''}" id="end-btn" ${can ? '' : 'disabled'}>${forced ? 'No move possible &ndash; pass' : optional ? `Don't act${next ? ` &rarr; ${esc(next)}` : ''}` : next ? `End turn &rarr; ${esc(next)}` : 'End turn'}</button>
-      <button class="btn btn-outline-secondary" id="undo-btn" ${ui.history.length ? '' : 'disabled'}>Undo</button></div>
-      <p class="small text-muted">${s.role === 'roller' ? `${s.actions}/3 actions used.` : `${s.actions}/1 action used.`}${can ? (optional ? ' Acting is optional for you: pick an evangelist, or skip.' : '') : ' Pick an evangelist, then a highlighted city on the map.'}</p>`;
+    controls = `<p class="small text-muted">${s.role === 'roller' ? `${s.actions}/3 actions used.` : `${s.actions}/1 action used.`}${can ? (optional ? ' Acting is optional for you: pick an evangelist, or skip.' : '') : ' Pick an evangelist, then a highlighted city on the map.'}</p>`;
   }
   const log = s.log.slice(-40).reverse().map((l) => `<li>${esc(l.text)}</li>`).join('');
   $('#side').innerHTML = `
@@ -485,8 +488,6 @@ function renderSide() {
     else if (act === 'move') doMove(b.dataset.edge);
     else if (act === 'preach') doPreach(b.dataset.ev);
   };
-  const end = $('#end-btn'); if (end) end.onclick = () => commit(G.endTurn(state));
-  const undo = $('#undo-btn'); if (undo) undo.onclick = doUndo;
   $('#side').querySelectorAll('[data-view]').forEach((b) => { b.onclick = () => { ui.viewSeat = Number(b.dataset.view); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }; });
   const fix = $('#roller-fix'); if (fix) fix.onchange = () => commit(G.setRoller(state, Number(fix.value)));
   const fin = $('#finish-btn');

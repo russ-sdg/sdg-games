@@ -14,8 +14,8 @@
 The page's rules leave a few things open; these are the choices made, so they are easy to change:
 
 - **Starting a day:** only the next day's own card (a Day 2 card next to Day 1) starts a day: 2 points.
-- **Adding:** a day card goes on its own day's stack or any *later* stack that is started, not full and not closed ("onto its own or a later day's stack"). So a Day 4 card can go on Day 6. Scores 1 point if a card of the same name (kind) is already on that stack, otherwise 2.
-- **Closing:** Evening & Morning goes on a full, unclosed stack, once per stack, for the day's number in points. Day cards can no longer be added to a closed day.
+- **Adding:** a day card goes on its own day's stack or any *later* stack that is started, not full and not closed ("onto its own or a later day's stack"), as long as its own day is not closed. So a Day 4 card can go on Day 6, until Day 4 is closed. Scores 1 point if a card of the same name (kind) is already on that stack, otherwise 2.
+- **Closing:** Evening & Morning goes on a full, unclosed stack, once per stack, for the day's number in points. Once a day is closed, that day's cards can no longer be played anywhere: not on it, and not on a later day either (the box rules: "its day cards can no longer be played").
 - **Draw:** the draw pile or the top of any discard pile; a turn is draw, then play *or* discard one card, so you always hold 2 cards between turns.
 - **Empty discard piles** are refilled from the draw pile at the end of a turn. If the draw pile runs out, the discards (all but each pile's top card) are shuffled back in, up to 3 times; after that, or after 80 rounds, the game ends and the points stand.
 - **The game ends** the moment every stack holds its full number of day cards; most points wins (ties share the win).

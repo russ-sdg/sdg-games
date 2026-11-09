@@ -10,10 +10,11 @@ export const SKILLS = {
   sharp: { wander: 0, careful: true, gift: 0.35 },
 };
 
-// Could this card still be played somewhere, ever? (day cards for days already full or closed, and Evening & Morning with nothing left to close, are dead)
+// Could this card still be played somewhere, ever? (day cards for days already closed, or with no open stack left to take them, and Evening & Morning with nothing left to close, are dead)
 function useful(s, uid) {
   const d = E.DEFS[uid];
   if (d.kind === 'em') return s.stacks.some((k, i) => k.em === null && (i >= s.started || true));
+  if (E.isClosed(s, d.day - 1)) return false;                  // its own day is closed: its cards can no longer be played anywhere
   for (let i = d.day - 1; i < 6; i++) if (!E.isClosed(s, i) && !E.isFull(s, i)) return true;
   return false;
 }

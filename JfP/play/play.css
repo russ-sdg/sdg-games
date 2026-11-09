@@ -13,13 +13,21 @@
 .choice:has(input:focus-visible) { outline: 3px solid #86b7fe; }
 .choice small { display: block; color: #6c757d; margin-top: .15rem; }
 
-/* HUD */
-.hud { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; padding: .75rem 1rem; margin-bottom: .75rem;
-       background: #212529; color: #fff; border-radius: .5rem; }
-.hud .who { font-size: 1.1rem; font-weight: 600; }
-.hud .sub { color: #ced4da; font-size: .9rem; }
-.hud .grow { flex: 1 1 260px; }
-.hud .btn-group-modes { display: flex; gap: .5rem; flex-wrap: wrap; }
+/* HUD: pinned to the foot of the screen, so what to do next (and the roll / end turn buttons) is always in view */
+.hud { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem;
+       padding: .5rem .9rem calc(.5rem + env(safe-area-inset-bottom)); background: #212529; color: #fff; border-top: 3px solid #ffd43b; box-shadow: 0 -6px 18px rgba(0,0,0,.35); }
+.hud > * { max-width: 1500px; }
+.hud .who { font-size: 1.05rem; font-weight: 600; }
+.hud .sub { color: #ced4da; font-size: .88rem; }
+.hud .grow { flex: 1 1 240px; }
+.hud .btn-group-modes, .hud .announce, .hud .dock-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+body:has(#game:not([hidden])) { padding-bottom: calc(var(--dock-h, 110px) + 12px); }
+@media (max-width: 575.98px) {
+    .hud { gap: .3rem .6rem; padding-top: .4rem; }
+    .hud .who { font-size: .95rem; } .hud .sub { font-size: .8rem; }
+    .hud .btn-lg { --bs-btn-padding-y: .3rem; --bs-btn-padding-x: .8rem; --bs-btn-font-size: 1rem; }
+    .hud .die { min-width: 0; height: 40px; padding: 0 .6rem; } .hud .die-img { height: 40px; }
+}
 
 /* die and mode badge */
 .die { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; min-width: 190px; height: 52px; padding: 0 .9rem;
@@ -31,7 +39,7 @@
 .swatch { width: 54px; height: 14px; flex: none; }
 
 /* the die picture */
-.die-img { height: 63px; width: auto; flex: none; filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)); }
+.die-img { height: 46px; width: auto; flex: none; filter: drop-shadow(0 3px 3px rgba(0,0,0,.4)); }
 .die-img.rolling { animation: tumble .45s ease-in-out infinite; }
 @keyframes tumble { 0% { transform: rotate(0) translateY(0); } 25% { transform: rotate(-25deg) translateY(-10px); }
                     50% { transform: rotate(0) translateY(0); } 75% { transform: rotate(25deg) translateY(-10px); } 100% { transform: rotate(0) translateY(0); } }
@@ -114,8 +122,8 @@
 .verse blockquote { margin: 0 0 .35rem; font-size: 1.05rem; line-height: 1.45; font-style: italic; }
 .verse-ref { font-size: .9rem; }
 .verse-note { margin-top: .4rem; font: .82rem system-ui, sans-serif; color: #495057; }
-.verse-toast { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 1500; width: min(640px, calc(100vw - 24px));
-               max-height: 42vh; overflow: auto; background: #fffdf5; border: 1px solid #e6dcb8; border-left: 6px solid #c9a227;
+.verse-toast { position: fixed; left: 50%; bottom: calc(var(--dock-h, 0px) + 14px); transform: translateX(-50%); z-index: 1500; width: min(640px, calc(100vw - 24px));
+               max-height: 36vh; overflow: auto; background: #fffdf5; border: 1px solid #e6dcb8; border-left: 6px solid #c9a227;
                border-radius: .5rem; padding: .8rem 2.4rem .8rem 1rem; box-shadow: 0 6px 24px rgba(0,0,0,.28); animation: rise .35s ease-out; }
 .verse-toast[hidden] { display: none; }
 .verse-close { position: absolute; top: .6rem; right: .6rem; }
