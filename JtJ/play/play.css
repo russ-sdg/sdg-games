@@ -1,0 +1,106 @@
+/* Journeys through Jerusalem: play online. The stone and earth of the old city, with the gold of the title scroll. */
+.jt { --gold: #f2c14e; --ink: #2d1b0b; --brown: #5b3a1e; --red: #a8321f; --ok: #198754; max-width: 1280px; margin: 0 auto; padding-bottom: 7rem !important; }
+.jt-name { font: 800 1.6rem/1 Georgia, serif; color: var(--ink); text-decoration: none; }
+.jt-h { font-size: 1.05rem; font-weight: 800; margin: 1rem 0 .4rem; }
+.jt-card { background: #fff; border: 1px solid #dee2e6; border-radius: .6rem; padding: .7rem .85rem; margin-bottom: .7rem; }
+[hidden] { display: none !important; }
+.jt-swatches { display: flex; flex-wrap: wrap; gap: .5rem; }
+.jt-swatches label { display: flex; align-items: center; gap: .4rem; padding: .3rem .6rem; border: 2px solid #ced4da; border-radius: .6rem; cursor: pointer; }
+.jt-swatches input { position: absolute; opacity: 0; }
+.jt-swatches label:has(input:checked) { border-color: var(--brown); background: #fff4d6; }
+.jt-swatches label:has(input:focus-visible) { outline: 3px solid #0a7a8f; }
+.jt-dot { display: inline-block; width: 1.1rem; height: 1.1rem; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1.5px #222; flex: none; vertical-align: -.2rem; }
+
+/* the scores */
+.jt-bar { display: flex; flex-wrap: wrap; gap: .4rem; position: sticky; top: 0; z-index: 30; padding: .45rem 0; background: #f0f2f5; }
+.jt-score { display: flex; align-items: center; gap: .5rem; padding: .3rem .7rem; border: 2px solid #ced4da; border-radius: .6rem; background: #fff; }
+.jt-score .n { font-weight: 700; }
+.jt-score.is-roller { border-color: var(--gold); background: #fff9e6; }
+.jt-cats { font-size: .72rem; font-weight: 800; display: flex; gap: .15rem; }
+.jt-cat { width: 1.25rem; text-align: center; border-radius: 4px; color: #fff; opacity: .28; }
+.jt-cat.on { opacity: 1; }
+.jt-round { margin-left: auto; align-self: center; font-size: .85rem; color: #5c636a; text-align: right; }
+
+.jt-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1rem; align-items: start; }
+@media (max-width: 900px) { .jt-grid { grid-template-columns: 1fr; } }
+
+/* the map */
+.jt-mapbox { position: relative; border: 3px solid var(--brown); border-radius: .6rem; overflow: hidden; background: #6b6a2a; position: sticky; top: 3.4rem; }
+@media (max-width: 900px) { .jt-mapbox { position: relative; top: 0; } }
+.jt-map { display: block; width: 100%; height: auto; aspect-ratio: 1; touch-action: manipulation; }
+.jt-zoom { position: absolute; right: .5rem; top: .5rem; opacity: .92; }
+.jt-map .go { cursor: pointer; }
+.jt-map .go circle.hit { fill: rgba(255,255,255,.42); stroke: var(--gold); stroke-width: 4; }
+.jt-map .go.site circle.hit { fill: rgba(242,193,78,.55); stroke: #fff; stroke-width: 5; }
+.jt-map .go:hover circle.hit, .jt-map .go:focus-visible circle.hit { fill: rgba(242,193,78,.85); stroke: #000; }
+.jt-map .go.sel circle.hit { fill: rgba(25,135,84,.75); stroke: #fff; stroke-width: 6; }
+.jt-map .go:focus { outline: none; }
+.jt-map .go text { font: 800 15px system-ui, sans-serif; fill: #000; paint-order: stroke; stroke: #fff; stroke-width: 3px; text-anchor: middle; pointer-events: none; }
+.jt-map .route { fill: none; stroke: #fff; stroke-width: 7; stroke-dasharray: 2 12; stroke-linecap: round; pointer-events: none; }
+.jt-map .need { fill: none; stroke: var(--gold); stroke-width: 6; pointer-events: none; }
+.jt-map .need.is-done { stroke: #19c37d; }
+.jt-map .tick { fill: #19c37d; stroke: #fff; stroke-width: 3; pointer-events: none; }
+.jt-map .tick-t { font: 800 15px system-ui, sans-serif; fill: #fff; text-anchor: middle; pointer-events: none; }
+.jt-map .tok { transition: transform .45s ease; }
+.jt-map .tok circle { stroke: #000; stroke-width: 5; paint-order: stroke; }
+.jt-map .tok .ring { fill: none; stroke: #fff; stroke-width: 4; }
+@keyframes jt-pulse { 50% { opacity: .55; } }
+.jt-map .go { animation: jt-pulse 1.6s ease-in-out infinite; }
+.jt-map .go.sel { animation: none; }
+
+/* your journey */
+.jt-mine { display: grid; grid-template-columns: minmax(0, 9rem) 1fr; gap: .8rem; }
+.jt-mine img { width: 100%; height: auto; border-radius: 7px; box-shadow: 0 1px 5px rgba(0,0,0,.5); cursor: zoom-in; display: block; }
+.jt-mine h2 { font-size: 1.1rem; font-weight: 800; margin: 0; }
+.jt-mine .cat { font-size: .78rem; font-weight: 800; color: #fff; padding: 0 .45rem; border-radius: 4px; }
+.jt-stops { list-style: none; padding: 0; margin: .4rem 0 0; font-size: .86rem; }
+.jt-stops li { display: flex; align-items: center; gap: .4rem; padding: .1rem 0; }
+.jt-stops img { width: 1.5rem; height: 1.5rem; border-radius: 50%; box-shadow: none; cursor: default; flex: none; }
+.jt-stops .ref { color: #6c757d; font-size: .74rem; }
+.jt-stops li.got { color: var(--ok); font-weight: 700; }
+.jt-stops li.got::after { content: ' \2713'; }
+
+/* the other players */
+.jt-opps { display: grid; gap: .5rem; margin-bottom: .7rem; }
+.jt-opp { background: #fff; border: 3px solid #dee2e6; border-radius: .6rem; padding: .4rem .6rem; }
+.jt-opp.is-roller { border-color: var(--gold); }
+.jt-opp-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .1rem .6rem; font-weight: 700; }
+.jt-opp-head .meta { font-size: .8rem; font-weight: 600; color: #5c636a; margin-left: auto; }
+.jt-marks { display: flex; flex-wrap: wrap; gap: .15rem; margin-top: .25rem; }
+.jt-marks img { width: 1.35rem; height: 1.35rem; border-radius: 50%; opacity: .22; }
+.jt-marks img.on { opacity: 1; box-shadow: 0 0 0 2px var(--ok); }
+.jt-won { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .35rem; align-items: center; min-height: 1.4rem; }
+.jt-won .none { color: #868e96; font-size: .8rem; }
+.jt-won figure { margin: 0; width: 2.3rem; text-align: center; }
+.jt-won img { width: 100%; height: auto; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.45); display: block; cursor: zoom-in; }
+.jt-won figcaption { font-size: .6rem; font-weight: 700; line-height: 1.1; }
+
+.jt-log { margin: 0; padding: 0; list-style: none; font-size: .86rem; max-height: 16rem; overflow: auto; }
+.jt-log li.me { font-weight: 700; }
+.jt-log li.head { color: #5c636a; font-weight: 700; border-top: 1px solid #e9ecef; margin-top: .2rem; padding-top: .15rem; }
+.jt-log li.head:first-child { border-top: 0; margin-top: 0; }
+
+/* what to do next, pinned to the foot of the screen */
+.jt-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: #fffdf5; border-top: 3px solid var(--brown); box-shadow: 0 -6px 18px rgba(0,0,0,.25); padding: .5rem .8rem calc(.5rem + env(safe-area-inset-bottom)); }
+.jt-dock-main { display: flex; flex-wrap: wrap; gap: .4rem .8rem; align-items: center; max-width: 1280px; margin: 0 auto; }
+.jt-dock-text { margin: 0; font-weight: 700; flex: 1 1 14rem; }
+.jt-dock-actions { display: flex; flex-wrap: wrap; gap: .4rem; }
+.jt-die { font-size: 2.6rem; line-height: 1; width: 2.6rem; text-align: center; color: var(--brown); }
+.jt-die:empty { display: none; }
+
+/* dialogs */
+.jt-dialog { border: 0; border-radius: .8rem; padding: 1rem; max-width: min(94vw, 34rem); box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+.jt-dialog::backdrop { background: rgba(0,0,0,.6); }
+.jt-dialog.jt-wide { max-width: min(96vw, 46rem); }
+.jt-dialog img#zoom-img { max-width: 100%; max-height: 78vh; display: block; margin: 0 auto .5rem; border-radius: 8px; }
+.jt-offers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+.jt-offer { border: 3px solid #dee2e6; border-radius: .6rem; padding: .5rem; background: #fff; text-align: left; cursor: pointer; }
+.jt-offer:hover, .jt-offer:focus-visible { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold); outline: none; }
+.jt-offer img { width: 100%; height: auto; border-radius: 6px; display: block; }
+.jt-offer b { display: block; margin-top: .3rem; }
+.jt-offer .small { color: #5c636a; }
+.jt-final { width: 100%; font-size: .92rem; }
+.jt-final td, .jt-final th { padding: .25rem .5rem; border-bottom: 1px solid #e9ecef; }
+.jt-final tr.win { background: #fff4d6; font-weight: 700; }
+@media (max-width: 520px) { .jt-offers { grid-template-columns: 1fr 1fr; gap: .4rem; } .jt-mine { grid-template-columns: 6.5rem 1fr; } }
+@media (prefers-reduced-motion: reduce) { .jt-map .go { animation: none; } .jt-map .tok { transition: none; } }
