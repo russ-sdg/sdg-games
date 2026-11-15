@@ -24,7 +24,7 @@
       blurb: 'A trick-taking game with a Biblical twist: your role from the gospels turns matching cards into grace cards.', facts: ['2\u20134 players', 'Ages 12+', '30\u201360 min'] },
     { slug: 'JfP', title: 'Journeys for Paul', tags: ['Board game'], art: 'jfp', artAlt: 'Journeys for Paul game art', price: '34.99', online: 'JfP/play/',
       blurb: 'Send three evangelists to the churches Paul planted.', facts: ['2–4 players', 'Ages 12+', '15–30 min'] },
-    { slug: 'JtJ', title: 'Journeys through Jerusalem', tags: ['Board game'], art: 'jtj', artAlt: 'Journeys through Jerusalem game art', price: '49.99', featured: true,
+    { slug: 'JtJ', title: 'Journeys through Jerusalem', tags: ['Board game'], art: 'jtj', artAlt: 'Journeys through Jerusalem game art', price: '49.99', online: 'JtJ/play/', featured: true,
       blurb: 'Follow Biblical characters through Jesus’ final days in Jerusalem and complete their journeys to score.', facts: ['2–6 players', 'Ages 12+', '15–30 min'] },
     { slug: 'journeys-with-jesus', title: 'Journeys with Jesus', tags: ['Board game'], art: 'jwj', artAlt: 'Journeys with Jesus game art', price: '34.99', online: 'journeys-with-jesus/play/',
       blurb: 'Travel with Jesus through the gospels, learning their geography and memorizing Scripture along the way.', facts: ['Up to 4 players', 'Ages 12+', '15–30 min'] },

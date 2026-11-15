@@ -74,3 +74,6 @@
 
 /3x3/play/*
   Cache-Control: no-cache
+
+/JtJ/play/*
+  Cache-Control: no-cache
