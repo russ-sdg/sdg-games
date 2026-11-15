@@ -104,3 +104,9 @@
 .jt-final tr.win { background: #fff4d6; font-weight: 700; }
 @media (max-width: 520px) { .jt-offers { grid-template-columns: 1fr 1fr; gap: .4rem; } .jt-mine { grid-template-columns: 6.5rem 1fr; } }
 @media (prefers-reduced-motion: reduce) { .jt-map .go { animation: none; } .jt-map .tok { transition: none; } }
+
+/* the Scripture for a site you have reached */
+.jt-verse { max-height: 50vh; overflow: auto; font: 1.05rem/1.55 Georgia, serif; padding: .5rem .7rem; background: #fffaf0; border-left: 4px solid var(--gold); border-radius: .3rem; }
+.jt-verse sup { font: 700 .66rem system-ui, sans-serif; color: var(--red); margin-right: .15rem; }
+.jt-verse-icon { width: 1.8rem; height: 1.8rem; border-radius: 50%; vertical-align: -.45rem; }
+.ref-btn { border: 0; background: none; padding: 0; color: #0a58ca; font-size: .74rem; text-decoration: underline; cursor: pointer; }

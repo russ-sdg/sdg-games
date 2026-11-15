@@ -3,6 +3,7 @@ import * as E from './engine.js';
 import * as AI from './ai.js';
 import { TILES, SITES, COLORS, MAP_IMAGE, MAP_SIZE, pathBetween } from './map-data.js';
 import { CARD, CATEGORIES, cardImage } from './cards.js';
+import SCRIPTURE from './scripture-data.js';
 import { drawShareImage, canvasToBlob, nativeShareData, shareMessage } from './share.js';
 
 const KEY = 'sdg-jtj-play-1';
@@ -100,11 +101,14 @@ async function doMove(my) {
   ui.tiles = null; ui.sel = null; ui.actions = [];
   S = E.submitMove(S, 0, choice === 'stay' ? null : choice);
   S = AI.botMoves(S);
-  const rolledBy = S.roller === 0 ? 'you' : S.players[S.roller].name;
+  const rolledBy = S.roller === 0 ? 'you' : S.players[S.roller].name, cardBefore = S.players[0].card, seenBefore = S.players[0].visited.slice();
   S = E.resolve(S);
   const lines = describe(S.last);
   logRound(rolledBy, lines); save();
   ui.msg = lines.filter((l) => l.show).map((l) => l.text).join(' ') || 'Everyone has moved.'; ui.die = FACES[S.die - 1]; render();
+  const reached = S.last.find((e) => e.seat === 0 && e.site !== null && e.site !== undefined && cardBefore && !seenBefore.includes(e.site));
+  const stop = reached && CARD[cardBefore].stops.find((x) => x.site === SITES[reached.site].id);
+  if (stop) { await readPassage(stop, cardBefore); if (my !== token) return; }
   if (S.last.some((e) => e.t === 'complete')) { setAct([{ label: 'Continue', primary: true, act: () => settle(true) }]); await waitFor(); } else await sleep(1000);
   ui.actions = []; ui.msg = '';
   S = AI.botPicks(S); save(); render();
@@ -147,7 +151,30 @@ function pickCardDialog(offer, title, note) {
     dlg.showModal();
   });
 }
+// the Scripture that puts the character at a site you have reached (World English Bible)
+function showPassage(stop, cardId, onClose) {
+  const site = SITES.find((x) => x.id === stop.site), verses = SCRIPTURE.passages[stop.ref] || [];
+  $('verse-title').innerHTML = `<img src="${site.icon}" alt="" class="jt-verse-icon" /> ${esc(site.name)} <span class="small text-muted">&middot; ${esc(CARD[cardId].name)}</span>`;
+  $('verse-ref').textContent = `${stop.ref} (${SCRIPTURE.translation})`;
+  $('verse-text').innerHTML = verses.map(([n, t]) => `<sup>${n}</sup>${esc(t)}`).join(' ');
+  const dlg = $('verse'); dlg.onclose = () => { dlg.onclose = null; if (onClose) onClose(); };
+  dlg.showModal();
+}
+const readPassage = (stop, cardId) => new Promise((resolve) => { pending = (v) => { if ($('verse').open) $('verse').close(); resolve(v); }; showPassage(stop, cardId, () => { pending = null; resolve(true); }); });
 function zoomCard(id) { $('zoom-img').src = cardImage(id, 820); $('zoom-img').alt = `The ${CARD[id].name} card`; $('zoom-cap').textContent = `${CARD[id].name}, ${CARD[id].pts} points`; $('zoom').showModal(); }
+
+// Taps are caught on the map itself (not on squares that get redrawn), and go to the nearest square you can choose. A redraw between
+// finger down and finger up (the browser's address bar sliding away resizes the page, for one) can no longer swallow the first tap.
+const choose = (tile) => { if (ui.onPick) ui.onPick(tile); else settle(tile); };
+function tapMap(e) {
+  if (!ui.tiles || !ui.tiles.length || (e.pointerType === 'mouse' && e.button !== 0)) return;
+  const svg = $('map'), m = svg.getScreenCTM(); if (!m) return;
+  const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+  const p = pt.matrixTransform(m.inverse()), per = svg.viewBox.baseVal.width / (svg.clientWidth || 1), tol = Math.max(26, Math.min(44, 22 * per));
+  let best = null, bd = Infinity;
+  for (const o of ui.tiles) { const d = Math.hypot(TILES[o.tile].x - p.x, TILES[o.tile].y - p.y); if (d < bd) { bd = d; best = o; } }
+  if (best && bd <= tol) choose(best.tile);
+}
 
 // ---- drawing ---------------------------------------------------------------------------------------------------------------------
 function render() {
@@ -189,8 +216,7 @@ function renderMap() {
     const t = TILES[o.tile], g = el('g', { class: `go${t.site !== null ? ' site' : ''}${ui.sel === o.tile ? ' sel' : ''}`, tabindex: 0, role: 'button', 'data-tile': o.tile, 'aria-label': `${squareName(o.tile)}${o.steps ? `, ${plural(o.steps, 'square')} away` : ''}` }, svg);
     el('circle', { cx: t.x, cy: t.y, r: 21, class: 'hit' }, g);
     if (o.steps) el('text', { x: t.x, y: t.y + 5 }, g).textContent = o.steps;
-    const pick = () => { if (ui.onPick) ui.onPick(o.tile); else settle(o.tile); };
-    g.addEventListener('click', pick); g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+    g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(o.tile); } });
   }
   if (ui.sel !== null && me.pos >= 0) el('polyline', { points: pathBetween(me.pos, ui.sel).map((i) => `${TILES[i].x},${TILES[i].y}`).join(' '), class: 'route' }, svg);
   if (me.pos >= 0) {
@@ -205,7 +231,7 @@ function renderMine() {
   box.innerHTML = `<div class="jt-mine"><img src="${cardImage(id, 320)}" alt="The ${esc(c.name)} card (zoom)" data-zoom="${id}" /><div>
     <h2>${esc(c.name)} <span class="cat" style="background:${cat.bar}">${cat.name}</span></h2>
     <div class="small">${c.pts} points &middot; ${got} of ${c.stops.length} sites visited${got ? ` (+${got * E.END_BONUS} if the game ended now)` : ''}</div>
-    <ul class="jt-stops">${c.stops.map((s) => { const i = SITES.findIndex((x) => x.id === s.site); return `<li class="${vis.includes(i) ? 'got' : ''}"><img src="${SITES[i].icon}" alt="" /><span>${esc(SITES[i].name)} <span class="ref">${esc(s.ref)}</span></span></li>`; }).join('')}</ul></div></div>
+    <ul class="jt-stops">${c.stops.map((s) => { const i = SITES.findIndex((x) => x.id === s.site); return `<li class="${vis.includes(i) ? 'got' : ''}"><img src="${SITES[i].icon}" alt="" /><span>${esc(SITES[i].name)} ${vis.includes(i) ? `<button type="button" class="ref-btn" data-read="${esc(s.ref)}" data-site="${s.site}" data-card="${id}">Read ${esc(s.ref)}</button>` : `<span class="ref">${esc(s.ref)}</span>`}</span></li>`; }).join('')}</ul></div></div>
     <div class="small mt-2 text-muted">You can finish your move on a site you do not need, but it only counts if it is on your card. Your token is ${colorName(me.color).toLowerCase()}.</div>`;
 }
 function renderOpps() {
@@ -249,8 +275,10 @@ const saved = load();
 if (saved) { $('resume').hidden = false; $('resume-btn').addEventListener('click', () => { S = saved.S; cfg = saved.cfg; ui = { sel: null, msg: '', actions: [], die: '', tiles: null }; wholeMap = null; show('game'); render(); run(); }); $('discard-btn').addEventListener('click', () => { clearSave(); $('resume').hidden = true; }); }
 $('menu-btn').addEventListener('click', () => { if (S && !S.over && !confirm('Leave this game? It is saved, and you can resume it from the start page.')) return; token++; settle(null); if (S && !S.over) save(); location.reload(); });
 $('zoom-btn').addEventListener('click', () => { const small = window.innerWidth < 900; wholeMap = wholeMap === null ? !small : !wholeMap; render(); });
-document.addEventListener('click', (e) => { const z = e.target.closest('[data-zoom]'); if (z) zoomCard(z.dataset.zoom); });
+document.addEventListener('click', (e) => { const r = e.target.closest('[data-read]'); if (r) { showPassage({ site: r.dataset.site, ref: r.dataset.read }, r.dataset.card); return; } const z = e.target.closest('[data-zoom]'); if (z) zoomCard(z.dataset.zoom); });
 $('final-again').addEventListener('click', () => { clearSave(); location.reload(); });
 $('share-btn').addEventListener('click', share);
-window.addEventListener('resize', () => { if (S) renderMap(); });
+let lastW = window.innerWidth;
+window.addEventListener('resize', () => { if (S && window.innerWidth !== lastW) { lastW = window.innerWidth; renderMap(); } });   // phones resize when the address bar moves: that is not a new layout
+$('map').addEventListener('pointerup', tapMap);
 if (params.has('debug')) window.jtj = { get S() { return S; }, E, AI };

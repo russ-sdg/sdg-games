@@ -155,3 +155,14 @@ test('a tie goes to the player with the most journeys, and can still be shared',
   assert.deepEqual(S.winners, [1]);
   assert.deepEqual(E.standings(S).map((r) => r.seat), [1, 0]);
 });
+
+test('every passage on every card has World English Bible text, verse by verse, for the whole range printed on the card', async () => {
+  const { default: W } = await import('./js/scripture-data.js');
+  assert.equal(W.translation, 'World English Bible');
+  for (const c of CARDS) for (const s of c.stops) {
+    const v = W.passages[s.ref], m = /:(\d+)(?:-(\d+))?$/.exec(s.ref), from = Number(m[1]), to = Number(m[2] || m[1]);
+    assert.ok(v && v.length === to - from + 1, `${s.ref} has every verse`);
+    v.forEach(([n, t], i) => { assert.equal(n, from + i); assert.ok(t.length > 10, `${s.ref}:${n}`); });
+  }
+  assert.match(W.passages['Luke 24:33'][0][1], /^They rose up that very hour/);
+});
