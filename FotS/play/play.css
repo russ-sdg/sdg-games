@@ -1,0 +1,101 @@
+/* The Fruit of the Spirit: play online. Olive green and ripe gold, as on the product page. */
+.fp { --gold: #f0c75e; --ink: #1f2a12; --olive: #35572b; --pick: #0a7a8f; --ok: #198754; --cw: clamp(88px, 17vw, 124px); max-width: 1200px; margin: 0 auto; }
+.fp-name { font: 800 1.6rem/1 Georgia, serif; color: var(--olive); text-decoration: none; }
+.fp-h { font-size: 1.05rem; font-weight: 800; margin: 1rem 0 .4rem; }
+.fp-card { background: #fff; border: 1px solid #dee2e6; border-radius: .6rem; padding: .7rem .85rem; }
+.fp-steps { padding-left: 1.2rem; }
+[hidden] { display: none !important; }
+
+/* the scores */
+.fp-bar { display: flex; flex-wrap: wrap; gap: .4rem; position: sticky; top: 0; z-index: 30; padding: .45rem 0; background: #f0f2f5; }
+.fp-score { display: flex; align-items: center; gap: .5rem; padding: .3rem .7rem; border: 2px solid #ced4da; border-radius: .6rem; background: #fff; }
+.fp-score .n { font-weight: 700; }
+.fp-score.is-turn { border-color: var(--gold); background: #fff9e6; }
+.fp-score .c { font-size: .78rem; color: #5c636a; }
+.fp-pips { letter-spacing: .05rem; font-size: .95rem; color: var(--olive); }
+.fp-round { margin-left: auto; align-self: center; font-size: .85rem; color: #5c636a; text-align: right; }
+
+/* a Fruit Tree: nine spaces */
+.fp-tree { display: grid; grid-template-columns: repeat(3, 1fr); gap: .3rem; }
+.fp-slot { position: relative; border: 2px dashed #ced4da; border-radius: 7px; padding: .2rem .1rem; min-height: 2.6rem; text-align: center; display: flex; flex-direction: column; justify-content: center; line-height: 1.1; background: #fafafa; color: #868e96; }
+.fp-slot .nm { font-size: .72rem; font-weight: 700; }
+.fp-slot .st { font-size: .64rem; }
+.fp-slot.up { border: 2px solid var(--c); background: #fff; color: var(--c); }
+.fp-slot.up .st::before { content: "\2713 "; }
+.fp-slot.up.wild { background: #f3f6e4; }
+.fp-slot.up.wild .st::before { content: "\1FAD2  "; }
+.fp-slot.cov { border: 2px solid #212529; background: #343a40; color: #f8f9fa; }
+.fp-slot.cov .nm { text-decoration: line-through; opacity: .75; }
+.fp-slot.cov .st { color: #ffb4a8; font-weight: 700; }
+.fp-me .fp-slot { min-height: 3.4rem; } .fp-me .fp-slot .nm { font-size: .86rem; } .fp-me .fp-slot .st { font-size: .74rem; }
+
+/* the other players */
+.fp-opps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .6rem; }
+.fp-opp { background: #fff; border: 3px solid #dee2e6; border-radius: .6rem; padding: .45rem .6rem; }
+.fp-opp.is-turn { border-color: var(--gold); }
+.fp-opp-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .1rem .6rem; font-weight: 700; margin-bottom: .3rem; }
+.fp-opp-head .meta { font-size: .8rem; font-weight: 600; color: #5c636a; margin-left: auto; }
+.fp-me { background: #fff; border: 3px solid #dee2e6; border-radius: .6rem; padding: .5rem .6rem; max-width: 30rem; }
+.fp-me.is-turn { border-color: var(--gold); }
+.fp-flag { display: inline-block; font-size: .72rem; font-weight: 700; background: #e7f1ff; color: #084298; border-radius: 1rem; padding: 0 .5rem; margin-left: .3rem; }
+
+/* the piles */
+.fp-table { margin-top: .8rem; }
+.fp-piles { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
+.fp-pile { text-align: center; font-size: .8rem; color: #5c636a; }
+.fp-pile .fp-c { --cw: 84px; margin: 0 auto .2rem; }
+.fp-back { background: repeating-linear-gradient(45deg, #35572b 0 8px, #2b4723 8px 16px); border-color: #1f2a12; color: #f0c75e; display: grid; place-items: center; font-size: 1.6rem; }
+
+/* a card */
+.fp-hand { display: flex; flex-wrap: wrap; gap: .5rem; }
+.fp-c { position: relative; width: var(--cw); aspect-ratio: 5 / 7; border: 3px solid var(--c, #333); border-radius: 10px; background: #fff; color: var(--c, #333); padding: .25rem .3rem; display: flex; flex-direction: column; align-items: center; text-align: center; overflow: hidden; font-family: inherit; }
+button.fp-c { cursor: pointer; }
+button.fp-c:hover, button.fp-c:focus-visible { box-shadow: 0 0 0 3px rgba(10,122,143,.5); }
+.fp-c .ic { font-size: 1.15rem; line-height: 1; }
+.fp-c .nm { font: 700 .95rem/1.1 Georgia, serif; margin-top: .1rem; }
+.fp-c .tx { font-size: .62rem; line-height: 1.15; color: #212529; margin: .2rem 0; flex: 1; display: flex; align-items: center; }
+.fp-c .ty { font: 700 .8rem/1 Georgia, serif; }
+.fp-c.deed { background: #fbf3f2; --c: #7a1313; }
+.fp-c.deed .ty { text-transform: none; }
+.fp-c.wild { background: #f3f6e4; --c: #5d6b1f; }
+.fp-c.can { box-shadow: 0 0 0 3px rgba(10,122,143,.35); }
+.fp-c.big { --cw: min(60vw, 230px); padding: .5rem .6rem; }
+.fp-c.big .ic { font-size: 2rem; } .fp-c.big .nm { font-size: 1.6rem; } .fp-c.big .tx { font-size: .95rem; } .fp-c.big .ty { font-size: 1.1rem; }
+.fp-c.mini { --cw: 4.2rem; border-width: 2px; padding: .15rem; } .fp-c.mini .nm { font-size: .7rem; } .fp-c.mini .tx, .fp-c.mini .ic { display: none; } .fp-c.mini .ty { font-size: .6rem; }
+
+.fp-log { margin: 0; padding-left: 1.2rem; font-size: .88rem; display: flex; flex-direction: column-reverse; }
+.fp-log li.me { font-weight: 700; }
+.fp-log li.note { color: #5c636a; font-style: italic; }
+
+/* what to do next, pinned to the foot of the screen */
+.fp-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: #fffdf5; border-top: 3px solid var(--olive); box-shadow: 0 -6px 18px rgba(0,0,0,.25); padding: .5rem .8rem calc(.5rem + env(safe-area-inset-bottom)); }
+.fp-dock-main { display: flex; flex-wrap: wrap; gap: .4rem .8rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+.fp-dock-text { margin: 0; font-weight: 700; flex: 1 1 16rem; }
+.fp-dock-text small { display: block; font-weight: 500; }
+.fp-dock-actions { display: flex; flex-wrap: wrap; gap: .4rem; flex: 0 0 auto; }
+body.has-dock { padding-bottom: 8rem; }
+
+/* dialogs */
+.fp-dialog { border: 0; border-radius: .8rem; max-width: min(92vw, 34rem); padding: 1rem 1.2rem; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+.fp-dialog::backdrop { background: rgba(0,0,0,.5); }
+.fp-wide { max-width: min(94vw, 40rem); max-height: 92vh; overflow: auto; }
+.fp-opts { display: flex; flex-wrap: wrap; gap: .5rem; margin: .6rem 0; }
+.fp-opt { border: 2px solid var(--c, #adb5bd); background: #fff; color: var(--c, #212529); border-radius: .6rem; padding: .4rem .8rem; font-weight: 700; text-align: left; }
+.fp-opt small { display: block; font-weight: 500; color: #5c636a; }
+.fp-opt:hover, .fp-opt:focus-visible { box-shadow: 0 0 0 3px rgba(10,122,143,.5); }
+.fp-cardview { display: flex; flex-direction: column; align-items: center; gap: .6rem; }
+.fp-why { background: #fff3cd; border-radius: .5rem; padding: .4rem .7rem; font-size: .88rem; }
+.fp-verse { font-size: .8rem; color: #5c636a; font-style: italic; }
+.fp-final-row { display: flex; justify-content: space-between; padding: .25rem 0; border-bottom: 1px solid #e9ecef; }
+.fp-final-row.win { font-weight: 800; color: #0f5132; }
+.fp-quiz-n { font-weight: 800; }
+
+@media (max-width: 575px) {
+  .fp { --cw: calc((100vw - 2.2rem - 1rem) / 3); }
+  .fp-c .tx { font-size: .56rem; } .fp-c .nm { font-size: .85rem; }
+  .fp-dock { padding-top: .35rem; } .fp-dock-text { font-size: .88rem; } .fp-dock-text small { font-size: .8rem; }
+  .fp-dock-actions .btn { padding: .25rem .6rem; font-size: .85rem; }
+  body.has-dock { padding-bottom: 9rem; }
+  .fp-dialog { max-width: 96vw; width: 96vw; }
+}
+@media (prefers-reduced-motion: no-preference) { .fp-c, .fp-slot { transition: box-shadow .15s, border-color .15s; } }

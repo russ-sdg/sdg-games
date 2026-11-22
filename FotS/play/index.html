@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Play The Fruit of the Spirit online, free: be the first to collect all nine fruits of Galatians 5:22-23 against 1 to 3 computer players." />
+    <title>Play The Fruit of the Spirit Online - SDG Games</title>
+    <link rel="icon" type="image/x-icon" href="../../assets/favicon.ico" />
+    <link href="../../css/styles.css" rel="stylesheet" />
+    <link href="play.css?v=20261122" rel="stylesheet" />
+</head>
+<body class="sb-nav-fixed">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="main-nav"></nav>
+
+    <main class="fp container-fluid px-3 pb-5">
+        <div class="fp-title d-flex flex-wrap align-items-center gap-3 py-3">
+            <a href="../index.html" class="fp-name">The Fruit of the Spirit</a>
+            <span class="badge text-bg-secondary">Play online</span>
+            <a class="ms-auto small" href="../index.html">About the game</a>
+        </div>
+
+        <!-- ================= SETUP ================= -->
+        <section id="setup" aria-labelledby="setup-title">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card shadow-sm"><div class="card-body">
+                        <h1 class="h3" id="setup-title">New game</h1>
+                        <div id="resume" class="alert alert-info d-flex flex-wrap align-items-center gap-2" hidden>
+                            <span>You have a game in progress.</span>
+                            <button type="button" class="btn btn-sm btn-primary" id="resume-btn">Resume</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="discard-btn">Discard it</button>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-6"><label class="form-label" for="bot-count">Computer players</label>
+                                <select class="form-select" id="bot-count"><option value="1">1 opponent</option><option value="2">2 opponents</option><option value="3" selected>3 opponents</option></select></div>
+                            <div class="col-sm-6"><label class="form-label" for="bot-skill">How well do they play?</label>
+                                <select class="form-select" id="bot-skill"><option value="casual">Casual</option><option value="steady" selected>Steady</option><option value="sharp">Sharp</option><option value="mixed">A mix</option></select></div>
+                        </div>
+                        <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="quiz-help" /><label class="form-check-label" for="quiz-help">Help me with Goodness <span class="text-muted">(shows the first letter of each fruit while you recite)</span></label></div>
+                        <button type="button" class="btn btn-primary btn-lg" id="start-btn">Start the game</button>
+                        <p class="small text-muted mt-3 mb-0">The box game has teams for four to six players. Online, you play on your own against up to three computer players.</p>
+                    </div></div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card shadow-sm"><div class="card-body small">
+                        <h2 class="h6">How it works</h2>
+                        <p>Be the first to show <b>all nine fruits</b> of Galatians 5:22&ndash;23 on your Fruit Tree. Everyone holds five cards.</p>
+                        <ol class="fp-steps">
+                            <li><b>Draw</b> a card from the pile or the top of the discard pile &mdash; or <b>skip</b> your turn.</li>
+                            <li><b>Play one Fruit card</b> by doing what it says. <b>Joy</b> and <b>Faithfulness</b> are extras.</li>
+                            <li><b>Play one Deed card</b> if you like. It hurts an opponent, but it <b>covers one of your own fruit</b>.</li>
+                            <li><b>Discard</b> what you do not need, then draw back up to five.</li>
+                        </ol>
+                        <p>A covered fruit must be earned again, or <b>redeemed</b> by playing Self-Control (or when an opponent plays Love for you). A <b>Wild</b> card fills any gap when you cannot play another Fruit card.</p>
+                        <p class="mb-0"><a href="../index.html#play">Read the full rules</a> &middot; tap any card in the game to read what it does.</p>
+                    </div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= GAME ================= -->
+        <section id="game" hidden aria-label="Game">
+            <div class="fp-bar" id="bar"></div>
+            <div id="opps" class="fp-opps"></div>
+            <div class="fp-table">
+                <div class="fp-piles" id="piles"></div>
+            </div>
+            <h2 class="fp-h">You</h2>
+            <div class="fp-me" id="me"></div>
+            <h2 class="fp-h">Your hand <small class="fw-normal text-muted" id="hand-note"></small></h2>
+            <div class="fp-hand" id="hand"></div>
+            <div class="fp-card mt-3"><h2 class="fp-h mt-0">What happened</h2><ol class="fp-log" id="log"></ol></div>
+            <p class="mt-3"><button type="button" class="btn btn-outline-secondary btn-sm" id="menu-btn">New game</button></p>
+        </section>
+    </main>
+
+    <!-- what to do next, pinned to the foot of the screen -->
+    <div class="fp-dock" id="dock" hidden>
+        <div class="fp-dock-main"><p class="fp-dock-text" id="status" role="status" aria-live="polite"></p><div class="fp-dock-actions" id="actions"></div></div>
+    </div>
+
+    <dialog id="ask" class="fp-dialog" aria-labelledby="ask-title"><form method="dialog" id="ask-form"></form></dialog>
+    <dialog id="final" class="fp-dialog fp-wide" aria-labelledby="final-title">
+        <form method="dialog">
+            <h2 class="h5" id="final-title"></h2>
+            <div id="final-body"></div>
+            <div class="d-flex flex-wrap gap-2 mt-3"><button value="again" class="btn btn-primary" id="final-again">New game</button><button value="close" class="btn btn-outline-secondary">Close</button></div>
+        </form>
+    </dialog>
+
+    <footer class="py-5 bg-dark">
+        <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; <span class="current-year">2026</span> SDG Strategy, LLC | To God be the glory</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../../js/scripts.js"></script>
+    <script type="module" src="js/app.js?v=20261122"></script>
+<!-- Default Statcounter code for SDG Games
+https://sdggames.fun -->
+<script type="text/javascript">
+var sc_project=13364187;
+var sc_invisible=1;
+var sc_security="487bfc6e";
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics
+Made Easy - Statcounter" href="https://statcounter.com/"
+target="_blank"><img class="statcounter" width="1" height="1"
+src="https://c.statcounter.com/13364187/0/487bfc6e/1/"
+alt="Web Analytics Made Easy - Statcounter"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+</body>
+</html>
