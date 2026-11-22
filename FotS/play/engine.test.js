@@ -129,3 +129,13 @@ test('Goodness recital: any order, other wording, small slips', () => {
   assert.ok(check('self-control gentleness faithfulness goodness kindnes patience peace joy love').ok);
   assert.equal(check('love joy peace').count, 3);
 });
+test('share text: headline and link', async () => {
+  const { headline, shareMessage } = await import('./js/share.js');
+  const S = E.newGame({ seed: 2, players: [{ name: 'You' }, { name: 'B', bot: true }] });
+  for (const f of E.FRUITS) S.players[0].tree[f] = { s: 1, d: null, wild: false };
+  S.over = true; S.winner = 0;
+  assert.match(headline(S), /all nine/);
+  assert.match(shareMessage(S), /sdggames\.fun\/FotS\/play\//);
+  S.winner = 1; for (const f of E.FRUITS.slice(3)) S.players[0].tree[f].s = 0;
+  assert.match(headline(S), /3 fruit of nine/);
+});

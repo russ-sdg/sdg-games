@@ -2,6 +2,7 @@
 import * as E from './engine.js';
 import * as AI from './ai.js';
 import { check as checkRecital } from './quiz.js';
+import { drawShareImage, canvasToBlob, nativeShareData, shareMessage } from './share.js';
 
 const KEY = 'sdg-fots-play-1', HELP = 'sdg-fots-help';
 const $ = (id) => document.getElementById(id);
@@ -334,8 +335,33 @@ function showFinal() {
   const why = S.endedBy === 'limit' ? 'The game ran very long, so the player with the most fruit showing wins.' : w === 0 ? 'You collected the fruit of the Spirit: love, joy, peace, patience, kindness, goodness, faithfulness, gentleness and self-control.' : `${S.players[w].name} was first to show all nine fruit.`;
   $('final-body').innerHTML = `<p class="small text-muted">${esc(why)}</p>` + order.map((p) => `<div class="fp-final-row${p.i === w ? ' win' : ''}"><span>${esc(p.name)}</span><span>${plural(E.upCount(p), 'fruit')} showing</span></div><div class="my-2">${treeHtml(p)}</div>`).join('')
     + '<p class="small mt-3 mb-0">&ldquo;But the fruit of the Spirit is love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, self-control; against such things there is no law.&rdquo; Galatians 5:22&ndash;23</p>';
+  $('final-body').insertAdjacentHTML('beforeend', '<div id="share-slot"></div>');
+  mountShare($('share-slot'), structuredClone(S));
   clearSave();
   if (!$('final').open) $('final').showModal();
+}
+
+// Share the result as a picture: the share sheet where the browser offers it, plus a download and copyable text (which has the link).
+function mountShare(root, snap) {
+  const box = document.createElement('div');
+  box.innerHTML = `<h3 class="h6 mt-3">Share your result</h3><div class="d-flex flex-wrap gap-2 my-2"><button type="button" class="btn btn-primary btn-sm" id="share-native" hidden>Share\u2026</button>
+    <button type="button" class="btn btn-primary btn-sm" id="share-dl" disabled>Download image</button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="share-copy">Copy text and link</button></div>
+    <img class="img-fluid rounded shadow-sm" alt="Your result: your Fruit Tree and the final standings" hidden>
+    <p class="small text-muted mb-0" id="share-msg" aria-live="polite">Drawing your result picture\u2026</p>`;
+  root.appendChild(box);
+  const im = box.querySelector('img'), msg = box.querySelector('#share-msg'), dl = box.querySelector('#share-dl'), nat = box.querySelector('#share-native');
+  box.querySelector('#share-copy').onclick = async () => { try { await navigator.clipboard.writeText(shareMessage(snap)); msg.textContent = 'Copied. Paste it anywhere.'; } catch { msg.textContent = shareMessage(snap); } };
+  (async () => {
+    try {
+      const blob = await canvasToBlob(drawShareImage(document.createElement('canvas'), snap)), url = URL.createObjectURL(blob);
+      im.src = url; im.hidden = false; dl.disabled = false; msg.textContent = '';
+      const file = new File([blob], 'fruit-of-the-spirit.png', { type: 'image/png' });
+      nat.hidden = !(navigator.canShare && navigator.canShare({ files: [file] }));
+      dl.onclick = () => { const a = document.createElement('a'); a.href = url; a.download = 'fruit-of-the-spirit.png'; document.body.appendChild(a); a.click(); a.remove(); };
+      nat.onclick = async () => { try { await navigator.share(nativeShareData(file, snap)); } catch { /* cancelled */ } };
+    } catch { msg.textContent = 'Sorry, the picture could not be drawn in this browser. You can still copy the text.'; }
+  })();
 }
 
 // ---- wiring ----------------------------------------------------------------------------------------------------------------------
