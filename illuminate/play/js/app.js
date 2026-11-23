@@ -165,16 +165,21 @@ function render() {
 }
 const sym = (r) => `<img class="il-symimg" src="${symbolImage(r)}" alt="" />`;
 const roleChip = (r) => `<span class="il-role" style="--c:${ROLE_COLOR[r]}"><span class="il-symbg">${sym(r)}</span> ${ROLE_NAMES[r]}</span>`;
+// While the last trick of a hand is on the table the next hand is already dealt: keep showing the hand that just ended until you click Next.
+const ending = () => ui.hold && S.history.length > ui.seenHands ? S.history[S.history.length - 1] : null;
 function renderHead() {
-  const size = E.handSize(S);
-  $('head').innerHTML = `<span>Hand ${S.handNo + 1} of ${S.sizes.length}</span><small>${plural(size, 'card')} each${E.isAllNothing(size) ? ' &middot; bid <b>all</b> or <b>nothing</b>' : ''} &middot; dealer ${esc(nm(S.dealer))}</small>`;
+  const h = ending(), size = h ? h.size : E.handSize(S), dealer = h ? (S.dealer + S.n - 1) % S.n : S.dealer;
+  $('head').innerHTML = `<span>Hand ${h ? h.no : S.handNo + 1} of ${S.sizes.length}</span><small>${plural(size, 'card')} each${E.isAllNothing(size) ? ' &middot; bid <b>all</b> or <b>nothing</b>' : ''} &middot; dealer ${esc(nm(dealer))}</small>`;
 }
 function renderPlayers() {
-  const size = E.handSize(S);
-  $('players').innerHTML = S.players.map((p, i) => `<div class="il-pl${i === S.turn && !S.over && !ui.hold && S.phase !== 'over' ? ' is-turn' : ''}">
-    <div class="n"><span>${esc(p.name)}</span>${i === S.dealer ? '<span class="il-badge">dealer</span>' : ''}<span class="sc" title="Score">${p.score}</span></div>
+  const h = ending(), size = h ? h.size : E.handSize(S), dealer = h ? (S.dealer + S.n - 1) % S.n : S.dealer;
+  $('players').innerHTML = S.players.map((p, i) => {
+    const bid = h ? h.bids[i] : p.bid, won = h ? h.won[i] : p.won, cards = h ? 0 : p.hand.length, score = h ? h.scores[i] - h.pts[i] : p.score;
+    return `<div class="il-pl${i === S.turn && !S.over && !ui.hold && S.phase !== 'over' ? ' is-turn' : ''}">
+    <div class="n"><span>${esc(p.name)}</span>${i === dealer ? '<span class="il-badge">dealer</span>' : ''}<span class="sc" title="Score">${score}</span></div>
     <div>${roleChip(p.role)}</div>
-    <div class="meta">Bid: <b>${p.bid === null ? '&ndash;' : esc(bidText(p.bid, size))}</b> &middot; Won: <b>${p.won}</b> &middot; ${plural(p.hand.length, 'card')}</div></div>`).join('');
+    <div class="meta">Bid: <b>${bid === null ? '&ndash;' : esc(bidText(bid, size))}</b> &middot; Won: <b>${won}</b> &middot; ${plural(cards, 'card')}</div></div>`;
+  }).join('');
 }
 const faceHtml = (id, { tag = 'div', cls = '', attrs = '', grace = false } = {}) => {
   const c = CARD[id], sym = c.special ? '⭐' : '';
@@ -188,6 +193,7 @@ function renderTable() {
   $('table-note').textContent = live ? (S.trick.some((e) => CARD[e.card].special) ? S.trick.filter((e) => CARD[e.card].special).map((e) => SPECIAL_TEXT[CARD[e.card].special]).join(' ') : `Suit led: ${SUIT_NAMES[CARD[S.trick[0].card].suit]}`) : (entries.length ? 'The last trick' : '');
 }
 function renderHand() {
+  if (ending()) { $('hand').innerHTML = '<span class="text-muted">All your cards are played. The next hand is dealt when you click Next.</span>'; $('hand-note').textContent = ''; return; }
   const p = S.players[0], L = mine() && S.phase === 'play' ? E.legal(S) : [], ok = new Set(L.map((a) => a.card));
   const graceOk = new Set(L.filter((a) => a.grace).map((a) => a.card));
   $('hand').innerHTML = p.hand.map((c) => `<div class="il-play">${faceHtml(c, { tag: 'button', cls: mine() && S.phase === 'play' ? (ok.has(c) ? 'can' : 'dim') : '', attrs: `data-card="${c}"` })}</div>`).join('') || '<span class="text-muted">No cards in hand.</span>';

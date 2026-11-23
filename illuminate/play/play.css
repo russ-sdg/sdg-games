@@ -52,7 +52,7 @@ body.has-dock { padding-bottom: 9rem; }
 .il-wide { max-width: min(94vw, 40rem); max-height: 92vh; overflow: auto; }
 .il-opts { display: flex; flex-wrap: wrap; gap: .5rem; margin: .6rem 0; }
 .il-cardview { display: flex; flex-direction: column; align-items: center; gap: .6rem; }
-.il-cardview img { width: min(62vw, 260px); height: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.4); }
+.il-cardview > img { width: min(62vw, 260px); height: auto; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,.4); }
 .il-why { background: #fff3cd; border-radius: .5rem; padding: .4rem .7rem; font-size: .88rem; }
 .il-tbl { width: 100%; font-size: .9rem; } .il-tbl th, .il-tbl td { padding: .2rem .4rem; text-align: center; } .il-tbl th:first-child, .il-tbl td:first-child { text-align: left; }
 .il-tbl tr.win td { font-weight: 800; color: #0f5132; }
