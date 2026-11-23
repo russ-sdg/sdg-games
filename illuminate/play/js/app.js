@@ -1,7 +1,7 @@
 // Illuminate: play online against 1 to 3 computer players. You are seat 0.
 import * as E from './engine.js';
 import * as AI from './ai.js';
-import { CARD, SUIT_NAMES, ROLES, ROLE_NAMES, ROLE_COLOR, SYMBOL, SPECIAL_TEXT, cardImage, backImage, roleImage } from './cards.js';
+import { CARD, SUIT_NAMES, ROLES, ROLE_NAMES, ROLE_COLOR, SYMBOL, SPECIAL_TEXT, cardImage, backImage, roleImage, symbolImage } from './cards.js';
 import { drawShareImage, canvasToBlob, nativeShareData, shareMessage } from './share.js';
 
 const KEY = 'sdg-illuminate-play-1';
@@ -14,7 +14,7 @@ const BOTS = ['Peter', 'Mary', 'John'];
 const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 
 let S = null, cfg = null, token = 0, busy = false, release = null;
-let ui = { seenTricks: 0, seenHands: 0, hold: false };
+let ui = { seenTricks: 0, seenHands: 0, hold: false, rotated: null };
 
 function save() { try { localStorage.setItem(KEY, JSON.stringify({ S, cfg })); } catch (e) { /* private mode */ } }
 function load() { try { const v = JSON.parse(localStorage.getItem(KEY)); return v && v.S && v.S.v === 1 && v.cfg && !v.S.over ? v : null; } catch (e) { return null; } }
@@ -29,7 +29,7 @@ function startGame() {
   const players = [{ name: 'You', bot: false, role: mine }, ...Array.from({ length: n }, (_, i) => ({ name: BOTS[i], bot: true, role: others[i], skill: pick === 'mixed' ? skills[(i + 1) % 3] : pick }))];
   cfg = { bots: n, skill: pick, role: mine, plan: $('plan').value, notPerfect: $('not-perfect').checked, offer: $('offer-proclaim').checked, seed };
   S = E.newGame({ seed, players, plan: cfg.plan, notPerfect: cfg.notPerfect, dealer: Math.floor(Math.random() * players.length) });
-  ui = { seenTricks: 0, seenHands: 0, hold: false };
+  ui = { seenTricks: 0, seenHands: 0, hold: false, rotated: null };
   save(); show('game'); render(); run();
 }
 
@@ -48,7 +48,7 @@ function said(e) {
     case 'play': return `${W} ${V(e.who, 'play')} ${CARD[e.card].label}${e.grace ? ' with Grace' : ''}.`;
     case 'proclaim': return `${W} ${V(e.who, 'proclaim')} “Grace!” for ${e.target === 0 ? 'your' : `${nm(e.target)}’s`} ${CARD[e.card].label}.`;
     case 'trick': return `${W} ${V(e.who, 'win')} the trick.`;
-    case 'rotate': return 'The roles rotate to the right.';
+    case 'rotate': return `Luke 19:24: the roles rotate to the right. You are now the ${ROLE_NAMES[e.roles[0]]}.`;
     case 'hand': return `Hand ${e.no} is scored.`;
     default: return '';
   }
@@ -78,12 +78,26 @@ async function run() {
       return;
     }
     render(); await sleep(S.phase === 'bid' ? 650 : 800); if (my !== token) return;
-    S = E.apply(S, AI.choose(S, p.skill)); save(); render();
+    step(AI.choose(S, p.skill)); save(); render();
+    if (ui.rotated) { await rotationNotice(); if (my !== token) return; }
   }
 }
+// Apply an action, remembering if it changed anyone's role (only Luke 19:24 does), so the page can say so.
+function step(a) {
+  const before = S.players.map((p) => p.role);
+  S = E.apply(S, a);
+  const after = S.players.map((p) => p.role);
+  if (before.join() !== after.join()) ui.rotated = { before, after, by: S.log.filter((e) => e.k === 'play').slice(-1)[0].who };
+}
 function act(a) {
-  try { S = E.apply(S, a); } catch (e) { console.error(e); return; }
+  try { step(a); } catch (e) { console.error(e); return; }
   save(); render(); run();
+}
+async function rotationNotice() {
+  const r = ui.rotated; ui.rotated = null;
+  const rows = S.players.map((p, i) => `<tr><td>${esc(p.name)}</td><td>${roleChip(r.before[i])}</td><td>&rarr;</td><td>${roleChip(r.after[i])}</td></tr>`).join('');
+  await ask({ title: 'The roles rotate!', html: `<p>${esc(nm(r.by))} played <b>Luke 19:24</b>, the star card that rotates the roles to the right. Everyone takes the role of the player on their left, and the new roles count straight away.</p><table class="il-tbl"><tbody>${rows}</tbody></table><p class="small mb-0 mt-2">You are now the <b>${ROLE_NAMES[r.after[0]]}</b>: cards with ${sym(r.after[0])} are your Grace cards.</p>`,
+    options: [{ label: 'OK', value: 1, cls: 'btn-primary' }] });
 }
 
 // ---- asking you things ----------------------------------------------------------------------------------------------------------
@@ -102,7 +116,7 @@ function ask({ title, html = '', options = [] }) {
 const cardInfo = (id, role) => {
   const c = CARD[id], bits = [];
   if (c.special) bits.push(`<b>Special card.</b> ${SPECIAL_TEXT[c.special]}`);
-  else bits.push(`Grace card for: ${c.roles.map((r) => `<b style="color:${ROLE_COLOR[r]}">${SYMBOL[r]} ${ROLE_NAMES[r]}</b>`).join(' and ')}.`);
+  else bits.push(`Grace card for: ${c.roles.map((r) => `<b style="color:${ROLE_COLOR[r]}">${sym(r)} ${ROLE_NAMES[r]}</b>`).join(' and ')}.`);
   if (role && c.roles.includes(role)) bits.push('It is a Grace card for <b>you</b>.');
   return `<p class="small mb-0">${bits.join(' ')}</p>`;
 };
@@ -149,7 +163,8 @@ function render() {
   if (!S) return;
   renderHead(); renderPlayers(); renderTable(); renderHand(); renderLog(); renderDock();
 }
-const roleChip = (r) => `<span class="il-role" style="--c:${ROLE_COLOR[r]}">${SYMBOL[r]} ${ROLE_NAMES[r]}</span>`;
+const sym = (r) => `<img class="il-symimg" src="${symbolImage(r)}" alt="" />`;
+const roleChip = (r) => `<span class="il-role" style="--c:${ROLE_COLOR[r]}"><span class="il-symbg">${sym(r)}</span> ${ROLE_NAMES[r]}</span>`;
 function renderHead() {
   const size = E.handSize(S);
   $('head').innerHTML = `<span>Hand ${S.handNo + 1} of ${S.sizes.length}</span><small>${plural(size, 'card')} each${E.isAllNothing(size) ? ' &middot; bid <b>all</b> or <b>nothing</b>' : ''} &middot; dealer ${esc(nm(S.dealer))}</small>`;
@@ -176,10 +191,10 @@ function renderHand() {
   const p = S.players[0], L = mine() && S.phase === 'play' ? E.legal(S) : [], ok = new Set(L.map((a) => a.card));
   const graceOk = new Set(L.filter((a) => a.grace).map((a) => a.card));
   $('hand').innerHTML = p.hand.map((c) => `<div class="il-play">${faceHtml(c, { tag: 'button', cls: mine() && S.phase === 'play' ? (ok.has(c) ? 'can' : 'dim') : '', attrs: `data-card="${c}"` })}</div>`).join('') || '<span class="text-muted">No cards in hand.</span>';
-  $('hand-note').innerHTML = `You are the ${roleChip(p.role)} &mdash; cards with ${SYMBOL[p.role]} are Grace cards for you. Tap a card to read it${mine() && S.phase === 'play' ? ' or play it' : ''}.`;
+  $('hand-note').innerHTML = `You are the ${roleChip(p.role)} &mdash; cards with this symbol ${sym(p.role)} are Grace cards for you. Tap a card to read it${mine() && S.phase === 'play' ? ' or play it' : ''}.`;
 }
 function renderLog() {
-  $('log').innerHTML = S.log.filter((e) => e.k !== 'hand').slice(-18).map((e) => { const t = said(e); return t ? `<li class="${e.who === 0 ? 'me' : e.k === 'rotate' ? 'note' : ''}">${esc(t)}</li>` : ''; }).join('') || '<li>Nothing yet.</li>';
+  $('log').innerHTML = S.log.filter((e) => e.k !== 'hand').slice(-18).map((e) => { const t = said(e); return t ? `<li class="${e.who === 0 ? 'me' : e.k === 'rotate' ? 'me' : ''}">${esc(t)}</li>` : ''; }).join('') || '<li>Nothing yet.</li>';
 }
 function renderDock() {
   const on = !S.over || ui.hold; $('dock').hidden = !on; document.body.classList.toggle('has-dock', on);
@@ -244,7 +259,7 @@ function init() {
   $('start-btn').addEventListener('click', () => { clearSave(); token++; startGame(); });
   $('menu-btn').addEventListener('click', () => { token++; refreshResume(); show('setup'); });
   $('final-again').addEventListener('click', () => { clearSave(); token++; show('setup'); refreshResume(); });
-  $('resume-btn').addEventListener('click', () => { const v = load(); if (!v) return; S = v.S; cfg = v.cfg; ui = { seenTricks: S.tricks, seenHands: S.history.length, hold: false }; show('game'); render(); run(); });
+  $('resume-btn').addEventListener('click', () => { const v = load(); if (!v) return; S = v.S; cfg = v.cfg; ui = { seenTricks: S.tricks, seenHands: S.history.length, hold: false, rotated: null }; show('game'); render(); run(); });
   $('discard-btn').addEventListener('click', () => { clearSave(); refreshResume(); });
   document.addEventListener('click', onClick);
   refreshResume();

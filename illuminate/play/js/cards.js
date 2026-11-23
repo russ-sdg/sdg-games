@@ -31,6 +31,7 @@ for (const suit of SUITS) for (const row of TABLE[suit]) {
 export const value = (id) => CARD[id].ch * 100 + CARD[id].vs;
 export const cardImage = (id, w = 320) => `../../assets/illuminate-web/cards/${id}-${w}.webp`;
 export const backImage = (w = 320) => cardImage('back', w);
+export const symbolImage = (r) => `../../assets/illuminate-web/symbols/${r}.webp`;      // the symbol exactly as printed on the cards
 export const roleImage = (r, w = 320) => cardImage(r, w);
 const SUIT_ORDER = Object.fromEntries(SUITS.map((s, i) => [s, i]));
 export const byHand = (a, b) => SUIT_ORDER[CARD[a].suit] - SUIT_ORDER[CARD[b].suit] || value(a) - value(b);

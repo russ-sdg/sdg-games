@@ -66,3 +66,9 @@ body.has-dock { padding-bottom: 9rem; }
   .il-dialog { max-width: 96vw; width: 96vw; }
 }
 @media (prefers-reduced-motion: no-preference) { .il-c { transition: box-shadow .15s, border-color .15s; } }
+
+/* the role symbols, cut from the card pictures */
+.il-symimg { height: 1.15em; width: auto; vertical-align: -.2em; }
+.il-symbg { display: inline-grid; place-items: center; background: #fffdf5; border-radius: .35rem; padding: 0 .2rem; height: 1.4em; }
+.il-role .il-symimg { height: 1.05em; vertical-align: 0; }
+.il-tbl .il-role { font-size: .8rem; }
