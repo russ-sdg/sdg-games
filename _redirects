@@ -2,5 +2,6 @@
 /2021/* https://blog.sdggames.fun/2021/:splat 301
 /2022/* https://blog.sdggames.fun/2022/:splat 301
 /2023/* https://blog.sdggames.fun/2023/:splat 301
-404.html /
+/category/* https://blog.sdggames.fun/category/:splat 301
+/tag/* https://blog.sdggames.fun/tag/:splat 301
 /roman-catacombs/scorepad.html /roman-catacombs/play/ 301
