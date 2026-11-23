@@ -64,6 +64,10 @@ async function run() {
   const my = ++token;
   for (;;) {
     if (!S) return;
+    if (ui.rotated) {                                            // Luke 19:24 was just played (by you or a computer player): say so before anything else happens
+      if (S.tricks > ui.seenTricks) ui.hold = true;              // it was the last card of the trick: keep that trick on the table behind the notice
+      render(); await rotationNotice(); if (my !== token) return;
+    }
     if (S.tricks > ui.seenTricks) {                              // a trick was just taken: leave it on the table until you say so
       ui.seenTricks = S.tricks; await waitClick(); if (my !== token) return;
       if (S.history.length > ui.seenHands) { ui.seenHands = S.history.length; await handDialog(S.history[S.history.length - 1]); if (my !== token) return; }
@@ -79,7 +83,6 @@ async function run() {
     }
     render(); await sleep(S.phase === 'bid' ? 650 : 800); if (my !== token) return;
     step(AI.choose(S, p.skill)); save(); render();
-    if (ui.rotated) { await rotationNotice(); if (my !== token) return; }
   }
 }
 // Apply an action, remembering if it changed anyone's role (only Luke 19:24 does), so the page can say so.
