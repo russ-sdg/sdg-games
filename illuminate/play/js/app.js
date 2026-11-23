@@ -187,10 +187,10 @@ const faceHtml = (id, { tag = 'div', cls = '', attrs = '', grace = false } = {})
 };
 function renderTable() {
   const T = S.lastTrick, live = S.trick.length && !ui.hold;
-  const entries = live ? S.trick : (T && S.tricks > 0 ? T.entries : []), winner = ui.hold && T ? T.winner : -1;
+  const entries = live ? S.trick : (ui.hold && T ? T.entries : []), winner = ui.hold && T ? T.winner : -1;
   $('table').innerHTML = entries.length ? entries.map((e) => `<div class="il-play${e.p === winner ? ' win' : ''}${live ? '' : ' old'}"><span class="who">${esc(nm(e.p))}${e.p === winner ? ' \u2714' : ''}</span>${faceHtml(e.card, { tag: 'button', attrs: `data-table="${e.card}"`, grace: e.grace })}</div>`).join('')
-    : '<span class="il-empty">No cards played yet.</span>';
-  $('table-note').textContent = live ? (S.trick.some((e) => CARD[e.card].special) ? S.trick.filter((e) => CARD[e.card].special).map((e) => SPECIAL_TEXT[CARD[e.card].special]).join(' ') : `Suit led: ${SUIT_NAMES[CARD[S.trick[0].card].suit]}`) : (entries.length ? 'The last trick' : '');
+    : `<span class="il-empty">${S.phase === 'bid' ? `Bidding. ${esc(nm(S.leader))} will lead the first trick.` : `${esc(nm(S.leader))} ${S.leader === 0 ? 'lead' : 'leads'} the next trick.`}</span>`;
+  $('table-note').textContent = live ? (S.trick.some((e) => CARD[e.card].special) ? S.trick.filter((e) => CARD[e.card].special).map((e) => SPECIAL_TEXT[CARD[e.card].special]).join(' ') : `Suit led: ${SUIT_NAMES[CARD[S.trick[0].card].suit]}`) : (ui.hold && entries.length ? 'The trick just played' : '');
 }
 function renderHand() {
   if (ending()) { $('hand').innerHTML = '<span class="text-muted">All your cards are played. The next hand is dealt when you click Next.</span>'; $('hand-note').textContent = ''; return; }
